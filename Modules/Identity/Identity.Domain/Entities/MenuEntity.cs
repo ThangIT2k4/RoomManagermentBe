@@ -1,6 +1,7 @@
 using Identity.Domain.Common;
 using Identity.Domain.Exceptions;
 using Identity.Domain.ValueObjects;
+using Identity.Domain.Events;
 
 namespace Identity.Domain.Entities;
 
@@ -18,7 +19,7 @@ public sealed class MenuEntity : AggregateRoot<Guid>
 
     private MenuEntity() {}
 
-    private MenuEntity( Guid id, MenuCode code, MenuLabel label, int orderIndex, MenuPath? path, string? icon, Guid? parentId, bool isActive)
+    private MenuEntity(Guid id, MenuCode code, MenuLabel label, int orderIndex, MenuPath? path, string? icon, Guid? parentId, bool isActive)
     {
         Id = id;
         Code = code;
@@ -29,9 +30,17 @@ public sealed class MenuEntity : AggregateRoot<Guid>
         ParentId = parentId;
         IsActive = isActive;
         CreatedAt = DateTime.UtcNow;
+
+        AddDomainEvent(new MenuCreatedEvent(
+            id,
+            code.Value,
+            label.Value,
+            orderIndex,
+            parentId,
+            DateTimeOffset.UtcNow));
     }
 
-    public static MenuEntity Create( Guid id, MenuCode code, MenuLabel label, int orderIndex, MenuPath? path = null, string? icon = null, Guid? parentId = null, bool isActive = true)
+    public static MenuEntity Create(Guid id, MenuCode code, MenuLabel label, int orderIndex, MenuPath? path = null, string? icon = null, Guid? parentId = null, bool isActive = true)
     {
         return new MenuEntity(id, code, label, orderIndex, path, icon, parentId, isActive);
     }
@@ -42,6 +51,12 @@ public sealed class MenuEntity : AggregateRoot<Guid>
         Path = path;
         Icon = icon;
         OrderIndex = orderIndex;
+        UpdatedAt = updatedAt;
+
+        AddDomainEvent(new MenuUpdatedEvent(
+            Id,
+            label.Value,
+            DateTimeOffset.UtcNow));
     }
 
     public void SetActive(bool isActive, DateTime updatedAt)

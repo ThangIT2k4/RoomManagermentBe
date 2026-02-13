@@ -2,6 +2,7 @@ using Identity.Domain.Common;
 using Identity.Domain.Enums;
 using Identity.Domain.Exceptions;
 using Identity.Domain.ValueObjects;
+using Identity.Domain.Events;
 
 namespace Identity.Domain.Entities;
 
@@ -24,6 +25,11 @@ public sealed class UserEntity : AggregateRoot<Guid>
         PasswordHash = passwordHash;
         CreatedAt = DateTime.UtcNow;
         Status = UserStatus.InActive;
+        AddDomainEvent(new UserCreatedEvent(
+            id,
+            username.Value,
+            email.Value,
+            DateTimeOffset.UtcNow));
     }
     
     private UserEntity(Guid id, Username username, Email email, PasswordHash passwordHash, UserStatus status, DateTime createdAt, DateTime? updatedAt)
@@ -53,6 +59,9 @@ public sealed class UserEntity : AggregateRoot<Guid>
             throw new InvalidUserStateException(InvalidUserStateException.CodeLockedToActivate);
         Status = UserStatus.Active;
         UpdatedAt = changeAt;
+        AddDomainEvent(new UserActivatedEvent(
+            Id,
+            DateTimeOffset.UtcNow));
     }
 
     public void Deactive(DateTime changeAt)
@@ -61,6 +70,9 @@ public sealed class UserEntity : AggregateRoot<Guid>
             throw new InvalidUserStateException(InvalidUserStateException.CodeInactiveToActivate);
         Status = UserStatus.InActive;
         UpdatedAt = changeAt;
+        AddDomainEvent(new UserDeactivatedEvent(
+            Id,
+            DateTimeOffset.UtcNow));
     }
     
     public void Lock(DateTime changeAt)
@@ -69,6 +81,9 @@ public sealed class UserEntity : AggregateRoot<Guid>
             return;
         Status = UserStatus.Locked;
         UpdatedAt = changeAt;
+        AddDomainEvent(new UserLockedEvent(
+            Id,
+            DateTimeOffset.UtcNow));
     }
     
     public void Unlock(DateTime changeAt)
@@ -76,5 +91,9 @@ public sealed class UserEntity : AggregateRoot<Guid>
         if (Status == UserStatus.Active)
             return;
         Status = UserStatus.Active;
+        UpdatedAt = changeAt;
+        AddDomainEvent(new UserUnlockedEvent(
+            Id,
+            DateTimeOffset.UtcNow));
     }
 }

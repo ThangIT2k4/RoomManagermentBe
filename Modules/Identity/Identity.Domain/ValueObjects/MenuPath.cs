@@ -17,10 +17,6 @@ public sealed class MenuPath : ValueObject
     
     public static MenuPath Create(string value)
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new InvalidMenuException(InvalidMenuException.CodeEmpty);
-        }
         value = value.Trim();
         if (value.Length > PathMaxLength)
         {
