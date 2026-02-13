@@ -1,0 +1,6 @@
+@RoomManagerment.ExternalApi_HostAddress = http://localhost:5222
+
+GET {{RoomManagerment.ExternalApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
