@@ -9,7 +9,7 @@ public sealed class GetMenusByParentQueryHandler(IMenuRepository menuRepository)
         GetMenusByParentQuery query,
         CancellationToken cancellationToken = default)
     {
-        var menus = await menuRepository.GetByParentIdAsync(query.ParentId, cancellationToken);
+        var menus = await menuRepository.GetByParentIdAsync(query.ParentId, query.Filter, cancellationToken);
 
         var dtos = menus
             .Select(menu => new MenuListItemDto(

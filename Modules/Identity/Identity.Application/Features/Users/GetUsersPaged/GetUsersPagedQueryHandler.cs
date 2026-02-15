@@ -9,7 +9,7 @@ public sealed class GetUsersPagedQueryHandler(IUserRepository userRepository)
         GetUsersPagedQuery query,
         CancellationToken cancellationToken = default)
     {
-        var paged = await userRepository.GetPagedAsync(query.Page, query.PageSize, cancellationToken);
+        var paged = await userRepository.GetPagedAsync(query.Page, query.PageSize, query.Filter, cancellationToken);
 
         var items = paged.Items
             .Select(user => new UserListItemDto(
