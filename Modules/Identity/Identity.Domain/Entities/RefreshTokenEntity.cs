@@ -18,11 +18,6 @@ public sealed class RefreshTokenEntity : Entity<Guid>
 
     private RefreshTokenEntity(Guid id, Guid userId, TokenValue token, DateTime expiresAt)
     {
-        if (userId == Guid.Empty)
-            throw new InvalidRefreshTokenException(InvalidRefreshTokenException.UserIdEmpty);
-        if (expiresAt <= DateTime.UtcNow)
-            throw new InvalidRefreshTokenException(InvalidRefreshTokenException.ExpiresAtNotFuture);
-
         Id = id;
         UserId = userId;
         Token = token;
@@ -31,9 +26,28 @@ public sealed class RefreshTokenEntity : Entity<Guid>
         CreatedAt = DateTime.UtcNow;
     }
 
+    private RefreshTokenEntity(Guid id, Guid userId, TokenValue token, DateTime expiresAt, bool isRevoked, DateTime createdAt)
+    {
+        Id = id;
+        UserId = userId;
+        Token = token;
+        ExpiresAt = expiresAt;
+        IsRevoked = isRevoked;
+        CreatedAt = createdAt;
+    }
+
     public static RefreshTokenEntity Create(Guid id, Guid userId, TokenValue token, DateTime expiresAt)
     {
+        if (userId == Guid.Empty)
+            throw new InvalidRefreshTokenException(InvalidRefreshTokenException.UserIdEmpty);
+        if (expiresAt <= DateTime.UtcNow)
+            throw new InvalidRefreshTokenException(InvalidRefreshTokenException.ExpiresAtNotFuture);
         return new RefreshTokenEntity(id, userId, token, expiresAt);
+    }
+
+    public static RefreshTokenEntity Reconstitute(Guid id, Guid userId, TokenValue token, DateTime expiresAt, bool isRevoked, DateTime createdAt)
+    {
+        return new RefreshTokenEntity(id, userId, token, expiresAt, isRevoked, createdAt);
     }
 
     public void Revoke()

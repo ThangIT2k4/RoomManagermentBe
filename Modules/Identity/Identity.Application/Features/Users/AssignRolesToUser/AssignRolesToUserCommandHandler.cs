@@ -1,6 +1,7 @@
 using Identity.Application.Common;
 using Identity.Domain.Entities;
 using Identity.Domain.Repositories;
+using MediatR;
 
 namespace Identity.Application.Features.Users.AssignRolesToUser;
 
@@ -9,8 +10,9 @@ public sealed class AssignRolesToUserCommandHandler(
     IRoleRepository roleRepository,
     IUserRoleRepository userRoleRepository,
     IUnitOfWork unitOfWork)
+    : IRequestHandler<AssignRolesToUserCommand, Result>
 {
-    public async Task<Result> HandleAsync(AssignRolesToUserCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result> Handle(AssignRolesToUserCommand command, CancellationToken cancellationToken = default)
     {
         var user = await userRepository.GetByIdAsync(command.UserId, cancellationToken);
         if (user is null)

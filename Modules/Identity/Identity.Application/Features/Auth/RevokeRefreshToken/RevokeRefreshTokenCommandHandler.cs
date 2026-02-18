@@ -1,13 +1,15 @@
 using Identity.Application.Common;
 using Identity.Domain.Repositories;
+using MediatR;
 
 namespace Identity.Application.Features.Auth.RevokeRefreshToken;
 
 public sealed class RevokeRefreshTokenCommandHandler(
     IRefreshTokenRepository refreshTokenRepository,
     IUnitOfWork unitOfWork)
+    : IRequestHandler<RevokeRefreshTokenCommand, Result>
 {
-    public async Task<Result> HandleAsync(RevokeRefreshTokenCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result> Handle(RevokeRefreshTokenCommand command, CancellationToken cancellationToken = default)
     {
         var refreshToken = await refreshTokenRepository.GetByTokenAsync(command.Token, cancellationToken);
         if (refreshToken is null)

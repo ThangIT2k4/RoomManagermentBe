@@ -2,12 +2,14 @@ using Identity.Application.Common;
 using Identity.Domain.Entities;
 using Identity.Domain.Repositories;
 using Identity.Domain.ValueObjects;
+using MediatR;
 
 namespace Identity.Application.Features.Permissions.CreatePermission;
 
 public sealed class CreatePermissionCommandHandler(IPermissionRepository permissionRepository, IUnitOfWork unitOfWork)
+    : IRequestHandler<CreatePermissionCommand, Result<CreatePermissionResult>>
 {
-    public async Task<Result<CreatePermissionResult>> HandleAsync(CreatePermissionCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<CreatePermissionResult>> Handle(CreatePermissionCommand command, CancellationToken cancellationToken = default)
     {
         var existing = await permissionRepository.GetByCodeAsync(command.Code, cancellationToken);
         if (existing is not null)

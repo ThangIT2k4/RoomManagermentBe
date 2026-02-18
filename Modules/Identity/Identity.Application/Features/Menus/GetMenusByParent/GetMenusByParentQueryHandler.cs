@@ -1,11 +1,13 @@
 using Identity.Application.Common;
 using Identity.Domain.Repositories;
+using MediatR;
 
 namespace Identity.Application.Features.Menus.GetMenusByParent;
 
 public sealed class GetMenusByParentQueryHandler(IMenuRepository menuRepository)
+    : IRequestHandler<GetMenusByParentQuery, Result<IReadOnlyList<MenuListItemDto>>>
 {
-    public async Task<Result<IReadOnlyList<MenuListItemDto>>> HandleAsync(
+    public async Task<Result<IReadOnlyList<MenuListItemDto>>> Handle(
         GetMenusByParentQuery query,
         CancellationToken cancellationToken = default)
     {

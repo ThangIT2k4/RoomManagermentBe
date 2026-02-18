@@ -2,6 +2,7 @@ using Identity.Application.Common;
 using Identity.Domain.Entities;
 using Identity.Domain.Repositories;
 using Identity.Domain.ValueObjects;
+using MediatR;
 
 namespace Identity.Application.Features.Auth.CreateRefreshToken;
 
@@ -9,8 +10,9 @@ public sealed class CreateRefreshTokenCommandHandler(
     IUserRepository userRepository,
     IRefreshTokenRepository refreshTokenRepository,
     IUnitOfWork unitOfWork)
+    : IRequestHandler<CreateRefreshTokenCommand, Result>
 {
-    public async Task<Result> HandleAsync(CreateRefreshTokenCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result> Handle(CreateRefreshTokenCommand command, CancellationToken cancellationToken = default)
     {
         var user = await userRepository.GetByIdAsync(command.UserId, cancellationToken);
         if (user is null)

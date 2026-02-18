@@ -1,6 +1,7 @@
 using Identity.Application.Common;
 using Identity.Domain.Entities;
 using Identity.Domain.Repositories;
+using MediatR;
 
 namespace Identity.Application.Features.Users.SetUserPermission;
 
@@ -9,8 +10,9 @@ public sealed class SetUserPermissionCommandHandler(
     IPermissionRepository permissionRepository,
     IUserPermissionRepository userPermissionRepository,
     IUnitOfWork unitOfWork)
+    : IRequestHandler<SetUserPermissionCommand, Result>
 {
-    public async Task<Result> HandleAsync(SetUserPermissionCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result> Handle(SetUserPermissionCommand command, CancellationToken cancellationToken = default)
     {
         var user = await userRepository.GetByIdAsync(command.UserId, cancellationToken);
         if (user is null)

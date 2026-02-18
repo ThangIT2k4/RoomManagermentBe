@@ -2,7 +2,12 @@ namespace Identity.Domain.Common;
 
 public sealed class FilterCondition
 {
-    public string Field { get; init; } = default!;
-    public string Operator { get; init; } = default!;
-    public string Value { get; init; } = default!;
+    public required string Field { get; init; }
+    public required string Operator { get; init; }
+
+    // Dùng cho eq, gt, like...
+    public object? Value { get; init; }
+
+    // Dùng cho in, between
+    public IReadOnlyList<object?>? Values { get; init; }
 }

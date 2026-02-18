@@ -16,6 +16,8 @@ public sealed class Phone : ValueObject
 
     private readonly string _value;
 
+    public string Value => _value;
+
     private Phone(string value)
     {
         _value = value;

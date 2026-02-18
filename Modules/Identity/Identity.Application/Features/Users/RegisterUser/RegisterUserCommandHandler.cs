@@ -1,14 +1,15 @@
 using Identity.Application.Common;
-using Identity.Application.Features.Users.Commands.RegisterUser;
 using Identity.Domain.Entities;
 using Identity.Domain.Repositories;
 using Identity.Domain.ValueObjects;
+using MediatR;
 
 namespace Identity.Application.Features.Users.RegisterUser;
 
 public sealed class RegisterUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
+    : IRequestHandler<RegisterUserCommand, Result<RegisterUserResult>>
 {
-    public async Task<Result<RegisterUserResult>> HandleAsync(RegisterUserCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<RegisterUserResult>> Handle(RegisterUserCommand command, CancellationToken cancellationToken = default)
     {
         if (await userRepository.ExistsByUsernameAsync(command.Username, cancellationToken))
         {

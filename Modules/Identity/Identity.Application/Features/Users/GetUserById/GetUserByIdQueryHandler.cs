@@ -1,11 +1,13 @@
 using Identity.Application.Common;
 using Identity.Domain.Repositories;
+using MediatR;
 
 namespace Identity.Application.Features.Users.GetUserById;
 
 public sealed class GetUserByIdQueryHandler(IUserRepository userRepository)
+    : IRequestHandler<GetUserByIdQuery, Result<UserDto>>
 {
-    public async Task<Result<UserDto>> HandleAsync(GetUserByIdQuery query, CancellationToken cancellationToken = default)
+    public async Task<Result<UserDto>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken = default)
     {
         var user = await userRepository.GetByIdAsync(query.UserId, cancellationToken);
 

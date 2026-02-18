@@ -19,7 +19,7 @@ public sealed class MenuEntity : AggregateRoot<Guid>
 
     private MenuEntity() {}
 
-    private MenuEntity(Guid id, MenuCode code, MenuLabel label, int orderIndex, MenuPath? path, string? icon, Guid? parentId, bool isActive)
+    private MenuEntity(Guid id, MenuCode code, MenuLabel label, int orderIndex, MenuPath? path, string? icon, Guid? parentId, bool isActive, bool isNew)
     {
         Id = id;
         Code = code;
@@ -29,20 +29,43 @@ public sealed class MenuEntity : AggregateRoot<Guid>
         Icon = icon;
         ParentId = parentId;
         IsActive = isActive;
-        CreatedAt = DateTime.UtcNow;
+        CreatedAt = isNew ? DateTime.UtcNow : default;
+        UpdatedAt = null;
 
-        AddDomainEvent(new MenuCreatedEvent(
-            id,
-            code.Value,
-            label.Value,
-            orderIndex,
-            parentId,
-            DateTimeOffset.UtcNow));
+        if (isNew)
+        {
+            AddDomainEvent(new MenuCreatedEvent(
+                id,
+                code.Value,
+                label.Value,
+                orderIndex,
+                parentId,
+                DateTimeOffset.UtcNow));
+        }
+    }
+
+    private MenuEntity(Guid id, MenuCode code, MenuLabel label, int orderIndex, MenuPath? path, string? icon, Guid? parentId, bool isActive, DateTime createdAt, DateTime? updatedAt)
+    {
+        Id = id;
+        Code = code;
+        Label = label;
+        OrderIndex = orderIndex;
+        Path = path;
+        Icon = icon;
+        ParentId = parentId;
+        IsActive = isActive;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
     }
 
     public static MenuEntity Create(Guid id, MenuCode code, MenuLabel label, int orderIndex, MenuPath? path = null, string? icon = null, Guid? parentId = null, bool isActive = true)
     {
-        return new MenuEntity(id, code, label, orderIndex, path, icon, parentId, isActive);
+        return new MenuEntity(id, code, label, orderIndex, path, icon, parentId, isActive, true);
+    }
+
+    public static MenuEntity Reconstitute(Guid id, MenuCode code, MenuLabel label, int orderIndex, MenuPath? path, string? icon, Guid? parentId, bool isActive, DateTime createdAt, DateTime? updatedAt)
+    {
+        return new MenuEntity(id, code, label, orderIndex, path, icon, parentId, isActive, createdAt, updatedAt);
     }
 
     public void Update(MenuLabel label, MenuPath? path, string? icon, int orderIndex, DateTime updatedAt)

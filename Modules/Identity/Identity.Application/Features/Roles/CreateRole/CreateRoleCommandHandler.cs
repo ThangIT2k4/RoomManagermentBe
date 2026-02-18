@@ -2,12 +2,14 @@ using Identity.Application.Common;
 using Identity.Domain.Entities;
 using Identity.Domain.Repositories;
 using Identity.Domain.ValueObjects;
+using MediatR;
 
 namespace Identity.Application.Features.Roles.CreateRole;
 
 public sealed class CreateRoleCommandHandler(IRoleRepository roleRepository, IUnitOfWork unitOfWork)
+    : IRequestHandler<CreateRoleCommand, Result<CreateRoleResult>>
 {
-    public async Task<Result<CreateRoleResult>> HandleAsync(CreateRoleCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<CreateRoleResult>> Handle(CreateRoleCommand command, CancellationToken cancellationToken = default)
     {
         var existing = await roleRepository.GetByCodeAsync(command.Code, cancellationToken);
         if (existing is not null)

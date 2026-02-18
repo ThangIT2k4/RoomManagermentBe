@@ -1,3 +1,6 @@
+using Identity.Application.Common;
+using MediatR;
+
 namespace Identity.Application.Features.Menus.CreateMenu;
 
 public sealed record CreateMenuCommand(
@@ -8,5 +11,5 @@ public sealed record CreateMenuCommand(
     string? Icon,
     Guid? ParentId,
     bool IsActive
-);
+) : IRequest<Result<CreateMenuResult>>;
 

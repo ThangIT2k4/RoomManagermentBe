@@ -1,11 +1,13 @@
 using Identity.Application.Common;
 using Identity.Domain.Repositories;
+using MediatR;
 
 namespace Identity.Application.Features.Users.ActivateUser;
 
 public sealed class ActivateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
+    : IRequestHandler<ActivateUserCommand, Result>
 {
-    public async Task<Result> HandleAsync(ActivateUserCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result> Handle(ActivateUserCommand command, CancellationToken cancellationToken = default)
     {
         var user = await userRepository.GetByIdAsync(command.UserId, cancellationToken);
 

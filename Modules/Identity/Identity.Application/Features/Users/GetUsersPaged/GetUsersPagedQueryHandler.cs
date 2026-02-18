@@ -1,11 +1,13 @@
 using Identity.Application.Common;
 using Identity.Domain.Repositories;
+using MediatR;
 
 namespace Identity.Application.Features.Users.GetUsersPaged;
 
 public sealed class GetUsersPagedQueryHandler(IUserRepository userRepository)
+    : IRequestHandler<GetUsersPagedQuery, Result<PagedResponse<UserListItemDto>>>
 {
-    public async Task<Result<PagedResponse<UserListItemDto>>> HandleAsync(
+    public async Task<Result<PagedResponse<UserListItemDto>>> Handle(
         GetUsersPagedQuery query,
         CancellationToken cancellationToken = default)
     {
