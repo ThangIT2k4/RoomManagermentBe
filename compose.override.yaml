@@ -1,0 +1,86 @@
+services:
+
+  
+  # ---------------- REDIS ----------------
+  redis:
+    image: redis:7-alpine
+    container_name: rm-redis
+    command: redis-server --appendonly yes --appendfsync everysec
+    volumes:
+      - redisdata:/data
+    restart: unless-stopped
+    networks:
+      - rm-network
+  
+  # ---------------- POSTGRES ----------------
+  postgres:
+    image: postgres:18-alpine
+    container_name: rm-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rm-network
+  
+  # ---------------- IDENTITY API ----------------
+  identity-api:
+    build:
+      context: .
+      dockerfile: ./Modules/Identity/Identity.API/Dockerfile
+    container_name: rm-identity-api
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+      ConnectionStrings__Default: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      Redis__Configuration: redis:6379
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - rm-network
+  
+  # ---------------- EXTERNAL API ----------------
+  external-api:
+    build:
+      context: .
+      dockerfile: ./RoomManagerment.ExternalApi/Dockerfile
+    container_name: rm-external-api
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+    restart: unless-stopped
+    networks:
+      - rm-network
+  
+  # ---------------- GATEWAY ----------------
+  gateway:
+    build:
+      context: .
+      dockerfile: ./RoomManagerment.Gateway/.Dockerfile
+    container_name: rm-gateway
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    depends_on:
+      - identity-api
+      - external-api
+    networks:
+      - rm-network
+networks:
+
+  rm-network:
+    driver: bridge
+volumes:
+
+  pgdata:
+  redisdata:

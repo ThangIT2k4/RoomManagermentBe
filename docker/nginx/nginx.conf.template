@@ -1,0 +1,41 @@
+worker_processes $WORKER_PROCESSES;
+
+events {
+    worker_connections $WORKER_CONNECTIONS;
+    multi_accept on;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    
+    server_tokens off;
+    
+    # logging
+    log_format main '$remote_addr - $remote_user [$time_local] '
+                    '"$request" $status $body_bytes_sent '
+                    '"$http_referer" "$http_user_agent" '
+                    '"$http_x_forwarded_for"';
+                    
+    access_log $ACCESS_LOG_PATH main;
+    error_log  $ERROR_LOG_PATH $LOG_LEVEL;
+    
+    # gzip
+    gzip $GZIP_ENABLED;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+    gzip_min_length $GZIP_MIN_LENGTH;
+    
+    # rate limit zone
+    limit_req_zone $binary_remote_addr zone=api_limit:10m rate=$RATE_LIMIT;
+    
+    # Timeouts
+    client_body_timeout $CLIENT_BODY_TIMEOUT;
+    client_header_timeout $CLIENT_HEADER_TIMEOUT;
+    keepalive_timeout $KEEPALIVE_TIMEOUT;
+    send_timeout $SEND_TIMEOUT;
+    
+    # Max upload size
+    client_max_body_size $CLIENT_MAX_BODY_SIZE;
+    
+    include /etc/nginx/conf.d/*.conf;
+}

@@ -1,0 +1,590 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--LLBLGen Pro v5.13 project file. Do not manually edit this file. Incorrect references could lead to an unloadable project file.-->
+<Project Version="5.13" TargetFrameworkName="LLBLGen Pro Runtime Framework" UseLegacyDefaults="false">
+  <Properties>
+    <Abbreviations />
+    <Property Name="AdditionalTaskPerformerFolder" Value="" />
+    <Property Name="AdditionalTasksFolder" Value="" />
+    <Property Name="AdditionalTemplatesFolder" Value="" />
+    <Property Name="AdditionalTypeConverterFolder" Value="" />
+    <Property Name="AddNewElementsAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AddNewFieldsAfterRefresh_v5" Value="true" />
+    <Property Name="AddNewFieldsAfterRelationalModelDataSync_v5" Value="true" />
+    <Property Name="AddNewViewsAsEntitiesAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewViewsAsEntitiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AutoAddManyToManyRelationships" Value="false" />
+    <Property Name="AutoAssignSequencesToIntegerPks" Value="true" />
+    <Property Name="AutoAssignTypeConverterToFieldMapping" Value="true" />
+    <Property Name="AutomaticallyGenerateSourceCodeOnProjectSave" Value="true" />
+    <Property Name="ConnectionStringKeyNamePattern" Value="ConnectionString.{$ProviderName}" />
+    <Property Name="DefaultDDLSQLScriptDestinationFolder" Value=".\DDLSQLScripts" />
+    <Property Name="DefaultDeleteRuleAction" Value="1" />
+    <Property Name="DefaultSourceCodeDestinationFolder" Value=".\Code" />
+    <Property Name="DefaultUpdateRuleAction" Value="0" />
+    <Property Name="DeleteObsoleteFiles" Value="true" />
+    <Property Name="ElementNamePrefixPattern" Value="{$SchemaName}" />
+    <Property Name="ElementNamePrefixPatternIsAppliedWhen" Value="1" />
+    <Property Name="EncodingToUse" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForTable" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForView" Value="4" />
+    <Property Name="EntityFieldNameStripPattern" Value="{}{}" />
+    <Property Name="EntityNameStripPattern" Value="{tbl_}{}" />
+    <Property Name="ExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="FailCodeGenerationOnWriteError" Value="false" />
+    <Property Name="FieldMappedOntoRelatedFieldPattern" Value="{$RelatedFieldName}" />
+    <Property Name="FkFieldsAreNamedAfterTargetField" Value="true" />
+    <Property Name="ForeignKeyConstraintPattern" Value="FK_{$Guid}" />
+    <Property Name="ForeignKeyFieldPattern" Value="{$NavigatorName}{$RelatedFieldName}" />
+    <Property Name="GroupUsage" Value="0" />
+    <Property Name="IdentifyingFieldsFollowDBPrimaryKeyConstraints_v5" Value="true" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseInsensitiveDBs" Value="false" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseSensitiveDBs" Value="false" />
+    <Property Name="LengthPrecisionScaleFollowDBLengthPrecisionScale_v5" Value="true" />
+    <Property Name="MakeElementNamePascalCasing" Value="true" />
+    <Property Name="NavigatorMappedOntoManyToManyPattern" Value="{$EndEntityName}CollectionVia{$IntermediateEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneManyToOnePattern" Value="{$EndEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneToManyPattern" Value="{$EndEntityName$P}" />
+    <Property Name="NonExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="PreferDecimalOverCurrencyTypes" Value="true" />
+    <Property Name="PreferNaturalCharacterTypes" Value="true" />
+    <Property Name="PreferSystemSequencesOverSchemaSequencesIfApplicable" Value="true" />
+    <Property Name="PreferVariableLengthTypes" Value="true" />
+    <Property Name="PrimaryKeyConstraintPattern" Value="PK_{$Guid}" />
+    <Property Name="ProjectCreator" Value="TranDucThang" />
+    <Property Name="ProjectName" Value="RoomManagerment.Auth" />
+    <Property Name="ReflectNullabilityOfElementFieldInTargetField_v5" Value="false" />
+    <Property Name="ReflectTypeOfElementFieldInTargetField_v5" Value="true" />
+    <Property Name="RelationalModelDataElementNameCasingCaseInsensitiveDBs" Value="3" />
+    <Property Name="RelationalModelDataElementNameCasingCaseSensitiveDBs" Value="3" />
+    <Property Name="RelationshipsFollowDBForeignKeyConstraints_v5" Value="true" />
+    <Property Name="RemoveUnderscoresFromElementName" Value="true" />
+    <Property Name="RemoveUnmappedElementsAfterRefresh_v5" Value="false" />
+    <Property Name="RemoveUnmappedElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRefresh" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRelationalModelDataSync" Value="false" />
+    <Property Name="RetrieveDBCustomProperties" Value="false" />
+    <Property Name="RootNamespace" Value="" />
+    <Property Name="SequenceNameMatchingPattern" Value="SEQ_{$TableName}" />
+    <Property Name="SequencePattern" Value="SEQ_{$EntityName}" />
+    <Property Name="SetGroupNameAfterSchemaName" Value="true" />
+    <Property Name="SetSchemaNameAfterGroupName" Value="true" />
+    <Property Name="SingularizeElementNames" Value="true" />
+    <Property Name="StoredProcNameStripPattern" Value="{pr_, sp_}{}" />
+    <Property Name="StoreTimeLastGeneratedIntoProject" Value="false" />
+    <Property Name="StoreTimeLastSyncIntoProject" Value="true" />
+    <Property Name="SyncCustomFieldOrderingWithTableFieldIndex" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="SyncRelationalModelDataElementNameWithModelElementName_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="TableValuedFunctionNameStripPattern" Value="{fn_, pr_, sp_}{}" />
+    <Property Name="TargetPerEntityEdgesRequireBackingFkConstraint" Value="true" />
+    <Property Name="TypedViewFieldNameStripPattern" Value="{}{}" />
+    <Property Name="TypedViewMappedOnResultsetPattern" Value="{$ProcFunctionName}{$ResultsetName}Result" />
+    <Property Name="TypedViewNameStripPattern" Value="{vw_}{}" />
+    <Property Name="UniqueConstraintPattern" Value="UC_{$Guid}" />
+    <Property Name="UniqueConstraintsFollowDBUniqueConstraints_v5" Value="true" />
+    <Property Name="UpdateCustomPropertiesAfterRefresh_v5" Value="false" />
+    <Property Name="UpdateCustomPropertiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="UseCustomFieldOrderingOnNewElements" Value="false" />
+  </Properties>
+  <TypeShortcuts />
+  <IgnoredWarnings />
+  <SavedSearchQueries />
+  <CodeGenerationCyclePreferences>
+    <OutputType Value="3">
+      <LastUsedPreferences>
+        <DestinationRootFolder Value="Z:\WorkSpace\Projects\RoomManagerment\RoomManagermentBe\Modules\Identity\DAL" />
+        <FrameworkName Value="LLBLGen Pro Runtime Framework" />
+        <LanguageName Value="C#" />
+        <PlatformName Value=".NET 9" />
+        <PresetName Value="SD.Presets.Adapter.General.Netstandard" />
+        <RootNamespace Value="RoomManagerment.Identity" />
+        <TemplateGroup Value="Adapter" />
+        <TemplateBindings>
+          <Binding Name="SD.TemplateBindings.PostgreSqlSpecific" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates.Net9" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates" />
+          <Binding Name="SD.TemplateBindings.General" />
+        </TemplateBindings>
+        <AdhocTemplateSets />
+      </LastUsedPreferences>
+    </OutputType>
+  </CodeGenerationCyclePreferences>
+  <OutputSettingValues>
+    <SettingValues>
+      <SettingValue Name="1:AdapterDbGenericSubFolderName" Value="DatabaseGeneric" Type="18" />
+      <SettingValue Name="1:AdapterDbSpecificNamespaceSuffix" Value="DatabaseSpecific" Type="18" />
+      <SettingValue Name="1:AdapterDbSpecificProjectFileSuffix" Value="DBSpecific" Type="18" />
+      <SettingValue Name="1:AdapterDbSpecificSubFolderName" Value="DatabaseSpecific" Type="18" />
+      <SettingValue Name="1:ConvertNulledReferenceTypesToDefaultValue" Value="true" Type="3" />
+      <SettingValue Name="1:EntityBaseClassNameDefault" Value="CommonEntityBase" Type="18" />
+      <SettingValue Name="1:FieldPropertyIsPublicDefault" Value="true" Type="3" />
+      <SettingValue Name="1:GenerateAsNullableTypeDefault" Value="true" Type="3" />
+      <SettingValue Name="1:GenerateEntityFieldFactory" Value="false" Type="3" />
+      <SettingValue Name="1:GenerateEntityFieldsFactory" Value="false" Type="3" />
+      <SettingValue Name="1:InlineValueTypedFields" Value="true" Type="3" />
+      <SettingValue Name="1:LazyLoadingWithoutResultReturnsNew" Value="false" Type="3" />
+      <SettingValue Name="1:NavigatorPropertyIsPublicDefault" Value="true" Type="3" />
+      <SettingValue Name="1:SupportedActionCombinations" Value="0,1,2,3,4,5,6,7" Type="18" />
+      <SettingValue Name="1:TdlEmitTimeDateInOutputFiles" Value="false" Type="3" />
+      <SettingValue Name="1:TypedListOutputTypeDefault" Value="PocoWithQuerySpecQuery" Type="18" />
+      <SettingValue Name="1:TypedViewOutputTypeDefault" Value="PocoWithQuerySpecQuery" Type="18" />
+    </SettingValues>
+  </OutputSettingValues>
+  <CodeGenerationMetaDataDefaults>
+    <TargetElement Type="256">
+      <Defaults>
+        <Attributes>
+          <Attribute Value="Browsable($false)" />
+        </Attributes>
+      </Defaults>
+    </TargetElement>
+  </CodeGenerationMetaDataDefaults>
+  <EntityModel>
+    <ValueTypeDefinitions />
+    <EntityDefinitions>
+      <EntityDefinition Name="Permission" GroupName="Auth" ObjectID="3ef7dffe-0c89-4709-a17b-193754f43978">
+        <Fields>
+          <Field Name="Code" Type="string" MaxLength="50" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="Name" Type="string" MaxLength="100" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="RefreshToken" GroupName="Auth" ObjectID="5244e244-5aba-4b7d-ac84-7377a8cbfa22">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="ExpiresAt" Type="datetime" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="IsRevoked" Type="bool" />
+          <Field Name="Token" Type="string" MaxLength="500" />
+          <Field Name="UserId" Type="guid" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="Role" GroupName="Auth" ObjectID="bc23ca75-4a6b-4484-8a67-d654a578c6d8">
+        <Fields>
+          <Field Name="Code" Type="string" MaxLength="50" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="Name" Type="string" MaxLength="100" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="RolePermission" GroupName="Auth" ObjectID="e6c7f680-001c-4b9f-b766-bf9ced38862f">
+        <Fields>
+          <Field Name="PermissionId" Type="guid" IsPrimaryKey="true" />
+          <Field Name="RoleId" Type="guid" IsPrimaryKey="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="User" GroupName="Auth" ObjectID="628beb4b-7b1c-427a-8da1-ea0ec8c787a6">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="Email" Type="string" MaxLength="200" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="PasswordHash" Type="string" MaxLength="500" />
+          <Field Name="Status" Type="short" Precision="5" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="Username" Type="string" MaxLength="100" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="UserPermission" GroupName="Auth" ObjectID="59968a48-ac55-47bb-a9be-12ed78108db5">
+        <Fields>
+          <Field Name="IsGranted" Type="bool" />
+          <Field Name="PermissionId" Type="guid" IsPrimaryKey="true" />
+          <Field Name="UserId" Type="guid" IsPrimaryKey="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="UserProfile" GroupName="Auth" ObjectID="9511ff96-2540-4388-8ac7-dd894fb4744f">
+        <Fields>
+          <Field Name="AvatarUrl" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="FullName" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="Phone" Type="string" IsOptional="true" MaxLength="30" />
+          <Field Name="SearchVector" Type="string" IsOptional="true" MaxLength="10485760" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UserId" Type="guid" IsPrimaryKey="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="UserRole" GroupName="Auth" ObjectID="1f0407a4-f156-4fa1-b8eb-95e7bef84aa5">
+        <Fields>
+          <Field Name="RoleId" Type="guid" IsPrimaryKey="true" />
+          <Field Name="UserId" Type="guid" IsPrimaryKey="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="Menu" GroupName="Menu" ObjectID="ebefd05e-54be-4d73-be6d-67f774852726">
+        <Fields>
+          <Field Name="Code" Type="string" MaxLength="100" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="Icon" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="IsActive" Type="bool" />
+          <Field Name="Label" Type="string" MaxLength="200" />
+          <Field Name="OrderIndex" Type="int" Precision="10" />
+          <Field Name="ParentId" Type="guid" IsOptional="true" />
+          <Field Name="Path" Type="string" IsOptional="true" MaxLength="300" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="MenuPermission" GroupName="Menu" ObjectID="15a752c5-81d3-4072-8993-cc42c9845121">
+        <Fields>
+          <Field Name="MenuId" Type="guid" IsPrimaryKey="true" />
+          <Field Name="PermissionCode" Type="string" MaxLength="50" IsPrimaryKey="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="UserMenuOverride" GroupName="Menu" ObjectID="0e998bd9-55b8-4d40-8c87-28aac41964c2">
+        <Fields>
+          <Field Name="IsVisible" Type="bool" />
+          <Field Name="MenuId" Type="guid" IsPrimaryKey="true" />
+          <Field Name="UserId" Type="guid" IsPrimaryKey="true" />
+        </Fields>
+      </EntityDefinition>
+    </EntityDefinitions>
+    <Relationships>
+      <NormalRelationship Name="Auth.RefreshToken.User-Auth.User.RefreshTokens" Start="Auth:RefreshToken" End="Auth:User" StartNavigator="User" EndNavigator="RefreshTokens" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="UserId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.RolePermission.Permission-Auth.Permission.RolePermissions" Start="Auth:RolePermission" End="Auth:Permission" StartNavigator="Permission" EndNavigator="RolePermissions" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="PermissionId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.RolePermission.Role-Auth.Role.RolePermissions" Start="Auth:RolePermission" End="Auth:Role" StartNavigator="Role" EndNavigator="RolePermissions" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="RoleId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.UserPermission.Permission-Auth.Permission.UserPermissions" Start="Auth:UserPermission" End="Auth:Permission" StartNavigator="Permission" EndNavigator="UserPermissions" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="PermissionId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.UserPermission.User-Auth.User.UserPermissions" Start="Auth:UserPermission" End="Auth:User" StartNavigator="User" EndNavigator="UserPermissions" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="UserId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.UserProfile.User-Auth.User.UserProfile" Start="Auth:UserProfile" End="Auth:User" StartNavigator="User" EndNavigator="UserProfile" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="UserId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.UserRole.Role-Auth.Role.UserRoles" Start="Auth:UserRole" End="Auth:Role" StartNavigator="Role" EndNavigator="UserRoles" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="RoleId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.UserRole.User-Auth.User.UserRoles" Start="Auth:UserRole" End="Auth:User" StartNavigator="User" EndNavigator="UserRoles" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="UserId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Menu.MenuPermission.Menu-Menu.Menu.MenuPermissions" Start="Menu:MenuPermission" End="Menu:Menu" StartNavigator="Menu" EndNavigator="MenuPermissions" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="MenuId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Menu.UserMenuOverride.Menu-Menu.Menu.UserMenuOverrides" Start="Menu:UserMenuOverride" End="Menu:Menu" StartNavigator="Menu" EndNavigator="UserMenuOverrides" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="MenuId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+    </Relationships>
+    <InheritanceHierarchies />
+  </EntityModel>
+  <TargetDatabases>
+    <TargetDatabase Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F" SyncSource="2">
+      <ConnectionElements>
+        <ConnectionElement Name="ServerName" Value="room-managerment.postgres.database.azure.com" />
+        <ConnectionElement Name="CatalogName" Value="room_managerment" />
+        <ConnectionElement Name="UserID" Value="room_managerment" />
+        <ConnectionElement Name="Password" Value="" />
+        <ConnectionElement Name="PortNumber" Value="5432" />
+        <ConnectionElement Name="SslMode" Value="Require" />
+        <ConnectionElement Name="CustomFragments" Value="" />
+      </ConnectionElements>
+      <SystemSequences>
+        <Sequence Name="SystemIdentity" />
+      </SystemSequences>
+      <Catalogs>
+        <Catalog Name="room_managerment" SyncSource="2">
+          <Schemas>
+            <Schema Name="auth" SyncSource="2" LastSyncWithDatabase="2026-02-02T15:55:06.7245381Z">
+              <Tables>
+                <Table Name="permissions">
+                  <PkConstraintName Name="permissions_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="code" Ordinal="2" DbType="24" Length="50" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="100" />
+                    <Field Name="created_at" Ordinal="4" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="refresh_tokens">
+                  <PkConstraintName Name="refresh_tokens_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="user_id" Ordinal="2" DbType="28" />
+                    <Field Name="token" Ordinal="3" DbType="24" Length="500" />
+                    <Field Name="expires_at" Ordinal="4" DbType="23" />
+                    <Field Name="is_revoked" Ordinal="5" HasDefaultValue="true" DefaultValue="false" DbType="0" />
+                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="role_permissions">
+                  <PkConstraintName Name="role_permissions_pkey" />
+                  <Fields>
+                    <Field Name="role_id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="permission_id" Ordinal="2" IsPrimaryKey="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="roles">
+                  <PkConstraintName Name="roles_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="code" Ordinal="2" DbType="24" Length="50" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="100" />
+                    <Field Name="created_at" Ordinal="4" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="user_permissions">
+                  <PkConstraintName Name="user_permissions_pkey" />
+                  <Fields>
+                    <Field Name="user_id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="permission_id" Ordinal="2" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="is_granted" Ordinal="3" DbType="0" />
+                  </Fields>
+                </Table>
+                <Table Name="user_profiles">
+                  <PkConstraintName Name="user_profiles_pkey" />
+                  <Fields>
+                    <Field Name="user_id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="full_name" Ordinal="2" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="phone" Ordinal="3" IsOptional="true" DbType="24" Length="30" />
+                    <Field Name="avatar_url" Ordinal="4" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="search_vector" Ordinal="5" IsOptional="true" DbType="24" Length="10485760" />
+                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="user_roles">
+                  <PkConstraintName Name="user_roles_pkey" />
+                  <Fields>
+                    <Field Name="user_id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="role_id" Ordinal="2" IsPrimaryKey="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="users">
+                  <PkConstraintName Name="users_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="username" Ordinal="2" DbType="24" Length="100" />
+                    <Field Name="email" Ordinal="3" DbType="24" Length="200" />
+                    <Field Name="password_hash" Ordinal="4" DbType="24" Length="500" />
+                    <Field Name="status" Ordinal="5" HasDefaultValue="true" DefaultValue="1" DbType="8" Precision="5" />
+                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+              </Tables>
+            </Schema>
+            <Schema Name="menu" SyncSource="2" LastSyncWithDatabase="2026-02-02T15:55:08.8844663Z">
+              <Tables>
+                <Table Name="menu_permissions">
+                  <PkConstraintName Name="menu_permissions_pkey" />
+                  <Fields>
+                    <Field Name="menu_id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="permission_code" Ordinal="2" IsPrimaryKey="true" DbType="24" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="menus">
+                  <PkConstraintName Name="menus_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="code" Ordinal="2" DbType="24" Length="100" />
+                    <Field Name="label" Ordinal="3" DbType="24" Length="200" />
+                    <Field Name="path" Ordinal="4" IsOptional="true" DbType="24" Length="300" />
+                    <Field Name="icon" Ordinal="5" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="parent_id" Ordinal="6" IsOptional="true" DbType="28" />
+                    <Field Name="order_index" Ordinal="7" HasDefaultValue="true" DefaultValue="0" DbType="9" Precision="10" />
+                    <Field Name="is_active" Ordinal="8" HasDefaultValue="true" DefaultValue="true" DbType="0" />
+                    <Field Name="created_at" Ordinal="9" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="10" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="user_menu_overrides">
+                  <PkConstraintName Name="user_menu_overrides_pkey" />
+                  <Fields>
+                    <Field Name="user_id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="menu_id" Ordinal="2" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="is_visible" Ordinal="3" DbType="0" />
+                  </Fields>
+                </Table>
+              </Tables>
+            </Schema>
+          </Schemas>
+          <ForeignKeyConstraints>
+            <ForeignKeyConstraint Name="auth:refresh_tokens:fk_refresh_tokens_users" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:users:id" FkField="auth:refresh_tokens:user_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:role_permissions:fk_role_permissions_permissions" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:permissions:id" FkField="auth:role_permissions:permission_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:role_permissions:fk_role_permissions_roles" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:roles:id" FkField="auth:role_permissions:role_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:user_permissions:fk_user_permissions_permissions" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:permissions:id" FkField="auth:user_permissions:permission_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:user_permissions:fk_user_permissions_users" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:users:id" FkField="auth:user_permissions:user_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:user_profiles:fk_user_profiles_users" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:users:id" FkField="auth:user_profiles:user_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:user_roles:fk_user_roles_roles" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:roles:id" FkField="auth:user_roles:role_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:user_roles:fk_user_roles_users" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:users:id" FkField="auth:user_roles:user_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="menu:menu_permissions:fk_menu_permissions_menus" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="menu:menus:id" FkField="menu:menu_permissions:menu_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="menu:user_menu_overrides:fk_user_menu_overrides_menus" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="menu:menus:id" FkField="menu:user_menu_overrides:menu_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+          </ForeignKeyConstraints>
+        </Catalog>
+      </Catalogs>
+    </TargetDatabase>
+  </TargetDatabases>
+  <MappingStores>
+    <MappingStore Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F">
+      <EntityMappings>
+        <EntityMapping EntityName="Auth:Permission" TargetName="room_managerment:auth:permissions">
+          <FieldMappings>
+            <FieldMapping FieldName="Code" TargetFieldName="code" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="Name" TargetFieldName="name" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:RefreshToken" TargetName="room_managerment:auth:refresh_tokens">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="ExpiresAt" TargetFieldName="expires_at" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IsRevoked" TargetFieldName="is_revoked" />
+            <FieldMapping FieldName="Token" TargetFieldName="token" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:Role" TargetName="room_managerment:auth:roles">
+          <FieldMappings>
+            <FieldMapping FieldName="Code" TargetFieldName="code" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="Name" TargetFieldName="name" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:RolePermission" TargetName="room_managerment:auth:role_permissions">
+          <FieldMappings>
+            <FieldMapping FieldName="PermissionId" TargetFieldName="permission_id" />
+            <FieldMapping FieldName="RoleId" TargetFieldName="role_id" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:User" TargetName="room_managerment:auth:users">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="Email" TargetFieldName="email" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="PasswordHash" TargetFieldName="password_hash" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="Username" TargetFieldName="username" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:UserPermission" TargetName="room_managerment:auth:user_permissions">
+          <FieldMappings>
+            <FieldMapping FieldName="IsGranted" TargetFieldName="is_granted" />
+            <FieldMapping FieldName="PermissionId" TargetFieldName="permission_id" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:UserProfile" TargetName="room_managerment:auth:user_profiles">
+          <FieldMappings>
+            <FieldMapping FieldName="AvatarUrl" TargetFieldName="avatar_url" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="FullName" TargetFieldName="full_name" />
+            <FieldMapping FieldName="Phone" TargetFieldName="phone" />
+            <FieldMapping FieldName="SearchVector" TargetFieldName="search_vector" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:UserRole" TargetName="room_managerment:auth:user_roles">
+          <FieldMappings>
+            <FieldMapping FieldName="RoleId" TargetFieldName="role_id" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Menu:Menu" TargetName="room_managerment:menu:menus">
+          <FieldMappings>
+            <FieldMapping FieldName="Code" TargetFieldName="code" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="Icon" TargetFieldName="icon" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IsActive" TargetFieldName="is_active" />
+            <FieldMapping FieldName="Label" TargetFieldName="label" />
+            <FieldMapping FieldName="OrderIndex" TargetFieldName="order_index" />
+            <FieldMapping FieldName="ParentId" TargetFieldName="parent_id" />
+            <FieldMapping FieldName="Path" TargetFieldName="path" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Menu:MenuPermission" TargetName="room_managerment:menu:menu_permissions">
+          <FieldMappings>
+            <FieldMapping FieldName="MenuId" TargetFieldName="menu_id" />
+            <FieldMapping FieldName="PermissionCode" TargetFieldName="permission_code" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Menu:UserMenuOverride" TargetName="room_managerment:menu:user_menu_overrides">
+          <FieldMappings>
+            <FieldMapping FieldName="IsVisible" TargetFieldName="is_visible" />
+            <FieldMapping FieldName="MenuId" TargetFieldName="menu_id" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+          </FieldMappings>
+        </EntityMapping>
+      </EntityMappings>
+      <TypedViewMappings />
+      <SPCallMappings />
+      <TvfCallMappings />
+      <TypeConversionDefinitions />
+    </MappingStore>
+  </MappingStores>
+  <ModelViews />
+</Project>
