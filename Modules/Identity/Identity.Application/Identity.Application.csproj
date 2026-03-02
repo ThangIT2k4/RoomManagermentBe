@@ -13,6 +13,7 @@
     <ItemGroup>
       <PackageReference Include="MediatR" Version="13.1.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Repositories\" />
