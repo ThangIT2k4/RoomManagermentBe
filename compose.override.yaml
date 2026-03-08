@@ -1,6 +1,6 @@
 services:
 
-  
+
   # ---------------- REDIS ----------------
   redis:
     image: redis:7-alpine
@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
     networks:
       - rm-network
-  
+
   # ---------------- POSTGRES ----------------
   postgres:
     image: postgres:18-alpine
@@ -30,7 +30,7 @@ services:
       retries: 5
     networks:
       - rm-network
-  
+
   # ---------------- IDENTITY API ----------------
   identity-api:
     build:
@@ -45,9 +45,11 @@ services:
     depends_on:
       - postgres
       - redis
+    security_opt:
+      - no-new-privileges:true
     networks:
       - rm-network
-  
+
   # ---------------- EXTERNAL API ----------------
   external-api:
     build:
@@ -57,9 +59,11 @@ services:
     environment:
       ASPNETCORE_URLS: http://0.0.0.0:8080
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - rm-network
-  
+
   # ---------------- GATEWAY ----------------
   gateway:
     build:
@@ -74,6 +78,8 @@ services:
     depends_on:
       - identity-api
       - external-api
+    security_opt:
+      - no-new-privileges:true
     networks:
       - rm-network
 networks:

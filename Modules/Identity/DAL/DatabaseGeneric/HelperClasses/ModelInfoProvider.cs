@@ -42,7 +42,6 @@ namespace RoomManagerment.Identity.HelperClasses
 		{
 			this.InitClass();
 			InitPermissionEntityInfo();
-			InitRefreshTokenEntityInfo();
 			InitRoleEntityInfo();
 			InitRolePermissionEntityInfo();
 			InitUserEntityInfo();
@@ -63,18 +62,6 @@ namespace RoomManagerment.Identity.HelperClasses
 			this.AddElementFieldInfo("PermissionEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)PermissionFieldIndex.CreatedAt, 0, 0, 0);
 			this.AddElementFieldInfo("PermissionEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)PermissionFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("PermissionEntity", "Name", typeof(System.String), false, false, false, false,  (int)PermissionFieldIndex.Name, 100, 0, 0);
-		}
-
-		/// <summary>Inits RefreshTokenEntity's info objects</summary>
-		private void InitRefreshTokenEntityInfo()
-		{
-			this.AddFieldIndexEnumForElementName(typeof(RefreshTokenFieldIndex), "RefreshTokenEntity");
-			this.AddElementFieldInfo("RefreshTokenEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)RefreshTokenFieldIndex.CreatedAt, 0, 0, 0);
-			this.AddElementFieldInfo("RefreshTokenEntity", "ExpiresAt", typeof(System.DateTime), false, false, false, false,  (int)RefreshTokenFieldIndex.ExpiresAt, 0, 0, 0);
-			this.AddElementFieldInfo("RefreshTokenEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)RefreshTokenFieldIndex.Id, 0, 0, 0);
-			this.AddElementFieldInfo("RefreshTokenEntity", "IsRevoked", typeof(System.Boolean), false, false, false, false,  (int)RefreshTokenFieldIndex.IsRevoked, 0, 0, 0);
-			this.AddElementFieldInfo("RefreshTokenEntity", "Token", typeof(System.String), false, false, false, false,  (int)RefreshTokenFieldIndex.Token, 500, 0, 0);
-			this.AddElementFieldInfo("RefreshTokenEntity", "UserId", typeof(System.Guid), false, true, false, false,  (int)RefreshTokenFieldIndex.UserId, 0, 0, 0);
 		}
 
 		/// <summary>Inits RoleEntity's info objects</summary>

@@ -16,8 +16,6 @@ namespace RoomManagerment.Identity
 	{
 		///<summary>Permission</summary>
 		PermissionEntity,
-		///<summary>RefreshToken</summary>
-		RefreshTokenEntity,
 		///<summary>Role</summary>
 		RoleEntity,
 		///<summary>RolePermission</summary>

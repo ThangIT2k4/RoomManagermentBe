@@ -21,9 +21,6 @@ namespace RoomManagerment.Identity.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the Permission entity</summary>
 		public EntityQuery<PermissionEntity> Permission { get { return Create<PermissionEntity>(); } }
 
-		/// <summary>Creates and returns a new EntityQuery for the RefreshToken entity</summary>
-		public EntityQuery<RefreshTokenEntity> RefreshToken { get { return Create<RefreshTokenEntity>(); } }
-
 		/// <summary>Creates and returns a new EntityQuery for the Role entity</summary>
 		public EntityQuery<RoleEntity> Role { get { return Create<RoleEntity>(); } }
 

@@ -75,16 +75,6 @@ namespace RoomManagerment.Identity.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new PermissionEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty RefreshTokenEntity objects.</summary>
-	[Serializable]
-	public partial class RefreshTokenEntityFactory : EntityFactoryBase2<RefreshTokenEntity> 
-	{
-		/// <summary>CTor</summary>
-		public RefreshTokenEntityFactory() : base("RefreshTokenEntity", RoomManagerment.Identity.EntityType.RefreshTokenEntity, false) { }
-		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new RefreshTokenEntity(fields); }
-	}
-
 	/// <summary>Factory to create new, empty RoleEntity objects.</summary>
 	[Serializable]
 	public partial class RoleEntityFactory : EntityFactoryBase2<RoleEntity> 
@@ -224,8 +214,6 @@ namespace RoomManagerment.Identity.FactoryClasses
 			{
 				case RoomManagerment.Identity.EntityType.PermissionEntity:
 					return new PermissionEntityFactory();
-				case RoomManagerment.Identity.EntityType.RefreshTokenEntity:
-					return new RefreshTokenEntityFactory();
 				case RoomManagerment.Identity.EntityType.RoleEntity:
 					return new RoleEntityFactory();
 				case RoomManagerment.Identity.EntityType.RolePermissionEntity:

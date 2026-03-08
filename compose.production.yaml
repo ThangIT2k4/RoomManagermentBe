@@ -41,6 +41,8 @@ services:
     depends_on:
       - postgres
       - redis
+    security_opt:
+      - no-new-privileges:true
     networks:
       - rm-network
   # ---------------- EXTERNAL API ----------------
@@ -52,6 +54,8 @@ services:
     environment:
       ASPNETCORE_URLS: http://0.0.0.0:8080
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     networks:
       - rm-network
   # ---------------- GATEWAY ----------------
@@ -68,6 +72,8 @@ services:
     depends_on:
       - identity-api
       - external-api
+    security_opt:
+      - no-new-privileges:true
     networks:
       - rm-network
 networks:

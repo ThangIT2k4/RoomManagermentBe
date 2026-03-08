@@ -46,8 +46,6 @@ namespace RoomManagerment.Identity.Linq
 			{
 				case RoomManagerment.Identity.EntityType.PermissionEntity:
 					return this.Permission;
-				case RoomManagerment.Identity.EntityType.RefreshTokenEntity:
-					return this.RefreshToken;
 				case RoomManagerment.Identity.EntityType.RoleEntity:
 					return this.Role;
 				case RoomManagerment.Identity.EntityType.RolePermissionEntity:
@@ -94,9 +92,6 @@ namespace RoomManagerment.Identity.Linq
 
 		/// <summary>returns the datasource to use in a Linq query when targeting PermissionEntity instances in the database.</summary>
 		public DataSource2<PermissionEntity> Permission {	get { return new DataSource2<PermissionEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting RefreshTokenEntity instances in the database.</summary>
-		public DataSource2<RefreshTokenEntity> RefreshToken {	get { return new DataSource2<RefreshTokenEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting RoleEntity instances in the database.</summary>
 		public DataSource2<RoleEntity> Role {	get { return new DataSource2<RoleEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }

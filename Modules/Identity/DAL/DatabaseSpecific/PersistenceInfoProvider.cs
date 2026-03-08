@@ -37,7 +37,6 @@ namespace RoomManagerment.Identity.DatabaseSpecific
 		{
 			this.InitClass();
 			InitPermissionEntityMappings();
-			InitRefreshTokenEntityMappings();
 			InitRoleEntityMappings();
 			InitRolePermissionEntityMappings();
 			InitUserEntityMappings();
@@ -52,29 +51,17 @@ namespace RoomManagerment.Identity.DatabaseSpecific
 		/// <summary>Inits PermissionEntity's mappings</summary>
 		private void InitPermissionEntityMappings()
 		{
-			this.AddElementMapping("PermissionEntity", @"room_managerment", @"auth", "permissions", 4, 0);
+			this.AddElementMapping("PermissionEntity", @"postgres", @"auth", "permissions", 4, 0);
 			this.AddElementFieldMapping("PermissionEntity", "Code", "code", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("PermissionEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
 			this.AddElementFieldMapping("PermissionEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
 			this.AddElementFieldMapping("PermissionEntity", "Name", "name", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
-		/// <summary>Inits RefreshTokenEntity's mappings</summary>
-		private void InitRefreshTokenEntityMappings()
-		{
-			this.AddElementMapping("RefreshTokenEntity", @"room_managerment", @"auth", "refresh_tokens", 6, 0);
-			this.AddElementFieldMapping("RefreshTokenEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
-			this.AddElementFieldMapping("RefreshTokenEntity", "ExpiresAt", "expires_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
-			this.AddElementFieldMapping("RefreshTokenEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
-			this.AddElementFieldMapping("RefreshTokenEntity", "IsRevoked", "is_revoked", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
-			this.AddElementFieldMapping("RefreshTokenEntity", "Token", "token", false, "Varchar", 500, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("RefreshTokenEntity", "UserId", "user_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 5);
-		}
-
 		/// <summary>Inits RoleEntity's mappings</summary>
 		private void InitRoleEntityMappings()
 		{
-			this.AddElementMapping("RoleEntity", @"room_managerment", @"auth", "roles", 4, 0);
+			this.AddElementMapping("RoleEntity", @"postgres", @"auth", "roles", 4, 0);
 			this.AddElementFieldMapping("RoleEntity", "Code", "code", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("RoleEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
 			this.AddElementFieldMapping("RoleEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
@@ -84,7 +71,7 @@ namespace RoomManagerment.Identity.DatabaseSpecific
 		/// <summary>Inits RolePermissionEntity's mappings</summary>
 		private void InitRolePermissionEntityMappings()
 		{
-			this.AddElementMapping("RolePermissionEntity", @"room_managerment", @"auth", "role_permissions", 2, 0);
+			this.AddElementMapping("RolePermissionEntity", @"postgres", @"auth", "role_permissions", 2, 0);
 			this.AddElementFieldMapping("RolePermissionEntity", "PermissionId", "permission_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 0);
 			this.AddElementFieldMapping("RolePermissionEntity", "RoleId", "role_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 1);
 		}
@@ -92,7 +79,7 @@ namespace RoomManagerment.Identity.DatabaseSpecific
 		/// <summary>Inits UserEntity's mappings</summary>
 		private void InitUserEntityMappings()
 		{
-			this.AddElementMapping("UserEntity", @"room_managerment", @"auth", "users", 7, 0);
+			this.AddElementMapping("UserEntity", @"postgres", @"auth", "users", 7, 0);
 			this.AddElementFieldMapping("UserEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
 			this.AddElementFieldMapping("UserEntity", "Email", "email", false, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("UserEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
@@ -105,7 +92,7 @@ namespace RoomManagerment.Identity.DatabaseSpecific
 		/// <summary>Inits UserPermissionEntity's mappings</summary>
 		private void InitUserPermissionEntityMappings()
 		{
-			this.AddElementMapping("UserPermissionEntity", @"room_managerment", @"auth", "user_permissions", 3, 0);
+			this.AddElementMapping("UserPermissionEntity", @"postgres", @"auth", "user_permissions", 3, 0);
 			this.AddElementFieldMapping("UserPermissionEntity", "IsGranted", "is_granted", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("UserPermissionEntity", "PermissionId", "permission_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 1);
 			this.AddElementFieldMapping("UserPermissionEntity", "UserId", "user_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
@@ -114,7 +101,7 @@ namespace RoomManagerment.Identity.DatabaseSpecific
 		/// <summary>Inits UserProfileEntity's mappings</summary>
 		private void InitUserProfileEntityMappings()
 		{
-			this.AddElementMapping("UserProfileEntity", @"room_managerment", @"auth", "user_profiles", 7, 0);
+			this.AddElementMapping("UserProfileEntity", @"postgres", @"auth", "user_profiles", 7, 0);
 			this.AddElementFieldMapping("UserProfileEntity", "AvatarUrl", "avatar_url", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("UserProfileEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
 			this.AddElementFieldMapping("UserProfileEntity", "FullName", "full_name", true, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 2);
@@ -127,7 +114,7 @@ namespace RoomManagerment.Identity.DatabaseSpecific
 		/// <summary>Inits UserRoleEntity's mappings</summary>
 		private void InitUserRoleEntityMappings()
 		{
-			this.AddElementMapping("UserRoleEntity", @"room_managerment", @"auth", "user_roles", 2, 0);
+			this.AddElementMapping("UserRoleEntity", @"postgres", @"auth", "user_roles", 2, 0);
 			this.AddElementFieldMapping("UserRoleEntity", "RoleId", "role_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 0);
 			this.AddElementFieldMapping("UserRoleEntity", "UserId", "user_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 1);
 		}
@@ -135,7 +122,7 @@ namespace RoomManagerment.Identity.DatabaseSpecific
 		/// <summary>Inits MenuEntity's mappings</summary>
 		private void InitMenuEntityMappings()
 		{
-			this.AddElementMapping("MenuEntity", @"room_managerment", @"menu", "menus", 10, 0);
+			this.AddElementMapping("MenuEntity", @"postgres", @"menu", "menus", 10, 0);
 			this.AddElementFieldMapping("MenuEntity", "Code", "code", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("MenuEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
 			this.AddElementFieldMapping("MenuEntity", "Icon", "icon", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 2);
@@ -151,7 +138,7 @@ namespace RoomManagerment.Identity.DatabaseSpecific
 		/// <summary>Inits MenuPermissionEntity's mappings</summary>
 		private void InitMenuPermissionEntityMappings()
 		{
-			this.AddElementMapping("MenuPermissionEntity", @"room_managerment", @"menu", "menu_permissions", 2, 0);
+			this.AddElementMapping("MenuPermissionEntity", @"postgres", @"menu", "menu_permissions", 2, 0);
 			this.AddElementFieldMapping("MenuPermissionEntity", "MenuId", "menu_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 0);
 			this.AddElementFieldMapping("MenuPermissionEntity", "PermissionCode", "permission_code", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 		}
@@ -159,7 +146,7 @@ namespace RoomManagerment.Identity.DatabaseSpecific
 		/// <summary>Inits UserMenuOverrideEntity's mappings</summary>
 		private void InitUserMenuOverrideEntityMappings()
 		{
-			this.AddElementMapping("UserMenuOverrideEntity", @"room_managerment", @"menu", "user_menu_overrides", 3, 0);
+			this.AddElementMapping("UserMenuOverrideEntity", @"postgres", @"menu", "user_menu_overrides", 3, 0);
 			this.AddElementFieldMapping("UserMenuOverrideEntity", "IsVisible", "is_visible", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("UserMenuOverrideEntity", "MenuId", "menu_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 1);
 			this.AddElementFieldMapping("UserMenuOverrideEntity", "UserId", "user_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);

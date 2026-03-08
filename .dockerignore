@@ -1,0 +1,15 @@
+.git
+.gitignore
+.vscode
+.idea
+**/.vs
+**/bin
+**/obj
+**/*.user
+**/*.suo
+**/*.swp
+**/*.tmp
+**/*.log
+docker/nginx/logs
+.env
+.env.*

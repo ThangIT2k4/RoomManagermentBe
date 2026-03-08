@@ -1,129 +1,206 @@
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ===== LOGGING =====
-builder.Services.AddSerilog(
-    new LoggerConfiguration()
-        .WriteTo.Console()
-        .WriteTo.File("logs/gateway-.txt", rollingInterval: RollingInterval.Day)
-        .MinimumLevel.Information()
-        .CreateLogger());
 
-// ===== REQUEST SIZE LIMIT =====
-builder.WebHost.ConfigureKestrel(options =>
+#region LOGGING
+
+builder.Host.UseSerilog((ctx, lc) =>
 {
-    options.Limits.MaxRequestBodySize = 10 * 1024 * 1024; // 10MB
+    lc.ReadFrom.Configuration(ctx.Configuration)
+        .Enrich.FromLogContext()
+        .Enrich.WithMachineName()
+        .Enrich.WithThreadId()
+        .Enrich.WithProcessId();
 });
 
-// ===== FORWARDED HEADERS =====
+#endregion
+
+#region REDIS
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = builder.Configuration["Redis:InstanceName"] ?? "RoomManagementGateway:";
+});
+
+#endregion
+
+#region SESSION
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(
+        builder.Configuration.GetValue<int>("Session:TimeoutMinutes", 30)
+    );
+
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = "RoomManager.SessionId";
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+});
+
+#endregion
+
+#region REQUEST SIZE LIMIT
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 
+        builder.Configuration.GetValue<long>("Kestrel:MaxRequestBodySize", 10 * 1024 * 1024); // Default to 10MB
+});
+
+#endregion
+
+#region FORWARDED HEADER
+
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
-    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor |
+        ForwardedHeaders.XForwardedProto;
+
     options.KnownNetworks.Clear();
     options.KnownProxies.Clear();
 });
 
-// ===== CORS =====
+#endregion
+
+#region CORS
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("GatewayPolicy", policy =>
     {
-        var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 
-            ?? new[] { "http://localhost:3000", "http://localhost:4200" };
-        
+        var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+                             ?? new[] { "http://localhost:3000", "http://localhost:4200" };
+
         policy.WithOrigins(allowedOrigins)
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials();
     });
 });
+    
+#endregion
 
-// ===== RATE LIMITER =====
+#region RATE LIMITER
+
 builder.Services.AddRateLimiter(options =>
 {
+    // 1️⃣ Global concurrency limit (protect CPU)
+    options.AddConcurrencyLimiter("concurrency", opt =>
+    {
+        opt.PermitLimit = 100; // max 100 request running at same time
+        opt.QueueLimit = 50;
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+
+    // 2️⃣ IP + User based rate limit
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
     {
-        var clientIp = context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
-            ?? context.Connection.RemoteIpAddress?.ToString()
-            ?? "unknown";
-        
-        return RateLimitPartition.GetFixedWindowLimiter(clientIp, _ => new FixedWindowRateLimiterOptions
-        {
-            PermitLimit = 100,
-            Window = TimeSpan.FromMinutes(1),
-            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-            QueueLimit = 5
-        });
+        var userId = context.User?.Identity?.IsAuthenticated == true
+            ? context.User.Identity.Name
+            : null;
+
+        var clientIp = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+        var partitionKey = userId ?? clientIp;
+
+        return RateLimitPartition.GetFixedWindowLimiter(partitionKey, _ =>
+            new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 100, // 100 req
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 5,
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+            });
     });
-    
+
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
-// ===== PROBLEM DETAILS =====
+#endregion
+
+#region PROBLEM DETAILS
+
 builder.Services.AddProblemDetails();
 
-// ===== REVERSE PROXY =====
+#endregion
+
+#region REVERSE PROXY
+
 builder.Services
     .AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 builder.Services.AddOpenApiDocument();
 
+#endregion
+
+builder.Services.AddOpenApiDocument();
+
 var app = builder.Build();
 
-// ===== MIDDLEWARE PIPELINE =====
+#region ===== MIDDLEWARE PIPELINE =====
 
-// 1. Exception Handling (FIRST)
+// Exception handling
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/error");
 }
+
 app.UseStatusCodePages();
 
-// 2. HSTS + HTTPS
+// HTTPS
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
 }
+
 app.UseHttpsRedirection();
 
-// 3. Forwarded Headers (CRITICAL - BEFORE Rate Limiting)
+// Forwarded headers
 app.UseForwardedHeaders();
 
-// 4. Request Logging
-app.UseSerilogRequestLogging(options =>
-{
-    options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
-});
+// Logging
+app.UseSerilogRequestLogging();
 
-// 5. CORS
+// CORS
 app.UseCors("GatewayPolicy");
 
-// 6. Rate Limiting (CRITICAL - BEFORE Reverse Proxy)
+// Session
+app.UseSession();
+
+// Rate limiting
 app.UseRateLimiter();
 
-// 7. Development endpoints
+// Swagger (dev only)
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwaggerUi();
 }
 
-// 8. Reverse Proxy
+// Reverse proxy
 app.MapReverseProxy();
 
-// 9. Error handler
+// Error endpoint
 if (!app.Environment.IsDevelopment())
 {
     app.Map("/error", HandleException);
 }
 
+#endregion
+
 app.Run();
 
-// ===== ERROR HANDLER =====
+#region HELPER METHODS
+
 static IResult HandleException(HttpContext context)
 {
     var problem = new
@@ -134,7 +211,10 @@ static IResult HandleException(HttpContext context)
         detail = "An internal server error has occurred.",
         instance = context.Request.Path
     };
-    
-    context.Response.ContentType = "application/problem+json";
-    return Results.Json(problem, statusCode: StatusCodes.Status500InternalServerError);
+
+    return Results.Json(problem,
+        statusCode: StatusCodes.Status500InternalServerError,
+        contentType: "application/problem+json");
 }
+
+#endregion

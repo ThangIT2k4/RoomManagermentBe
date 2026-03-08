@@ -14,6 +14,7 @@
       <PackageReference Include="Serilog" Version="4.1.0" />
       <PackageReference Include="StackExchange.Redis" Version="2.11.0" />
       <ProjectReference Include="..\DAL\DatabaseGeneric\RoomManagerment.Identity.csproj" />
+      <ProjectReference Include="..\DAL\DatabaseGeneric\Room_Managerment_Identity.csproj" />
       <ProjectReference Include="..\DAL\DatabaseSpecific\RoomManagerment.IdentityDBSpecific.csproj" />
       <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
       <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />

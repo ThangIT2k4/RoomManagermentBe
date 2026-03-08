@@ -51,8 +51,8 @@
     <Property Name="PreferSystemSequencesOverSchemaSequencesIfApplicable" Value="true" />
     <Property Name="PreferVariableLengthTypes" Value="true" />
     <Property Name="PrimaryKeyConstraintPattern" Value="PK_{$Guid}" />
-    <Property Name="ProjectCreator" Value="TranDucThang" />
-    <Property Name="ProjectName" Value="RoomManagerment.Auth" />
+    <Property Name="ProjectCreator" Value="TranThang" />
+    <Property Name="ProjectName" Value="Room_Managerment" />
     <Property Name="ReflectNullabilityOfElementFieldInTargetField_v5" Value="false" />
     <Property Name="ReflectTypeOfElementFieldInTargetField_v5" Value="true" />
     <Property Name="RelationalModelDataElementNameCasingCaseInsensitiveDBs" Value="3" />
@@ -146,7 +146,7 @@
   <EntityModel>
     <ValueTypeDefinitions />
     <EntityDefinitions>
-      <EntityDefinition Name="Permission" GroupName="Auth" ObjectID="3ef7dffe-0c89-4709-a17b-193754f43978">
+      <EntityDefinition Name="Permission" GroupName="Auth" ObjectID="4604a2bd-3f57-47dc-985e-b0cc8dab48cd">
         <Fields>
           <Field Name="Code" Type="string" MaxLength="50" />
           <Field Name="CreatedAt" Type="datetime" />
@@ -154,17 +154,7 @@
           <Field Name="Name" Type="string" MaxLength="100" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="RefreshToken" GroupName="Auth" ObjectID="5244e244-5aba-4b7d-ac84-7377a8cbfa22">
-        <Fields>
-          <Field Name="CreatedAt" Type="datetime" />
-          <Field Name="ExpiresAt" Type="datetime" />
-          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
-          <Field Name="IsRevoked" Type="bool" />
-          <Field Name="Token" Type="string" MaxLength="500" />
-          <Field Name="UserId" Type="guid" />
-        </Fields>
-      </EntityDefinition>
-      <EntityDefinition Name="Role" GroupName="Auth" ObjectID="bc23ca75-4a6b-4484-8a67-d654a578c6d8">
+      <EntityDefinition Name="Role" GroupName="Auth" ObjectID="eaca6bf5-4ec5-4eb2-bd02-d06e3d7b67ad">
         <Fields>
           <Field Name="Code" Type="string" MaxLength="50" />
           <Field Name="CreatedAt" Type="datetime" />
@@ -172,13 +162,13 @@
           <Field Name="Name" Type="string" MaxLength="100" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="RolePermission" GroupName="Auth" ObjectID="e6c7f680-001c-4b9f-b766-bf9ced38862f">
+      <EntityDefinition Name="RolePermission" GroupName="Auth" ObjectID="37fb4d10-f9ec-4fdd-8a1a-47f169338618">
         <Fields>
           <Field Name="PermissionId" Type="guid" IsPrimaryKey="true" />
           <Field Name="RoleId" Type="guid" IsPrimaryKey="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="User" GroupName="Auth" ObjectID="628beb4b-7b1c-427a-8da1-ea0ec8c787a6">
+      <EntityDefinition Name="User" GroupName="Auth" ObjectID="028fe2b8-d998-4eb4-bd40-2502ededbbb9">
         <Fields>
           <Field Name="CreatedAt" Type="datetime" />
           <Field Name="Email" Type="string" MaxLength="200" />
@@ -189,14 +179,14 @@
           <Field Name="Username" Type="string" MaxLength="100" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UserPermission" GroupName="Auth" ObjectID="59968a48-ac55-47bb-a9be-12ed78108db5">
+      <EntityDefinition Name="UserPermission" GroupName="Auth" ObjectID="72e92164-1d8b-46dc-bb3d-5e238014e0a9">
         <Fields>
           <Field Name="IsGranted" Type="bool" />
           <Field Name="PermissionId" Type="guid" IsPrimaryKey="true" />
           <Field Name="UserId" Type="guid" IsPrimaryKey="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UserProfile" GroupName="Auth" ObjectID="9511ff96-2540-4388-8ac7-dd894fb4744f">
+      <EntityDefinition Name="UserProfile" GroupName="Auth" ObjectID="35445f49-7a91-41f6-a578-7c135f084320">
         <Fields>
           <Field Name="AvatarUrl" Type="string" IsOptional="true" MaxLength="1073741824" />
           <Field Name="CreatedAt" Type="datetime" />
@@ -207,13 +197,13 @@
           <Field Name="UserId" Type="guid" IsPrimaryKey="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UserRole" GroupName="Auth" ObjectID="1f0407a4-f156-4fa1-b8eb-95e7bef84aa5">
+      <EntityDefinition Name="UserRole" GroupName="Auth" ObjectID="50bbb448-697d-44b3-803e-d495ffad5c66">
         <Fields>
           <Field Name="RoleId" Type="guid" IsPrimaryKey="true" />
           <Field Name="UserId" Type="guid" IsPrimaryKey="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="Menu" GroupName="Menu" ObjectID="ebefd05e-54be-4d73-be6d-67f774852726">
+      <EntityDefinition Name="Menu" GroupName="Menu" ObjectID="4852ec72-4ea6-4cd6-8d6e-ba16ce99e7ee">
         <Fields>
           <Field Name="Code" Type="string" MaxLength="100" />
           <Field Name="CreatedAt" Type="datetime" />
@@ -227,13 +217,13 @@
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="MenuPermission" GroupName="Menu" ObjectID="15a752c5-81d3-4072-8993-cc42c9845121">
+      <EntityDefinition Name="MenuPermission" GroupName="Menu" ObjectID="98748107-6fe5-4d9e-8a99-4783764f37dd">
         <Fields>
           <Field Name="MenuId" Type="guid" IsPrimaryKey="true" />
           <Field Name="PermissionCode" Type="string" MaxLength="50" IsPrimaryKey="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UserMenuOverride" GroupName="Menu" ObjectID="0e998bd9-55b8-4d40-8c87-28aac41964c2">
+      <EntityDefinition Name="UserMenuOverride" GroupName="Menu" ObjectID="b5f834b4-6801-4665-9a8f-46982407434e">
         <Fields>
           <Field Name="IsVisible" Type="bool" />
           <Field Name="MenuId" Type="guid" IsPrimaryKey="true" />
@@ -242,11 +232,6 @@
       </EntityDefinition>
     </EntityDefinitions>
     <Relationships>
-      <NormalRelationship Name="Auth.RefreshToken.User-Auth.User.RefreshTokens" Start="Auth:RefreshToken" End="Auth:User" StartNavigator="User" EndNavigator="RefreshTokens" Type="4" DeleteRuleAction="1">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="UserId" PkField="Id" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="Auth.RolePermission.Permission-Auth.Permission.RolePermissions" Start="Auth:RolePermission" End="Auth:Permission" StartNavigator="Permission" EndNavigator="RolePermissions" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="PermissionId" PkField="Id" />
@@ -298,21 +283,21 @@
   <TargetDatabases>
     <TargetDatabase Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F" SyncSource="2">
       <ConnectionElements>
-        <ConnectionElement Name="ServerName" Value="room-managerment.postgres.database.azure.com" />
-        <ConnectionElement Name="CatalogName" Value="room_managerment" />
+        <ConnectionElement Name="ServerName" Value="192.125.24.109" />
+        <ConnectionElement Name="CatalogName" Value="postgres" />
         <ConnectionElement Name="UserID" Value="room_managerment" />
         <ConnectionElement Name="Password" Value="" />
-        <ConnectionElement Name="PortNumber" Value="5432" />
-        <ConnectionElement Name="SslMode" Value="Require" />
+        <ConnectionElement Name="PortNumber" Value="5433" />
+        <ConnectionElement Name="SslMode" Value="Disable" />
         <ConnectionElement Name="CustomFragments" Value="" />
       </ConnectionElements>
       <SystemSequences>
         <Sequence Name="SystemIdentity" />
       </SystemSequences>
       <Catalogs>
-        <Catalog Name="room_managerment" SyncSource="2">
+        <Catalog Name="postgres">
           <Schemas>
-            <Schema Name="auth" SyncSource="2" LastSyncWithDatabase="2026-02-02T15:55:06.7245381Z">
+            <Schema Name="auth" SyncSource="2" LastSyncWithDatabase="2026-03-08T01:33:58.2775802Z">
               <Tables>
                 <Table Name="permissions">
                   <PkConstraintName Name="permissions_pkey" />
@@ -321,17 +306,6 @@
                     <Field Name="code" Ordinal="2" DbType="24" Length="50" />
                     <Field Name="name" Ordinal="3" DbType="24" Length="100" />
                     <Field Name="created_at" Ordinal="4" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                  </Fields>
-                </Table>
-                <Table Name="refresh_tokens">
-                  <PkConstraintName Name="refresh_tokens_pkey" />
-                  <Fields>
-                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
-                    <Field Name="user_id" Ordinal="2" DbType="28" />
-                    <Field Name="token" Ordinal="3" DbType="24" Length="500" />
-                    <Field Name="expires_at" Ordinal="4" DbType="23" />
-                    <Field Name="is_revoked" Ordinal="5" HasDefaultValue="true" DefaultValue="false" DbType="0" />
-                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
                   </Fields>
                 </Table>
                 <Table Name="role_permissions">
@@ -391,7 +365,7 @@
                 </Table>
               </Tables>
             </Schema>
-            <Schema Name="menu" SyncSource="2" LastSyncWithDatabase="2026-02-02T15:55:08.8844663Z">
+            <Schema Name="menu" SyncSource="2" LastSyncWithDatabase="2026-03-08T01:33:58.3088278Z">
               <Tables>
                 <Table Name="menu_permissions">
                   <PkConstraintName Name="menu_permissions_pkey" />
@@ -427,11 +401,6 @@
             </Schema>
           </Schemas>
           <ForeignKeyConstraints>
-            <ForeignKeyConstraint Name="auth:refresh_tokens:fk_refresh_tokens_users" DeleteRuleAction="1">
-              <FieldPairs>
-                <FieldPair PkField="auth:users:id" FkField="auth:refresh_tokens:user_id" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="auth:role_permissions:fk_role_permissions_permissions" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="auth:permissions:id" FkField="auth:role_permissions:permission_id" />
@@ -485,7 +454,7 @@
   <MappingStores>
     <MappingStore Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F">
       <EntityMappings>
-        <EntityMapping EntityName="Auth:Permission" TargetName="room_managerment:auth:permissions">
+        <EntityMapping EntityName="Auth:Permission" TargetName="postgres:auth:permissions">
           <FieldMappings>
             <FieldMapping FieldName="Code" TargetFieldName="code" />
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
@@ -493,17 +462,7 @@
             <FieldMapping FieldName="Name" TargetFieldName="name" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName="Auth:RefreshToken" TargetName="room_managerment:auth:refresh_tokens">
-          <FieldMappings>
-            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
-            <FieldMapping FieldName="ExpiresAt" TargetFieldName="expires_at" />
-            <FieldMapping FieldName="Id" TargetFieldName="id" />
-            <FieldMapping FieldName="IsRevoked" TargetFieldName="is_revoked" />
-            <FieldMapping FieldName="Token" TargetFieldName="token" />
-            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
-          </FieldMappings>
-        </EntityMapping>
-        <EntityMapping EntityName="Auth:Role" TargetName="room_managerment:auth:roles">
+        <EntityMapping EntityName="Auth:Role" TargetName="postgres:auth:roles">
           <FieldMappings>
             <FieldMapping FieldName="Code" TargetFieldName="code" />
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
@@ -511,13 +470,13 @@
             <FieldMapping FieldName="Name" TargetFieldName="name" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName="Auth:RolePermission" TargetName="room_managerment:auth:role_permissions">
+        <EntityMapping EntityName="Auth:RolePermission" TargetName="postgres:auth:role_permissions">
           <FieldMappings>
             <FieldMapping FieldName="PermissionId" TargetFieldName="permission_id" />
             <FieldMapping FieldName="RoleId" TargetFieldName="role_id" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName="Auth:User" TargetName="room_managerment:auth:users">
+        <EntityMapping EntityName="Auth:User" TargetName="postgres:auth:users">
           <FieldMappings>
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
             <FieldMapping FieldName="Email" TargetFieldName="email" />
@@ -528,14 +487,14 @@
             <FieldMapping FieldName="Username" TargetFieldName="username" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName="Auth:UserPermission" TargetName="room_managerment:auth:user_permissions">
+        <EntityMapping EntityName="Auth:UserPermission" TargetName="postgres:auth:user_permissions">
           <FieldMappings>
             <FieldMapping FieldName="IsGranted" TargetFieldName="is_granted" />
             <FieldMapping FieldName="PermissionId" TargetFieldName="permission_id" />
             <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName="Auth:UserProfile" TargetName="room_managerment:auth:user_profiles">
+        <EntityMapping EntityName="Auth:UserProfile" TargetName="postgres:auth:user_profiles">
           <FieldMappings>
             <FieldMapping FieldName="AvatarUrl" TargetFieldName="avatar_url" />
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
@@ -546,13 +505,13 @@
             <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName="Auth:UserRole" TargetName="room_managerment:auth:user_roles">
+        <EntityMapping EntityName="Auth:UserRole" TargetName="postgres:auth:user_roles">
           <FieldMappings>
             <FieldMapping FieldName="RoleId" TargetFieldName="role_id" />
             <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName="Menu:Menu" TargetName="room_managerment:menu:menus">
+        <EntityMapping EntityName="Menu:Menu" TargetName="postgres:menu:menus">
           <FieldMappings>
             <FieldMapping FieldName="Code" TargetFieldName="code" />
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
@@ -566,13 +525,13 @@
             <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName="Menu:MenuPermission" TargetName="room_managerment:menu:menu_permissions">
+        <EntityMapping EntityName="Menu:MenuPermission" TargetName="postgres:menu:menu_permissions">
           <FieldMappings>
             <FieldMapping FieldName="MenuId" TargetFieldName="menu_id" />
             <FieldMapping FieldName="PermissionCode" TargetFieldName="permission_code" />
           </FieldMappings>
         </EntityMapping>
-        <EntityMapping EntityName="Menu:UserMenuOverride" TargetName="room_managerment:menu:user_menu_overrides">
+        <EntityMapping EntityName="Menu:UserMenuOverride" TargetName="postgres:menu:user_menu_overrides">
           <FieldMappings>
             <FieldMapping FieldName="IsVisible" TargetFieldName="is_visible" />
             <FieldMapping FieldName="MenuId" TargetFieldName="menu_id" />

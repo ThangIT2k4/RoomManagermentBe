@@ -12,13 +12,15 @@ RUN dotnet restore "Modules/Identity/Identity.API/Identity.API.csproj"
 
 COPY . .
 WORKDIR "/app/Modules/Identity/Identity.API"
-RUN dotnet build "Identity.API.csproj" -c Release -o /app/build
+RUN dotnet build "Identity.API.csproj" -c Release -o /app/build --no-restore
 
 FROM builder AS publish
-RUN dotnet publish "Identity.API.csproj" -c Release -o /app/publish
+RUN dotnet publish "Identity.API.csproj" -c Release -o /app/publish --no-build
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 EXPOSE 8080
+ENV ASPNETCORE_HTTP_PORTS=8080
 COPY --from=publish /app/publish .
+USER $APP_UID
 ENTRYPOINT ["dotnet", "Identity.API.dll"]

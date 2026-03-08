@@ -23,23 +23,6 @@ namespace RoomManagerment.Identity.HelperClasses
 		public static EntityField2 Name { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PermissionFieldIndex.Name); }}
 	}
 
-	/// <summary>Field Creation Class for entity RefreshTokenEntity</summary>
-	public partial class RefreshTokenFields
-	{
-		/// <summary>Creates a new RefreshTokenEntity.CreatedAt field instance</summary>
-		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(RefreshTokenFieldIndex.CreatedAt); }}
-		/// <summary>Creates a new RefreshTokenEntity.ExpiresAt field instance</summary>
-		public static EntityField2 ExpiresAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(RefreshTokenFieldIndex.ExpiresAt); }}
-		/// <summary>Creates a new RefreshTokenEntity.Id field instance</summary>
-		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(RefreshTokenFieldIndex.Id); }}
-		/// <summary>Creates a new RefreshTokenEntity.IsRevoked field instance</summary>
-		public static EntityField2 IsRevoked { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(RefreshTokenFieldIndex.IsRevoked); }}
-		/// <summary>Creates a new RefreshTokenEntity.Token field instance</summary>
-		public static EntityField2 Token { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(RefreshTokenFieldIndex.Token); }}
-		/// <summary>Creates a new RefreshTokenEntity.UserId field instance</summary>
-		public static EntityField2 UserId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(RefreshTokenFieldIndex.UserId); }}
-	}
-
 	/// <summary>Field Creation Class for entity RoleEntity</summary>
 	public partial class RoleFields
 	{

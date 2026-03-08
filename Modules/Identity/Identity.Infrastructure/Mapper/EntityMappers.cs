@@ -48,18 +48,6 @@ internal static class EntityMappers
             dal.UpdatedAt);
     }
 
-    public static Identity.Domain.Entities.RefreshTokenEntity ToDomain(this RoomManagerment.Identity.EntityClasses.RefreshTokenEntity dal)
-    {
-        if (dal is null) return null!;
-        return Identity.Domain.Entities.RefreshTokenEntity.Reconstitute(
-            dal.Id,
-            dal.UserId,
-            TokenValue.Create(dal.Token),
-            dal.ExpiresAt,
-            dal.IsRevoked,
-            dal.CreatedAt);
-    }
-
     public static Identity.Domain.Entities.MenuPermissionEntity ToDomain(this RoomManagerment.Identity.EntityClasses.MenuPermissionEntity dal)
     {
         if (dal is null) return null!;
