@@ -2,11 +2,16 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
+using System.Net.Sockets;
+using IOException = System.IO.IOException;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 #region LOGGING
+
+var logBasePath = Environment.GetEnvironmentVariable("LOG_BASE_PATH") ?? "/home/thang/projects/WorkSpace/Projects/RoomManagerment/Logs";
+var gatewayLogPath = Path.Combine(logBasePath, "gateway", "gateway-.txt");
 
 builder.Host.UseSerilog((ctx, lc) =>
 {
@@ -14,18 +19,24 @@ builder.Host.UseSerilog((ctx, lc) =>
         .Enrich.FromLogContext()
         .Enrich.WithMachineName()
         .Enrich.WithThreadId()
-        .Enrich.WithProcessId();
+        .Enrich.WithProcessId()
+        .WriteTo.Console()
+        .WriteTo.File(gatewayLogPath, rollingInterval: Serilog.RollingInterval.Day);
 });
 
 #endregion
 
 #region REDIS
 
+var redisConfig = builder.Configuration.GetConnectionString("Redis");
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.Configuration = redisConfig;
     options.InstanceName = builder.Configuration["Redis:InstanceName"] ?? "RoomManagementGateway:";
 });
+builder.Services.AddSingleton<StackExchange.Redis.IConnectionMultiplexer>(_ =>
+    StackExchange.Redis.ConnectionMultiplexer.Connect(redisConfig ?? "localhost:6379"));
+builder.Services.AddHostedService<RoomManagerment.Gateway.Services.NotificationPushRedisSubscriber>();
 
 #endregion
 
@@ -132,11 +143,23 @@ builder.Services.AddProblemDetails();
 
 #endregion
 
+#region SIGNALR
+
+var redisConnection = builder.Configuration.GetConnectionString("Redis");
+builder.Services.AddSignalR()
+    .AddStackExchangeRedis(redisConnection ?? "localhost:6379", options =>
+    {
+        options.Configuration.ChannelPrefix = StackExchange.Redis.RedisChannel.Literal("RoomManagerment:SignalR:");
+    });
+
+#endregion
+
 #region REVERSE PROXY
 
 builder.Services
     .AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    .AddTransforms<RoomManagerment.Gateway.Transforms.SessionUserIdTransformProvider>();
 
 builder.Services.AddOpenApiDocument();
 
@@ -173,11 +196,14 @@ app.UseSerilogRequestLogging();
 // CORS
 app.UseCors("GatewayPolicy");
 
-// Session
+// Session (phải trước MapHub để Hub đọc được session)
 app.UseSession();
 
 // Rate limiting
 app.UseRateLimiter();
+
+// SignalR Hub (notification realtime; client connect với cookie session)
+app.MapHub<RoomManagerment.Gateway.Hubs.NotificationsHub>("/hubs/notifications");
 
 // Swagger (dev only)
 if (app.Environment.IsDevelopment())
@@ -197,7 +223,20 @@ if (!app.Environment.IsDevelopment())
 
 #endregion
 
-app.Run();
+// Read port from environment or launchSettings, with fallback
+var port = Environment.GetEnvironmentVariable("GATEWAY_API_PORT") ?? "5000";
+var protocol = app.Environment.IsDevelopment() ? "http" : "https";
+
+try
+{
+    Log.Information("Gateway attempting to bind on {Protocol}://0.0.0.0:{Port}", protocol, port);
+    app.Run($"{protocol}://0.0.0.0:{port}");
+}
+catch (IOException ex) when (ex.InnerException is SocketException)
+{
+    Log.Fatal(ex, "Failed to bind to port {Port}. Port may already be in use", port);
+    throw;
+}
 
 #region HELPER METHODS
 

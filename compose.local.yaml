@@ -43,7 +43,7 @@ services:
     env_file:
       - .env.local
     environment:
-      ASPNETCORE_URLS: http://0.0.0.0:8080
+      ASPNETCORE_URLS: http://0.0.0.0:${IDENTITY_API_PORT}
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       ConnectionStrings__Identity: ${IDENTITY_CONNECTION_STRING}
       Redis__Host: ${REDIS_HOST}
@@ -55,6 +55,8 @@ services:
       Cors__AllowedOrigins__0: http://localhost:3000
       Cors__AllowedOrigins__1: http://localhost:4200
       Cors__AllowedOrigins__2: http://localhost:5000
+    ports:
+      - "${IDENTITY_API_PORT}:${IDENTITY_API_PORT}"
     restart: unless-stopped
     depends_on:
       - postgres
@@ -70,9 +72,36 @@ services:
       context: .
       dockerfile: ./RoomManagerment.ExternalApi/Dockerfile
     container_name: rm-external-api
+    env_file:
+      - .env.local
     environment:
-      ASPNETCORE_URLS: http://0.0.0.0:8080
+      ASPNETCORE_URLS: http://0.0.0.0:${EXTERNAL_API_PORT}
+    ports:
+      - "${EXTERNAL_API_PORT}:${EXTERNAL_API_PORT}"
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rm-network
+
+  # ---------------- NOTIFICATION API ----------------
+  notification-api:
+    build:
+      context: .
+      dockerfile: ./Modules/Notification/Notification.API/Dockerfile
+    container_name: rm-notification-api
+    env_file:
+      - .env.local
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:${NOTIFICATION_API_PORT}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ConnectionStrings__Notification: ${NOTIFICATION_CONNECTION_STRING}
+      LOG_BASE_PATH: ${LOG_BASE_PATH:-/app/logs}
+    ports:
+      - "${NOTIFICATION_API_PORT}:${NOTIFICATION_API_PORT}"
+    restart: unless-stopped
+    depends_on:
+      - postgres
     security_opt:
       - no-new-privileges:true
     networks:
@@ -87,7 +116,7 @@ services:
     env_file:
       - .env.local
     environment:
-      ASPNETCORE_URLS: http://0.0.0.0:8000
+      ASPNETCORE_URLS: http://0.0.0.0:${GATEWAY_API_PORT}
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       ConnectionStrings__Redis: ${REDIS_HOST}:${REDIS_PORT},password=${REDIS_PASSWORD}
       Redis__InstanceName: ${REDIS_INSTANCE_NAME}
@@ -97,14 +126,16 @@ services:
       Cors__AllowedOrigins__1: http://localhost:4200
       Cors__AllowedOrigins__2: http://localhost:5000
       Kestrel__Limits__MaxRequestBodySize: ${GATEWAY_MAX_REQUEST_BODY_SIZE:-10485760}
-      ReverseProxy__Clusters__identity__Destinations__d1__Address: http://identity-api:8080
-      ReverseProxy__Clusters__external__Destinations__d1__Address: http://external-api:8080
+      ReverseProxy__Clusters__identity__Destinations__d1__Address: http://identity-api:${IDENTITY_API_PORT}
+      ReverseProxy__Clusters__external__Destinations__d1__Address: http://external-api:${EXTERNAL_API_PORT}
+      ReverseProxy__Clusters__notification__Destinations__d1__Address: http://notification-api:${NOTIFICATION_API_PORT}
     ports:
-      - "8000:8000"
+      - "${GATEWAY_API_PORT}:${GATEWAY_API_PORT}"
     restart: unless-stopped
     depends_on:
       - identity-api
       - external-api
+      - notification-api
     security_opt:
       - no-new-privileges:true
     networks:

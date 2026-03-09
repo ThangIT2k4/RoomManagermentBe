@@ -10,6 +10,7 @@ public class SessionOptions
 
 public class CookieOptions
 {
+    public string Name { get; set; } = "RoomManager.SessionId";
     public bool HttpOnly { get; set; } = true;
     public bool IsEssential { get; set; } = true;
     public SameSiteMode SameSite { get; set; } = SameSiteMode.Strict;

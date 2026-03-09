@@ -1,10 +1,8 @@
-using Identity.Application;
 using Identity.Application.Services;
 using Identity.Domain.Repositories;
 using Identity.Infrastructure.Options;
 using Identity.Infrastructure.Repositories;
 using Identity.Infrastructure.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RoomManagerment.Identity.DatabaseSpecific;
@@ -30,7 +28,15 @@ public static class DependencyInjection
         services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(redisConnectionString));
         services.AddScoped<ICacheService, RedisCacheService>();
 
-        // register session configuration
+        // session store: Redis (cùng store với Gateway để share session)
+        var sessionInstanceName = configuration["Session:RedisInstanceName"] ?? "RoomManagermentGateway:";
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = redisConnectionString;
+            options.InstanceName = sessionInstanceName;
+        });
+
+        // register session configuration (cookie name trùng Gateway: RoomManager.SessionId)
         services.AddSessionConfiguration(configuration);
 
         // register mapping services
@@ -60,6 +66,7 @@ public static class DependencyInjection
         services.AddSession(options =>
         {
             options.IdleTimeout = TimeSpan.FromMinutes(sessionOptions.IdleTimeout);
+            options.Cookie.Name = sessionOptions.Cookie.Name ?? "RoomManager.SessionId";
             options.Cookie.HttpOnly = sessionOptions.Cookie.HttpOnly;
             options.Cookie.IsEssential = sessionOptions.Cookie.IsEssential;
             options.Cookie.SecurePolicy = sessionOptions.Cookie.SecurePolicy;
