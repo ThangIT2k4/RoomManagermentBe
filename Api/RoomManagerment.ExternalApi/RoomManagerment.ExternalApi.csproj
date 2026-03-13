@@ -25,4 +25,9 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\BuildingBlocks\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
+      <ProjectReference Include="..\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
+    </ItemGroup>
+
 </Project>

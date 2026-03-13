@@ -1,13 +1,16 @@
 using Identity.Application.Common;
 using Identity.Domain.Enums;
 using Identity.Domain.Repositories;
+using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using RoomManagerment.Messaging.Contracts.Events;
 
 namespace Identity.Application.Features.Auth.Login;
 
 public class LoginCommandHandler(
     IUserRepository userRepository,
+    IPublishEndpoint publishEndpoint,
     ILogger<LoginCommandHandler> logger) 
     : IRequestHandler<LoginCommand, Result<LoginResult>>
 {
@@ -15,7 +18,6 @@ public class LoginCommandHandler(
     {
         try
         {
-            // Try to get user by email first, then by username
             var user = await userRepository.GetByEmailAsync(request.UsernameOrEmail, cancellationToken);
             
             if (user == null)
@@ -47,6 +49,15 @@ public class LoginCommandHandler(
             }
 
             logger.LogInformation("User logged in successfully: {Email}", user.Email.Value);
+
+            // Publish event cho các service khác
+            await publishEndpoint.Publish(new UserLoggedInEvent
+            {
+                UserId = user.Id,
+                Username = user.Username.Value,
+                IpAddress = request.IpAddress ?? "unknown",
+                LoggedInAt = DateTime.UtcNow
+            }, cancellationToken);
 
             // Generate access token (optional, can be empty if using session)
             var accessToken = string.Empty;

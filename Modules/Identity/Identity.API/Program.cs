@@ -1,5 +1,6 @@
 using Identity.Application;
 using Identity.Infrastructure;
+using RoomManagerment.Messaging.Extensions;
 using Serilog;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -82,6 +83,10 @@ builder.Services.AddProblemDetails();
 // ===== APPLICATION & INFRASTRUCTURE =====
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// ===== RABBITMQ MESSAGING =====
+// Identity chỉ publish events (không cần consumer ở đây)
+builder.Services.AddRabbitMqMessaging(builder.Configuration);
 
 var app = builder.Build();
 

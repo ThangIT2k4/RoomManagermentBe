@@ -11,6 +11,25 @@ services:
     networks:
       - rm-network
 
+  # ---------------- RABBITMQ ----------------
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rm-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RABBITMQ_DEFAULT_VHOST: /
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rm-network
+
   # ---------------- POSTGRES ----------------
   postgres:
     image: postgres:18-alpine
@@ -40,10 +59,14 @@ services:
       ASPNETCORE_URLS: http://0.0.0.0:8080
       ConnectionStrings__Default: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       Redis__Configuration: redis:6379
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
     restart: unless-stopped
     depends_on:
       - postgres
       - redis
+      - rabbitmq
     security_opt:
       - no-new-privileges:true
     networks:
@@ -57,7 +80,12 @@ services:
     container_name: rm-external-api
     environment:
       ASPNETCORE_URLS: http://0.0.0.0:8080
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
     restart: unless-stopped
+    depends_on:
+      - rabbitmq
     security_opt:
       - no-new-privileges:true
     networks:
@@ -72,9 +100,13 @@ services:
     environment:
       ASPNETCORE_URLS: http://0.0.0.0:8080
       ConnectionStrings__Notification: Host=postgres;Port=5432;Database=${NOTIFICATION_DB:-roommanager_notification};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
     restart: unless-stopped
     depends_on:
       - postgres
+      - rabbitmq
     security_opt:
       - no-new-privileges:true
     networks:
@@ -147,3 +179,4 @@ networks:
 volumes:
   pgdata:
   redisdata:
+  rabbitmqdata:

@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using Notification.Application;
 using Notification.Infrastructure;
+using Notification.Infrastructure.Consumers;
+using RoomManagerment.Messaging.Extensions;
 using Serilog;
 using System.Net.Sockets;
 using System.Threading.RateLimiting;
@@ -69,6 +71,14 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
 // ===== APPLICATION & INFRASTRUCTURE =====
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// ===== RABBITMQ MESSAGING =====
+// Notification API là consumer: lắng nghe events từ các service khác
+builder.Services.AddRabbitMqMessaging(builder.Configuration, x =>
+{
+    x.AddConsumer<NotificationCreateRequestedConsumer>();
+    x.AddConsumer<UserRegisteredConsumer>();
+});
 
 var app = builder.Build();
 

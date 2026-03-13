@@ -1,0 +1,16 @@
+namespace RoomManagerment.Messaging.Configuration;
+
+public sealed class RabbitMqOptions
+{
+    public const string Section = "RabbitMq";
+
+    public string Host { get; set; } = "localhost";
+    public int Port { get; set; } = 5672;
+    public string Username { get; set; } = "guest";
+    public string Password { get; set; } = "guest";
+    public string VirtualHost { get; set; } = "/";
+    
+    public int RetryCount { get; set; } = 3;
+    
+    public int RetryIntervalMs { get; set; } = 1000;
+}

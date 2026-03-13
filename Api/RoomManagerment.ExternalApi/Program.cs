@@ -1,3 +1,5 @@
+using RoomManagerment.ExternalApi.Consumers;
+using RoomManagerment.Messaging.Extensions;
 using Serilog;
 using System.Net.Sockets;
 using IOException = System.IO.IOException;
@@ -13,6 +15,14 @@ builder.Host.UseSerilog((ctx, lc) =>
         .MinimumLevel.Information());
 
 builder.Services.AddOpenApi();
+builder.Services.AddControllers();
+
+// ===== RABBITMQ MESSAGING =====
+// ExternalApi: consumer cho UserLoggedInEvent + publisher cho NotificationCreateRequestedEvent
+builder.Services.AddRabbitMqMessaging(builder.Configuration, x =>
+{
+    x.AddConsumer<UserLoggedInConsumer>();
+});
 
 var app = builder.Build();
 
@@ -24,6 +34,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
+app.MapControllers();
 
 var summaries = new[]
 {

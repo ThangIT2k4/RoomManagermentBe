@@ -2,14 +2,17 @@ using Identity.Application.Common;
 using Identity.Domain.Entities;
 using Identity.Domain.Repositories;
 using Identity.Domain.ValueObjects;
+using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using RoomManagerment.Messaging.Contracts.Events;
 
 namespace Identity.Application.Features.Auth.Register;
 
 public class RegisterCommandHandler(
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
+    IPublishEndpoint publishEndpoint,
     ILogger<RegisterCommandHandler> logger) 
     : IRequestHandler<RegisterCommand, Result<RegisterResult>>
 {
@@ -55,6 +58,15 @@ public class RegisterCommandHandler(
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             logger.LogInformation("User registered successfully: {Email}", request.Email);
+
+            // Publish event cho các service khác (Notification, External)
+            await publishEndpoint.Publish(new UserRegisteredEvent
+            {
+                UserId = newUser.Id,
+                Username = newUser.Username.Value,
+                Email = newUser.Email.Value,
+                RegisteredAt = DateTime.UtcNow
+            }, cancellationToken);
 
             return Result<RegisterResult>.Success(new RegisterResult
             {

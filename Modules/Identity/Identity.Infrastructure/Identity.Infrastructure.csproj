@@ -20,4 +20,8 @@
       <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
+    </ItemGroup>
+
 </Project>

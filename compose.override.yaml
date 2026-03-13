@@ -12,6 +12,25 @@ services:
     networks:
       - rm-network
 
+  # ---------------- RABBITMQ ----------------
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rm-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RABBITMQ_DEFAULT_VHOST: /
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rm-network
+
   # ---------------- POSTGRES ----------------
   postgres:
     image: postgres:18-alpine
@@ -111,3 +130,4 @@ volumes:
 
   pgdata:
   redisdata:
+  rabbitmqdata:

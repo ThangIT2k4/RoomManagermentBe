@@ -7,4 +7,5 @@ public class LoginCommand : IRequest<Result<LoginResult>>
 {
     public required string UsernameOrEmail { get; set; }
     public required string Password { get; set; }
+    public string? IpAddress { get; set; }
 }

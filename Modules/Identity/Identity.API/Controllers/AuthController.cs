@@ -48,7 +48,8 @@ public class AuthController(IMediator mediator) : ControllerBase
         var command = new LoginCommand
         {
             UsernameOrEmail = request.UsernameOrEmail,
-            Password = request.Password
+            Password = request.Password,
+            IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString()
         };
 
         var result = await mediator.Send(command, cancellationToken);
