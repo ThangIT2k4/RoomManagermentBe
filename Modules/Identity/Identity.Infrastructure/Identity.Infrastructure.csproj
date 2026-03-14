@@ -18,10 +18,7 @@
       <ProjectReference Include="..\DAL\DatabaseSpecific\RoomManagerment.IdentityDBSpecific.csproj" />
       <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
       <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
-    </ItemGroup>
-
+    
 </Project>

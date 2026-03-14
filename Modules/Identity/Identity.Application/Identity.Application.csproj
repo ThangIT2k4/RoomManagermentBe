@@ -10,7 +10,6 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
       <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
-      <ProjectReference Include="..\..\..\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="MediatR" Version="13.1.0" />
