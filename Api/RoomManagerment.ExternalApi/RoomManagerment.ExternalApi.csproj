@@ -23,6 +23,7 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Content Include="Properties\launchSettings.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
     </ItemGroup>
 
     <ItemGroup>

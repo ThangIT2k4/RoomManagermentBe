@@ -4,11 +4,12 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
-COPY ["RoomManagerment.Gateway/RoomManagerment.Gateway.csproj", "RoomManagerment.Gateway/"]
-RUN dotnet restore "RoomManagerment.Gateway/RoomManagerment.Gateway.csproj"
+# Context là root RoomManagermentBe; Gateway nằm trong Api/
+COPY ["Api/RoomManagerment.Gateway/RoomManagerment.Gateway.csproj", "Api/RoomManagerment.Gateway/"]
+RUN dotnet restore "Api/RoomManagerment.Gateway/RoomManagerment.Gateway.csproj"
 
 COPY . .
-WORKDIR "/app/RoomManagerment.Gateway"
+WORKDIR "/app/Api/RoomManagerment.Gateway"
 RUN dotnet build "RoomManagerment.Gateway.csproj" -c Release -o /app/build --no-restore
 
 FROM build AS publish

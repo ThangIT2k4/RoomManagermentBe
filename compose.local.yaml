@@ -96,7 +96,7 @@ services:
   external-api:
     build:
       context: .
-      dockerfile: ./RoomManagerment.ExternalApi/Dockerfile
+      dockerfile: ./Api/RoomManagerment.ExternalApi/Dockerfile
     container_name: rm-external-api
     env_file:
       - .env.local
@@ -146,7 +146,7 @@ services:
   gateway:
     build:
       context: .
-      dockerfile: ./RoomManagerment.Gateway/.Dockerfile
+      dockerfile: ./Api/RoomManagerment.Gateway/Dockerfile
     container_name: rm-gateway
     env_file:
       - .env.local

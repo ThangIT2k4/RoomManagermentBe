@@ -36,25 +36,6 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.MapControllers();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
-
 // Read port from environment or launchSettings, with fallback
 var port = Environment.GetEnvironmentVariable("EXTERNAL_API_PORT") ?? "5001";
 var protocol = app.Environment.IsDevelopment() ? "http" : "https";

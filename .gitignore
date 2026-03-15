@@ -4,6 +4,7 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 .env*
+!.env.example
 .idea/.idea.RoomManagermentBe/.idea
 *.md
 *.log

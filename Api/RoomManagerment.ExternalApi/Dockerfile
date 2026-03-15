@@ -1,11 +1,13 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
-COPY ["RoomManagerment.ExternalApi/RoomManagerment.ExternalApi.csproj", "RoomManagerment.ExternalApi/"]
-RUN dotnet restore "RoomManagerment.ExternalApi/RoomManagerment.ExternalApi.csproj"
+# Context là root RoomManagermentBe; ExternalApi nằm trong Api/, và reference BuildingBlocks
+COPY ["Api/RoomManagerment.ExternalApi/RoomManagerment.ExternalApi.csproj", "Api/RoomManagerment.ExternalApi/"]
+COPY ["BuildingBlocks/RoomManagerment.Messaging/RoomManagerment.Messaging.csproj", "BuildingBlocks/RoomManagerment.Messaging/"]
+RUN dotnet restore "Api/RoomManagerment.ExternalApi/RoomManagerment.ExternalApi.csproj"
 
 COPY . .
-WORKDIR "/app/RoomManagerment.ExternalApi"
+WORKDIR "/app/Api/RoomManagerment.ExternalApi"
 RUN dotnet build "RoomManagerment.ExternalApi.csproj" -c Release -o /app/build --no-restore
 
 FROM build AS publish

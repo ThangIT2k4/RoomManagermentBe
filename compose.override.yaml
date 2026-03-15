@@ -73,7 +73,7 @@ services:
   external-api:
     build:
       context: .
-      dockerfile: ./RoomManagerment.ExternalApi/Dockerfile
+      dockerfile: ./Api/RoomManagerment.ExternalApi/Dockerfile
     container_name: rm-external-api
     environment:
       ASPNETCORE_URLS: http://0.0.0.0:8080
@@ -104,7 +104,7 @@ services:
   gateway:
     build:
       context: .
-      dockerfile: ./RoomManagerment.Gateway/.Dockerfile
+      dockerfile: ./Api/RoomManagerment.Gateway/Dockerfile
     container_name: rm-gateway
     environment:
       ASPNETCORE_URLS: http://0.0.0.0:8000
