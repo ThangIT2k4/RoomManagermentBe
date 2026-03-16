@@ -6,11 +6,6 @@ using RoomManagerment.Messaging.Contracts.Events;
 
 namespace Notification.Infrastructure.Consumers;
 
-/// <summary>
-/// Nhận event NotificationCreateRequestedEvent từ RabbitMQ.
-/// Lưu Notification + UserNotification vào DB.
-/// Queue: notification-create-requested
-/// </summary>
 public sealed class NotificationCreateRequestedConsumer(
     INotificationRepository notificationRepository,
     IUserNotificationRepository userNotificationRepository,

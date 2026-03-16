@@ -17,8 +17,7 @@ builder.Host.UseSerilog((ctx, lc) =>
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
-// ===== RABBITMQ MESSAGING =====
-// ExternalApi: consumer cho UserLoggedInEvent + publisher cho NotificationCreateRequestedEvent
+
 builder.Services.AddRabbitMqMessaging(builder.Configuration, x =>
 {
     x.AddConsumer<UserLoggedInConsumer>();
@@ -26,7 +25,7 @@ builder.Services.AddRabbitMqMessaging(builder.Configuration, x =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -36,7 +35,6 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.MapControllers();
 
-// Read port from environment or launchSettings, with fallback
 var port = Environment.GetEnvironmentVariable("EXTERNAL_API_PORT") ?? "5001";
 var protocol = app.Environment.IsDevelopment() ? "http" : "https";
 
@@ -49,9 +47,4 @@ catch (IOException ex) when (ex.InnerException is SocketException)
 {
     Log.Fatal(ex, "Failed to bind to port {Port}. Port may already be in use", port);
     throw;
-}
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }

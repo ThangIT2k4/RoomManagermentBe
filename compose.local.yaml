@@ -10,6 +10,11 @@ services:
     volumes:
       - redisdata:/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - rm-network
 
@@ -78,15 +83,20 @@ services:
       Cors__AllowedOrigins__1: http://localhost:4200
       Cors__AllowedOrigins__2: http://localhost:5000
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
+      RabbitMq__Port: 5672
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
       RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__VirtualHost: /
     ports:
       - "${IDENTITY_API_PORT}:${IDENTITY_API_PORT}"
     restart: unless-stopped
     depends_on:
-      - postgres
-      - redis
-      - rabbitmq
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     security_opt:
       - no-new-privileges:true
     networks:
@@ -103,13 +113,16 @@ services:
     environment:
       ASPNETCORE_URLS: http://0.0.0.0:${EXTERNAL_API_PORT}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
+      RabbitMq__Port: 5672
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
       RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__VirtualHost: /
     ports:
       - "${EXTERNAL_API_PORT}:${EXTERNAL_API_PORT}"
     restart: unless-stopped
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     security_opt:
       - no-new-privileges:true
     networks:
@@ -129,14 +142,18 @@ services:
       ConnectionStrings__Notification: ${NOTIFICATION_CONNECTION_STRING}
       LOG_BASE_PATH: ${LOG_BASE_PATH:-/app/logs}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
+      RabbitMq__Port: 5672
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
       RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__VirtualHost: /
     ports:
       - "${NOTIFICATION_API_PORT}:${NOTIFICATION_API_PORT}"
     restart: unless-stopped
     depends_on:
-      - postgres
-      - rabbitmq
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     security_opt:
       - no-new-privileges:true
     networks:
@@ -154,6 +171,7 @@ services:
       ASPNETCORE_URLS: http://0.0.0.0:${GATEWAY_API_PORT}
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       ConnectionStrings__Redis: ${REDIS_HOST}:${REDIS_PORT},password=${REDIS_PASSWORD}
+      Redis__Configuration: ${REDIS_HOST}:${REDIS_PORT}
       Redis__InstanceName: ${REDIS_INSTANCE_NAME}
       Session__TimeoutMinutes: ${SESSION_TIMEOUT_MINUTES}
       Session__Cookie__Name: ${SESSION_COOKIE_NAME}
@@ -168,9 +186,14 @@ services:
       - "${GATEWAY_API_PORT}:${GATEWAY_API_PORT}"
     restart: unless-stopped
     depends_on:
-      - identity-api
-      - external-api
-      - notification-api
+      redis:
+        condition: service_healthy
+      identity-api:
+        condition: service_started
+      external-api:
+        condition: service_started
+      notification-api:
+        condition: service_started
     security_opt:
       - no-new-privileges:true
     networks:

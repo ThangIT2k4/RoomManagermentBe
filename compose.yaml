@@ -8,6 +8,11 @@ services:
     volumes:
       - redisdata:/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - rm-network
 
@@ -60,13 +65,18 @@ services:
       ConnectionStrings__Default: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       Redis__Configuration: redis:6379
       RabbitMq__Host: rabbitmq
+      RabbitMq__Port: 5672
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
       RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__VirtualHost: /
     restart: unless-stopped
     depends_on:
-      - postgres
-      - redis
-      - rabbitmq
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     security_opt:
       - no-new-privileges:true
     networks:
@@ -81,11 +91,14 @@ services:
     environment:
       ASPNETCORE_URLS: http://0.0.0.0:8080
       RabbitMq__Host: rabbitmq
+      RabbitMq__Port: 5672
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
       RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__VirtualHost: /
     restart: unless-stopped
     depends_on:
-      - rabbitmq
+      rabbitmq:
+          condition: service_healthy
     security_opt:
       - no-new-privileges:true
     networks:
@@ -101,12 +114,16 @@ services:
       ASPNETCORE_URLS: http://0.0.0.0:8080
       ConnectionStrings__Notification: Host=postgres;Port=5432;Database=${NOTIFICATION_DB:-roommanager_notification};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       RabbitMq__Host: rabbitmq
+      RabbitMq__Port: 5672
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
       RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__VirtualHost: /
     restart: unless-stopped
     depends_on:
-      - postgres
-      - rabbitmq
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     security_opt:
       - no-new-privileges:true
     networks:
@@ -123,13 +140,18 @@ services:
       IDENTITY_API_URL: http://identity-api:8080
       EXTERNAL_API_URL: http://external-api:8080
       NOTIFICATION_API_URL: http://notification-api:8080
+      ConnectionStrings__Redis: redis:6379
+      Redis__Configuration: redis:6379
     ports:
       - "8000:8000"
     restart: unless-stopped
     depends_on:
-      - identity-api
-      - external-api
-      - notification-api
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     security_opt:
       - no-new-privileges:true
     networks:

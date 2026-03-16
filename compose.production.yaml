@@ -7,6 +7,11 @@ services:
     volumes:
       - redisdata:/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - rm-network
   # ---------------- POSTGRES ----------------
@@ -27,6 +32,27 @@ services:
       retries: 5
     networks:
       - rm-network
+
+  # ---------------- RABBITMQ ----------------
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rm-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RABBITMQ_DEFAULT_VHOST: /
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rm-network
+
+  
   # ---------------- IDENTITY API ----------------
   identity-api:
     build:
@@ -39,8 +65,12 @@ services:
       Redis__Configuration: redis:6379
     restart: unless-stopped
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     security_opt:
       - no-new-privileges:true
     networks:
@@ -69,7 +99,10 @@ services:
       ConnectionStrings__Notification: Host=postgres;Port=5432;Database=${NOTIFICATION_DB:-roommanager_notification};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
     restart: unless-stopped
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     security_opt:
       - no-new-privileges:true
     networks:
@@ -85,13 +118,20 @@ services:
       IDENTITY_API_URL: http://identity-api:8080
       EXTERNAL_API_URL: http://external-api:8080
       NOTIFICATION_API_URL: http://notification-api:8080
+      ConnectionStrings__Redis: redis:6379
+      Redis__Configuration: redis:6379
     ports:
       - "8000:8000"
     restart: unless-stopped
     depends_on:
-      - identity-api
-      - external-api
-      - notification-api
+      redis:
+        condition: service_healthy
+      identity-api:
+        condition: service_started
+      external-api:
+        condition: service_started
+      notification-api:
+        condition: service_started
     security_opt:
       - no-new-privileges:true
     networks:
@@ -102,3 +142,4 @@ networks:
 volumes:
   pgdata:
   redisdata:
+  rabbitmqdata:

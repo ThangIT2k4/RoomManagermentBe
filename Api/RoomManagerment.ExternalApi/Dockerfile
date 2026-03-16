@@ -11,7 +11,7 @@ WORKDIR "/app/Api/RoomManagerment.ExternalApi"
 RUN dotnet build "RoomManagerment.ExternalApi.csproj" -c Release -o /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish "RoomManagerment.ExternalApi.csproj" -c Release -o /app/publish --no-build
+RUN dotnet publish "RoomManagerment.ExternalApi.csproj" -c Release -o /app/publish --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app

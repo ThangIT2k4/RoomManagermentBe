@@ -28,14 +28,17 @@ builder.Host.UseSerilog((ctx, lc) =>
 
 #region REDIS
 
-var redisConfig = builder.Configuration.GetConnectionString("Redis");
+// Redis:Configuration (env Redis__Configuration) hoặc ConnectionStrings:Redis; Docker override = redis:6379
+var redisConfig = builder.Configuration["Redis:Configuration"]
+    ?? builder.Configuration.GetConnectionString("Redis")
+    ?? "redis:6379";
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = redisConfig;
     options.InstanceName = builder.Configuration["Redis:InstanceName"] ?? "RoomManagementGateway:";
 });
 builder.Services.AddSingleton<StackExchange.Redis.IConnectionMultiplexer>(_ =>
-    StackExchange.Redis.ConnectionMultiplexer.Connect(redisConfig ?? "localhost:6379"));
+    StackExchange.Redis.ConnectionMultiplexer.Connect(redisConfig));
 builder.Services.AddHostedService<RoomManagerment.Gateway.Services.NotificationPushRedisSubscriber>();
 
 #endregion
@@ -145,9 +148,11 @@ builder.Services.AddProblemDetails();
 
 #region SIGNALR
 
-var redisConnection = builder.Configuration.GetConnectionString("Redis");
+var redisConnection = builder.Configuration["Redis:Configuration"]
+    ?? builder.Configuration.GetConnectionString("Redis")
+    ?? "redis:6379";
 builder.Services.AddSignalR()
-    .AddStackExchangeRedis(redisConnection ?? "localhost:6379", options =>
+    .AddStackExchangeRedis(redisConnection, options =>
     {
         options.Configuration.ChannelPrefix = StackExchange.Redis.RedisChannel.Literal("RoomManagerment:SignalR:");
     });
