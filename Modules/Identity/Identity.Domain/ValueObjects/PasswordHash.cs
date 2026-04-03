@@ -5,7 +5,6 @@ namespace Identity.Domain.ValueObjects;
 
 public sealed class PasswordHash : ValueObject
 {
-    
     public string Value { get; private set; }
 
     private PasswordHash(string value)
@@ -17,7 +16,7 @@ public sealed class PasswordHash : ValueObject
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new InvalidPasswordHashException(InvalidUsernameException.CodeEmpty);
+            throw new InvalidPasswordHashException(InvalidPasswordHashException.CodeEmpty);
         }
 
         return new PasswordHash(value.Trim());

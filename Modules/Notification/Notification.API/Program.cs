@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using Notification.Application;
+using Notification.API.Common;
 using Notification.Infrastructure;
 using Notification.Infrastructure.Consumers;
 using RoomManagerment.Messaging.Extensions;
@@ -78,6 +79,7 @@ builder.Services.AddRabbitMqMessaging(builder.Configuration, x =>
 {
     x.AddConsumer<NotificationCreateRequestedConsumer>();
     x.AddConsumer<UserRegisteredConsumer>();
+    x.AddConsumer<PasswordChangedConsumer>();
 });
 
 var app = builder.Build();
@@ -99,6 +101,32 @@ app.UseForwardedHeaders();
 app.UseSerilogRequestLogging();
 app.UseCors("ApiPolicy");
 app.UseRateLimiter();
+
+var internalSharedKey = builder.Configuration["InternalAuth:SharedKey"];
+app.Use(async (context, next) =>
+{
+    if (!context.Request.Path.StartsWithSegments("/api", StringComparison.OrdinalIgnoreCase))
+    {
+        await next();
+        return;
+    }
+
+    if (string.IsNullOrWhiteSpace(internalSharedKey))
+    {
+        await next();
+        return;
+    }
+
+    var providedKey = context.Request.Headers[SessionUserIdHeader.InternalServiceKeyName].FirstOrDefault();
+    if (!string.Equals(providedKey, internalSharedKey, StringComparison.Ordinal))
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        await context.Response.WriteAsJsonAsync(new { error = "Invalid internal service key." });
+        return;
+    }
+
+    await next();
+});
 
 if (app.Environment.IsDevelopment())
 {

@@ -3,8 +3,10 @@ using Identity.Domain.Repositories;
 using Identity.Infrastructure.Options;
 using Identity.Infrastructure.Repositories;
 using Identity.Infrastructure.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using RoomManagerment.Identity.DatabaseSpecific;
 using StackExchange.Redis;
 
@@ -12,7 +14,10 @@ namespace Identity.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        IHostEnvironment environment)
     {
         // register data access adapter factory and adapter
         services.AddScoped<IDataAccessAdapterFactory, DataAccessAdapterFactory>();
@@ -37,7 +42,7 @@ public static class DependencyInjection
         });
 
         // register session configuration (cookie name trùng Gateway: RoomManager.SessionId)
-        services.AddSessionConfiguration(configuration);
+        services.AddSessionConfiguration(configuration, environment);
 
         // register mapping services
        
@@ -57,8 +62,10 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddSessionConfiguration(this IServiceCollection services,
-        IConfiguration configuration)
+    private static IServiceCollection AddSessionConfiguration(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        IHostEnvironment environment)
     {
         var sessionOptions = configuration.GetSection("Session").Get<SessionOptions>()
                              ?? new SessionOptions();
@@ -69,7 +76,9 @@ public static class DependencyInjection
             options.Cookie.Name = sessionOptions.Cookie.Name ?? "RoomManager.SessionId";
             options.Cookie.HttpOnly = sessionOptions.Cookie.HttpOnly;
             options.Cookie.IsEssential = sessionOptions.Cookie.IsEssential;
-            options.Cookie.SecurePolicy = sessionOptions.Cookie.SecurePolicy;
+            options.Cookie.SecurePolicy = environment.IsDevelopment()
+                ? CookieSecurePolicy.SameAsRequest
+                : sessionOptions.Cookie.SecurePolicy;
             options.Cookie.SameSite = sessionOptions.Cookie.SameSite;
         });
 

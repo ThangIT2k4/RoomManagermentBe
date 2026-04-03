@@ -25,9 +25,8 @@ public sealed class RegisterUserCommandHandler(IUserRepository userRepository, I
         
         var username = Username.Create(command.Username);
         var email = Email.Create(command.Email);
-        // Ở đây tạm thời giả sử password đã được hash ở ngoài và truyền vào,
-        // hoặc bạn sẽ thay thế bằng IPasswordHasher ở Application/Infrastructure.
-        var passwordHash = PasswordHash.Create(command.Password);
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(command.Password);
+        var passwordHash = PasswordHash.Create(hashedPassword);
 
         var user = UserEntity.Create(Guid.NewGuid(), username, email, passwordHash);
 

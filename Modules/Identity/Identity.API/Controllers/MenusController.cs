@@ -6,12 +6,14 @@ using Identity.Application.Features.Menus.GetMenusByParent;
 using Identity.Application.Features.Menus.GetMenusPaged;
 using Identity.Application.Features.Menus.SetMenuActive;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Identity.API.Requests;
 
 namespace Identity.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class MenusController(IMediator mediator) : ControllerBase
 {

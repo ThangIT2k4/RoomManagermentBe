@@ -8,11 +8,13 @@ using Identity.Application.Features.Users.GetUsersPaged;
 using Identity.Application.Features.Users.RegisterUser;
 using Identity.Application.Features.Users.SetUserPermission;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class UsersController(IMediator mediator) : ControllerBase
 {

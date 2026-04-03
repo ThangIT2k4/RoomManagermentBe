@@ -4,11 +4,13 @@ using Identity.Application.Features.Permissions.CreatePermission;
 using Identity.Application.Features.Permissions.GetPermissionById;
 using Identity.Application.Features.Permissions.GetPermissionsPaged;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class PermissionsController(IMediator mediator) : ControllerBase
 {

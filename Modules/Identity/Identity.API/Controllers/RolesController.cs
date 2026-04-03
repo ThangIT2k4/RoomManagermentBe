@@ -6,11 +6,13 @@ using Identity.Application.Features.Roles.CreateRole;
 using Identity.Application.Features.Roles.GetRoleById;
 using Identity.Application.Features.Roles.GetRolesPaged;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class RolesController(IMediator mediator) : ControllerBase
 {

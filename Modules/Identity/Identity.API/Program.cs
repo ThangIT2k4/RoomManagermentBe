@@ -1,10 +1,15 @@
 using Identity.Application;
+using Identity.API.Requests;
+using Identity.API.Security;
+using Identity.API.Validators;
 using Identity.Infrastructure;
 using RoomManagerment.Messaging.Extensions;
 using Serilog;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
+using FluentValidation;
+using Microsoft.AspNetCore.Authentication;
 using System.Net.Sockets;
 using IOException = System.IO.IOException;
 
@@ -24,6 +29,14 @@ builder.Services.AddSerilog(
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 // Session store = Redis (đăng ký trong Identity.Infrastructure) để share session với Gateway
+builder.Services.AddScoped<IValidator<LoginRequest>, LoginRequestValidator>();
+builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterRequestValidator>();
+builder.Services
+    .AddAuthentication(SessionAuthenticationHandler.SchemeName)
+    .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>(
+        SessionAuthenticationHandler.SchemeName,
+        _ => { });
+builder.Services.AddAuthorization();
 
 // ===== REQUEST SIZE LIMIT =====
 builder.WebHost.ConfigureKestrel(options =>
@@ -82,7 +95,7 @@ builder.Services.AddProblemDetails();
 
 // ===== APPLICATION & INFRASTRUCTURE =====
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
 
 // ===== RABBITMQ MESSAGING =====
 // Identity chỉ publish events (không cần consumer ở đây)
@@ -115,15 +128,16 @@ app.UseSerilogRequestLogging();
 // 5. CORS
 app.UseCors("ApiPolicy");
 
-// 6. Authentication & Authorization
+// 6. Session (must run before session-based authentication)
+app.UseSession();
+
+// 7. Authentication & Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 7. Rate Limiting
+// 8. Rate Limiting
 app.UseRateLimiter();
 
-// 8. Session
-app.UseSession();
 
 // 9. Development endpoints
 if (app.Environment.IsDevelopment())

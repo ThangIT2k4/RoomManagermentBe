@@ -7,4 +7,5 @@ namespace Notification.API.Common;
 public static class SessionUserIdHeader
 {
     public const string Name = "X-User-Id";
+    public const string InternalServiceKeyName = "X-Internal-Service-Key";
 }
