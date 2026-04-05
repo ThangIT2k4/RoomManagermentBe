@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
+    <ProjectReference Include="..\DAL\DatabaseGeneric\RoomManagerment.Finance.csproj" />
+    <ProjectReference Include="..\DAL\DatabaseSpecific\RoomManagerment.FinanceDBSpecific.csproj" />
+    <ProjectReference Include="..\Finance.Application\Finance.Application.csproj" />
+    <ProjectReference Include="..\Finance.Domain\Finance.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.4.1" />
+    <PackageReference Include="StackExchange.Redis" Version="2.9.32" />
+  </ItemGroup>
+</Project>
+
