@@ -21,10 +21,14 @@ public sealed class NotificationRepository(DataAccessAdapter adapter) : INotific
         var dal = new RoomManagerment.Notification.EntityClasses.NotificationEntity
         {
             Id = notification.Id,
+            UserId = notification.UserId,
+            NotificationChannelId = notification.NotificationChannelId,
             Title = notification.Title,
-            Content = notification.Content,
+            Message = notification.Content,
             Type = notification.Type,
-            CreatedAt = notification.CreatedAt
+            CreatedAt = notification.CreatedAt,
+            IsRead = notification.IsRead,
+            ReadAt = notification.ReadAt
         };
         await adapter.SaveEntityAsync(dal, true, false, ct);
         return notification;

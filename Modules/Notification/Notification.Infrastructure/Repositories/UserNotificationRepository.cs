@@ -1,3 +1,4 @@
+using Notification.Domain.Common;
 using Notification.Domain.Entities;
 using Notification.Domain.Repositories;
 using Notification.Infrastructure.Mapper;
@@ -16,57 +17,38 @@ public sealed class UserNotificationRepository(DataAccessAdapter adapter) : IUse
     public async Task<UserNotificationEntity?> GetByIdAsync(Guid id, CancellationToken ct = default)
     {
         var linq = new LinqMetaData(adapter);
-        var dal = await linq.UserNotification
+        var dal = await linq.Notification
             .Where(un => un.Id == id)
             .FirstOrDefaultAsync(ct);
         if (dal is null) return null;
-        NotificationEntity? notif = null;
-        if (dal.Notification != null)
-            notif = dal.Notification.ToDomain();
-        return dal.ToDomain(notif);
+        return dal.ToUserNotificationDomain();
     }
 
     public async Task<UserNotificationEntity?> GetByUserAndNotificationAsync(Guid userId, Guid notificationId, CancellationToken ct = default)
     {
         var linq = new LinqMetaData(adapter);
-        var dal = await linq.UserNotification
-            .Where(un => un.UserId == userId && un.NotificationId == notificationId)
+        var dal = await linq.Notification
+            .Where(un => un.UserId == userId && un.Id == notificationId)
             .FirstOrDefaultAsync(ct);
         if (dal is null) return null;
-        NotificationEntity? notif = null;
-        if (dal.Notification != null)
-            notif = dal.Notification.ToDomain();
-        return dal.ToDomain(notif);
+        return dal.ToUserNotificationDomain();
     }
 
     public async Task<PagedResult<UserNotificationEntity>> GetByUserIdPagedAsync(Guid userId, int page, int pageSize, bool? isRead, CancellationToken ct = default)
     {
         var qf = new QueryFactory();
-        var baseQuery = qf.UserNotification.Where(UserNotificationFields.UserId.Equal(userId));
+        var baseQuery = qf.Notification.Where(NotificationFields.UserId.Equal(userId));
         if (isRead.HasValue)
-            baseQuery = baseQuery.Where(UserNotificationFields.IsRead.Equal(isRead.Value));
+            baseQuery = baseQuery.Where(NotificationFields.IsRead.Equal(isRead.Value));
 
         var totalCount = await adapter.FetchScalarAsync<int>(baseQuery.Select(Functions.CountRow()), ct);
         var query = baseQuery
-            .OrderBy(UserNotificationFields.Id.Descending())
+            .OrderBy(NotificationFields.Id.Descending())
             .Page(page, pageSize);
         var data = await adapter.FetchQueryAsync(query, ct);
-        var list = data.Cast<RoomManagerment.Notification.EntityClasses.UserNotificationEntity>().ToList();
-
-        var notificationIds = list.Select(un => un.NotificationId).Distinct().ToList();
-        var notifDict = new Dictionary<Guid, NotificationEntity>();
-        if (notificationIds.Count > 0)
-        {
-            var linq = new LinqMetaData(adapter);
-            var notifications = await linq.Notification
-                .Where(n => notificationIds.Contains(n.Id))
-                .ToListAsync(ct);
-            foreach (var n in notifications)
-                notifDict[n.Id] = n.ToDomain();
-        }
-
-        var entities = list
-            .Select(dal => dal.ToDomain(notifDict.GetValueOrDefault(dal.NotificationId)))
+        var entities = data
+            .Cast<RoomManagerment.Notification.EntityClasses.NotificationEntity>()
+            .Select(dal => dal.ToUserNotificationDomain())
             .ToList();
 
         return new PagedResult<UserNotificationEntity>(entities, totalCount, page, pageSize);
@@ -75,23 +57,35 @@ public sealed class UserNotificationRepository(DataAccessAdapter adapter) : IUse
     public async Task<int> GetUnreadCountAsync(Guid userId, CancellationToken ct = default)
     {
         var qf = new QueryFactory();
-        var query = qf.UserNotification
-            .Where(UserNotificationFields.UserId.Equal(userId))
-            .Where(UserNotificationFields.IsRead.Equal(false));
+        var query = qf.Notification
+            .Where(NotificationFields.UserId.Equal(userId))
+            .Where(NotificationFields.IsRead.Equal(false));
         var count = await adapter.FetchScalarAsync<int>(query.Select(Functions.CountRow()), ct);
         return count;
     }
 
-    public async Task<UserNotificationEntity> AddAsync(UserNotificationEntity userNotification, CancellationToken ct = default)
+    public Task<UserNotificationEntity> AddAsync(UserNotificationEntity userNotification, CancellationToken ct = default)
     {
-        var dal = new RoomManagerment.Notification.EntityClasses.UserNotificationEntity
+        var dal = new RoomManagerment.Notification.EntityClasses.NotificationEntity
         {
             Id = userNotification.Id,
             UserId = userNotification.UserId,
-            NotificationId = userNotification.NotificationId,
+            Title = userNotification.Title,
+            Message = userNotification.Content,
+            Type = userNotification.Type ?? "Info",
+            CreatedAt = userNotification.CreatedAt,
             IsRead = userNotification.IsRead,
             ReadAt = userNotification.ReadAt
         };
+
+        return SaveAndReturnAsync(dal, userNotification, ct);
+    }
+
+    private async Task<UserNotificationEntity> SaveAndReturnAsync(
+        RoomManagerment.Notification.EntityClasses.NotificationEntity dal,
+        UserNotificationEntity userNotification,
+        CancellationToken ct)
+    {
         await adapter.SaveEntityAsync(dal, true, false, ct);
         return userNotification;
     }
@@ -99,9 +93,9 @@ public sealed class UserNotificationRepository(DataAccessAdapter adapter) : IUse
     public async Task<bool> MarkAsReadAsync(Guid userNotificationId, Guid userId, CancellationToken ct = default)
     {
         var linq = new LinqMetaData(adapter);
-        var dal = await linq.UserNotification
+        var dal = await linq.Notification
             .Where(un => un.Id == userNotificationId && un.UserId == userId)
-            .FirstOrDefaultAsync(ct) as RoomManagerment.Notification.EntityClasses.UserNotificationEntity;
+            .FirstOrDefaultAsync(ct);
         if (dal is null) return false;
         if (dal.IsRead) return true;
         dal.IsRead = true;

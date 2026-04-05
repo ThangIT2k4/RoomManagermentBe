@@ -21,8 +21,8 @@ RUN dotnet publish "./Notification.API.csproj" -c $BUILD_CONFIGURATION -o /app/p
 
 FROM base AS final
 WORKDIR /app
-EXPOSE 8080
-ENV ASPNETCORE_HTTP_PORTS=8080
+EXPOSE 5001
+ENV ASPNETCORE_HTTP_PORTS=5001
 COPY --from=publish /app/publish .
 RUN adduser --disabled-password --uid 10001 --gecos "" appuser \
     && chown -R appuser:appuser /app

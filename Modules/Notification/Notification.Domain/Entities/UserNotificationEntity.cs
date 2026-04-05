@@ -1,51 +1,66 @@
 namespace Notification.Domain.Entities;
 
 /// <summary>
-/// Domain entity: UserNotification (liên kết user – notification, trạng thái đã đọc).
+/// Domain entity: UserNotification (một bản ghi notifications gắn user và trạng thái đã đọc).
 /// Trong DDD, entity chỉ được tạo qua factory: Create (tạo mới) hoặc FromPersistence (tái tạo từ DB).
 /// </summary>
 public sealed class UserNotificationEntity
 {
     public Guid Id { get; }
     public Guid UserId { get; }
-    public Guid NotificationId { get; }
+    public string Title { get; }
+    public string Content { get; }
+    public string? Type { get; }
+    public DateTime CreatedAt { get; }
     public bool IsRead { get; }
     public DateTime? ReadAt { get; }
-    public NotificationEntity? Notification { get; }
 
     private UserNotificationEntity(
         Guid id,
         Guid userId,
-        Guid notificationId,
+        string title,
+        string content,
+        string? type,
+        DateTime createdAt,
         bool isRead,
-        DateTime? readAt,
-        NotificationEntity? notification)
+        DateTime? readAt)
     {
         Id = id;
         UserId = userId;
-        NotificationId = notificationId;
+        Title = title;
+        Content = content;
+        Type = type;
+        CreatedAt = createdAt;
         IsRead = isRead;
         ReadAt = readAt;
-        Notification = notification;
     }
 
     /// <summary>
-    /// Factory: tạo user-notification mới (chưa đọc). Chỉ dùng khi đã có NotificationEntity.
+    /// Factory: tạo user-notification mới.
     /// </summary>
-    public static UserNotificationEntity Create(Guid userId, Guid notificationId)
+    public static UserNotificationEntity Create(
+        Guid userId,
+        string title,
+        string content,
+        string? type = null,
+        DateTime? createdAt = null)
     {
         if (userId == Guid.Empty)
             throw new ArgumentException("UserId cannot be empty.", nameof(userId));
-        if (notificationId == Guid.Empty)
-            throw new ArgumentException("NotificationId cannot be empty.", nameof(notificationId));
+        if (string.IsNullOrWhiteSpace(title))
+            throw new ArgumentException("Title cannot be empty.", nameof(title));
+        if (string.IsNullOrWhiteSpace(content))
+            throw new ArgumentException("Content cannot be empty.", nameof(content));
 
         return new UserNotificationEntity(
             id: Guid.NewGuid(),
             userId,
-            notificationId,
+            title: title.Trim(),
+            content: content.Trim(),
+            type: string.IsNullOrWhiteSpace(type) ? "Info" : type.Trim(),
+            createdAt: createdAt ?? DateTime.UtcNow,
             isRead: false,
-            readAt: null,
-            notification: null);
+            readAt: null);
     }
 
     /// <summary>
@@ -54,11 +69,21 @@ public sealed class UserNotificationEntity
     public static UserNotificationEntity FromPersistence(
         Guid id,
         Guid userId,
-        Guid notificationId,
+        string title,
+        string content,
+        string? type,
+        DateTime createdAt,
         bool isRead,
-        DateTime? readAt,
-        NotificationEntity? notification = null)
+        DateTime? readAt)
     {
-        return new UserNotificationEntity(id, userId, notificationId, isRead, readAt, notification);
+        return new UserNotificationEntity(
+            id,
+            userId,
+            title ?? string.Empty,
+            content ?? string.Empty,
+            type,
+            createdAt,
+            isRead,
+            readAt);
     }
 }

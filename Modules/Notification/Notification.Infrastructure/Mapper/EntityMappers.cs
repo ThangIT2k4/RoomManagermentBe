@@ -1,30 +1,50 @@
-using Notification.Domain.Entities;
-using RoomManagerment.Notification.EntityClasses;
+using DomainNotificationEntity = Notification.Domain.Entities.NotificationEntity;
+using DomainUserNotificationEntity = Notification.Domain.Entities.UserNotificationEntity;
+using DomainUserNotificationPreferenceEntity = global::Notification.Domain.Entities.UserNotificationPreferenceEntity;
+using DalNotificationEntity = RoomManagerment.Notification.EntityClasses.NotificationEntity;
+using DalUserNotificationPreferenceEntity = RoomManagerment.Notification.EntityClasses.UserNotificationPreferenceEntity;
 
 namespace Notification.Infrastructure.Mapper;
 
 internal static class EntityMappers
 {
-    public static Notification.Domain.Entities.NotificationEntity ToDomain(this RoomManagerment.Notification.EntityClasses.NotificationEntity dal)
+    public static DomainNotificationEntity ToDomain(this DalNotificationEntity dal)
     {
-        if (dal is null) return null!;
-        return Notification.Domain.Entities.NotificationEntity.FromPersistence(
-            dal.Id,
-            dal.Title ?? string.Empty,
-            dal.Content ?? string.Empty,
-            dal.Type,
-            dal.CreatedAt);
-    }
-
-    public static Notification.Domain.Entities.UserNotificationEntity ToDomain(this RoomManagerment.Notification.EntityClasses.UserNotificationEntity dal, Notification.Domain.Entities.NotificationEntity? notification = null)
-    {
-        if (dal is null) return null!;
-        return Notification.Domain.Entities.UserNotificationEntity.FromPersistence(
+        return DomainNotificationEntity.FromPersistence(
             dal.Id,
             dal.UserId,
-            dal.NotificationId,
+            dal.NotificationChannelId,
+            dal.Title ?? string.Empty,
+            dal.Message ?? string.Empty,
+            dal.Type,
+            dal.CreatedAt,
             dal.IsRead,
-            dal.ReadAt,
-            notification);
+            dal.ReadAt);
     }
+
+    public static DomainUserNotificationEntity ToUserNotificationDomain(this DalNotificationEntity dal)
+    {
+        return DomainUserNotificationEntity.FromPersistence(
+            dal.Id,
+            dal.UserId,
+            dal.Title ?? string.Empty,
+            dal.Message ?? string.Empty,
+            dal.Type,
+            dal.CreatedAt,
+            dal.IsRead,
+            dal.ReadAt);
+    }
+
+    public static DomainUserNotificationPreferenceEntity ToDomain(this DalUserNotificationPreferenceEntity dal)
+    {
+        return DomainUserNotificationPreferenceEntity.FromPersistence(
+            dal.Id,
+            dal.UserId,
+            dal.EntityType,
+            dal.InAppEnabled,
+            dal.EmailEnabled,
+            dal.CreatedAt,
+            dal.UpdatedAt);
+    }
+
 }

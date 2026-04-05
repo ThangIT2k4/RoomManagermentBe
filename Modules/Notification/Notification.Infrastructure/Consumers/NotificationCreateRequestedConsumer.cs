@@ -1,15 +1,13 @@
+using System.Text;
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using Notification.Domain.Entities;
-using Notification.Domain.Repositories;
+using Notification.Application.Services;
 using RoomManagerment.Messaging.Contracts.Events;
 
 namespace Notification.Infrastructure.Consumers;
 
 public sealed class NotificationCreateRequestedConsumer(
-    INotificationRepository notificationRepository,
-    IUserNotificationRepository userNotificationRepository,
-    IUnitOfWork unitOfWork,
+    IUserNotificationIngestionService ingestion,
     ILogger<NotificationCreateRequestedConsumer> logger) : IConsumer<NotificationCreateRequestedEvent>
 {
     public async Task Consume(ConsumeContext<NotificationCreateRequestedEvent> context)
@@ -19,21 +17,32 @@ public sealed class NotificationCreateRequestedConsumer(
             "Received NotificationCreateRequestedEvent for user {UserId} from {Source}",
             evt.RecipientUserId, evt.SourceService);
 
-        var notification = NotificationEntity.Create(
+        var content = BuildContent(evt.Message, evt.Metadata);
+
+        var id = await ingestion.CreateAsync(
+            evt.RecipientUserId,
             evt.Title,
-            evt.Message,
+            content,
             evt.Type,
-            evt.CreatedAt);
-
-        await notificationRepository.AddAsync(notification, context.CancellationToken);
-
-        var userNotification = UserNotificationEntity.Create(evt.RecipientUserId, notification.Id);
-
-        await userNotificationRepository.AddAsync(userNotification, context.CancellationToken);
-        await unitOfWork.SaveChangesAsync(context.CancellationToken);
+            evt.CreatedAt,
+            context.CancellationToken);
 
         logger.LogInformation(
             "Notification {NotificationId} created for user {UserId}",
-            notification.Id, evt.RecipientUserId);
+            id, evt.RecipientUserId);
+    }
+
+    private static string BuildContent(string message, IReadOnlyDictionary<string, string>? metadata)
+    {
+        if (metadata is null || metadata.Count == 0)
+            return message;
+
+        var sb = new StringBuilder(message.TrimEnd());
+        sb.AppendLine();
+        sb.AppendLine();
+        foreach (var kv in metadata)
+            sb.AppendLine($"{kv.Key}: {kv.Value}");
+
+        return sb.ToString();
     }
 }

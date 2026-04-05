@@ -18,13 +18,13 @@ public sealed class GetUserNotificationsPagedQueryHandler(IUserNotificationRepos
             .Select(un => new UserNotificationListItemDto(
                 un.Id,
                 un.UserId,
-                un.NotificationId,
-                un.Notification?.Title ?? string.Empty,
-                un.Notification?.Content ?? string.Empty,
-                un.Notification?.Type,
+                un.Id,
+                un.Title,
+                un.Content,
+                un.Type,
                 un.IsRead,
                 un.ReadAt,
-                un.Notification?.CreatedAt ?? DateTime.MinValue))
+                un.CreatedAt))
             .ToList();
 
         var response = new PagedResponse<UserNotificationListItemDto>(

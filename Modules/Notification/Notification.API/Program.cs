@@ -80,6 +80,10 @@ builder.Services.AddRabbitMqMessaging(builder.Configuration, x =>
     x.AddConsumer<NotificationCreateRequestedConsumer>();
     x.AddConsumer<UserRegisteredConsumer>();
     x.AddConsumer<PasswordChangedConsumer>();
+    x.AddConsumer<UserLoggedInConsumer>();
+    x.AddConsumer<SessionCreatedConsumer>();
+    x.AddConsumer<SessionRevokedConsumer>();
+    x.AddConsumer<UserEmailVerifiedConsumer>();
 });
 
 var app = builder.Build();
@@ -140,7 +144,7 @@ if (!app.Environment.IsDevelopment())
     app.Map("/error", HandleException);
 }
 
-var port = Environment.GetEnvironmentVariable("NOTIFICATION_API_PORT") ?? "5287";
+var port = Environment.GetEnvironmentVariable("NOTIFICATION_API_PORT") ?? "5001";
 var protocol = app.Environment.IsDevelopment() ? "http" : "https";
 
 try

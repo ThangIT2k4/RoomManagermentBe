@@ -1,3 +1,4 @@
+using Notification.Domain.Common;
 using Notification.Domain.Entities;
 
 namespace Notification.Domain.Repositories;
