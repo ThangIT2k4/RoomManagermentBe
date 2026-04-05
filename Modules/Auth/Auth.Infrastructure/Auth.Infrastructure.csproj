@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="MediatR" Version="13.1.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.11.0" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
+    <ProjectReference Include="..\DAL\DatabaseGeneric\RoomManagerment.Auth.csproj" />
+    <ProjectReference Include="..\DAL\DatabaseSpecific\RoomManagerment.AuthDBSpecific.csproj" />
+    <ProjectReference Include="..\Auth.Application\Auth.Application.csproj" />
+    <ProjectReference Include="..\Auth.Domain\Auth.Domain.csproj" />
+  </ItemGroup>
+</Project>
+

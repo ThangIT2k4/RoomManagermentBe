@@ -1,0 +1,47 @@
+using MassTransit;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+namespace Auth.Infrastructure.Services;
+
+public sealed class RabbitMqIntegrationEventBackgroundService : BackgroundService
+{
+    private readonly RabbitMqIntegrationEventPublisher _publisher;
+    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly ILogger<RabbitMqIntegrationEventBackgroundService> _logger;
+
+    public RabbitMqIntegrationEventBackgroundService(
+        RabbitMqIntegrationEventPublisher publisher,
+        IPublishEndpoint publishEndpoint,
+        ILogger<RabbitMqIntegrationEventBackgroundService> logger)
+    {
+        _publisher = publisher;
+        _publishEndpoint = publishEndpoint;
+        _logger = logger;
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        await foreach (var envelope in _publisher.Reader.ReadAllAsync(stoppingToken))
+        {
+            await PublishWithRetryAsync(envelope, stoppingToken);
+        }
+    }
+
+    private async Task PublishWithRetryAsync(IntegrationEventEnvelope envelope, CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            try
+            {
+                await _publishEndpoint.Publish(envelope.Message, envelope.Message.GetType(), stoppingToken);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "RabbitMQ publish failed for {RoutingKey}. Retrying...", envelope.RoutingKey);
+                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+            }
+        }
+    }
+}
