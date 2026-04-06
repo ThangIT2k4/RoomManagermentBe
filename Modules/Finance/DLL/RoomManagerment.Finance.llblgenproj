@@ -1,0 +1,503 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--LLBLGen Pro v5.13 project file. Do not manually edit this file. Incorrect references could lead to an unloadable project file.-->
+<Project Version="5.13" TargetFrameworkName="LLBLGen Pro Runtime Framework" UseLegacyDefaults="false">
+  <Properties>
+    <Abbreviations />
+    <Property Name="AdditionalTaskPerformerFolder" Value="" />
+    <Property Name="AdditionalTasksFolder" Value="" />
+    <Property Name="AdditionalTemplatesFolder" Value="" />
+    <Property Name="AdditionalTypeConverterFolder" Value="" />
+    <Property Name="AddNewElementsAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AddNewFieldsAfterRefresh_v5" Value="true" />
+    <Property Name="AddNewFieldsAfterRelationalModelDataSync_v5" Value="true" />
+    <Property Name="AddNewViewsAsEntitiesAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewViewsAsEntitiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AutoAddManyToManyRelationships" Value="false" />
+    <Property Name="AutoAssignSequencesToIntegerPks" Value="true" />
+    <Property Name="AutoAssignTypeConverterToFieldMapping" Value="true" />
+    <Property Name="AutomaticallyGenerateSourceCodeOnProjectSave" Value="true" />
+    <Property Name="ConnectionStringKeyNamePattern" Value="ConnectionString.{$ProviderName}" />
+    <Property Name="DefaultDDLSQLScriptDestinationFolder" Value=".\DDLSQLScripts" />
+    <Property Name="DefaultDeleteRuleAction" Value="1" />
+    <Property Name="DefaultSourceCodeDestinationFolder" Value=".\Code" />
+    <Property Name="DefaultUpdateRuleAction" Value="0" />
+    <Property Name="DeleteObsoleteFiles" Value="true" />
+    <Property Name="ElementNamePrefixPattern" Value="{$SchemaName}" />
+    <Property Name="ElementNamePrefixPatternIsAppliedWhen" Value="1" />
+    <Property Name="EncodingToUse" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForTable" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForView" Value="4" />
+    <Property Name="EntityFieldNameStripPattern" Value="{}{}" />
+    <Property Name="EntityNameStripPattern" Value="{tbl_}{}" />
+    <Property Name="ExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="FailCodeGenerationOnWriteError" Value="false" />
+    <Property Name="FieldMappedOntoRelatedFieldPattern" Value="{$RelatedFieldName}" />
+    <Property Name="FkFieldsAreNamedAfterTargetField" Value="true" />
+    <Property Name="ForeignKeyConstraintPattern" Value="FK_{$Guid}" />
+    <Property Name="ForeignKeyFieldPattern" Value="{$NavigatorName}{$RelatedFieldName}" />
+    <Property Name="GroupUsage" Value="0" />
+    <Property Name="IdentifyingFieldsFollowDBPrimaryKeyConstraints_v5" Value="true" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseInsensitiveDBs" Value="false" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseSensitiveDBs" Value="false" />
+    <Property Name="LengthPrecisionScaleFollowDBLengthPrecisionScale_v5" Value="true" />
+    <Property Name="MakeElementNamePascalCasing" Value="true" />
+    <Property Name="NavigatorMappedOntoManyToManyPattern" Value="{$EndEntityName}CollectionVia{$IntermediateEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneManyToOnePattern" Value="{$EndEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneToManyPattern" Value="{$EndEntityName$P}" />
+    <Property Name="NonExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="PreferDecimalOverCurrencyTypes" Value="true" />
+    <Property Name="PreferNaturalCharacterTypes" Value="true" />
+    <Property Name="PreferSystemSequencesOverSchemaSequencesIfApplicable" Value="true" />
+    <Property Name="PreferVariableLengthTypes" Value="true" />
+    <Property Name="PrimaryKeyConstraintPattern" Value="PK_{$Guid}" />
+    <Property Name="ProjectCreator" Value="TranDucThang" />
+    <Property Name="ProjectName" Value="RoomManagerment.Finance" />
+    <Property Name="ReflectNullabilityOfElementFieldInTargetField_v5" Value="false" />
+    <Property Name="ReflectTypeOfElementFieldInTargetField_v5" Value="true" />
+    <Property Name="RelationalModelDataElementNameCasingCaseInsensitiveDBs" Value="3" />
+    <Property Name="RelationalModelDataElementNameCasingCaseSensitiveDBs" Value="3" />
+    <Property Name="RelationshipsFollowDBForeignKeyConstraints_v5" Value="true" />
+    <Property Name="RemoveUnderscoresFromElementName" Value="true" />
+    <Property Name="RemoveUnmappedElementsAfterRefresh_v5" Value="false" />
+    <Property Name="RemoveUnmappedElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRefresh" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRelationalModelDataSync" Value="false" />
+    <Property Name="RetrieveDBCustomProperties" Value="false" />
+    <Property Name="RootNamespace" Value="" />
+    <Property Name="SequenceNameMatchingPattern" Value="SEQ_{$TableName}" />
+    <Property Name="SequencePattern" Value="SEQ_{$EntityName}" />
+    <Property Name="SetGroupNameAfterSchemaName" Value="true" />
+    <Property Name="SetSchemaNameAfterGroupName" Value="true" />
+    <Property Name="SingularizeElementNames" Value="true" />
+    <Property Name="StoredProcNameStripPattern" Value="{pr_, sp_}{}" />
+    <Property Name="StoreTimeLastGeneratedIntoProject" Value="false" />
+    <Property Name="StoreTimeLastSyncIntoProject" Value="true" />
+    <Property Name="SyncCustomFieldOrderingWithTableFieldIndex" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="SyncRelationalModelDataElementNameWithModelElementName_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="TableValuedFunctionNameStripPattern" Value="{fn_, pr_, sp_}{}" />
+    <Property Name="TargetPerEntityEdgesRequireBackingFkConstraint" Value="true" />
+    <Property Name="TypedViewFieldNameStripPattern" Value="{}{}" />
+    <Property Name="TypedViewMappedOnResultsetPattern" Value="{$ProcFunctionName}{$ResultsetName}Result" />
+    <Property Name="TypedViewNameStripPattern" Value="{vw_}{}" />
+    <Property Name="UniqueConstraintPattern" Value="UC_{$Guid}" />
+    <Property Name="UniqueConstraintsFollowDBUniqueConstraints_v5" Value="true" />
+    <Property Name="UpdateCustomPropertiesAfterRefresh_v5" Value="false" />
+    <Property Name="UpdateCustomPropertiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="UseCustomFieldOrderingOnNewElements" Value="false" />
+  </Properties>
+  <TypeShortcuts />
+  <IgnoredWarnings />
+  <SavedSearchQueries />
+  <CodeGenerationCyclePreferences>
+    <OutputType Value="3">
+      <LastUsedPreferences>
+        <DestinationRootFolder Value="Z:\WorkSpace\Projects\RoomManagerment\RoomManagermentBe\Modules\Finance\DAL" />
+        <FrameworkName Value="LLBLGen Pro Runtime Framework" />
+        <LanguageName Value="C#" />
+        <PlatformName Value=".NET 9" />
+        <PresetName Value="SD.Presets.Adapter.General.Netstandard" />
+        <RootNamespace Value="RoomManagerment.Finance" />
+        <TemplateGroup Value="Adapter" />
+        <TemplateBindings>
+          <Binding Name="SD.TemplateBindings.PostgreSqlSpecific" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates.Net9" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates" />
+          <Binding Name="SD.TemplateBindings.General" />
+        </TemplateBindings>
+        <AdhocTemplateSets />
+      </LastUsedPreferences>
+    </OutputType>
+  </CodeGenerationCyclePreferences>
+  <CodeGenerationMetaDataDefaults>
+    <TargetElement Type="256">
+      <Defaults>
+        <Attributes>
+          <Attribute Value="Browsable($false)" />
+        </Attributes>
+      </Defaults>
+    </TargetElement>
+  </CodeGenerationMetaDataDefaults>
+  <EntityModel>
+    <ValueTypeDefinitions />
+    <EntityDefinitions>
+      <EntityDefinition Name="DepositRefund" GroupName="Finance" ObjectID="c79f9d0c-2bc4-4883-b7cf-c55815f7ebdf">
+        <Fields>
+          <Field Name="Amount" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="CreatedBy" Type="guid" IsOptional="true" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="LeaseId" Type="guid" />
+          <Field Name="Notes" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="PaidAt" Type="datetime" IsOptional="true" />
+          <Field Name="PaidBy" Type="guid" IsOptional="true" />
+          <Field Name="Status" Type="string" MaxLength="50" />
+          <Field Name="TenantId" Type="guid" IsOptional="true" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="Invoice" GroupName="Finance" ObjectID="fed7426a-f169-43dd-8f66-8b43686e75f0">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="CreatedBy" Type="guid" IsOptional="true" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="DueDate" Type="dateonly" IsOptional="true" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="InvoiceDate" Type="dateonly" />
+          <Field Name="InvoiceNo" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="IsAutoCreated" Type="bool" />
+          <Field Name="LeaseId" Type="guid" IsOptional="true" />
+          <Field Name="Notes" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="PaidAmount" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="Status" Type="string" MaxLength="50" />
+          <Field Name="TotalAmount" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="InvoiceItem" GroupName="Finance" ObjectID="55347a90-f337-402c-81c7-01c1aa44f111">
+        <Fields>
+          <Field Name="Amount" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="Description" Type="string" IsOptional="true" MaxLength="500" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="InvoiceId" Type="guid" />
+          <Field Name="ItemType" Type="string" MaxLength="100" />
+          <Field Name="MeterReadingId" Type="guid" IsOptional="true" />
+          <Field Name="Quantity" Type="decimal" Precision="10" Scale="3" />
+          <Field Name="ServiceId" Type="guid" IsOptional="true" />
+          <Field Name="TicketLogId" Type="guid" IsOptional="true" />
+          <Field Name="UnitPrice" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="Payment" GroupName="Finance" ObjectID="8604cfb5-5547-4a86-81a7-ead8baf5372a">
+        <Fields>
+          <Field Name="Amount" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="ErrorMessage" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="InvoiceId" Type="guid" />
+          <Field Name="MethodId" Type="guid" IsOptional="true" />
+          <Field Name="PaidAt" Type="datetime" IsOptional="true" />
+          <Field Name="RawPayload" Type="string" IsOptional="true" />
+          <Field Name="ReferenceCode" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="Status" Type="string" MaxLength="50" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="PaymentMethod" GroupName="Finance" ObjectID="12f58bae-a74b-4fbc-a38b-43459d21d220">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="Description" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="KeyCode" Type="string" MaxLength="50" />
+          <Field Name="Name" Type="string" MaxLength="200" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="PaymentToken" GroupName="Finance" ObjectID="02f3622a-85d7-49ac-91c9-c01337d809ad">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="ExpiresAt" Type="datetime" IsOptional="true" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="InvoiceId" Type="guid" />
+          <Field Name="Status" Type="string" MaxLength="50" />
+          <Field Name="Token" Type="string" MaxLength="500" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UsedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+    </EntityDefinitions>
+    <Relationships>
+      <NormalRelationship Name="Finance.InvoiceItem.Invoice-Finance.Invoice.InvoiceItems" Start="Finance:InvoiceItem" End="Finance:Invoice" StartNavigator="Invoice" EndNavigator="InvoiceItems" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="InvoiceId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Finance.Payment.Invoice-Finance.Invoice.Payments" Start="Finance:Payment" End="Finance:Invoice" StartNavigator="Invoice" EndNavigator="Payments" Type="4">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="InvoiceId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Finance.Payment.PaymentMethod-Finance.PaymentMethod.Payments" Start="Finance:Payment" End="Finance:PaymentMethod" StartNavigator="PaymentMethod" EndNavigator="Payments" Type="4" EndIsOptional="true">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="MethodId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Finance.PaymentToken.Invoice-Finance.Invoice.PaymentTokens" Start="Finance:PaymentToken" End="Finance:Invoice" StartNavigator="Invoice" EndNavigator="PaymentTokens" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="InvoiceId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+    </Relationships>
+    <InheritanceHierarchies />
+  </EntityModel>
+  <TargetDatabases>
+    <TargetDatabase Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F" SyncSource="2">
+      <ConnectionElements>
+        <ConnectionElement Name="ServerName" Value="room-managerment.postgres.database.azure.com" />
+        <ConnectionElement Name="CatalogName" Value="room_managerment" />
+        <ConnectionElement Name="UserID" Value="room_managerment" />
+        <ConnectionElement Name="Password" Value="" />
+        <ConnectionElement Name="PortNumber" Value="5432" />
+        <ConnectionElement Name="SslMode" Value="Require" />
+        <ConnectionElement Name="CustomFragments" Value="" />
+      </ConnectionElements>
+      <SystemSequences>
+        <Sequence Name="SystemIdentity" />
+      </SystemSequences>
+      <Catalogs>
+        <Catalog Name="room_managerment" SyncSource="2">
+          <Schemas>
+            <Schema Name="finance" SyncSource="2" LastSyncWithDatabase="2026-04-04T19:28:39.3837096Z">
+              <Tables>
+                <Table Name="deposit_refunds">
+                  <PkConstraintName Name="deposit_refunds_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="lease_id" Ordinal="2" DbType="28" />
+                    <Field Name="organization_id" Ordinal="3" DbType="28" />
+                    <Field Name="tenant_id" Ordinal="4" IsOptional="true" DbType="28" />
+                    <Field Name="amount" Ordinal="5" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="status" Ordinal="6" HasDefaultValue="true" DefaultValue="'pending'::character varying" DbType="24" Length="50" />
+                    <Field Name="notes" Ordinal="7" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="paid_by" Ordinal="8" IsOptional="true" DbType="28" />
+                    <Field Name="paid_at" Ordinal="9" IsOptional="true" DbType="23" />
+                    <Field Name="created_by" Ordinal="10" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="11" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="12" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="13" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="14" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="invoice_items">
+                  <PkConstraintName Name="invoice_items_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="invoice_id" Ordinal="2" DbType="28" />
+                    <Field Name="item_type" Ordinal="3" DbType="24" Length="100" />
+                    <Field Name="description" Ordinal="4" IsOptional="true" DbType="24" Length="500" />
+                    <Field Name="quantity" Ordinal="5" HasDefaultValue="true" DefaultValue="1" DbType="14" Precision="10" Scale="3" />
+                    <Field Name="unit_price" Ordinal="6" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="amount" Ordinal="7" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="service_id" Ordinal="8" IsOptional="true" DbType="28" />
+                    <Field Name="meter_reading_id" Ordinal="9" IsOptional="true" DbType="28" />
+                    <Field Name="ticket_log_id" Ordinal="10" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="11" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="12" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="13" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="14" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="invoices">
+                  <PkConstraintName Name="invoices_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="lease_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="is_auto_created" Ordinal="4" HasDefaultValue="true" DefaultValue="false" DbType="0" />
+                    <Field Name="invoice_no" Ordinal="5" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="invoice_date" Ordinal="6" DbType="5" />
+                    <Field Name="due_date" Ordinal="7" IsOptional="true" DbType="5" />
+                    <Field Name="status" Ordinal="8" HasDefaultValue="true" DefaultValue="'draft'::character varying" DbType="24" Length="50" />
+                    <Field Name="total_amount" Ordinal="9" HasDefaultValue="true" DefaultValue="0" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="paid_amount" Ordinal="10" HasDefaultValue="true" DefaultValue="0" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="notes" Ordinal="11" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_by" Ordinal="12" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="13" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="14" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="15" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="16" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="payment_methods">
+                  <PkConstraintName Name="payment_methods_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="key_code" Ordinal="2" DbType="24" Length="50" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="200" />
+                    <Field Name="description" Ordinal="4" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="5" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="6" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="payment_tokens">
+                  <PkConstraintName Name="payment_tokens_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="invoice_id" Ordinal="2" DbType="28" />
+                    <Field Name="token" Ordinal="3" DbType="24" Length="500" />
+                    <Field Name="status" Ordinal="4" HasDefaultValue="true" DefaultValue="'pending'::character varying" DbType="24" Length="50" />
+                    <Field Name="expires_at" Ordinal="5" IsOptional="true" DbType="23" />
+                    <Field Name="used_at" Ordinal="6" IsOptional="true" DbType="23" />
+                    <Field Name="created_at" Ordinal="7" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="8" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="payments">
+                  <PkConstraintName Name="payments_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="invoice_id" Ordinal="2" DbType="28" />
+                    <Field Name="method_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="amount" Ordinal="4" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="paid_at" Ordinal="5" IsOptional="true" DbType="23" />
+                    <Field Name="reference_code" Ordinal="6" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="status" Ordinal="7" HasDefaultValue="true" DefaultValue="'pending'::character varying" DbType="24" Length="50" />
+                    <Field Name="error_message" Ordinal="8" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="raw_payload" Ordinal="9" IsOptional="true" DbType="30" />
+                    <Field Name="created_at" Ordinal="10" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="11" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="12" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="13" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+              </Tables>
+            </Schema>
+          </Schemas>
+          <ForeignKeyConstraints>
+            <ForeignKeyConstraint Name="finance:invoice_items:invoice_items_invoice_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="finance:invoices:id" FkField="finance:invoice_items:invoice_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="finance:payment_tokens:payment_tokens_invoice_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="finance:invoices:id" FkField="finance:payment_tokens:invoice_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="finance:payments:payments_invoice_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="finance:invoices:id" FkField="finance:payments:invoice_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="finance:payments:payments_method_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="finance:payment_methods:id" FkField="finance:payments:method_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+          </ForeignKeyConstraints>
+        </Catalog>
+      </Catalogs>
+    </TargetDatabase>
+  </TargetDatabases>
+  <MappingStores>
+    <MappingStore Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F">
+      <EntityMappings>
+        <EntityMapping EntityName="Finance:DepositRefund" TargetName="room_managerment:finance:deposit_refunds">
+          <FieldMappings>
+            <FieldMapping FieldName="Amount" TargetFieldName="amount" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="CreatedBy" TargetFieldName="created_by" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="LeaseId" TargetFieldName="lease_id" />
+            <FieldMapping FieldName="Notes" TargetFieldName="notes" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="PaidAt" TargetFieldName="paid_at" />
+            <FieldMapping FieldName="PaidBy" TargetFieldName="paid_by" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="TenantId" TargetFieldName="tenant_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Finance:Invoice" TargetName="room_managerment:finance:invoices">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="CreatedBy" TargetFieldName="created_by" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="DueDate" TargetFieldName="due_date" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="InvoiceDate" TargetFieldName="invoice_date" />
+            <FieldMapping FieldName="InvoiceNo" TargetFieldName="invoice_no" />
+            <FieldMapping FieldName="IsAutoCreated" TargetFieldName="is_auto_created" />
+            <FieldMapping FieldName="LeaseId" TargetFieldName="lease_id" />
+            <FieldMapping FieldName="Notes" TargetFieldName="notes" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="PaidAmount" TargetFieldName="paid_amount" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="TotalAmount" TargetFieldName="total_amount" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Finance:InvoiceItem" TargetName="room_managerment:finance:invoice_items">
+          <FieldMappings>
+            <FieldMapping FieldName="Amount" TargetFieldName="amount" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="Description" TargetFieldName="description" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="InvoiceId" TargetFieldName="invoice_id" />
+            <FieldMapping FieldName="ItemType" TargetFieldName="item_type" />
+            <FieldMapping FieldName="MeterReadingId" TargetFieldName="meter_reading_id" />
+            <FieldMapping FieldName="Quantity" TargetFieldName="quantity" />
+            <FieldMapping FieldName="ServiceId" TargetFieldName="service_id" />
+            <FieldMapping FieldName="TicketLogId" TargetFieldName="ticket_log_id" />
+            <FieldMapping FieldName="UnitPrice" TargetFieldName="unit_price" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Finance:Payment" TargetName="room_managerment:finance:payments">
+          <FieldMappings>
+            <FieldMapping FieldName="Amount" TargetFieldName="amount" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="ErrorMessage" TargetFieldName="error_message" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="InvoiceId" TargetFieldName="invoice_id" />
+            <FieldMapping FieldName="MethodId" TargetFieldName="method_id" />
+            <FieldMapping FieldName="PaidAt" TargetFieldName="paid_at" />
+            <FieldMapping FieldName="RawPayload" TargetFieldName="raw_payload" />
+            <FieldMapping FieldName="ReferenceCode" TargetFieldName="reference_code" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Finance:PaymentMethod" TargetName="room_managerment:finance:payment_methods">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="Description" TargetFieldName="description" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="KeyCode" TargetFieldName="key_code" />
+            <FieldMapping FieldName="Name" TargetFieldName="name" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Finance:PaymentToken" TargetName="room_managerment:finance:payment_tokens">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="ExpiresAt" TargetFieldName="expires_at" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="InvoiceId" TargetFieldName="invoice_id" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="Token" TargetFieldName="token" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UsedAt" TargetFieldName="used_at" />
+          </FieldMappings>
+        </EntityMapping>
+      </EntityMappings>
+      <TypedViewMappings />
+      <SPCallMappings />
+      <TvfCallMappings />
+      <TypeConversionDefinitions />
+    </MappingStore>
+  </MappingStores>
+  <ModelViews />
+</Project>

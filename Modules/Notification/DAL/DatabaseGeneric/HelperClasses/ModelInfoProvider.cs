@@ -42,7 +42,8 @@ namespace RoomManagerment.Notification.HelperClasses
 		{
 			this.InitClass();
 			InitNotificationEntityInfo();
-			InitUserNotificationEntityInfo();
+			InitNotificationChannelEntityInfo();
+			InitUserNotificationPreferenceEntityInfo();
 			this.BuildInternalStructures();
 		}
 
@@ -50,22 +51,42 @@ namespace RoomManagerment.Notification.HelperClasses
 		private void InitNotificationEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(NotificationFieldIndex), "NotificationEntity");
-			this.AddElementFieldInfo("NotificationEntity", "Content", typeof(System.String), false, false, false, false,  (int)NotificationFieldIndex.Content, 1073741824, 0, 0);
+			this.AddElementFieldInfo("NotificationEntity", "AuditLogId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)NotificationFieldIndex.AuditLogId, 0, 0, 0);
 			this.AddElementFieldInfo("NotificationEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)NotificationFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("NotificationEntity", "EntityId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)NotificationFieldIndex.EntityId, 0, 0, 0);
 			this.AddElementFieldInfo("NotificationEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)NotificationFieldIndex.Id, 0, 0, 0);
-			this.AddElementFieldInfo("NotificationEntity", "Title", typeof(System.String), false, false, false, false,  (int)NotificationFieldIndex.Title, 255, 0, 0);
-			this.AddElementFieldInfo("NotificationEntity", "Type", typeof(System.String), false, false, false, true,  (int)NotificationFieldIndex.Type, 50, 0, 0);
+			this.AddElementFieldInfo("NotificationEntity", "IsRead", typeof(System.Boolean), false, false, false, false,  (int)NotificationFieldIndex.IsRead, 0, 0, 0);
+			this.AddElementFieldInfo("NotificationEntity", "Message", typeof(System.String), false, false, false, true,  (int)NotificationFieldIndex.Message, 1073741824, 0, 0);
+			this.AddElementFieldInfo("NotificationEntity", "NotificationChannelId", typeof(System.Guid), false, true, false, false,  (int)NotificationFieldIndex.NotificationChannelId, 0, 0, 0);
+			this.AddElementFieldInfo("NotificationEntity", "ReadAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)NotificationFieldIndex.ReadAt, 0, 0, 0);
+			this.AddElementFieldInfo("NotificationEntity", "Title", typeof(System.String), false, false, false, true,  (int)NotificationFieldIndex.Title, 500, 0, 0);
+			this.AddElementFieldInfo("NotificationEntity", "Type", typeof(System.String), false, false, false, false,  (int)NotificationFieldIndex.Type, 100, 0, 0);
+			this.AddElementFieldInfo("NotificationEntity", "UserId", typeof(System.Guid), false, false, false, false,  (int)NotificationFieldIndex.UserId, 0, 0, 0);
 		}
 
-		/// <summary>Inits UserNotificationEntity's info objects</summary>
-		private void InitUserNotificationEntityInfo()
+		/// <summary>Inits NotificationChannelEntity's info objects</summary>
+		private void InitNotificationChannelEntityInfo()
 		{
-			this.AddFieldIndexEnumForElementName(typeof(UserNotificationFieldIndex), "UserNotificationEntity");
-			this.AddElementFieldInfo("UserNotificationEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)UserNotificationFieldIndex.Id, 0, 0, 0);
-			this.AddElementFieldInfo("UserNotificationEntity", "IsRead", typeof(System.Boolean), false, false, false, false,  (int)UserNotificationFieldIndex.IsRead, 0, 0, 0);
-			this.AddElementFieldInfo("UserNotificationEntity", "NotificationId", typeof(System.Guid), false, true, false, false,  (int)UserNotificationFieldIndex.NotificationId, 0, 0, 0);
-			this.AddElementFieldInfo("UserNotificationEntity", "ReadAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)UserNotificationFieldIndex.ReadAt, 0, 0, 0);
-			this.AddElementFieldInfo("UserNotificationEntity", "UserId", typeof(System.Guid), false, false, false, false,  (int)UserNotificationFieldIndex.UserId, 0, 0, 0);
+			this.AddFieldIndexEnumForElementName(typeof(NotificationChannelFieldIndex), "NotificationChannelEntity");
+			this.AddElementFieldInfo("NotificationChannelEntity", "Channel", typeof(System.String), false, false, false, false,  (int)NotificationChannelFieldIndex.Channel, 50, 0, 0);
+			this.AddElementFieldInfo("NotificationChannelEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)NotificationChannelFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("NotificationChannelEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)NotificationChannelFieldIndex.Id, 0, 0, 0);
+			this.AddElementFieldInfo("NotificationChannelEntity", "KeyCode", typeof(System.String), false, false, false, false,  (int)NotificationChannelFieldIndex.KeyCode, 50, 0, 0);
+			this.AddElementFieldInfo("NotificationChannelEntity", "Name", typeof(System.String), false, false, false, false,  (int)NotificationChannelFieldIndex.Name, 100, 0, 0);
+			this.AddElementFieldInfo("NotificationChannelEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)NotificationChannelFieldIndex.UpdatedAt, 0, 0, 0);
+		}
+
+		/// <summary>Inits UserNotificationPreferenceEntity's info objects</summary>
+		private void InitUserNotificationPreferenceEntityInfo()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UserNotificationPreferenceFieldIndex), "UserNotificationPreferenceEntity");
+			this.AddElementFieldInfo("UserNotificationPreferenceEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)UserNotificationPreferenceFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("UserNotificationPreferenceEntity", "EmailEnabled", typeof(System.Boolean), false, false, false, false,  (int)UserNotificationPreferenceFieldIndex.EmailEnabled, 0, 0, 0);
+			this.AddElementFieldInfo("UserNotificationPreferenceEntity", "EntityType", typeof(System.String), false, false, false, false,  (int)UserNotificationPreferenceFieldIndex.EntityType, 100, 0, 0);
+			this.AddElementFieldInfo("UserNotificationPreferenceEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)UserNotificationPreferenceFieldIndex.Id, 0, 0, 0);
+			this.AddElementFieldInfo("UserNotificationPreferenceEntity", "InAppEnabled", typeof(System.Boolean), false, false, false, false,  (int)UserNotificationPreferenceFieldIndex.InAppEnabled, 0, 0, 0);
+			this.AddElementFieldInfo("UserNotificationPreferenceEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)UserNotificationPreferenceFieldIndex.UpdatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("UserNotificationPreferenceEntity", "UserId", typeof(System.Guid), false, false, false, false,  (int)UserNotificationPreferenceFieldIndex.UserId, 0, 0, 0);
 		}
 	}
 }

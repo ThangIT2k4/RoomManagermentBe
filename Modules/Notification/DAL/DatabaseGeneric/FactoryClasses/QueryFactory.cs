@@ -21,8 +21,11 @@ namespace RoomManagerment.Notification.FactoryClasses
 		/// <summary>Creates and returns a new EntityQuery for the Notification entity</summary>
 		public EntityQuery<NotificationEntity> Notification { get { return Create<NotificationEntity>(); } }
 
-		/// <summary>Creates and returns a new EntityQuery for the UserNotification entity</summary>
-		public EntityQuery<UserNotificationEntity> UserNotification { get { return Create<UserNotificationEntity>(); } }
+		/// <summary>Creates and returns a new EntityQuery for the NotificationChannel entity</summary>
+		public EntityQuery<NotificationChannelEntity> NotificationChannel { get { return Create<NotificationChannelEntity>(); } }
+
+		/// <summary>Creates and returns a new EntityQuery for the UserNotificationPreference entity</summary>
+		public EntityQuery<UserNotificationPreferenceEntity> UserNotificationPreference { get { return Create<UserNotificationPreferenceEntity>(); } }
 
 		/// <inheritdoc/>
 		protected override IElementCreatorCore CreateElementCreator() { return new ElementCreator(); }

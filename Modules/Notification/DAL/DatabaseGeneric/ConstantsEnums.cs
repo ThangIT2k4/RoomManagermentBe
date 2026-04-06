@@ -16,15 +16,16 @@ namespace RoomManagerment.Notification
 	{
 		///<summary>Notification</summary>
 		NotificationEntity,
-		///<summary>UserNotification</summary>
-		UserNotificationEntity
+		///<summary>NotificationChannel</summary>
+		NotificationChannelEntity,
+		///<summary>UserNotificationPreference</summary>
+		UserNotificationPreferenceEntity
 	}
 
 
 
 	// __LLBLGENPRO_USER_CODE_REGION_START CustomUserConstants
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 }
 

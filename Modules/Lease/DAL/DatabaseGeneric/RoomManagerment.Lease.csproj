@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>RoomManagerment.Lease</AssemblyName>
+    <RootNamespace>RoomManagerment.Lease</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.13.0" />
+  </ItemGroup>
+</Project>

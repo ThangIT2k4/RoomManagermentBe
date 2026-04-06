@@ -60,6 +60,34 @@ public sealed class UserEntity : AggregateRoot<Guid>
             status,
             createdAt);
 
+    public static UserEntity RegisterByEmail(
+        string email,
+        string? username = null,
+        string? phone = null,
+        string? passwordHash = null,
+        DateTime? createdAt = null)
+        => Create(email, username, phone, passwordHash, (short)UserStatus.Inactive, createdAt);
+
+    public static UserEntity CreateGoogleAccount(
+        string email,
+        string googleId,
+        string? username = null,
+        string? phone = null,
+        DateTime? createdAt = null)
+    {
+        if (string.IsNullOrWhiteSpace(googleId))
+        {
+            throw new ArgumentException("Google id cannot be empty.", nameof(googleId));
+        }
+
+        var entity = Create(email, username, phone, null, (short)UserStatus.Active, createdAt);
+        var now = entity.CreatedAt;
+        entity.GoogleId = googleId.Trim();
+        entity.EmailVerifiedAt = now;
+        entity.UpdatedAt = now;
+        return entity;
+    }
+
     public static UserEntity Create(
         Email email,
         Username? username = null,
@@ -140,6 +168,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
 
     public void ChangeEmail(Email email, DateTime changedAt)
     {
+        EnsureNotDeleted();
         EnsureUtc(changedAt);
 
         if (Email == email)
@@ -154,6 +183,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
 
     public void ChangeUsername(Username? username, DateTime changedAt)
     {
+        EnsureNotDeleted();
         EnsureUtc(changedAt);
 
         if (Username == username)
@@ -168,6 +198,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
 
     public void ChangePhone(Phone? phone, DateTime changedAt)
     {
+        EnsureNotDeleted();
         EnsureUtc(changedAt);
 
         if (Phone == phone)
@@ -182,6 +213,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
 
     public void SetPassword(PasswordHash passwordHash, DateTime changedAt)
     {
+        EnsureNotDeleted();
         EnsureUtc(changedAt);
 
         if (PasswordHash == passwordHash)
@@ -196,6 +228,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
 
     public void MarkEmailVerified(DateTime verifiedAt)
     {
+        EnsureNotDeleted();
         EnsureUtc(verifiedAt);
 
         EmailVerifiedAt = verifiedAt;
@@ -205,6 +238,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
 
     public void MarkPhoneVerified(DateTime verifiedAt)
     {
+        EnsureNotDeleted();
         EnsureUtc(verifiedAt);
 
         PhoneVerifiedAt = verifiedAt;
@@ -214,6 +248,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
 
     public void RecordLogin(DateTime loginAt, string? rememberToken = null, string? ipAddress = null)
     {
+        EnsureNotDeleted();
         EnsureUtc(loginAt);
 
         if (Status != UserStatus.Active)
@@ -226,24 +261,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
         LastLoginAt = loginAt;
         RememberToken = rememberToken;
         UpdatedAt = loginAt;
-        AddDomainEvent(new UserLoginRecordedEvent(Id, Username?.Value, ipAddress, DateTimeOffset.UtcNow));
-    }
-
-    public void ClearRememberToken(DateTime changedAt)
-    {
-        EnsureUtc(changedAt);
-        RememberToken = null;
-        UpdatedAt = changedAt;
-    }
-
-    public void VerifyEmailAndActivate(DateTime changedAt)
-    {
-        EnsureUtc(changedAt);
-        MarkEmailVerified(changedAt);
-        if (Status == UserStatus.Inactive)
-        {
-            Activate(changedAt);
-        }
+        AddDomainEvent(new UserLoginRecordedEvent(Id, Username?.Value ?? Email.Value, ipAddress, DateTimeOffset.UtcNow));
     }
 
     public void Activate(DateTime changedAt)
@@ -252,7 +270,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
     }
 
     public void Deactivate(DateTime changedAt)
-    {
+    { 
         ChangeStatus(UserStatus.Inactive, changedAt);
     }
 
@@ -263,9 +281,98 @@ public sealed class UserEntity : AggregateRoot<Guid>
 
     public bool CanLogin() => Status == UserStatus.Active && DeletedAt is null;
 
+    public void VerifyEmailAndActivate(DateTime verifiedAt)
+    {
+        EnsureNotDeleted();
+        EnsureUtc(verifiedAt);
+
+        var previousStatus = Status;
+        EmailVerifiedAt = verifiedAt;
+        if (Status == UserStatus.Inactive)
+        {
+            Status = UserStatus.Active;
+        }
+
+        UpdatedAt = verifiedAt;
+        AddDomainEvent(new UserEmailVerifiedEvent(Id, Email.Value, DateTimeOffset.UtcNow));
+        if (previousStatus != Status)
+        {
+            AddDomainEvent(new UserStatusChangedEvent(Id, (short)previousStatus, (short)Status, DateTimeOffset.UtcNow));
+        }
+    }
+
+    public void LinkGoogleAccount(string googleId, DateTime linkedAt)
+    {
+        EnsureNotDeleted();
+        EnsureUtc(linkedAt);
+
+        if (string.IsNullOrWhiteSpace(googleId))
+        {
+            throw new ArgumentException("Google id cannot be empty.", nameof(googleId));
+        }
+
+        var normalized = googleId.Trim();
+        if (GoogleId == normalized)
+        {
+            return;
+        }
+
+        GoogleId = normalized;
+        if (EmailVerifiedAt is null)
+        {
+            EmailVerifiedAt = linkedAt;
+        }
+
+        UpdatedAt = linkedAt;
+    }
+
+    public void SetRememberToken(string rememberToken, DateTime changedAt)
+    {
+        EnsureNotDeleted();
+        EnsureUtc(changedAt);
+
+        if (string.IsNullOrWhiteSpace(rememberToken))
+        {
+            throw new ArgumentException("Remember token cannot be empty.", nameof(rememberToken));
+        }
+
+        var normalized = rememberToken.Trim();
+        if (RememberToken == normalized)
+        {
+            return;
+        }
+
+        RememberToken = normalized;
+        UpdatedAt = changedAt;
+    }
+
+    public void ClearRememberToken(DateTime changedAt)
+    {
+        EnsureNotDeleted();
+        EnsureUtc(changedAt);
+
+        if (RememberToken is null)
+        {
+            return;
+        }
+
+        RememberToken = null;
+        UpdatedAt = changedAt;
+    }
+
     public void SoftDelete(Guid deletedBy, DateTime deletedAt)
     {
         EnsureUtc(deletedAt);
+
+        if (deletedBy == Guid.Empty)
+        {
+            throw new ArgumentException("DeletedBy must be a valid identifier.", nameof(deletedBy));
+        }
+
+        if (DeletedAt.HasValue)
+        {
+            return;
+        }
 
         DeletedAt = deletedAt;
         DeletedBy = deletedBy;
@@ -274,6 +381,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
 
     private void ChangeStatus(UserStatus targetStatus, DateTime changedAt)
     {
+        EnsureNotDeleted();
         EnsureUtc(changedAt);
 
         if (Status == targetStatus)
@@ -302,6 +410,14 @@ public sealed class UserEntity : AggregateRoot<Guid>
         if (value.Kind != DateTimeKind.Utc)
         {
             throw new ArgumentException("Timestamp must be in UTC.", nameof(value));
+        }
+    }
+
+    private void EnsureNotDeleted()
+    {
+        if (DeletedAt is not null)
+        {
+            throw new InvalidUserStateException(InvalidUserStateException.CodeInactiveUser);
         }
     }
 }

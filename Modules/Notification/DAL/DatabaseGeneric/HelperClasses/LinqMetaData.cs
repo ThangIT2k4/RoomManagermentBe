@@ -46,8 +46,10 @@ namespace RoomManagerment.Notification.Linq
 			{
 				case RoomManagerment.Notification.EntityType.NotificationEntity:
 					return this.Notification;
-				case RoomManagerment.Notification.EntityType.UserNotificationEntity:
-					return this.UserNotification;
+				case RoomManagerment.Notification.EntityType.NotificationChannelEntity:
+					return this.NotificationChannel;
+				case RoomManagerment.Notification.EntityType.UserNotificationPreferenceEntity:
+					return this.UserNotificationPreference;
 				default:
 					return null;
 			}
@@ -77,8 +79,11 @@ namespace RoomManagerment.Notification.Linq
 		/// <summary>returns the datasource to use in a Linq query when targeting NotificationEntity instances in the database.</summary>
 		public DataSource2<NotificationEntity> Notification {	get { return new DataSource2<NotificationEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting UserNotificationEntity instances in the database.</summary>
-		public DataSource2<UserNotificationEntity> UserNotification {	get { return new DataSource2<UserNotificationEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		/// <summary>returns the datasource to use in a Linq query when targeting NotificationChannelEntity instances in the database.</summary>
+		public DataSource2<NotificationChannelEntity> NotificationChannel {	get { return new DataSource2<NotificationChannelEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UserNotificationPreferenceEntity instances in the database.</summary>
+		public DataSource2<UserNotificationPreferenceEntity> UserNotificationPreference {	get { return new DataSource2<UserNotificationPreferenceEntity>(this.AdapterToUse, new ElementCreator(), this.CustomFunctionMappings, this.ContextToUse); } }
 		
 
 

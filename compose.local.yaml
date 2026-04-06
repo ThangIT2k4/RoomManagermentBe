@@ -1,3 +1,6 @@
+# Dev: `docker compose -f compose.local.yaml --env-file .env up --build`
+# Sao chép `.env.example` → `.env` và chỉnh mật khẩu / connection string.
+
 services:
 
   # ---------------- REDIS ----------------
@@ -6,7 +9,7 @@ services:
     container_name: rm-redis
     command: redis-server --appendonly yes --appendfsync everysec
     ports:
-      - "6379:6379"   # Dev: truy cap tu host & may cung mang (LAN)
+      - "6379:6379"
     volumes:
       - redisdata:/data
     restart: unless-stopped
@@ -23,8 +26,8 @@ services:
     image: rabbitmq:3.13-management-alpine
     container_name: rm-rabbitmq
     ports:
-      - "5672:5672"     # AMQP port
-      - "15672:15672"   # Management UI
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
@@ -45,7 +48,7 @@ services:
     image: postgres:18-alpine
     container_name: rm-postgres
     ports:
-      - "5433:5432"   # Dev: host port 5433 (tranh conflict voi postgres tren host), container 5432
+      - "5433:5432"
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -61,34 +64,54 @@ services:
     networks:
       - rm-network
 
-  # ---------------- IDENTITY API ----------------
-  identity-api:
+  # ---------------- IDENTITY API (legacy — đã tắt) ----------------
+  # identity-api:
+  #   build:
+  #     context: .
+  #     dockerfile: ./Modules/Identity/Identity.API/Dockerfile
+  #   container_name: rm-identity-api
+  #   environment:
+  #     ASPNETCORE_URLS: http://0.0.0.0:${IDENTITY_API_PORT:-5099}
+  #     ConnectionStrings__Identity: ${IDENTITY_CONNECTION_STRING}
+  #     Redis__Configuration: redis:6379
+  #     RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
+  #     RabbitMq__Port: 5672
+  #     RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+  #     RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+  #     RabbitMq__VirtualHost: /
+  #   ports:
+  #     - "${IDENTITY_API_PORT:-5099}:${IDENTITY_API_PORT:-5099}"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #     rabbitmq:
+  #       condition: service_healthy
+  #   networks:
+  #     - rm-network
+
+  # ---------------- AUTH API :5002 ----------------
+  auth-api:
     build:
       context: .
-      dockerfile: ./Modules/Identity/Identity.API/Dockerfile
-    container_name: rm-identity-api
-    env_file:
-      - .env.local
+      dockerfile: ./Modules/Auth/Auth.API/Dockerfile
+    container_name: rm-auth-api
     environment:
-      ASPNETCORE_URLS: http://0.0.0.0:${IDENTITY_API_PORT}
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      ConnectionStrings__Identity: ${IDENTITY_CONNECTION_STRING}
-      Redis__Host: ${REDIS_HOST}
-      Redis__Port: ${REDIS_PORT}
-      Redis__Password: ${REDIS_PASSWORD}
-      Redis__Database: ${REDIS_DATABASE}
-      Redis__Timeout: ${REDIS_TIMEOUT}
-      Session__TimeoutMinutes: ${SESSION_TIMEOUT_MINUTES}
+      ASPNETCORE_URLS: http://0.0.0.0:${AUTH_API_PORT:-5002}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ConnectionStrings__Auth: ${AUTH_CONNECTION_STRING}
+      Redis__Configuration: redis:6379
       Cors__AllowedOrigins__0: http://localhost:3000
       Cors__AllowedOrigins__1: http://localhost:4200
-      Cors__AllowedOrigins__2: http://localhost:5000
+      Cors__AllowedOrigins__2: http://localhost:${GATEWAY_API_PORT:-5000}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: 5672
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
       RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
       RabbitMq__VirtualHost: /
     ports:
-      - "${IDENTITY_API_PORT}:${IDENTITY_API_PORT}"
+      - "${AUTH_API_PORT:-5002}:${AUTH_API_PORT:-5002}"
     restart: unless-stopped
     depends_on:
       postgres:
@@ -102,23 +125,54 @@ services:
     networks:
       - rm-network
 
-  # ---------------- EXTERNAL API ----------------
-  external-api:
+  # ---------------- FINANCE API :5003 ----------------
+  finance-api:
     build:
       context: .
-      dockerfile: ./Api/RoomManagerment.ExternalApi/Dockerfile
-    container_name: rm-external-api
-    env_file:
-      - .env.local
+      dockerfile: ./Modules/Finance/Finance.API/Dockerfile
+    container_name: rm-finance-api
     environment:
-      ASPNETCORE_URLS: http://0.0.0.0:${EXTERNAL_API_PORT}
+      ASPNETCORE_URLS: http://0.0.0.0:${FINANCE_API_PORT:-5003}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ConnectionStrings__Finance: ${FINANCE_CONNECTION_STRING}
+      Redis__Configuration: redis:6379
+      Finance__Messaging__Enabled: "true"
+      LOG_BASE_PATH: ${LOG_BASE_PATH:-/app/logs}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: 5672
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
       RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
       RabbitMq__VirtualHost: /
     ports:
-      - "${EXTERNAL_API_PORT}:${EXTERNAL_API_PORT}"
+      - "${FINANCE_API_PORT:-5003}:${FINANCE_API_PORT:-5003}"
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rm-network
+
+  # ---------------- EXTERNAL API :5004 ----------------
+  external-api:
+    build:
+      context: .
+      dockerfile: ./Api/RoomManagerment.ExternalApi/Dockerfile
+    container_name: rm-external-api
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:${EXTERNAL_API_PORT:-5004}
+      RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
+      RabbitMq__Port: 5672
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__VirtualHost: /
+    ports:
+      - "${EXTERNAL_API_PORT:-5004}:${EXTERNAL_API_PORT:-5004}"
     restart: unless-stopped
     depends_on:
       rabbitmq:
@@ -128,17 +182,15 @@ services:
     networks:
       - rm-network
 
-  # ---------------- NOTIFICATION API ----------------
+  # ---------------- NOTIFICATION API :5001 ----------------
   notification-api:
     build:
       context: .
       dockerfile: ./Modules/Notification/Notification.API/Dockerfile
     container_name: rm-notification-api
-    env_file:
-      - .env.local
     environment:
-      ASPNETCORE_URLS: http://0.0.0.0:${NOTIFICATION_API_PORT}
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ASPNETCORE_URLS: http://0.0.0.0:${NOTIFICATION_API_PORT:-5001}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
       ConnectionStrings__Notification: ${NOTIFICATION_CONNECTION_STRING}
       LOG_BASE_PATH: ${LOG_BASE_PATH:-/app/logs}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
@@ -147,7 +199,7 @@ services:
       RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
       RabbitMq__VirtualHost: /
     ports:
-      - "${NOTIFICATION_API_PORT}:${NOTIFICATION_API_PORT}"
+      - "${NOTIFICATION_API_PORT:-5001}:${NOTIFICATION_API_PORT:-5001}"
     restart: unless-stopped
     depends_on:
       postgres:
@@ -159,36 +211,41 @@ services:
     networks:
       - rm-network
 
-  # ---------------- GATEWAY ----------------
+  # ---------------- GATEWAY :5000 ----------------
   gateway:
     build:
       context: .
       dockerfile: ./Api/RoomManagerment.Gateway/Dockerfile
     container_name: rm-gateway
-    env_file:
-      - .env.local
     environment:
-      ASPNETCORE_URLS: http://0.0.0.0:${GATEWAY_API_PORT}
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      ConnectionStrings__Redis: ${REDIS_HOST}:${REDIS_PORT},password=${REDIS_PASSWORD}
-      Redis__Configuration: ${REDIS_HOST}:${REDIS_PORT}
-      Redis__InstanceName: ${REDIS_INSTANCE_NAME}
-      Session__TimeoutMinutes: ${SESSION_TIMEOUT_MINUTES}
-      Session__Cookie__Name: ${SESSION_COOKIE_NAME}
+      ASPNETCORE_URLS: http://0.0.0.0:${GATEWAY_API_PORT:-5000}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      AUTH_API_URL: ${AUTH_API_URL:-http://auth-api:5002}
+      FINANCE_API_URL: ${FINANCE_API_URL:-http://finance-api:5003}
+      EXTERNAL_API_URL: ${EXTERNAL_API_URL:-http://external-api:5004}
+      NOTIFICATION_API_URL: ${NOTIFICATION_API_URL:-http://notification-api:5001}
+      ConnectionStrings__Redis: redis:6379
+      Redis__Configuration: redis:6379
+      Redis__InstanceName: ${REDIS_INSTANCE_NAME:-RoomManagermentGateway:}
+      Session__TimeoutMinutes: ${SESSION_TIMEOUT_MINUTES:-30}
+      Session__Cookie__Name: ${SESSION_COOKIE_NAME:-RoomManager.SessionId}
       Cors__AllowedOrigins__0: http://localhost:3000
       Cors__AllowedOrigins__1: http://localhost:4200
-      Cors__AllowedOrigins__2: http://localhost:5000
+      Cors__AllowedOrigins__2: http://localhost:${GATEWAY_API_PORT:-5000}
       Kestrel__Limits__MaxRequestBodySize: ${GATEWAY_MAX_REQUEST_BODY_SIZE:-10485760}
-      ReverseProxy__Clusters__identity__Destinations__d1__Address: http://identity-api:${IDENTITY_API_PORT}
-      ReverseProxy__Clusters__external__Destinations__d1__Address: http://external-api:${EXTERNAL_API_PORT}
-      ReverseProxy__Clusters__notification__Destinations__d1__Address: http://notification-api:${NOTIFICATION_API_PORT}
+      ReverseProxy__Clusters__auth__Destinations__d1__Address: ${AUTH_API_URL:-http://auth-api:5002}
+      ReverseProxy__Clusters__finance__Destinations__d1__Address: ${FINANCE_API_URL:-http://finance-api:5003}
+      ReverseProxy__Clusters__external__Destinations__d1__Address: ${EXTERNAL_API_URL:-http://external-api:5004}
+      ReverseProxy__Clusters__notification__Destinations__d1__Address: ${NOTIFICATION_API_URL:-http://notification-api:5001}
     ports:
-      - "${GATEWAY_API_PORT}:${GATEWAY_API_PORT}"
+      - "${GATEWAY_API_PORT:-5000}:${GATEWAY_API_PORT:-5000}"
     restart: unless-stopped
     depends_on:
       redis:
         condition: service_healthy
-      identity-api:
+      auth-api:
+        condition: service_started
+      finance-api:
         condition: service_started
       external-api:
         condition: service_started

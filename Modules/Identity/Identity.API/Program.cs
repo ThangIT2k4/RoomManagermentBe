@@ -155,7 +155,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 // Read port from environment or launchSettings, with fallback
-var port = Environment.GetEnvironmentVariable("IDENTITY_API_PORT") ?? "5002";
+var port = Environment.GetEnvironmentVariable("IDENTITY_API_PORT") ?? "5099";
 var protocol = app.Environment.IsDevelopment() ? "http" : "https";
 
 try

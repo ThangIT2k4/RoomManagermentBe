@@ -1,4 +1,4 @@
-@RoomManagerment.Gateway_HostAddress = http://localhost:5149
+@RoomManagerment.Gateway_HostAddress = http://localhost:5000
 
 GET {{RoomManagerment.Gateway_HostAddress}}/weatherforecast/
 Accept: application/json

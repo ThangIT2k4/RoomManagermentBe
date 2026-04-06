@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../Modules/Auth/DAL/DatabaseGeneric/RoomManagerment.Auth.csproj" />
+    <ProjectReference Include="../../Modules/CRM/DAL/DatabaseGeneric/RoomManagerment.CRM.csproj" />
+    <ProjectReference Include="../../Modules/Finance/DAL/DatabaseGeneric/RoomManagerment.Finance.csproj" />
+    <ProjectReference Include="../../Modules/Lease/DAL/DatabaseGeneric/RoomManagerment.Lease.csproj" />
+    <ProjectReference Include="../../Modules/Organization/DAL/DatabaseGeneric/RoomManagerment.Organizations.csproj" />
+    <ProjectReference Include="../../Modules/Property/DAL/DatabaseGeneric/RoomManagerment.Property.csproj" />
+    <ProjectReference Include="../../Modules/Notification/DAL/DatabaseGeneric/RoomManagerment.Notification.csproj" />
+  </ItemGroup>
+</Project>
+

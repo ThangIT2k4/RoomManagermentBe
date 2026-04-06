@@ -1,0 +1,556 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--LLBLGen Pro v5.13 project file. Do not manually edit this file. Incorrect references could lead to an unloadable project file.-->
+<Project Version="5.13" TargetFrameworkName="LLBLGen Pro Runtime Framework" UseLegacyDefaults="false">
+  <Properties>
+    <Abbreviations />
+    <Property Name="AdditionalTaskPerformerFolder" Value="" />
+    <Property Name="AdditionalTasksFolder" Value="" />
+    <Property Name="AdditionalTemplatesFolder" Value="" />
+    <Property Name="AdditionalTypeConverterFolder" Value="" />
+    <Property Name="AddNewElementsAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AddNewFieldsAfterRefresh_v5" Value="true" />
+    <Property Name="AddNewFieldsAfterRelationalModelDataSync_v5" Value="true" />
+    <Property Name="AddNewViewsAsEntitiesAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewViewsAsEntitiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AutoAddManyToManyRelationships" Value="false" />
+    <Property Name="AutoAssignSequencesToIntegerPks" Value="true" />
+    <Property Name="AutoAssignTypeConverterToFieldMapping" Value="true" />
+    <Property Name="AutomaticallyGenerateSourceCodeOnProjectSave" Value="true" />
+    <Property Name="ConnectionStringKeyNamePattern" Value="ConnectionString.{$ProviderName}" />
+    <Property Name="DefaultDDLSQLScriptDestinationFolder" Value=".\DDLSQLScripts" />
+    <Property Name="DefaultDeleteRuleAction" Value="1" />
+    <Property Name="DefaultSourceCodeDestinationFolder" Value=".\Code" />
+    <Property Name="DefaultUpdateRuleAction" Value="0" />
+    <Property Name="DeleteObsoleteFiles" Value="true" />
+    <Property Name="ElementNamePrefixPattern" Value="{$SchemaName}" />
+    <Property Name="ElementNamePrefixPatternIsAppliedWhen" Value="1" />
+    <Property Name="EncodingToUse" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForTable" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForView" Value="4" />
+    <Property Name="EntityFieldNameStripPattern" Value="{}{}" />
+    <Property Name="EntityNameStripPattern" Value="{tbl_}{}" />
+    <Property Name="ExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="FailCodeGenerationOnWriteError" Value="false" />
+    <Property Name="FieldMappedOntoRelatedFieldPattern" Value="{$RelatedFieldName}" />
+    <Property Name="FkFieldsAreNamedAfterTargetField" Value="true" />
+    <Property Name="ForeignKeyConstraintPattern" Value="FK_{$Guid}" />
+    <Property Name="ForeignKeyFieldPattern" Value="{$NavigatorName}{$RelatedFieldName}" />
+    <Property Name="GroupUsage" Value="0" />
+    <Property Name="IdentifyingFieldsFollowDBPrimaryKeyConstraints_v5" Value="true" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseInsensitiveDBs" Value="false" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseSensitiveDBs" Value="false" />
+    <Property Name="LengthPrecisionScaleFollowDBLengthPrecisionScale_v5" Value="true" />
+    <Property Name="MakeElementNamePascalCasing" Value="true" />
+    <Property Name="NavigatorMappedOntoManyToManyPattern" Value="{$EndEntityName}CollectionVia{$IntermediateEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneManyToOnePattern" Value="{$EndEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneToManyPattern" Value="{$EndEntityName$P}" />
+    <Property Name="NonExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="PreferDecimalOverCurrencyTypes" Value="true" />
+    <Property Name="PreferNaturalCharacterTypes" Value="true" />
+    <Property Name="PreferSystemSequencesOverSchemaSequencesIfApplicable" Value="true" />
+    <Property Name="PreferVariableLengthTypes" Value="true" />
+    <Property Name="PrimaryKeyConstraintPattern" Value="PK_{$Guid}" />
+    <Property Name="ProjectCreator" Value="TranDucThang" />
+    <Property Name="ProjectName" Value="RoomManagerment.Auth" />
+    <Property Name="ReflectNullabilityOfElementFieldInTargetField_v5" Value="false" />
+    <Property Name="ReflectTypeOfElementFieldInTargetField_v5" Value="true" />
+    <Property Name="RelationalModelDataElementNameCasingCaseInsensitiveDBs" Value="3" />
+    <Property Name="RelationalModelDataElementNameCasingCaseSensitiveDBs" Value="3" />
+    <Property Name="RelationshipsFollowDBForeignKeyConstraints_v5" Value="true" />
+    <Property Name="RemoveUnderscoresFromElementName" Value="true" />
+    <Property Name="RemoveUnmappedElementsAfterRefresh_v5" Value="false" />
+    <Property Name="RemoveUnmappedElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRefresh" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRelationalModelDataSync" Value="false" />
+    <Property Name="RetrieveDBCustomProperties" Value="false" />
+    <Property Name="RootNamespace" Value="" />
+    <Property Name="SequenceNameMatchingPattern" Value="SEQ_{$TableName}" />
+    <Property Name="SequencePattern" Value="SEQ_{$EntityName}" />
+    <Property Name="SetGroupNameAfterSchemaName" Value="true" />
+    <Property Name="SetSchemaNameAfterGroupName" Value="true" />
+    <Property Name="SingularizeElementNames" Value="true" />
+    <Property Name="StoredProcNameStripPattern" Value="{pr_, sp_}{}" />
+    <Property Name="StoreTimeLastGeneratedIntoProject" Value="false" />
+    <Property Name="StoreTimeLastSyncIntoProject" Value="true" />
+    <Property Name="SyncCustomFieldOrderingWithTableFieldIndex" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="SyncRelationalModelDataElementNameWithModelElementName_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="TableValuedFunctionNameStripPattern" Value="{fn_, pr_, sp_}{}" />
+    <Property Name="TargetPerEntityEdgesRequireBackingFkConstraint" Value="true" />
+    <Property Name="TypedViewFieldNameStripPattern" Value="{}{}" />
+    <Property Name="TypedViewMappedOnResultsetPattern" Value="{$ProcFunctionName}{$ResultsetName}Result" />
+    <Property Name="TypedViewNameStripPattern" Value="{vw_}{}" />
+    <Property Name="UniqueConstraintPattern" Value="UC_{$Guid}" />
+    <Property Name="UniqueConstraintsFollowDBUniqueConstraints_v5" Value="true" />
+    <Property Name="UpdateCustomPropertiesAfterRefresh_v5" Value="false" />
+    <Property Name="UpdateCustomPropertiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="UseCustomFieldOrderingOnNewElements" Value="false" />
+  </Properties>
+  <TypeShortcuts />
+  <IgnoredWarnings />
+  <SavedSearchQueries />
+  <CodeGenerationCyclePreferences>
+    <OutputType Value="3">
+      <LastUsedPreferences>
+        <DestinationRootFolder Value="Z:\WorkSpace\Projects\RoomManagerment\RoomManagermentBe\Modules\Auth\DAL" />
+        <FrameworkName Value="LLBLGen Pro Runtime Framework" />
+        <LanguageName Value="C#" />
+        <PlatformName Value=".NET 9" />
+        <PresetName Value="SD.Presets.Adapter.General.Netstandard" />
+        <RootNamespace Value="RoomManagerment.Auth" />
+        <TemplateGroup Value="Adapter" />
+        <TemplateBindings>
+          <Binding Name="SD.TemplateBindings.PostgreSqlSpecific" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates.Net9" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates" />
+          <Binding Name="SD.TemplateBindings.General" />
+        </TemplateBindings>
+        <AdhocTemplateSets />
+      </LastUsedPreferences>
+    </OutputType>
+  </CodeGenerationCyclePreferences>
+  <CodeGenerationMetaDataDefaults>
+    <TargetElement Type="256">
+      <Defaults>
+        <Attributes>
+          <Attribute Value="Browsable($false)" />
+        </Attributes>
+      </Defaults>
+    </TargetElement>
+  </CodeGenerationMetaDataDefaults>
+  <EntityModel>
+    <ValueTypeDefinitions />
+    <EntityDefinitions>
+      <EntityDefinition Name="AuditLog" GroupName="Auth" ObjectID="90ae3c44-c73d-46a4-8cb8-0eedb43490c1">
+        <Fields>
+          <Field Name="Action" Type="string" MaxLength="100" />
+          <Field Name="ActorId" Type="guid" IsOptional="true" />
+          <Field Name="AfterJson" Type="string" IsOptional="true" />
+          <Field Name="BeforeJson" Type="string" IsOptional="true" />
+          <Field Name="ChangesJson" Type="string" IsOptional="true" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="EntityId" Type="guid" IsOptional="true" />
+          <Field Name="EntityType" Type="string" MaxLength="100" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="IpAddress" Type="ipaddress" IsOptional="true" />
+          <Field Name="OrganizationId" Type="guid" IsOptional="true" />
+          <Field Name="UserAgent" Type="string" IsOptional="true" MaxLength="1073741824" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="Capability" GroupName="Auth" ObjectID="808dcbb0-da1d-491f-a023-565091136199">
+        <Fields>
+          <Field Name="Category" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="Description" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="DisplayOrder" Type="int" Precision="10" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="KeyCode" Type="string" MaxLength="100" />
+          <Field Name="Name" Type="string" MaxLength="200" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="EmailOtp" GroupName="Auth" ObjectID="71789b3e-2f3a-490e-871f-8380e2d95380">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="Email" Type="string" MaxLength="200" />
+          <Field Name="ExpiresAt" Type="datetime" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="IsUsed" Type="bool" />
+          <Field Name="OtpCode" Type="string" MaxLength="20" />
+          <Field Name="Type" Type="string" MaxLength="50" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UserId" Type="guid" IsOptional="true" />
+          <Field Name="VerifiedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="Role" GroupName="Auth" ObjectID="9e42b704-fe63-44df-81ca-239198a2a2ca">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="Description" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="KeyCode" Type="string" MaxLength="50" />
+          <Field Name="Name" Type="string" MaxLength="100" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="Session" GroupName="Auth" ObjectID="c639c161-083c-42d8-861b-251232d5c73d">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="ExpiresAt" Type="datetime" IsOptional="true" />
+          <Field Name="Id" Type="string" MaxLength="128" IsPrimaryKey="true" />
+          <Field Name="IpAddress" Type="ipaddress" IsOptional="true" />
+          <Field Name="LastActivity" Type="datetime" />
+          <Field Name="Payload" Type="string" IsOptional="true" />
+          <Field Name="UserAgent" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="UserId" Type="guid" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="User" GroupName="Auth" ObjectID="ee7c6c9f-ddf4-49c2-aaa9-3f3fcfa8608f">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="Email" Type="string" MaxLength="200" />
+          <Field Name="EmailVerifiedAt" Type="datetime" IsOptional="true" />
+          <Field Name="GoogleId" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="LastLoginAt" Type="datetime" IsOptional="true" />
+          <Field Name="PasswordHash" Type="string" IsOptional="true" MaxLength="500" />
+          <Field Name="Phone" Type="string" IsOptional="true" MaxLength="30" />
+          <Field Name="PhoneVerifiedAt" Type="datetime" IsOptional="true" />
+          <Field Name="RememberToken" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="Status" Type="short" Precision="5" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="Username" Type="string" IsOptional="true" MaxLength="100" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="UserProfile" GroupName="Auth" ObjectID="42770b59-8f7e-4ce6-be7d-14215c89dad3">
+        <Fields>
+          <Field Name="AccountHolderName" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="AccountNumber" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="Address" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="Avatar" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="BankingNotes" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="BranchCode" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="BranchName" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="Dob" Type="dateonly" IsOptional="true" />
+          <Field Name="FullName" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="Gender" Type="short" IsOptional="true" Precision="5" />
+          <Field Name="IdCardPlace" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="IdImages" Type="string" IsOptional="true" />
+          <Field Name="IdIssuedAt" Type="dateonly" IsOptional="true" />
+          <Field Name="IdNumber" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="Note" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="SearchVector" Type="string" IsOptional="true" MaxLength="10485760" />
+          <Field Name="SepayBankId" Type="guid" IsOptional="true" />
+          <Field Name="SwiftCode" Type="string" IsOptional="true" MaxLength="30" />
+          <Field Name="TaxCode" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UserId" Type="guid" IsPrimaryKey="true" />
+        </Fields>
+      </EntityDefinition>
+    </EntityDefinitions>
+    <Relationships>
+      <NormalRelationship Name="Auth.AuditLog.User-Auth.User.AuditLogs" Start="Auth:AuditLog" End="Auth:User" StartNavigator="User" EndNavigator="AuditLogs" Type="4" EndIsOptional="true">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ActorId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.EmailOtp.User-Auth.User.EmailOtps" Start="Auth:EmailOtp" End="Auth:User" StartNavigator="User" EndNavigator="EmailOtps" Type="4" EndIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="UserId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.Session.User-Auth.User.Sessions" Start="Auth:Session" End="Auth:User" StartNavigator="User" EndNavigator="Sessions" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="UserId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.User.User-Auth.User.Users" Start="Auth:User" End="Auth:User" StartNavigator="User" EndNavigator="Users" Type="4" EndIsOptional="true">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="DeletedBy" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Auth.UserProfile.User-Auth.User.UserProfile" Start="Auth:UserProfile" End="Auth:User" StartNavigator="User" EndNavigator="UserProfile" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="UserId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+    </Relationships>
+    <InheritanceHierarchies />
+  </EntityModel>
+  <TargetDatabases>
+    <TargetDatabase Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F" SyncSource="2">
+      <ConnectionElements>
+        <ConnectionElement Name="ServerName" Value="room-managerment.postgres.database.azure.com" />
+        <ConnectionElement Name="CatalogName" Value="room_managerment" />
+        <ConnectionElement Name="UserID" Value="room_managerment" />
+        <ConnectionElement Name="Password" Value="" />
+        <ConnectionElement Name="PortNumber" Value="5432" />
+        <ConnectionElement Name="SslMode" Value="Require" />
+        <ConnectionElement Name="CustomFragments" Value="" />
+      </ConnectionElements>
+      <SystemSequences>
+        <Sequence Name="SystemIdentity" />
+      </SystemSequences>
+      <Catalogs>
+        <Catalog Name="room_managerment" SyncSource="2">
+          <Schemas>
+            <Schema Name="auth" SyncSource="2" LastSyncWithDatabase="2026-04-04T19:05:23.6424495Z">
+              <Tables>
+                <Table Name="audit_logs">
+                  <PkConstraintName Name="audit_logs_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="actor_id" Ordinal="2" IsOptional="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="action" Ordinal="4" DbType="24" Length="100" />
+                    <Field Name="entity_type" Ordinal="5" DbType="24" Length="100" />
+                    <Field Name="entity_id" Ordinal="6" IsOptional="true" DbType="28" />
+                    <Field Name="before_json" Ordinal="7" IsOptional="true" DbType="30" />
+                    <Field Name="after_json" Ordinal="8" IsOptional="true" DbType="30" />
+                    <Field Name="changes_json" Ordinal="9" IsOptional="true" DbType="30" />
+                    <Field Name="ip_address" Ordinal="10" IsOptional="true" DbType="25" />
+                    <Field Name="user_agent" Ordinal="11" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="12" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="capabilities">
+                  <PkConstraintName Name="capabilities_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="key_code" Ordinal="2" DbType="24" Length="100" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="200" />
+                    <Field Name="description" Ordinal="4" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="category" Ordinal="5" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="display_order" Ordinal="6" HasDefaultValue="true" DefaultValue="0" DbType="9" Precision="10" />
+                    <Field Name="created_at" Ordinal="7" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="8" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="email_otps">
+                  <PkConstraintName Name="email_otps_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="user_id" Ordinal="2" IsOptional="true" DbType="28" />
+                    <Field Name="email" Ordinal="3" DbType="24" Length="200" />
+                    <Field Name="otp_code" Ordinal="4" DbType="24" Length="20" />
+                    <Field Name="type" Ordinal="5" DbType="24" Length="50" />
+                    <Field Name="expires_at" Ordinal="6" DbType="23" />
+                    <Field Name="verified_at" Ordinal="7" IsOptional="true" DbType="23" />
+                    <Field Name="is_used" Ordinal="8" HasDefaultValue="true" DefaultValue="false" DbType="0" />
+                    <Field Name="created_at" Ordinal="9" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="10" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="roles">
+                  <PkConstraintName Name="roles_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="key_code" Ordinal="2" DbType="24" Length="50" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="100" />
+                    <Field Name="description" Ordinal="4" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="5" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="6" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="sessions">
+                  <PkConstraintName Name="sessions_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="24" Length="128" />
+                    <Field Name="user_id" Ordinal="2" DbType="28" />
+                    <Field Name="ip_address" Ordinal="3" IsOptional="true" DbType="25" />
+                    <Field Name="user_agent" Ordinal="4" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="payload" Ordinal="5" IsOptional="true" DbType="30" />
+                    <Field Name="last_activity" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="expires_at" Ordinal="7" IsOptional="true" DbType="23" />
+                    <Field Name="created_at" Ordinal="8" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="user_profiles">
+                  <PkConstraintName Name="user_profiles_pkey" />
+                  <Fields>
+                    <Field Name="user_id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="full_name" Ordinal="2" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="avatar" Ordinal="3" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="dob" Ordinal="4" IsOptional="true" DbType="5" />
+                    <Field Name="gender" Ordinal="5" IsOptional="true" DbType="8" Precision="5" />
+                    <Field Name="id_number" Ordinal="6" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="tax_code" Ordinal="7" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="id_issued_at" Ordinal="8" IsOptional="true" DbType="5" />
+                    <Field Name="id_card_place" Ordinal="9" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="id_images" Ordinal="10" IsOptional="true" DbType="30" />
+                    <Field Name="address" Ordinal="11" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="note" Ordinal="12" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="sepay_bank_id" Ordinal="13" IsOptional="true" DbType="28" />
+                    <Field Name="account_number" Ordinal="14" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="account_holder_name" Ordinal="15" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="branch_name" Ordinal="16" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="branch_code" Ordinal="17" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="swift_code" Ordinal="18" IsOptional="true" DbType="24" Length="30" />
+                    <Field Name="banking_notes" Ordinal="19" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="search_vector" Ordinal="20" IsOptional="true" DbType="24" Length="10485760" />
+                    <Field Name="created_at" Ordinal="21" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="22" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="users">
+                  <PkConstraintName Name="users_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="email" Ordinal="2" DbType="24" Length="200" />
+                    <Field Name="email_verified_at" Ordinal="3" IsOptional="true" DbType="23" />
+                    <Field Name="google_id" Ordinal="4" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="phone" Ordinal="5" IsOptional="true" DbType="24" Length="30" />
+                    <Field Name="phone_verified_at" Ordinal="6" IsOptional="true" DbType="23" />
+                    <Field Name="password_hash" Ordinal="7" IsOptional="true" DbType="24" Length="500" />
+                    <Field Name="remember_token" Ordinal="8" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="username" Ordinal="9" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="status" Ordinal="10" HasDefaultValue="true" DefaultValue="1" DbType="8" Precision="5" />
+                    <Field Name="last_login_at" Ordinal="11" IsOptional="true" DbType="23" />
+                    <Field Name="created_at" Ordinal="12" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="13" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="14" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="15" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+              </Tables>
+            </Schema>
+          </Schemas>
+          <ForeignKeyConstraints>
+            <ForeignKeyConstraint Name="auth:audit_logs:audit_logs_actor_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="auth:users:id" FkField="auth:audit_logs:actor_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:email_otps:email_otps_user_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:users:id" FkField="auth:email_otps:user_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:sessions:sessions_user_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:users:id" FkField="auth:sessions:user_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:user_profiles:user_profiles_user_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="auth:users:id" FkField="auth:user_profiles:user_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="auth:users:users_deleted_by_fkey">
+              <FieldPairs>
+                <FieldPair PkField="auth:users:id" FkField="auth:users:deleted_by" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+          </ForeignKeyConstraints>
+        </Catalog>
+      </Catalogs>
+    </TargetDatabase>
+  </TargetDatabases>
+  <MappingStores>
+    <MappingStore Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F">
+      <EntityMappings>
+        <EntityMapping EntityName="Auth:AuditLog" TargetName="room_managerment:auth:audit_logs">
+          <FieldMappings>
+            <FieldMapping FieldName="Action" TargetFieldName="action" />
+            <FieldMapping FieldName="ActorId" TargetFieldName="actor_id" />
+            <FieldMapping FieldName="AfterJson" TargetFieldName="after_json" />
+            <FieldMapping FieldName="BeforeJson" TargetFieldName="before_json" />
+            <FieldMapping FieldName="ChangesJson" TargetFieldName="changes_json" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="EntityId" TargetFieldName="entity_id" />
+            <FieldMapping FieldName="EntityType" TargetFieldName="entity_type" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IpAddress" TargetFieldName="ip_address" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="UserAgent" TargetFieldName="user_agent" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:Capability" TargetName="room_managerment:auth:capabilities">
+          <FieldMappings>
+            <FieldMapping FieldName="Category" TargetFieldName="category" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="Description" TargetFieldName="description" />
+            <FieldMapping FieldName="DisplayOrder" TargetFieldName="display_order" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="KeyCode" TargetFieldName="key_code" />
+            <FieldMapping FieldName="Name" TargetFieldName="name" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:EmailOtp" TargetName="room_managerment:auth:email_otps">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="Email" TargetFieldName="email" />
+            <FieldMapping FieldName="ExpiresAt" TargetFieldName="expires_at" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IsUsed" TargetFieldName="is_used" />
+            <FieldMapping FieldName="OtpCode" TargetFieldName="otp_code" />
+            <FieldMapping FieldName="Type" TargetFieldName="type" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+            <FieldMapping FieldName="VerifiedAt" TargetFieldName="verified_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:Role" TargetName="room_managerment:auth:roles">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="Description" TargetFieldName="description" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="KeyCode" TargetFieldName="key_code" />
+            <FieldMapping FieldName="Name" TargetFieldName="name" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:Session" TargetName="room_managerment:auth:sessions">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="ExpiresAt" TargetFieldName="expires_at" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IpAddress" TargetFieldName="ip_address" />
+            <FieldMapping FieldName="LastActivity" TargetFieldName="last_activity" />
+            <FieldMapping FieldName="Payload" TargetFieldName="payload" />
+            <FieldMapping FieldName="UserAgent" TargetFieldName="user_agent" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:User" TargetName="room_managerment:auth:users">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="Email" TargetFieldName="email" />
+            <FieldMapping FieldName="EmailVerifiedAt" TargetFieldName="email_verified_at" />
+            <FieldMapping FieldName="GoogleId" TargetFieldName="google_id" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="LastLoginAt" TargetFieldName="last_login_at" />
+            <FieldMapping FieldName="PasswordHash" TargetFieldName="password_hash" />
+            <FieldMapping FieldName="Phone" TargetFieldName="phone" />
+            <FieldMapping FieldName="PhoneVerifiedAt" TargetFieldName="phone_verified_at" />
+            <FieldMapping FieldName="RememberToken" TargetFieldName="remember_token" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="Username" TargetFieldName="username" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Auth:UserProfile" TargetName="room_managerment:auth:user_profiles">
+          <FieldMappings>
+            <FieldMapping FieldName="AccountHolderName" TargetFieldName="account_holder_name" />
+            <FieldMapping FieldName="AccountNumber" TargetFieldName="account_number" />
+            <FieldMapping FieldName="Address" TargetFieldName="address" />
+            <FieldMapping FieldName="Avatar" TargetFieldName="avatar" />
+            <FieldMapping FieldName="BankingNotes" TargetFieldName="banking_notes" />
+            <FieldMapping FieldName="BranchCode" TargetFieldName="branch_code" />
+            <FieldMapping FieldName="BranchName" TargetFieldName="branch_name" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="Dob" TargetFieldName="dob" />
+            <FieldMapping FieldName="FullName" TargetFieldName="full_name" />
+            <FieldMapping FieldName="Gender" TargetFieldName="gender" />
+            <FieldMapping FieldName="IdCardPlace" TargetFieldName="id_card_place" />
+            <FieldMapping FieldName="IdImages" TargetFieldName="id_images" />
+            <FieldMapping FieldName="IdIssuedAt" TargetFieldName="id_issued_at" />
+            <FieldMapping FieldName="IdNumber" TargetFieldName="id_number" />
+            <FieldMapping FieldName="Note" TargetFieldName="note" />
+            <FieldMapping FieldName="SearchVector" TargetFieldName="search_vector" />
+            <FieldMapping FieldName="SepayBankId" TargetFieldName="sepay_bank_id" />
+            <FieldMapping FieldName="SwiftCode" TargetFieldName="swift_code" />
+            <FieldMapping FieldName="TaxCode" TargetFieldName="tax_code" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+          </FieldMappings>
+        </EntityMapping>
+      </EntityMappings>
+      <TypedViewMappings />
+      <SPCallMappings />
+      <TvfCallMappings />
+      <TypeConversionDefinitions />
+    </MappingStore>
+  </MappingStores>
+  <ModelViews />
+</Project>

@@ -14,7 +14,7 @@ public interface IEmailOtpRepository
     Task<PagedResult<EmailOtpEntity>> GetByEmailPagedAsync(
         Email email,
         int pageNumber = 1,
-        int pageSize = 20,
+        int pageSize = 10,
         CancellationToken cancellationToken = default);
 
     Task<bool> HasUnexpiredOtpAsync(

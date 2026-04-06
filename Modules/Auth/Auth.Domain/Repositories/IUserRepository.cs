@@ -14,7 +14,7 @@ public interface IUserRepository
     Task<PagedResult<UserEntity>> SearchPagedAsync(
         string? searchTerm,
         int pageNumber = 1,
-        int pageSize = 20,
+        int pageSize = 10,
         bool includeDeleted = false,
         CancellationToken cancellationToken = default);
 

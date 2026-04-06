@@ -46,6 +46,23 @@ public sealed class EmailOtpEntity : AggregateRoot<Guid>
             IsUsed = isUsed
         };
 
+    public bool CanResend(DateTimeOffset at, TimeSpan minInterval)
+    {
+        if (minInterval < TimeSpan.Zero)
+        {
+            throw new ArgumentOutOfRangeException(nameof(minInterval));
+        }
+
+        return at >= CreatedAt.Add(minInterval);
+    }
+
+    public bool IsMatch(string email, string otpCode, EmailOtpType type)
+    {
+        return Type == type
+            && string.Equals(Email.Value, Email.Create(email).Value, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(OtpCode.Value, OtpCode.Create(otpCode).Value, StringComparison.Ordinal);
+    }
+
     public void MarkVerified(DateTimeOffset verifiedAt)
     {
         EnsureNotExpired(verifiedAt);
@@ -62,6 +79,11 @@ public sealed class EmailOtpEntity : AggregateRoot<Guid>
 
     public void MarkUsed(DateTimeOffset usedAt)
     {
+        if (IsUsed)
+        {
+            throw new InvalidEmailOtpException(InvalidEmailOtpException.CodeUsed);
+        }
+
         EnsureNotExpired(usedAt);
         IsUsed = true;
         UpdatedAt = usedAt.UtcDateTime;

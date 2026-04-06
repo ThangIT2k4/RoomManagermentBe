@@ -28,7 +28,7 @@ namespace RoomManagerment.Notification.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END
 	
 	{
-		private EntityCollection<UserNotificationEntity> _userNotifications;
+		private NotificationChannelEntity _notificationChannel;
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
 
@@ -38,8 +38,8 @@ namespace RoomManagerment.Notification.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name UserNotifications</summary>
-			public static readonly string UserNotifications = "UserNotifications";
+			/// <summary>Member name NotificationChannel</summary>
+			public static readonly string NotificationChannel = "NotificationChannel";
 		}
 
 		/// <summary>Static meta-data storage for navigator related information</summary>
@@ -48,7 +48,7 @@ namespace RoomManagerment.Notification.EntityClasses
 			public NotificationEntityStaticMetaData()
 			{
 				SetEntityCoreInfo("NotificationEntity", InheritanceHierarchyType.None, false, (int)RoomManagerment.Notification.EntityType.NotificationEntity, typeof(NotificationEntity), typeof(NotificationEntityFactory), false);
-				AddNavigatorMetaData<NotificationEntity, EntityCollection<UserNotificationEntity>>("UserNotifications", a => a._userNotifications, (a, b) => a._userNotifications = b, a => a.UserNotifications, () => new NotificationRelations().UserNotificationEntityUsingNotificationId, typeof(UserNotificationEntity), (int)RoomManagerment.Notification.EntityType.UserNotificationEntity);
+				AddNavigatorMetaData<NotificationEntity, NotificationChannelEntity>("NotificationChannel", "Notifications", (a, b) => a._notificationChannel = b, a => a._notificationChannel, (a, b) => a.NotificationChannel = b, RoomManagerment.Notification.RelationClasses.StaticNotificationRelations.NotificationChannelEntityUsingNotificationChannelIdStatic, ()=>new NotificationRelations().NotificationChannelEntityUsingNotificationChannelId, null, new int[] { (int)NotificationFieldIndex.NotificationChannelId }, null, true, (int)RoomManagerment.Notification.EntityType.NotificationChannelEntity);
 			}
 		}
 
@@ -101,9 +101,9 @@ namespace RoomManagerment.Notification.EntityClasses
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'UserNotification' to this entity.</summary>
+		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'NotificationChannel' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoUserNotifications() { return CreateRelationInfoForNavigator("UserNotifications"); }
+		public virtual IRelationPredicateBucket GetRelationInfoNotificationChannel() { return CreateRelationInfoForNavigator("NotificationChannel"); }
 		
 		/// <inheritdoc/>
 		protected override EntityStaticMetaDataBase GetEntityStaticMetaData() {	return _staticMetaData; }
@@ -137,24 +137,32 @@ namespace RoomManagerment.Notification.EntityClasses
 		/// <summary>The relations object holding all relations of this entity with other entity classes.</summary>
 		public static NotificationRelations Relations { get { return _relationsFactory; } }
 
-		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UserNotification' for this entity.</summary>
+		/// <summary>Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'NotificationChannel' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathUserNotifications { get { return _staticMetaData.GetPrefetchPathElement("UserNotifications", CommonEntityBase.CreateEntityCollection<UserNotificationEntity>()); } }
+		public static IPrefetchPathElement2 PrefetchPathNotificationChannel { get { return _staticMetaData.GetPrefetchPathElement("NotificationChannel", CommonEntityBase.CreateEntityCollection<NotificationChannelEntity>()); } }
 
-		/// <summary>The Content property of the Entity Notification<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "notifications"."content".<br/>Table field type characteristics (type, precision, scale, length): Text, 0, 0, 1073741824.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Content
+		/// <summary>The AuditLogId property of the Entity Notification<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "notifications"."audit_log_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> AuditLogId
 		{
-			get { return (System.String)GetValue((int)NotificationFieldIndex.Content, true); }
-			set { SetValue((int)NotificationFieldIndex.Content, value); }
+			get { return (Nullable<System.Guid>)GetValue((int)NotificationFieldIndex.AuditLogId, false); }
+			set { SetValue((int)NotificationFieldIndex.AuditLogId, value); }
 		}
 
 		/// <summary>The CreatedAt property of the Entity Notification<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "notifications"."created_at".<br/>Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "notifications"."created_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.DateTime CreatedAt
 		{
 			get { return (System.DateTime)GetValue((int)NotificationFieldIndex.CreatedAt, true); }
 			set { SetValue((int)NotificationFieldIndex.CreatedAt, value); }
+		}
+
+		/// <summary>The EntityId property of the Entity Notification<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "notifications"."entity_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> EntityId
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)NotificationFieldIndex.EntityId, false); }
+			set { SetValue((int)NotificationFieldIndex.EntityId, value); }
 		}
 
 		/// <summary>The Id property of the Entity Notification<br/><br/></summary>
@@ -165,8 +173,40 @@ namespace RoomManagerment.Notification.EntityClasses
 			set { SetValue((int)NotificationFieldIndex.Id, value); }
 		}
 
+		/// <summary>The IsRead property of the Entity Notification<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "notifications"."is_read".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean IsRead
+		{
+			get { return (System.Boolean)GetValue((int)NotificationFieldIndex.IsRead, true); }
+			set { SetValue((int)NotificationFieldIndex.IsRead, value); }
+		}
+
+		/// <summary>The Message property of the Entity Notification<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "notifications"."message".<br/>Table field type characteristics (type, precision, scale, length): Text, 0, 0, 1073741824.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Message
+		{
+			get { return (System.String)GetValue((int)NotificationFieldIndex.Message, true); }
+			set { SetValue((int)NotificationFieldIndex.Message, value); }
+		}
+
+		/// <summary>The NotificationChannelId property of the Entity Notification<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "notifications"."notification_channel_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Guid NotificationChannelId
+		{
+			get { return (System.Guid)GetValue((int)NotificationFieldIndex.NotificationChannelId, true); }
+			set { SetValue((int)NotificationFieldIndex.NotificationChannelId, value); }
+		}
+
+		/// <summary>The ReadAt property of the Entity Notification<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "notifications"."read_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> ReadAt
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)NotificationFieldIndex.ReadAt, false); }
+			set { SetValue((int)NotificationFieldIndex.ReadAt, value); }
+		}
+
 		/// <summary>The Title property of the Entity Notification<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "notifications"."title".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "notifications"."title".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 500.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Title
 		{
 			get { return (System.String)GetValue((int)NotificationFieldIndex.Title, true); }
@@ -174,16 +214,28 @@ namespace RoomManagerment.Notification.EntityClasses
 		}
 
 		/// <summary>The Type property of the Entity Notification<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "notifications"."type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "notifications"."type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Type
 		{
 			get { return (System.String)GetValue((int)NotificationFieldIndex.Type, true); }
 			set { SetValue((int)NotificationFieldIndex.Type, value); }
 		}
 
-		/// <summary>Gets the EntityCollection with the related entities of type 'UserNotificationEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(UserNotificationEntity))]
-		public virtual EntityCollection<UserNotificationEntity> UserNotifications { get { return GetOrCreateEntityCollection<UserNotificationEntity, UserNotificationEntityFactory>("Notification", true, false, ref _userNotifications); } }
+		/// <summary>The UserId property of the Entity Notification<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "notifications"."user_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Guid UserId
+		{
+			get { return (System.Guid)GetValue((int)NotificationFieldIndex.UserId, true); }
+			set { SetValue((int)NotificationFieldIndex.UserId, value); }
+		}
+
+		/// <summary>Gets / sets related entity of type 'NotificationChannelEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
+		[Browsable(false)]
+		public virtual NotificationChannelEntity NotificationChannel
+		{
+			get { return _notificationChannel; }
+			set { SetSingleRelatedEntityNavigator(value, "NotificationChannel"); }
+		}
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
 
@@ -195,16 +247,28 @@ namespace RoomManagerment.Notification
 {
 	public enum NotificationFieldIndex
 	{
-		///<summary>Content. </summary>
-		Content,
+		///<summary>AuditLogId. </summary>
+		AuditLogId,
 		///<summary>CreatedAt. </summary>
 		CreatedAt,
+		///<summary>EntityId. </summary>
+		EntityId,
 		///<summary>Id. </summary>
 		Id,
+		///<summary>IsRead. </summary>
+		IsRead,
+		///<summary>Message. </summary>
+		Message,
+		///<summary>NotificationChannelId. </summary>
+		NotificationChannelId,
+		///<summary>ReadAt. </summary>
+		ReadAt,
 		///<summary>Title. </summary>
 		Title,
 		///<summary>Type. </summary>
 		Type,
+		///<summary>UserId. </summary>
+		UserId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -215,10 +279,11 @@ namespace RoomManagerment.Notification.RelationClasses
 	/// <summary>Implements the relations factory for the entity: Notification. </summary>
 	public partial class NotificationRelations: RelationFactory
 	{
-		/// <summary>Returns a new IEntityRelation object, between NotificationEntity and UserNotificationEntity over the 1:n relation they have, using the relation between the fields: Notification.Id - UserNotification.NotificationId</summary>
-		public virtual IEntityRelation UserNotificationEntityUsingNotificationId
+
+		/// <summary>Returns a new IEntityRelation object, between NotificationEntity and NotificationChannelEntity over the m:1 relation they have, using the relation between the fields: Notification.NotificationChannelId - NotificationChannel.Id</summary>
+		public virtual IEntityRelation NotificationChannelEntityUsingNotificationChannelId
 		{
-			get { return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.OneToMany, "UserNotifications", true, new[] { NotificationFields.Id, UserNotificationFields.NotificationId }); }
+			get	{ return ModelInfoProviderSingleton.GetInstance().CreateRelation(RelationType.ManyToOne, "NotificationChannel", false, new[] { NotificationChannelFields.Id, NotificationFields.NotificationChannelId }); }
 		}
 
 	}
@@ -226,7 +291,7 @@ namespace RoomManagerment.Notification.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticNotificationRelations
 	{
-		internal static readonly IEntityRelation UserNotificationEntityUsingNotificationIdStatic = new NotificationRelations().UserNotificationEntityUsingNotificationId;
+		internal static readonly IEntityRelation NotificationChannelEntityUsingNotificationChannelIdStatic = new NotificationRelations().NotificationChannelEntityUsingNotificationChannelId;
 
 		/// <summary>CTor</summary>
 		static StaticNotificationRelations() { }

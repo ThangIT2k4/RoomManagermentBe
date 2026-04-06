@@ -17,7 +17,6 @@ namespace RoomManagerment.Notification.FactoryClasses
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
 
-
 	/// <summary>general base class for the generated factories</summary>
 	[Serializable]
 	public partial class EntityFactoryBase2<TEntity> : EntityFactoryCore2
@@ -75,14 +74,24 @@ namespace RoomManagerment.Notification.FactoryClasses
 		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new NotificationEntity(fields); }
 	}
 
-	/// <summary>Factory to create new, empty UserNotificationEntity objects.</summary>
+	/// <summary>Factory to create new, empty NotificationChannelEntity objects.</summary>
 	[Serializable]
-	public partial class UserNotificationEntityFactory : EntityFactoryBase2<UserNotificationEntity> 
+	public partial class NotificationChannelEntityFactory : EntityFactoryBase2<NotificationChannelEntity> 
 	{
 		/// <summary>CTor</summary>
-		public UserNotificationEntityFactory() : base("UserNotificationEntity", RoomManagerment.Notification.EntityType.UserNotificationEntity, false) { }
+		public NotificationChannelEntityFactory() : base("NotificationChannelEntity", RoomManagerment.Notification.EntityType.NotificationChannelEntity, false) { }
 		/// <inheritdoc/>
-		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new UserNotificationEntity(fields); }
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new NotificationChannelEntity(fields); }
+	}
+
+	/// <summary>Factory to create new, empty UserNotificationPreferenceEntity objects.</summary>
+	[Serializable]
+	public partial class UserNotificationPreferenceEntityFactory : EntityFactoryBase2<UserNotificationPreferenceEntity> 
+	{
+		/// <summary>CTor</summary>
+		public UserNotificationPreferenceEntityFactory() : base("UserNotificationPreferenceEntity", RoomManagerment.Notification.EntityType.UserNotificationPreferenceEntity, false) { }
+		/// <inheritdoc/>
+		protected override IEntity2 CreateImpl(IEntityFields2 fields) { return new UserNotificationPreferenceEntity(fields); }
 	}
 
 	/// <summary>Factory to create new, empty Entity objects based on the entity type specified. Uses  entity specific factory objects</summary>
@@ -134,8 +143,10 @@ namespace RoomManagerment.Notification.FactoryClasses
 			{
 				case RoomManagerment.Notification.EntityType.NotificationEntity:
 					return new NotificationEntityFactory();
-				case RoomManagerment.Notification.EntityType.UserNotificationEntity:
-					return new UserNotificationEntityFactory();
+				case RoomManagerment.Notification.EntityType.NotificationChannelEntity:
+					return new NotificationChannelEntityFactory();
+				case RoomManagerment.Notification.EntityType.UserNotificationPreferenceEntity:
+					return new UserNotificationPreferenceEntityFactory();
 				default:
 					return null;
 			}

@@ -117,6 +117,20 @@ public sealed class UserProfileEntity : AggregateRoot<Guid>
         AddDomainEvent(new UserProfileUpdatedEvent(Id, DateTimeOffset.UtcNow));
     }
 
+    public void UpdateAvatar(string? avatar, DateTime changedAt)
+    {
+        EnsureUtc(changedAt);
+        var normalized = avatar?.Trim();
+        if (Avatar == normalized)
+        {
+            return;
+        }
+
+        Avatar = normalized;
+        UpdatedAt = changedAt;
+        AddDomainEvent(new UserProfileUpdatedEvent(Id, DateTimeOffset.UtcNow));
+    }
+
     private static void EnsureUtc(DateTime value)
     {
         if (value.Kind != DateTimeKind.Utc)

@@ -15,8 +15,8 @@ RUN dotnet publish "RoomManagerment.ExternalApi.csproj" -c Release -o /app/publi
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
-EXPOSE 8080
-ENV ASPNETCORE_HTTP_PORTS=8080
+EXPOSE 5004
+ENV ASPNETCORE_HTTP_PORTS=5004
 COPY --from=publish /app/publish .
 RUN adduser --disabled-password --uid 10001 --gecos "" appuser \
     && chown -R appuser:appuser /app

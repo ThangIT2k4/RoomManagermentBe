@@ -13,31 +13,64 @@ namespace RoomManagerment.Notification.HelperClasses
 	/// <summary>Field Creation Class for entity NotificationEntity</summary>
 	public partial class NotificationFields
 	{
-		/// <summary>Creates a new NotificationEntity.Content field instance</summary>
-		public static EntityField2 Content { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.Content); }}
+		/// <summary>Creates a new NotificationEntity.AuditLogId field instance</summary>
+		public static EntityField2 AuditLogId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.AuditLogId); }}
 		/// <summary>Creates a new NotificationEntity.CreatedAt field instance</summary>
 		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new NotificationEntity.EntityId field instance</summary>
+		public static EntityField2 EntityId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.EntityId); }}
 		/// <summary>Creates a new NotificationEntity.Id field instance</summary>
 		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.Id); }}
+		/// <summary>Creates a new NotificationEntity.IsRead field instance</summary>
+		public static EntityField2 IsRead { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.IsRead); }}
+		/// <summary>Creates a new NotificationEntity.Message field instance</summary>
+		public static EntityField2 Message { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.Message); }}
+		/// <summary>Creates a new NotificationEntity.NotificationChannelId field instance</summary>
+		public static EntityField2 NotificationChannelId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.NotificationChannelId); }}
+		/// <summary>Creates a new NotificationEntity.ReadAt field instance</summary>
+		public static EntityField2 ReadAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.ReadAt); }}
 		/// <summary>Creates a new NotificationEntity.Title field instance</summary>
 		public static EntityField2 Title { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.Title); }}
 		/// <summary>Creates a new NotificationEntity.Type field instance</summary>
 		public static EntityField2 Type { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.Type); }}
+		/// <summary>Creates a new NotificationEntity.UserId field instance</summary>
+		public static EntityField2 UserId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationFieldIndex.UserId); }}
 	}
 
-	/// <summary>Field Creation Class for entity UserNotificationEntity</summary>
-	public partial class UserNotificationFields
+	/// <summary>Field Creation Class for entity NotificationChannelEntity</summary>
+	public partial class NotificationChannelFields
 	{
-		/// <summary>Creates a new UserNotificationEntity.Id field instance</summary>
-		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationFieldIndex.Id); }}
-		/// <summary>Creates a new UserNotificationEntity.IsRead field instance</summary>
-		public static EntityField2 IsRead { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationFieldIndex.IsRead); }}
-		/// <summary>Creates a new UserNotificationEntity.NotificationId field instance</summary>
-		public static EntityField2 NotificationId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationFieldIndex.NotificationId); }}
-		/// <summary>Creates a new UserNotificationEntity.ReadAt field instance</summary>
-		public static EntityField2 ReadAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationFieldIndex.ReadAt); }}
-		/// <summary>Creates a new UserNotificationEntity.UserId field instance</summary>
-		public static EntityField2 UserId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationFieldIndex.UserId); }}
+		/// <summary>Creates a new NotificationChannelEntity.Channel field instance</summary>
+		public static EntityField2 Channel { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationChannelFieldIndex.Channel); }}
+		/// <summary>Creates a new NotificationChannelEntity.CreatedAt field instance</summary>
+		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationChannelFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new NotificationChannelEntity.Id field instance</summary>
+		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationChannelFieldIndex.Id); }}
+		/// <summary>Creates a new NotificationChannelEntity.KeyCode field instance</summary>
+		public static EntityField2 KeyCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationChannelFieldIndex.KeyCode); }}
+		/// <summary>Creates a new NotificationChannelEntity.Name field instance</summary>
+		public static EntityField2 Name { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationChannelFieldIndex.Name); }}
+		/// <summary>Creates a new NotificationChannelEntity.UpdatedAt field instance</summary>
+		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(NotificationChannelFieldIndex.UpdatedAt); }}
+	}
+
+	/// <summary>Field Creation Class for entity UserNotificationPreferenceEntity</summary>
+	public partial class UserNotificationPreferenceFields
+	{
+		/// <summary>Creates a new UserNotificationPreferenceEntity.CreatedAt field instance</summary>
+		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationPreferenceFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new UserNotificationPreferenceEntity.EmailEnabled field instance</summary>
+		public static EntityField2 EmailEnabled { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationPreferenceFieldIndex.EmailEnabled); }}
+		/// <summary>Creates a new UserNotificationPreferenceEntity.EntityType field instance</summary>
+		public static EntityField2 EntityType { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationPreferenceFieldIndex.EntityType); }}
+		/// <summary>Creates a new UserNotificationPreferenceEntity.Id field instance</summary>
+		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationPreferenceFieldIndex.Id); }}
+		/// <summary>Creates a new UserNotificationPreferenceEntity.InAppEnabled field instance</summary>
+		public static EntityField2 InAppEnabled { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationPreferenceFieldIndex.InAppEnabled); }}
+		/// <summary>Creates a new UserNotificationPreferenceEntity.UpdatedAt field instance</summary>
+		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationPreferenceFieldIndex.UpdatedAt); }}
+		/// <summary>Creates a new UserNotificationPreferenceEntity.UserId field instance</summary>
+		public static EntityField2 UserId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UserNotificationPreferenceFieldIndex.UserId); }}
 	}
 	
 

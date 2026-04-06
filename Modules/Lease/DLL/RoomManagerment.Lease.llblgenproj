@@ -1,0 +1,509 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--LLBLGen Pro v5.13 project file. Do not manually edit this file. Incorrect references could lead to an unloadable project file.-->
+<Project Version="5.13" TargetFrameworkName="LLBLGen Pro Runtime Framework" UseLegacyDefaults="false">
+  <Properties>
+    <Abbreviations />
+    <Property Name="AdditionalTaskPerformerFolder" Value="" />
+    <Property Name="AdditionalTasksFolder" Value="" />
+    <Property Name="AdditionalTemplatesFolder" Value="" />
+    <Property Name="AdditionalTypeConverterFolder" Value="" />
+    <Property Name="AddNewElementsAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AddNewFieldsAfterRefresh_v5" Value="true" />
+    <Property Name="AddNewFieldsAfterRelationalModelDataSync_v5" Value="true" />
+    <Property Name="AddNewViewsAsEntitiesAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewViewsAsEntitiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AutoAddManyToManyRelationships" Value="false" />
+    <Property Name="AutoAssignSequencesToIntegerPks" Value="true" />
+    <Property Name="AutoAssignTypeConverterToFieldMapping" Value="true" />
+    <Property Name="AutomaticallyGenerateSourceCodeOnProjectSave" Value="true" />
+    <Property Name="ConnectionStringKeyNamePattern" Value="ConnectionString.{$ProviderName}" />
+    <Property Name="DefaultDDLSQLScriptDestinationFolder" Value=".\DDLSQLScripts" />
+    <Property Name="DefaultDeleteRuleAction" Value="1" />
+    <Property Name="DefaultSourceCodeDestinationFolder" Value=".\Code" />
+    <Property Name="DefaultUpdateRuleAction" Value="0" />
+    <Property Name="DeleteObsoleteFiles" Value="true" />
+    <Property Name="ElementNamePrefixPattern" Value="{$SchemaName}" />
+    <Property Name="ElementNamePrefixPatternIsAppliedWhen" Value="1" />
+    <Property Name="EncodingToUse" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForTable" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForView" Value="4" />
+    <Property Name="EntityFieldNameStripPattern" Value="{}{}" />
+    <Property Name="EntityNameStripPattern" Value="{tbl_}{}" />
+    <Property Name="ExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="FailCodeGenerationOnWriteError" Value="false" />
+    <Property Name="FieldMappedOntoRelatedFieldPattern" Value="{$RelatedFieldName}" />
+    <Property Name="FkFieldsAreNamedAfterTargetField" Value="true" />
+    <Property Name="ForeignKeyConstraintPattern" Value="FK_{$Guid}" />
+    <Property Name="ForeignKeyFieldPattern" Value="{$NavigatorName}{$RelatedFieldName}" />
+    <Property Name="GroupUsage" Value="0" />
+    <Property Name="IdentifyingFieldsFollowDBPrimaryKeyConstraints_v5" Value="true" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseInsensitiveDBs" Value="false" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseSensitiveDBs" Value="false" />
+    <Property Name="LengthPrecisionScaleFollowDBLengthPrecisionScale_v5" Value="true" />
+    <Property Name="MakeElementNamePascalCasing" Value="true" />
+    <Property Name="NavigatorMappedOntoManyToManyPattern" Value="{$EndEntityName}CollectionVia{$IntermediateEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneManyToOnePattern" Value="{$EndEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneToManyPattern" Value="{$EndEntityName$P}" />
+    <Property Name="NonExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="PreferDecimalOverCurrencyTypes" Value="true" />
+    <Property Name="PreferNaturalCharacterTypes" Value="true" />
+    <Property Name="PreferSystemSequencesOverSchemaSequencesIfApplicable" Value="true" />
+    <Property Name="PreferVariableLengthTypes" Value="true" />
+    <Property Name="PrimaryKeyConstraintPattern" Value="PK_{$Guid}" />
+    <Property Name="ProjectCreator" Value="TranDucThang" />
+    <Property Name="ProjectName" Value="RoomManagerment.Lease" />
+    <Property Name="ReflectNullabilityOfElementFieldInTargetField_v5" Value="false" />
+    <Property Name="ReflectTypeOfElementFieldInTargetField_v5" Value="true" />
+    <Property Name="RelationalModelDataElementNameCasingCaseInsensitiveDBs" Value="3" />
+    <Property Name="RelationalModelDataElementNameCasingCaseSensitiveDBs" Value="3" />
+    <Property Name="RelationshipsFollowDBForeignKeyConstraints_v5" Value="true" />
+    <Property Name="RemoveUnderscoresFromElementName" Value="true" />
+    <Property Name="RemoveUnmappedElementsAfterRefresh_v5" Value="false" />
+    <Property Name="RemoveUnmappedElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRefresh" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRelationalModelDataSync" Value="false" />
+    <Property Name="RetrieveDBCustomProperties" Value="false" />
+    <Property Name="RootNamespace" Value="" />
+    <Property Name="SequenceNameMatchingPattern" Value="SEQ_{$TableName}" />
+    <Property Name="SequencePattern" Value="SEQ_{$EntityName}" />
+    <Property Name="SetGroupNameAfterSchemaName" Value="true" />
+    <Property Name="SetSchemaNameAfterGroupName" Value="true" />
+    <Property Name="SingularizeElementNames" Value="true" />
+    <Property Name="StoredProcNameStripPattern" Value="{pr_, sp_}{}" />
+    <Property Name="StoreTimeLastGeneratedIntoProject" Value="false" />
+    <Property Name="StoreTimeLastSyncIntoProject" Value="true" />
+    <Property Name="SyncCustomFieldOrderingWithTableFieldIndex" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="SyncRelationalModelDataElementNameWithModelElementName_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="TableValuedFunctionNameStripPattern" Value="{fn_, pr_, sp_}{}" />
+    <Property Name="TargetPerEntityEdgesRequireBackingFkConstraint" Value="true" />
+    <Property Name="TypedViewFieldNameStripPattern" Value="{}{}" />
+    <Property Name="TypedViewMappedOnResultsetPattern" Value="{$ProcFunctionName}{$ResultsetName}Result" />
+    <Property Name="TypedViewNameStripPattern" Value="{vw_}{}" />
+    <Property Name="UniqueConstraintPattern" Value="UC_{$Guid}" />
+    <Property Name="UniqueConstraintsFollowDBUniqueConstraints_v5" Value="true" />
+    <Property Name="UpdateCustomPropertiesAfterRefresh_v5" Value="false" />
+    <Property Name="UpdateCustomPropertiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="UseCustomFieldOrderingOnNewElements" Value="false" />
+  </Properties>
+  <TypeShortcuts />
+  <IgnoredWarnings />
+  <SavedSearchQueries />
+  <CodeGenerationCyclePreferences>
+    <OutputType Value="3">
+      <LastUsedPreferences>
+        <DestinationRootFolder Value="Z:\WorkSpace\Projects\RoomManagerment\RoomManagermentBe\Modules\Lease\DAL" />
+        <FrameworkName Value="LLBLGen Pro Runtime Framework" />
+        <LanguageName Value="C#" />
+        <PlatformName Value=".NET 9" />
+        <PresetName Value="SD.Presets.Adapter.General.Netstandard" />
+        <RootNamespace Value="RoomManagerment.Lease" />
+        <TemplateGroup Value="Adapter" />
+        <TemplateBindings>
+          <Binding Name="SD.TemplateBindings.PostgreSqlSpecific" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates.Net9" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates" />
+          <Binding Name="SD.TemplateBindings.General" />
+        </TemplateBindings>
+        <AdhocTemplateSets />
+      </LastUsedPreferences>
+    </OutputType>
+  </CodeGenerationCyclePreferences>
+  <CodeGenerationMetaDataDefaults>
+    <TargetElement Type="256">
+      <Defaults>
+        <Attributes>
+          <Attribute Value="Browsable($false)" />
+        </Attributes>
+      </Defaults>
+    </TargetElement>
+  </CodeGenerationMetaDataDefaults>
+  <EntityModel>
+    <ValueTypeDefinitions />
+    <EntityDefinitions>
+      <EntityDefinition Name="Lease" GroupName="Lease" ObjectID="5d54f4ea-e84c-45c5-b980-3af0129184b5">
+        <Fields>
+          <Field Name="BookingId" Type="guid" IsOptional="true" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="CycleId" Type="guid" IsOptional="true" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="DepositAmount" Type="decimal" IsOptional="true" Precision="15" Scale="2" />
+          <Field Name="EndDate" Type="dateonly" IsOptional="true" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="LeaseNo" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="Notes" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="ParentLeaseId" Type="guid" IsOptional="true" />
+          <Field Name="PaymentDay" Type="int" IsOptional="true" Precision="10" />
+          <Field Name="RentAmount" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="StartDate" Type="dateonly" />
+          <Field Name="Status" Type="string" MaxLength="50" />
+          <Field Name="UnitId" Type="guid" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="LeaseResident" GroupName="Lease" ObjectID="5c0ae592-c333-49a6-940b-5be0cd0a90dd">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="Email" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="FullName" Type="string" MaxLength="200" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="IdNumber" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="IsPrimary" Type="bool" />
+          <Field Name="LeaseId" Type="guid" />
+          <Field Name="Phone" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="Relationship" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UserId" Type="guid" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="LeaseServiceSet" GroupName="Lease" ObjectID="775b36ac-94e1-4a19-b39a-52a3859a2ad4">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="Description" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="Name" Type="string" MaxLength="200" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="LeaseServiceSetItem" GroupName="Lease" ObjectID="a2c77858-7bc3-4ca8-91df-974a2423b4b5">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="IsRequired" Type="bool" />
+          <Field Name="LeaseServiceSetId" Type="guid" />
+          <Field Name="Price" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="ServiceId" Type="guid" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="MasterLease" GroupName="Lease" ObjectID="6c511564-3031-44bc-9fba-3956e896381f">
+        <Fields>
+          <Field Name="ContractNo" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="DepositAmount" Type="decimal" IsOptional="true" Precision="15" Scale="2" />
+          <Field Name="EndDate" Type="dateonly" IsOptional="true" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="LandlordUserId" Type="guid" />
+          <Field Name="Notes" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="PaymentDay" Type="int" IsOptional="true" Precision="10" />
+          <Field Name="PropertyId" Type="guid" />
+          <Field Name="RentAmount" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="StartDate" Type="dateonly" />
+          <Field Name="Status" Type="string" MaxLength="50" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="PaymentCycle" GroupName="Lease" ObjectID="684128a9-9aad-439c-a4f2-51ea888411e9">
+        <Fields>
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DayOfMonth" Type="int" IsOptional="true" Precision="10" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="DurationMonths" Type="int" Precision="10" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="Name" Type="string" MaxLength="200" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+    </EntityDefinitions>
+    <Relationships>
+      <NormalRelationship Name="Lease.Lease.Lease-Lease.Lease.Leases" Start="Lease:Lease" End="Lease:Lease" StartNavigator="Lease" EndNavigator="Leases" Type="4" EndIsOptional="true">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ParentLeaseId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Lease.Lease.PaymentCycle-Lease.PaymentCycle.Leases" Start="Lease:Lease" End="Lease:PaymentCycle" StartNavigator="PaymentCycle" EndNavigator="Leases" Type="4" EndIsOptional="true">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="CycleId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Lease.LeaseResident.Lease-Lease.Lease.LeaseResidents" Start="Lease:LeaseResident" End="Lease:Lease" StartNavigator="Lease" EndNavigator="LeaseResidents" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="LeaseId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Lease.LeaseServiceSetItem.LeaseServiceSet-Lease.LeaseServiceSet.LeaseServiceSetItems" Start="Lease:LeaseServiceSetItem" End="Lease:LeaseServiceSet" StartNavigator="LeaseServiceSet" EndNavigator="LeaseServiceSetItems" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="LeaseServiceSetId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+    </Relationships>
+    <InheritanceHierarchies />
+  </EntityModel>
+  <TargetDatabases>
+    <TargetDatabase Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F" SyncSource="2">
+      <ConnectionElements>
+        <ConnectionElement Name="ServerName" Value="room-managerment.postgres.database.azure.com" />
+        <ConnectionElement Name="CatalogName" Value="room_managerment" />
+        <ConnectionElement Name="UserID" Value="room_managerment" />
+        <ConnectionElement Name="Password" Value="" />
+        <ConnectionElement Name="PortNumber" Value="5432" />
+        <ConnectionElement Name="SslMode" Value="Require" />
+        <ConnectionElement Name="CustomFragments" Value="" />
+      </ConnectionElements>
+      <SystemSequences>
+        <Sequence Name="SystemIdentity" />
+      </SystemSequences>
+      <Catalogs>
+        <Catalog Name="room_managerment" SyncSource="2">
+          <Schemas>
+            <Schema Name="lease" SyncSource="2" LastSyncWithDatabase="2026-04-04T19:30:36.7219631Z">
+              <Tables>
+                <Table Name="lease_residents">
+                  <PkConstraintName Name="lease_residents_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="lease_id" Ordinal="2" DbType="28" />
+                    <Field Name="user_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="full_name" Ordinal="4" DbType="24" Length="200" />
+                    <Field Name="phone" Ordinal="5" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="email" Ordinal="6" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="id_number" Ordinal="7" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="relationship" Ordinal="8" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="is_primary" Ordinal="9" HasDefaultValue="true" DefaultValue="false" DbType="0" />
+                    <Field Name="created_at" Ordinal="10" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="11" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="12" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="13" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="lease_service_set_items">
+                  <PkConstraintName Name="lease_service_set_items_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="lease_service_set_id" Ordinal="2" DbType="28" />
+                    <Field Name="service_id" Ordinal="3" DbType="28" />
+                    <Field Name="price" Ordinal="4" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="is_required" Ordinal="5" HasDefaultValue="true" DefaultValue="true" DbType="0" />
+                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="8" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="9" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="lease_service_sets">
+                  <PkConstraintName Name="lease_service_sets_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="200" />
+                    <Field Name="description" Ordinal="4" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="5" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="6" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="7" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="8" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="leases">
+                  <PkConstraintName Name="leases_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="unit_id" Ordinal="3" DbType="28" />
+                    <Field Name="lease_no" Ordinal="4" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="start_date" Ordinal="5" DbType="5" />
+                    <Field Name="end_date" Ordinal="6" IsOptional="true" DbType="5" />
+                    <Field Name="rent_amount" Ordinal="7" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="deposit_amount" Ordinal="8" IsOptional="true" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="cycle_id" Ordinal="9" IsOptional="true" DbType="28" />
+                    <Field Name="payment_day" Ordinal="10" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="status" Ordinal="11" HasDefaultValue="true" DefaultValue="'active'::character varying" DbType="24" Length="50" />
+                    <Field Name="notes" Ordinal="12" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="parent_lease_id" Ordinal="13" IsOptional="true" DbType="28" />
+                    <Field Name="booking_id" Ordinal="14" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="15" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="16" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="17" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="18" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="master_leases">
+                  <PkConstraintName Name="master_leases_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="landlord_user_id" Ordinal="3" DbType="28" />
+                    <Field Name="property_id" Ordinal="4" DbType="28" />
+                    <Field Name="contract_no" Ordinal="5" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="start_date" Ordinal="6" DbType="5" />
+                    <Field Name="end_date" Ordinal="7" IsOptional="true" DbType="5" />
+                    <Field Name="rent_amount" Ordinal="8" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="deposit_amount" Ordinal="9" IsOptional="true" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="payment_day" Ordinal="10" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="status" Ordinal="11" HasDefaultValue="true" DefaultValue="'active'::character varying" DbType="24" Length="50" />
+                    <Field Name="notes" Ordinal="12" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="13" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="14" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="15" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="16" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="payment_cycles">
+                  <PkConstraintName Name="payment_cycles_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="200" />
+                    <Field Name="duration_months" Ordinal="4" HasDefaultValue="true" DefaultValue="1" DbType="9" Precision="10" />
+                    <Field Name="day_of_month" Ordinal="5" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="8" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="9" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+              </Tables>
+            </Schema>
+          </Schemas>
+          <ForeignKeyConstraints>
+            <ForeignKeyConstraint Name="lease:lease_residents:lease_residents_lease_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="lease:leases:id" FkField="lease:lease_residents:lease_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="lease:lease_service_set_items:lease_service_set_items_lease_service_set_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="lease:lease_service_sets:id" FkField="lease:lease_service_set_items:lease_service_set_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="lease:leases:leases_cycle_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="lease:payment_cycles:id" FkField="lease:leases:cycle_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="lease:leases:leases_parent_lease_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="lease:leases:id" FkField="lease:leases:parent_lease_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+          </ForeignKeyConstraints>
+        </Catalog>
+      </Catalogs>
+    </TargetDatabase>
+  </TargetDatabases>
+  <MappingStores>
+    <MappingStore Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F">
+      <EntityMappings>
+        <EntityMapping EntityName="Lease:Lease" TargetName="room_managerment:lease:leases">
+          <FieldMappings>
+            <FieldMapping FieldName="BookingId" TargetFieldName="booking_id" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="CycleId" TargetFieldName="cycle_id" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="DepositAmount" TargetFieldName="deposit_amount" />
+            <FieldMapping FieldName="EndDate" TargetFieldName="end_date" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="LeaseNo" TargetFieldName="lease_no" />
+            <FieldMapping FieldName="Notes" TargetFieldName="notes" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="ParentLeaseId" TargetFieldName="parent_lease_id" />
+            <FieldMapping FieldName="PaymentDay" TargetFieldName="payment_day" />
+            <FieldMapping FieldName="RentAmount" TargetFieldName="rent_amount" />
+            <FieldMapping FieldName="StartDate" TargetFieldName="start_date" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="UnitId" TargetFieldName="unit_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Lease:LeaseResident" TargetName="room_managerment:lease:lease_residents">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="Email" TargetFieldName="email" />
+            <FieldMapping FieldName="FullName" TargetFieldName="full_name" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IdNumber" TargetFieldName="id_number" />
+            <FieldMapping FieldName="IsPrimary" TargetFieldName="is_primary" />
+            <FieldMapping FieldName="LeaseId" TargetFieldName="lease_id" />
+            <FieldMapping FieldName="Phone" TargetFieldName="phone" />
+            <FieldMapping FieldName="Relationship" TargetFieldName="relationship" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Lease:LeaseServiceSet" TargetName="room_managerment:lease:lease_service_sets">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="Description" TargetFieldName="description" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="Name" TargetFieldName="name" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Lease:LeaseServiceSetItem" TargetName="room_managerment:lease:lease_service_set_items">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IsRequired" TargetFieldName="is_required" />
+            <FieldMapping FieldName="LeaseServiceSetId" TargetFieldName="lease_service_set_id" />
+            <FieldMapping FieldName="Price" TargetFieldName="price" />
+            <FieldMapping FieldName="ServiceId" TargetFieldName="service_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Lease:MasterLease" TargetName="room_managerment:lease:master_leases">
+          <FieldMappings>
+            <FieldMapping FieldName="ContractNo" TargetFieldName="contract_no" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="DepositAmount" TargetFieldName="deposit_amount" />
+            <FieldMapping FieldName="EndDate" TargetFieldName="end_date" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="LandlordUserId" TargetFieldName="landlord_user_id" />
+            <FieldMapping FieldName="Notes" TargetFieldName="notes" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="PaymentDay" TargetFieldName="payment_day" />
+            <FieldMapping FieldName="PropertyId" TargetFieldName="property_id" />
+            <FieldMapping FieldName="RentAmount" TargetFieldName="rent_amount" />
+            <FieldMapping FieldName="StartDate" TargetFieldName="start_date" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Lease:PaymentCycle" TargetName="room_managerment:lease:payment_cycles">
+          <FieldMappings>
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DayOfMonth" TargetFieldName="day_of_month" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="DurationMonths" TargetFieldName="duration_months" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="Name" TargetFieldName="name" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+      </EntityMappings>
+      <TypedViewMappings />
+      <SPCallMappings />
+      <TvfCallMappings />
+      <TypeConversionDefinitions />
+    </MappingStore>
+  </MappingStores>
+  <ModelViews />
+</Project>

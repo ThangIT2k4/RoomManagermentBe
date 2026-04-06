@@ -1,5 +1,4 @@
 using Auth.Domain.Common;
-using Auth.Domain.Enums;
 using Auth.Domain.Events;
 using Auth.Domain.Exceptions;
 using Auth.Domain.ValueObjects;
@@ -38,12 +37,30 @@ public sealed class SessionEntity : AggregateRoot<string>
         return entity;
     }
 
+    public static SessionEntity CreateSessionCookie(Guid userId, string token, string? ipAddress = null, string? userAgent = null, string? payloadJson = null, DateTime? createdAt = null)
+        => Create(userId, token, ipAddress, userAgent, payloadJson, null, createdAt);
+
+    public static SessionEntity CreateRemembered(Guid userId, string token, TimeSpan ttl, string? ipAddress = null, string? userAgent = null, string? payloadJson = null, DateTime? createdAt = null)
+    {
+        if (ttl <= TimeSpan.Zero)
+        {
+            throw new ArgumentOutOfRangeException(nameof(ttl));
+        }
+
+        return Create(userId, token, ipAddress, userAgent, payloadJson, DateTimeOffset.UtcNow.Add(ttl), createdAt);
+    }
+
     public static SessionEntity Reconstitute(string id, Guid userId, string? ipAddress, string? userAgent, string? payloadJson, DateTimeOffset lastActivity, DateTimeOffset? expiresAt, DateTime createdAt, bool isRevoked = false)
         => new(SessionToken.Create(id).Value, userId, ipAddress, userAgent, payloadJson, lastActivity, expiresAt, createdAt) { IsRevoked = isRevoked };
 
     public void Refresh(DateTimeOffset activityAt, string? payloadJson = null)
     {
-        if (IsExpired(activityAt))
+        if (IsRevoked)
+        {
+            throw new InvalidSessionException(InvalidSessionException.CodeRevoked);
+        }
+
+        if (ExpiresAt.HasValue && ExpiresAt.Value <= activityAt)
         {
             throw new InvalidSessionException(InvalidSessionException.CodeExpired);
         }

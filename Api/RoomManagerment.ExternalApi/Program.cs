@@ -35,7 +35,7 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.MapControllers();
 
-var port = Environment.GetEnvironmentVariable("EXTERNAL_API_PORT") ?? "5001";
+var port = Environment.GetEnvironmentVariable("EXTERNAL_API_PORT") ?? "5004";
 var protocol = app.Environment.IsDevelopment() ? "http" : "https";
 
 try

@@ -1,0 +1,664 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--LLBLGen Pro v5.13 project file. Do not manually edit this file. Incorrect references could lead to an unloadable project file.-->
+<Project Version="5.13" TargetFrameworkName="LLBLGen Pro Runtime Framework" UseLegacyDefaults="false">
+  <Properties>
+    <Abbreviations />
+    <Property Name="AdditionalTaskPerformerFolder" Value="" />
+    <Property Name="AdditionalTasksFolder" Value="" />
+    <Property Name="AdditionalTemplatesFolder" Value="" />
+    <Property Name="AdditionalTypeConverterFolder" Value="" />
+    <Property Name="AddNewElementsAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AddNewFieldsAfterRefresh_v5" Value="true" />
+    <Property Name="AddNewFieldsAfterRelationalModelDataSync_v5" Value="true" />
+    <Property Name="AddNewViewsAsEntitiesAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewViewsAsEntitiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AutoAddManyToManyRelationships" Value="false" />
+    <Property Name="AutoAssignSequencesToIntegerPks" Value="true" />
+    <Property Name="AutoAssignTypeConverterToFieldMapping" Value="true" />
+    <Property Name="AutomaticallyGenerateSourceCodeOnProjectSave" Value="true" />
+    <Property Name="ConnectionStringKeyNamePattern" Value="ConnectionString.{$ProviderName}" />
+    <Property Name="DefaultDDLSQLScriptDestinationFolder" Value=".\DDLSQLScripts" />
+    <Property Name="DefaultDeleteRuleAction" Value="1" />
+    <Property Name="DefaultSourceCodeDestinationFolder" Value=".\Code" />
+    <Property Name="DefaultUpdateRuleAction" Value="0" />
+    <Property Name="DeleteObsoleteFiles" Value="true" />
+    <Property Name="ElementNamePrefixPattern" Value="{$SchemaName}" />
+    <Property Name="ElementNamePrefixPatternIsAppliedWhen" Value="1" />
+    <Property Name="EncodingToUse" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForTable" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForView" Value="4" />
+    <Property Name="EntityFieldNameStripPattern" Value="{}{}" />
+    <Property Name="EntityNameStripPattern" Value="{tbl_}{}" />
+    <Property Name="ExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="FailCodeGenerationOnWriteError" Value="false" />
+    <Property Name="FieldMappedOntoRelatedFieldPattern" Value="{$RelatedFieldName}" />
+    <Property Name="FkFieldsAreNamedAfterTargetField" Value="true" />
+    <Property Name="ForeignKeyConstraintPattern" Value="FK_{$Guid}" />
+    <Property Name="ForeignKeyFieldPattern" Value="{$NavigatorName}{$RelatedFieldName}" />
+    <Property Name="GroupUsage" Value="0" />
+    <Property Name="IdentifyingFieldsFollowDBPrimaryKeyConstraints_v5" Value="true" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseInsensitiveDBs" Value="false" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseSensitiveDBs" Value="false" />
+    <Property Name="LengthPrecisionScaleFollowDBLengthPrecisionScale_v5" Value="true" />
+    <Property Name="MakeElementNamePascalCasing" Value="true" />
+    <Property Name="NavigatorMappedOntoManyToManyPattern" Value="{$EndEntityName}CollectionVia{$IntermediateEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneManyToOnePattern" Value="{$EndEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneToManyPattern" Value="{$EndEntityName$P}" />
+    <Property Name="NonExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="PreferDecimalOverCurrencyTypes" Value="true" />
+    <Property Name="PreferNaturalCharacterTypes" Value="true" />
+    <Property Name="PreferSystemSequencesOverSchemaSequencesIfApplicable" Value="true" />
+    <Property Name="PreferVariableLengthTypes" Value="true" />
+    <Property Name="PrimaryKeyConstraintPattern" Value="PK_{$Guid}" />
+    <Property Name="ProjectCreator" Value="TranDucThang" />
+    <Property Name="ProjectName" Value="RoomManagerment.CRM" />
+    <Property Name="ReflectNullabilityOfElementFieldInTargetField_v5" Value="false" />
+    <Property Name="ReflectTypeOfElementFieldInTargetField_v5" Value="true" />
+    <Property Name="RelationalModelDataElementNameCasingCaseInsensitiveDBs" Value="3" />
+    <Property Name="RelationalModelDataElementNameCasingCaseSensitiveDBs" Value="3" />
+    <Property Name="RelationshipsFollowDBForeignKeyConstraints_v5" Value="true" />
+    <Property Name="RemoveUnderscoresFromElementName" Value="true" />
+    <Property Name="RemoveUnmappedElementsAfterRefresh_v5" Value="false" />
+    <Property Name="RemoveUnmappedElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRefresh" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRelationalModelDataSync" Value="false" />
+    <Property Name="RetrieveDBCustomProperties" Value="false" />
+    <Property Name="RootNamespace" Value="" />
+    <Property Name="SequenceNameMatchingPattern" Value="SEQ_{$TableName}" />
+    <Property Name="SequencePattern" Value="SEQ_{$EntityName}" />
+    <Property Name="SetGroupNameAfterSchemaName" Value="true" />
+    <Property Name="SetSchemaNameAfterGroupName" Value="true" />
+    <Property Name="SingularizeElementNames" Value="true" />
+    <Property Name="StoredProcNameStripPattern" Value="{pr_, sp_}{}" />
+    <Property Name="StoreTimeLastGeneratedIntoProject" Value="false" />
+    <Property Name="StoreTimeLastSyncIntoProject" Value="true" />
+    <Property Name="SyncCustomFieldOrderingWithTableFieldIndex" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="SyncRelationalModelDataElementNameWithModelElementName_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="TableValuedFunctionNameStripPattern" Value="{fn_, pr_, sp_}{}" />
+    <Property Name="TargetPerEntityEdgesRequireBackingFkConstraint" Value="true" />
+    <Property Name="TypedViewFieldNameStripPattern" Value="{}{}" />
+    <Property Name="TypedViewMappedOnResultsetPattern" Value="{$ProcFunctionName}{$ResultsetName}Result" />
+    <Property Name="TypedViewNameStripPattern" Value="{vw_}{}" />
+    <Property Name="UniqueConstraintPattern" Value="UC_{$Guid}" />
+    <Property Name="UniqueConstraintsFollowDBUniqueConstraints_v5" Value="true" />
+    <Property Name="UpdateCustomPropertiesAfterRefresh_v5" Value="false" />
+    <Property Name="UpdateCustomPropertiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="UseCustomFieldOrderingOnNewElements" Value="false" />
+  </Properties>
+  <TypeShortcuts />
+  <IgnoredWarnings />
+  <SavedSearchQueries />
+  <CodeGenerationCyclePreferences>
+    <OutputType Value="3">
+      <LastUsedPreferences>
+        <DestinationRootFolder Value="Z:\WorkSpace\Projects\RoomManagerment\RoomManagermentBe\Modules\CRM\DAL" />
+        <FrameworkName Value="LLBLGen Pro Runtime Framework" />
+        <LanguageName Value="C#" />
+        <PlatformName Value=".NET 9" />
+        <PresetName Value="SD.Presets.Adapter.General.Netstandard" />
+        <RootNamespace Value="RoomManagerment.CRM" />
+        <TemplateGroup Value="Adapter" />
+        <TemplateBindings>
+          <Binding Name="SD.TemplateBindings.PostgreSqlSpecific" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates.Net9" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates" />
+          <Binding Name="SD.TemplateBindings.General" />
+        </TemplateBindings>
+        <AdhocTemplateSets />
+      </LastUsedPreferences>
+    </OutputType>
+  </CodeGenerationCyclePreferences>
+  <CodeGenerationMetaDataDefaults>
+    <TargetElement Type="256">
+      <Defaults>
+        <Attributes>
+          <Attribute Value="Browsable($false)" />
+        </Attributes>
+      </Defaults>
+    </TargetElement>
+  </CodeGenerationMetaDataDefaults>
+  <EntityModel>
+    <ValueTypeDefinitions />
+    <EntityDefinitions>
+      <EntityDefinition Name="BookingDeposit" GroupName="Crm" ObjectID="5d3b048f-309b-4e7d-81bf-4762e7f101ef">
+        <Fields>
+          <Field Name="AgentId" Type="guid" IsOptional="true" />
+          <Field Name="Amount" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="ApprovedAt" Type="datetime" IsOptional="true" />
+          <Field Name="ApprovedBy" Type="guid" IsOptional="true" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="DepositType" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="ExpiredAt" Type="datetime" IsOptional="true" />
+          <Field Name="HoldUntil" Type="datetime" IsOptional="true" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="LeadId" Type="guid" IsOptional="true" />
+          <Field Name="Notes" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="PaidAt" Type="datetime" IsOptional="true" />
+          <Field Name="PaymentDetails" Type="string" IsOptional="true" />
+          <Field Name="PaymentDueDate" Type="datetime" IsOptional="true" />
+          <Field Name="PaymentStatus" Type="string" MaxLength="50" />
+          <Field Name="ReferenceNumber" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="TenantUserId" Type="guid" IsOptional="true" />
+          <Field Name="UnitId" Type="guid" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="ViewingId" Type="guid" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="CommissionEvent" GroupName="Crm" ObjectID="a08f3f4b-4c6c-443c-91a3-4f5d1837f53f">
+        <Fields>
+          <Field Name="AgentId" Type="guid" IsOptional="true" />
+          <Field Name="AmountBase" Type="decimal" IsOptional="true" Precision="15" Scale="2" />
+          <Field Name="CommissionTotal" Type="decimal" Precision="15" Scale="2" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="LeaseId" Type="guid" IsOptional="true" />
+          <Field Name="OccurredAt" Type="datetime" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="PolicyId" Type="guid" IsOptional="true" />
+          <Field Name="RefId" Type="guid" IsOptional="true" />
+          <Field Name="RefType" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="Status" Type="string" MaxLength="50" />
+          <Field Name="TriggerEvent" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="UnitId" Type="guid" IsOptional="true" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="CommissionPolicy" GroupName="Crm" ObjectID="5e730cdb-784c-4160-ae91-919d0402bda1">
+        <Fields>
+          <Field Name="ApplyLimitMonths" Type="int" IsOptional="true" Precision="10" />
+          <Field Name="Basis" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="CalcType" Type="string" MaxLength="50" />
+          <Field Name="CapAmount" Type="decimal" IsOptional="true" Precision="15" Scale="2" />
+          <Field Name="Code" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="FiltersJson" Type="string" IsOptional="true" />
+          <Field Name="FlatAmount" Type="decimal" IsOptional="true" Precision="15" Scale="2" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="IsActive" Type="bool" />
+          <Field Name="MinAmount" Type="decimal" IsOptional="true" Precision="15" Scale="2" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="PercentValue" Type="decimal" IsOptional="true" Precision="10" Scale="4" />
+          <Field Name="Title" Type="string" MaxLength="255" />
+          <Field Name="TriggerEvent" Type="string" MaxLength="100" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="Lead" GroupName="Crm" ObjectID="6669fe2b-9aa4-4139-bd3f-881969a74115">
+        <Fields>
+          <Field Name="AssignedTo" Type="guid" IsOptional="true" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="Email" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="FullName" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="Notes" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="Phone" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="Source" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="Status" Type="string" MaxLength="50" />
+          <Field Name="TenantId" Type="guid" IsOptional="true" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="Review" GroupName="Crm" ObjectID="94ee75b9-41f5-4173-9645-bb9350c4f5c2">
+        <Fields>
+          <Field Name="Content" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="IsPublic" Type="bool" />
+          <Field Name="LeaseId" Type="guid" IsOptional="true" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="Rating" Type="short" Precision="5" />
+          <Field Name="UnitId" Type="guid" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UserId" Type="guid" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="ReviewReply" GroupName="Crm" ObjectID="06a78224-a2c8-4cbd-8e14-8d994e0ac828">
+        <Fields>
+          <Field Name="Content" Type="string" MaxLength="1073741824" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="ReviewId" Type="guid" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UserId" Type="guid" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="Viewing" GroupName="Crm" ObjectID="388a65d6-53b8-4419-9c21-7d9503479cd5">
+        <Fields>
+          <Field Name="AgentId" Type="guid" IsOptional="true" />
+          <Field Name="Checklist" Type="string" IsOptional="true" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
+          <Field Name="FeedbackNotes" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="FeedbackRating" Type="short" IsOptional="true" Precision="5" />
+          <Field Name="Id" Type="guid" IsPrimaryKey="true" />
+          <Field Name="IsVirtual" Type="bool" />
+          <Field Name="LeadEmail" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="LeadId" Type="guid" IsOptional="true" />
+          <Field Name="LeadName" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="LeadPhone" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="Note" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="OrganizationId" Type="guid" />
+          <Field Name="PropertyId" Type="guid" IsOptional="true" />
+          <Field Name="ResultNote" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="RouteData" Type="string" IsOptional="true" />
+          <Field Name="RouteOptimized" Type="bool" />
+          <Field Name="ScheduleAt" Type="datetime" />
+          <Field Name="Status" Type="string" MaxLength="50" />
+          <Field Name="TenantId" Type="guid" IsOptional="true" />
+          <Field Name="UnitId" Type="guid" IsOptional="true" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="VirtualViewingLink" Type="string" IsOptional="true" MaxLength="1073741824" />
+        </Fields>
+      </EntityDefinition>
+    </EntityDefinitions>
+    <Relationships>
+      <NormalRelationship Name="Crm.BookingDeposit.Lead-Crm.Lead.BookingDeposits" Start="Crm:BookingDeposit" End="Crm:Lead" StartNavigator="Lead" EndNavigator="BookingDeposits" Type="4" EndIsOptional="true">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="LeadId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Crm.BookingDeposit.Viewing-Crm.Viewing.BookingDeposits" Start="Crm:BookingDeposit" End="Crm:Viewing" StartNavigator="Viewing" EndNavigator="BookingDeposits" Type="4" EndIsOptional="true">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ViewingId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Crm.CommissionEvent.CommissionPolicy-Crm.CommissionPolicy.CommissionEvents" Start="Crm:CommissionEvent" End="Crm:CommissionPolicy" StartNavigator="CommissionPolicy" EndNavigator="CommissionEvents" Type="4" EndIsOptional="true">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="PolicyId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Crm.ReviewReply.Review-Crm.Review.ReviewReplies" Start="Crm:ReviewReply" End="Crm:Review" StartNavigator="Review" EndNavigator="ReviewReplies" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ReviewId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="Crm.Viewing.Lead-Crm.Lead.Viewings" Start="Crm:Viewing" End="Crm:Lead" StartNavigator="Lead" EndNavigator="Viewings" Type="4" EndIsOptional="true">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="LeadId" PkField="Id" />
+        </FieldRelationships>
+      </NormalRelationship>
+    </Relationships>
+    <InheritanceHierarchies />
+  </EntityModel>
+  <TargetDatabases>
+    <TargetDatabase Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F" SyncSource="2">
+      <ConnectionElements>
+        <ConnectionElement Name="ServerName" Value="room-managerment.postgres.database.azure.com" />
+        <ConnectionElement Name="CatalogName" Value="room_managerment" />
+        <ConnectionElement Name="UserID" Value="room_managerment" />
+        <ConnectionElement Name="Password" Value="" />
+        <ConnectionElement Name="PortNumber" Value="5432" />
+        <ConnectionElement Name="SslMode" Value="Require" />
+        <ConnectionElement Name="CustomFragments" Value="" />
+      </ConnectionElements>
+      <SystemSequences>
+        <Sequence Name="SystemIdentity" />
+      </SystemSequences>
+      <Catalogs>
+        <Catalog Name="room_managerment" SyncSource="2">
+          <Schemas>
+            <Schema Name="crm" SyncSource="2" LastSyncWithDatabase="2026-04-04T19:26:35.6735501Z">
+              <Tables>
+                <Table Name="booking_deposits">
+                  <PkConstraintName Name="booking_deposits_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="unit_id" Ordinal="3" DbType="28" />
+                    <Field Name="tenant_user_id" Ordinal="4" IsOptional="true" DbType="28" />
+                    <Field Name="lead_id" Ordinal="5" IsOptional="true" DbType="28" />
+                    <Field Name="viewing_id" Ordinal="6" IsOptional="true" DbType="28" />
+                    <Field Name="agent_id" Ordinal="7" IsOptional="true" DbType="28" />
+                    <Field Name="amount" Ordinal="8" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="payment_status" Ordinal="9" HasDefaultValue="true" DefaultValue="'pending'::character varying" DbType="24" Length="50" />
+                    <Field Name="deposit_type" Ordinal="10" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="hold_until" Ordinal="11" IsOptional="true" DbType="23" />
+                    <Field Name="payment_due_date" Ordinal="12" IsOptional="true" DbType="23" />
+                    <Field Name="approved_at" Ordinal="13" IsOptional="true" DbType="23" />
+                    <Field Name="approved_by" Ordinal="14" IsOptional="true" DbType="28" />
+                    <Field Name="paid_at" Ordinal="15" IsOptional="true" DbType="23" />
+                    <Field Name="expired_at" Ordinal="16" IsOptional="true" DbType="23" />
+                    <Field Name="notes" Ordinal="17" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="payment_details" Ordinal="18" IsOptional="true" DbType="30" />
+                    <Field Name="reference_number" Ordinal="19" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="created_at" Ordinal="20" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="21" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="22" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="23" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="commission_events">
+                  <PkConstraintName Name="commission_events_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="policy_id" Ordinal="2" IsOptional="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="3" DbType="28" />
+                    <Field Name="trigger_event" Ordinal="4" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="ref_type" Ordinal="5" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="ref_id" Ordinal="6" IsOptional="true" DbType="28" />
+                    <Field Name="lease_id" Ordinal="7" IsOptional="true" DbType="28" />
+                    <Field Name="unit_id" Ordinal="8" IsOptional="true" DbType="28" />
+                    <Field Name="agent_id" Ordinal="9" IsOptional="true" DbType="28" />
+                    <Field Name="occurred_at" Ordinal="10" DbType="23" />
+                    <Field Name="amount_base" Ordinal="11" IsOptional="true" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="commission_total" Ordinal="12" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="status" Ordinal="13" HasDefaultValue="true" DefaultValue="'pending'::character varying" DbType="24" Length="50" />
+                    <Field Name="created_at" Ordinal="14" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="15" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="16" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="17" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="commission_policies">
+                  <PkConstraintName Name="commission_policies_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="code" Ordinal="3" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="title" Ordinal="4" DbType="24" Length="255" />
+                    <Field Name="trigger_event" Ordinal="5" DbType="24" Length="100" />
+                    <Field Name="basis" Ordinal="6" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="calc_type" Ordinal="7" DbType="24" Length="50" />
+                    <Field Name="percent_value" Ordinal="8" IsOptional="true" DbType="14" Precision="10" Scale="4" />
+                    <Field Name="flat_amount" Ordinal="9" IsOptional="true" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="apply_limit_months" Ordinal="10" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="min_amount" Ordinal="11" IsOptional="true" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="cap_amount" Ordinal="12" IsOptional="true" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="filters_json" Ordinal="13" IsOptional="true" DbType="30" />
+                    <Field Name="is_active" Ordinal="14" HasDefaultValue="true" DefaultValue="true" DbType="0" />
+                    <Field Name="created_at" Ordinal="15" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="16" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="17" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="18" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="leads">
+                  <PkConstraintName Name="leads_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="tenant_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="full_name" Ordinal="4" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="email" Ordinal="5" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="phone" Ordinal="6" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="source" Ordinal="7" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="status" Ordinal="8" HasDefaultValue="true" DefaultValue="'new'::character varying" DbType="24" Length="50" />
+                    <Field Name="assigned_to" Ordinal="9" IsOptional="true" DbType="28" />
+                    <Field Name="notes" Ordinal="10" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="11" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="12" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="13" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="14" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="review_replies">
+                  <PkConstraintName Name="review_replies_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="review_id" Ordinal="2" DbType="28" />
+                    <Field Name="user_id" Ordinal="3" DbType="28" />
+                    <Field Name="content" Ordinal="4" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="5" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="6" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="7" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="8" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="reviews">
+                  <PkConstraintName Name="reviews_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="unit_id" Ordinal="3" DbType="28" />
+                    <Field Name="user_id" Ordinal="4" DbType="28" />
+                    <Field Name="lease_id" Ordinal="5" IsOptional="true" DbType="28" />
+                    <Field Name="rating" Ordinal="6" DbType="8" Precision="5" />
+                    <Field Name="content" Ordinal="7" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="is_public" Ordinal="8" HasDefaultValue="true" DefaultValue="true" DbType="0" />
+                    <Field Name="created_at" Ordinal="9" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="10" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="11" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="12" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="viewings">
+                  <PkConstraintName Name="viewings_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="lead_id" Ordinal="2" IsOptional="true" DbType="28" />
+                    <Field Name="tenant_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="property_id" Ordinal="4" IsOptional="true" DbType="28" />
+                    <Field Name="unit_id" Ordinal="5" IsOptional="true" DbType="28" />
+                    <Field Name="agent_id" Ordinal="6" IsOptional="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="7" DbType="28" />
+                    <Field Name="lead_name" Ordinal="8" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="lead_phone" Ordinal="9" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="lead_email" Ordinal="10" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="schedule_at" Ordinal="11" DbType="23" />
+                    <Field Name="status" Ordinal="12" HasDefaultValue="true" DefaultValue="'scheduled'::character varying" DbType="24" Length="50" />
+                    <Field Name="result_note" Ordinal="13" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="note" Ordinal="14" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="checklist" Ordinal="15" IsOptional="true" DbType="30" />
+                    <Field Name="feedback_notes" Ordinal="16" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="feedback_rating" Ordinal="17" IsOptional="true" DbType="8" Precision="5" />
+                    <Field Name="virtual_viewing_link" Ordinal="18" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="is_virtual" Ordinal="19" HasDefaultValue="true" DefaultValue="false" DbType="0" />
+                    <Field Name="route_optimized" Ordinal="20" HasDefaultValue="true" DefaultValue="false" DbType="0" />
+                    <Field Name="route_data" Ordinal="21" IsOptional="true" DbType="30" />
+                    <Field Name="created_at" Ordinal="22" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="23" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="24" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="25" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+              </Tables>
+            </Schema>
+          </Schemas>
+          <ForeignKeyConstraints>
+            <ForeignKeyConstraint Name="crm:booking_deposits:booking_deposits_lead_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="crm:leads:id" FkField="crm:booking_deposits:lead_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="crm:booking_deposits:booking_deposits_viewing_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="crm:viewings:id" FkField="crm:booking_deposits:viewing_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="crm:commission_events:commission_events_policy_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="crm:commission_policies:id" FkField="crm:commission_events:policy_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="crm:review_replies:review_replies_review_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="crm:reviews:id" FkField="crm:review_replies:review_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="crm:viewings:viewings_lead_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="crm:leads:id" FkField="crm:viewings:lead_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+          </ForeignKeyConstraints>
+        </Catalog>
+      </Catalogs>
+    </TargetDatabase>
+  </TargetDatabases>
+  <MappingStores>
+    <MappingStore Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F">
+      <EntityMappings>
+        <EntityMapping EntityName="Crm:BookingDeposit" TargetName="room_managerment:crm:booking_deposits">
+          <FieldMappings>
+            <FieldMapping FieldName="AgentId" TargetFieldName="agent_id" />
+            <FieldMapping FieldName="Amount" TargetFieldName="amount" />
+            <FieldMapping FieldName="ApprovedAt" TargetFieldName="approved_at" />
+            <FieldMapping FieldName="ApprovedBy" TargetFieldName="approved_by" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="DepositType" TargetFieldName="deposit_type" />
+            <FieldMapping FieldName="ExpiredAt" TargetFieldName="expired_at" />
+            <FieldMapping FieldName="HoldUntil" TargetFieldName="hold_until" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="LeadId" TargetFieldName="lead_id" />
+            <FieldMapping FieldName="Notes" TargetFieldName="notes" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="PaidAt" TargetFieldName="paid_at" />
+            <FieldMapping FieldName="PaymentDetails" TargetFieldName="payment_details" />
+            <FieldMapping FieldName="PaymentDueDate" TargetFieldName="payment_due_date" />
+            <FieldMapping FieldName="PaymentStatus" TargetFieldName="payment_status" />
+            <FieldMapping FieldName="ReferenceNumber" TargetFieldName="reference_number" />
+            <FieldMapping FieldName="TenantUserId" TargetFieldName="tenant_user_id" />
+            <FieldMapping FieldName="UnitId" TargetFieldName="unit_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="ViewingId" TargetFieldName="viewing_id" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Crm:CommissionEvent" TargetName="room_managerment:crm:commission_events">
+          <FieldMappings>
+            <FieldMapping FieldName="AgentId" TargetFieldName="agent_id" />
+            <FieldMapping FieldName="AmountBase" TargetFieldName="amount_base" />
+            <FieldMapping FieldName="CommissionTotal" TargetFieldName="commission_total" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="LeaseId" TargetFieldName="lease_id" />
+            <FieldMapping FieldName="OccurredAt" TargetFieldName="occurred_at" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="PolicyId" TargetFieldName="policy_id" />
+            <FieldMapping FieldName="RefId" TargetFieldName="ref_id" />
+            <FieldMapping FieldName="RefType" TargetFieldName="ref_type" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="TriggerEvent" TargetFieldName="trigger_event" />
+            <FieldMapping FieldName="UnitId" TargetFieldName="unit_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Crm:CommissionPolicy" TargetName="room_managerment:crm:commission_policies">
+          <FieldMappings>
+            <FieldMapping FieldName="ApplyLimitMonths" TargetFieldName="apply_limit_months" />
+            <FieldMapping FieldName="Basis" TargetFieldName="basis" />
+            <FieldMapping FieldName="CalcType" TargetFieldName="calc_type" />
+            <FieldMapping FieldName="CapAmount" TargetFieldName="cap_amount" />
+            <FieldMapping FieldName="Code" TargetFieldName="code" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="FiltersJson" TargetFieldName="filters_json" />
+            <FieldMapping FieldName="FlatAmount" TargetFieldName="flat_amount" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IsActive" TargetFieldName="is_active" />
+            <FieldMapping FieldName="MinAmount" TargetFieldName="min_amount" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="PercentValue" TargetFieldName="percent_value" />
+            <FieldMapping FieldName="Title" TargetFieldName="title" />
+            <FieldMapping FieldName="TriggerEvent" TargetFieldName="trigger_event" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Crm:Lead" TargetName="room_managerment:crm:leads">
+          <FieldMappings>
+            <FieldMapping FieldName="AssignedTo" TargetFieldName="assigned_to" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="Email" TargetFieldName="email" />
+            <FieldMapping FieldName="FullName" TargetFieldName="full_name" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="Notes" TargetFieldName="notes" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="Phone" TargetFieldName="phone" />
+            <FieldMapping FieldName="Source" TargetFieldName="source" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="TenantId" TargetFieldName="tenant_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Crm:Review" TargetName="room_managerment:crm:reviews">
+          <FieldMappings>
+            <FieldMapping FieldName="Content" TargetFieldName="content" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IsPublic" TargetFieldName="is_public" />
+            <FieldMapping FieldName="LeaseId" TargetFieldName="lease_id" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="Rating" TargetFieldName="rating" />
+            <FieldMapping FieldName="UnitId" TargetFieldName="unit_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Crm:ReviewReply" TargetName="room_managerment:crm:review_replies">
+          <FieldMappings>
+            <FieldMapping FieldName="Content" TargetFieldName="content" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="ReviewId" TargetFieldName="review_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName="Crm:Viewing" TargetName="room_managerment:crm:viewings">
+          <FieldMappings>
+            <FieldMapping FieldName="AgentId" TargetFieldName="agent_id" />
+            <FieldMapping FieldName="Checklist" TargetFieldName="checklist" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
+            <FieldMapping FieldName="FeedbackNotes" TargetFieldName="feedback_notes" />
+            <FieldMapping FieldName="FeedbackRating" TargetFieldName="feedback_rating" />
+            <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IsVirtual" TargetFieldName="is_virtual" />
+            <FieldMapping FieldName="LeadEmail" TargetFieldName="lead_email" />
+            <FieldMapping FieldName="LeadId" TargetFieldName="lead_id" />
+            <FieldMapping FieldName="LeadName" TargetFieldName="lead_name" />
+            <FieldMapping FieldName="LeadPhone" TargetFieldName="lead_phone" />
+            <FieldMapping FieldName="Note" TargetFieldName="note" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
+            <FieldMapping FieldName="PropertyId" TargetFieldName="property_id" />
+            <FieldMapping FieldName="ResultNote" TargetFieldName="result_note" />
+            <FieldMapping FieldName="RouteData" TargetFieldName="route_data" />
+            <FieldMapping FieldName="RouteOptimized" TargetFieldName="route_optimized" />
+            <FieldMapping FieldName="ScheduleAt" TargetFieldName="schedule_at" />
+            <FieldMapping FieldName="Status" TargetFieldName="status" />
+            <FieldMapping FieldName="TenantId" TargetFieldName="tenant_id" />
+            <FieldMapping FieldName="UnitId" TargetFieldName="unit_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="VirtualViewingLink" TargetFieldName="virtual_viewing_link" />
+          </FieldMappings>
+        </EntityMapping>
+      </EntityMappings>
+      <TypedViewMappings />
+      <SPCallMappings />
+      <TvfCallMappings />
+      <TypeConversionDefinitions />
+    </MappingStore>
+  </MappingStores>
+  <ModelViews />
+</Project>

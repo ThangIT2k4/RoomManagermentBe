@@ -37,29 +37,50 @@ namespace RoomManagerment.Notification.DatabaseSpecific
 		{
 			this.InitClass();
 			InitNotificationEntityMappings();
-			InitUserNotificationEntityMappings();
+			InitNotificationChannelEntityMappings();
+			InitUserNotificationPreferenceEntityMappings();
 		}
 
 		/// <summary>Inits NotificationEntity's mappings</summary>
 		private void InitNotificationEntityMappings()
 		{
-			this.AddElementMapping("NotificationEntity", @"postgres", @"notifications", "notifications", 5, 0);
-			this.AddElementFieldMapping("NotificationEntity", "Content", "content", false, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("NotificationEntity", "CreatedAt", "created_at", false, "Timestamp", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
-			this.AddElementFieldMapping("NotificationEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
-			this.AddElementFieldMapping("NotificationEntity", "Title", "title", false, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("NotificationEntity", "Type", "type", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementMapping("NotificationEntity", @"room_managerment", @"notify", "notifications", 11, 0);
+			this.AddElementFieldMapping("NotificationEntity", "AuditLogId", "audit_log_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 0);
+			this.AddElementFieldMapping("NotificationEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
+			this.AddElementFieldMapping("NotificationEntity", "EntityId", "entity_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
+			this.AddElementFieldMapping("NotificationEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 3);
+			this.AddElementFieldMapping("NotificationEntity", "IsRead", "is_read", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+			this.AddElementFieldMapping("NotificationEntity", "Message", "message", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("NotificationEntity", "NotificationChannelId", "notification_channel_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 6);
+			this.AddElementFieldMapping("NotificationEntity", "ReadAt", "read_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
+			this.AddElementFieldMapping("NotificationEntity", "Title", "title", true, "Varchar", 500, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("NotificationEntity", "Type", "type", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("NotificationEntity", "UserId", "user_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 10);
 		}
 
-		/// <summary>Inits UserNotificationEntity's mappings</summary>
-		private void InitUserNotificationEntityMappings()
+		/// <summary>Inits NotificationChannelEntity's mappings</summary>
+		private void InitNotificationChannelEntityMappings()
 		{
-			this.AddElementMapping("UserNotificationEntity", @"postgres", @"notifications", "user_notifications", 5, 0);
-			this.AddElementFieldMapping("UserNotificationEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 0);
-			this.AddElementFieldMapping("UserNotificationEntity", "IsRead", "is_read", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
-			this.AddElementFieldMapping("UserNotificationEntity", "NotificationId", "notification_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
-			this.AddElementFieldMapping("UserNotificationEntity", "ReadAt", "read_at", true, "Timestamp", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
-			this.AddElementFieldMapping("UserNotificationEntity", "UserId", "user_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 4);
+			this.AddElementMapping("NotificationChannelEntity", @"room_managerment", @"notify", "notification_channels", 6, 0);
+			this.AddElementFieldMapping("NotificationChannelEntity", "Channel", "channel", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
+			this.AddElementFieldMapping("NotificationChannelEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
+			this.AddElementFieldMapping("NotificationChannelEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
+			this.AddElementFieldMapping("NotificationChannelEntity", "KeyCode", "key_code", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("NotificationChannelEntity", "Name", "name", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("NotificationChannelEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 5);
+		}
+
+		/// <summary>Inits UserNotificationPreferenceEntity's mappings</summary>
+		private void InitUserNotificationPreferenceEntityMappings()
+		{
+			this.AddElementMapping("UserNotificationPreferenceEntity", @"room_managerment", @"notify", "user_notification_preferences", 7, 0);
+			this.AddElementFieldMapping("UserNotificationPreferenceEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
+			this.AddElementFieldMapping("UserNotificationPreferenceEntity", "EmailEnabled", "email_enabled", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 1);
+			this.AddElementFieldMapping("UserNotificationPreferenceEntity", "EntityType", "entity_type", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("UserNotificationPreferenceEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 3);
+			this.AddElementFieldMapping("UserNotificationPreferenceEntity", "InAppEnabled", "in_app_enabled", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+			this.AddElementFieldMapping("UserNotificationPreferenceEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 5);
+			this.AddElementFieldMapping("UserNotificationPreferenceEntity", "UserId", "user_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 6);
 		}
 
 	}

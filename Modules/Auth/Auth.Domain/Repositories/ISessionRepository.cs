@@ -15,12 +15,15 @@ public interface ISessionRepository
         int pageSize = 20,
         bool includeExpired = false,
         CancellationToken cancellationToken = default);
-
+    Task<IReadOnlyCollection<SessionEntity>> GetActiveByUserAsync(
+        Guid userId,
+        CancellationToken cancellationToken = default);
     Task<long> DeleteExpiredAsync(
         DateTimeOffset now,
         CancellationToken cancellationToken = default);
-
-    Task<long> DeleteAllByUserAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<long> DeleteAllByUserAsync(
+        Guid userId,
+        CancellationToken cancellationToken = default);
 
     Task<long> DeleteAllByUserExceptAsync(
         Guid userId,

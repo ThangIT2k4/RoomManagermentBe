@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\DAL\DatabaseGeneric\RoomManagerment.Organizations.csproj" />
+    <ProjectReference Include="..\DAL\DatabaseSpecific\RoomManagerment.OrganizationsDBSpecific.csproj" />
+    <ProjectReference Include="..\Organization.Application\Organization.Application.csproj" />
+    <ProjectReference Include="..\Organization.Domain\Organization.Domain.csproj" />
+  </ItemGroup>
+</Project>
+
