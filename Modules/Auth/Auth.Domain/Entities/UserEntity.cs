@@ -200,7 +200,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
 
         EmailVerifiedAt = verifiedAt;
         UpdatedAt = verifiedAt;
-        AddDomainEvent(new UserEmailVerifiedEvent(Id, DateTimeOffset.UtcNow));
+        AddDomainEvent(new UserEmailVerifiedEvent(Id, Email.Value, DateTimeOffset.UtcNow));
     }
 
     public void MarkPhoneVerified(DateTime verifiedAt)
@@ -212,7 +212,7 @@ public sealed class UserEntity : AggregateRoot<Guid>
         AddDomainEvent(new UserPhoneVerifiedEvent(Id, DateTimeOffset.UtcNow));
     }
 
-    public void RecordLogin(DateTime loginAt, string? rememberToken = null)
+    public void RecordLogin(DateTime loginAt, string? rememberToken = null, string? ipAddress = null)
     {
         EnsureUtc(loginAt);
 
@@ -226,7 +226,24 @@ public sealed class UserEntity : AggregateRoot<Guid>
         LastLoginAt = loginAt;
         RememberToken = rememberToken;
         UpdatedAt = loginAt;
-        AddDomainEvent(new UserLoginRecordedEvent(Id, DateTimeOffset.UtcNow));
+        AddDomainEvent(new UserLoginRecordedEvent(Id, Username?.Value, ipAddress, DateTimeOffset.UtcNow));
+    }
+
+    public void ClearRememberToken(DateTime changedAt)
+    {
+        EnsureUtc(changedAt);
+        RememberToken = null;
+        UpdatedAt = changedAt;
+    }
+
+    public void VerifyEmailAndActivate(DateTime changedAt)
+    {
+        EnsureUtc(changedAt);
+        MarkEmailVerified(changedAt);
+        if (Status == UserStatus.Inactive)
+        {
+            Activate(changedAt);
+        }
     }
 
     public void Activate(DateTime changedAt)

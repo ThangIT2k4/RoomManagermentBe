@@ -29,7 +29,7 @@ internal static class AuthIntegrationEventMapper
                 new UserLoggedInEvent
                 {
                     UserId = e.UserId,
-                    Username = e.Username,
+                    Username = e.Username ?? string.Empty,
                     IpAddress = e.IpAddress ?? string.Empty,
                     LoggedInAt = e.OccurredOn.UtcDateTime
                 }),

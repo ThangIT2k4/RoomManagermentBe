@@ -19,4 +19,11 @@ public interface ISessionRepository
     Task<long> DeleteExpiredAsync(
         DateTimeOffset now,
         CancellationToken cancellationToken = default);
+
+    Task<long> DeleteAllByUserAsync(Guid userId, CancellationToken cancellationToken = default);
+
+    Task<long> DeleteAllByUserExceptAsync(
+        Guid userId,
+        string exceptSessionId,
+        CancellationToken cancellationToken = default);
 }

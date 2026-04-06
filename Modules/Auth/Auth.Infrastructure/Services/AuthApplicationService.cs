@@ -173,7 +173,7 @@ public sealed class AuthApplicationService(
         return Result<PagedUsersResult>.Success(new PagedUsersResult(
             paged.Items.Select(MapUser).ToList(),
             paged.TotalCount,
-            paged.Page,
+            paged.PageNumber,
             paged.PageSize,
             paged.TotalPages));
     }
@@ -361,7 +361,7 @@ public sealed class AuthApplicationService(
         return Result<PagedSessionsResult>.Success(new PagedSessionsResult(
             paged.Items.Select(MapSession).ToList(),
             paged.TotalCount,
-            paged.Page,
+            paged.PageNumber,
             paged.PageSize,
             paged.TotalPages));
     }
@@ -439,7 +439,7 @@ public sealed class AuthApplicationService(
     {
         var paging = PagingInput.Create(request.PageNumber, request.PageSize);
         var linq = new AuthLinqMetaData(adapter);
-        var query = linq.Capability.AsQueryable();
+        IQueryable<RoomManagerment.Auth.EntityClasses.CapabilityEntity> query = linq.Capability;
 
         var search = SearchInput.Normalize(request.SearchTerm);
         if (!string.IsNullOrWhiteSpace(search))

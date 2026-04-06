@@ -22,7 +22,7 @@ public static class DependencyInjection
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(MediatorAssemblyMarker).Assembly));
         services.AddScoped<IMediatorGateway, MediatorGateway>();
         services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
-        // services.AddScoped<IOrganizationMembershipGateway, OrganizationMembershipGateway>();
+        services.AddScoped<IOrganizationMembershipGateway, NoOpOrganizationMembershipGateway>();
         services.AddScoped<IAuthApplicationService, AuthApplicationService>();
         services.AddSingleton<ICacheService, RedisCacheService>();
         services.AddSingleton<RabbitMqIntegrationEventPublisher>();
@@ -38,6 +38,11 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
+        services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<ICapabilityRepository, CapabilityRepository>();
+        services.AddScoped<IEmailOtpRepository, EmailOtpRepository>();
+        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
         return services;
     }
 }

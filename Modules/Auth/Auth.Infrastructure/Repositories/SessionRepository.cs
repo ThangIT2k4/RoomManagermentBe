@@ -91,11 +91,11 @@ public sealed class SessionRepository(
             .Take(paging.PageSize)
             .ToListAsync(cancellationToken);
 
-        return new PagedResult<SessionEntity>(
+        return PagedResult<SessionEntity>.Create(
             items.Select(x => x.ToDomain()).ToList(),
-            (int)totalCount,
             paging.PageNumber,
-            paging.PageSize);
+            paging.PageSize,
+            totalCount);
     }
 
     public async Task<IReadOnlyCollection<SessionEntity>> GetActiveByUserAsync(Guid userId, CancellationToken cancellationToken = default)

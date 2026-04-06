@@ -1,8 +1,20 @@
+using System.Globalization;
 using System.Net;
+using Auth.Domain.Enums;
 using DalSessionEntity = RoomManagerment.Auth.EntityClasses.SessionEntity;
 using DalUserEntity = RoomManagerment.Auth.EntityClasses.UserEntity;
+using DalAuditLogEntity = RoomManagerment.Auth.EntityClasses.AuditLogEntity;
+using DalCapabilityEntity = RoomManagerment.Auth.EntityClasses.CapabilityEntity;
+using DalEmailOtpEntity = RoomManagerment.Auth.EntityClasses.EmailOtpEntity;
+using DalRoleEntity = RoomManagerment.Auth.EntityClasses.RoleEntity;
+using DalUserProfileEntity = RoomManagerment.Auth.EntityClasses.UserProfileEntity;
 using DomainSessionEntity = Auth.Domain.Entities.SessionEntity;
 using DomainUserEntity = Auth.Domain.Entities.UserEntity;
+using DomainAuditLogEntity = Auth.Domain.Entities.AuditLogEntity;
+using DomainCapabilityEntity = Auth.Domain.Entities.CapabilityEntity;
+using DomainEmailOtpEntity = Auth.Domain.Entities.EmailOtpEntity;
+using DomainRoleEntity = Auth.Domain.Entities.RoleEntity;
+using DomainUserProfileEntity = Auth.Domain.Entities.UserProfileEntity;
 
 namespace Auth.Infrastructure.Mapper;
 
@@ -76,5 +88,260 @@ internal static class EntityMappers
             ExpiresAt = domain.ExpiresAt?.UtcDateTime,
             CreatedAt = domain.CreatedAt
         };
+    }
+
+    public static DomainUserProfileEntity ToDomain(this DalUserProfileEntity dal)
+    {
+        return DomainUserProfileEntity.Reconstitute(
+            dal.UserId,
+            NullIfEmpty(dal.FullName),
+            NullIfEmpty(dal.Avatar),
+            NullableDateOnly(dal.Dob),
+            MapGender(dal.Gender),
+            NullIfEmpty(dal.IdNumber),
+            NullIfEmpty(dal.TaxCode),
+            NullableDateOnly(dal.IdIssuedAt),
+            NullIfEmpty(dal.IdCardPlace),
+            NullIfEmpty(dal.IdImages),
+            NullIfEmpty(dal.Address),
+            NullIfEmpty(dal.Note),
+            dal.SepayBankId,
+            NullIfEmpty(dal.AccountNumber),
+            NullIfEmpty(dal.AccountHolderName),
+            NullIfEmpty(dal.BranchName),
+            NullIfEmpty(dal.BranchCode),
+            NullIfEmpty(dal.SwiftCode),
+            NullIfEmpty(dal.BankingNotes),
+            dal.CreatedAt,
+            dal.UpdatedAt);
+    }
+
+    public static DalUserProfileEntity ToPersistence(this DomainUserProfileEntity domain)
+    {
+        return new DalUserProfileEntity(domain.Id)
+        {
+            FullName = domain.FullName?.Value,
+            Avatar = domain.Avatar,
+            Dob = domain.Dob ?? default,
+            Gender = domain.Gender is { } g ? (short)g : null,
+            IdNumber = domain.IdNumber,
+            TaxCode = domain.TaxCode,
+            IdIssuedAt = domain.IdIssuedAt ?? default,
+            IdCardPlace = domain.IdCardPlace,
+            IdImages = domain.IdImagesJson,
+            Address = domain.Address,
+            Note = domain.Note,
+            SepayBankId = domain.SepayBankId,
+            AccountNumber = domain.AccountNumber,
+            AccountHolderName = domain.AccountHolderName,
+            BranchName = domain.BranchName,
+            BranchCode = domain.BranchCode,
+            SwiftCode = domain.SwiftCode,
+            BankingNotes = domain.BankingNotes,
+            CreatedAt = domain.CreatedAt,
+            UpdatedAt = domain.UpdatedAt
+        };
+    }
+
+    public static DomainRoleEntity ToDomain(this DalRoleEntity dal)
+    {
+        return DomainRoleEntity.Reconstitute(
+            dal.Id,
+            dal.KeyCode ?? string.Empty,
+            dal.Name ?? string.Empty,
+            dal.Description,
+            dal.CreatedAt,
+            dal.UpdatedAt);
+    }
+
+    public static DalRoleEntity ToPersistence(this DomainRoleEntity domain)
+    {
+        return new DalRoleEntity(domain.Id)
+        {
+            KeyCode = domain.KeyCode.Value,
+            Name = domain.Name,
+            Description = domain.Description,
+            CreatedAt = domain.CreatedAt,
+            UpdatedAt = domain.UpdatedAt
+        };
+    }
+
+    public static DomainCapabilityEntity ToDomain(this DalCapabilityEntity dal)
+    {
+        return DomainCapabilityEntity.Reconstitute(
+            dal.Id,
+            dal.KeyCode ?? string.Empty,
+            dal.Name ?? string.Empty,
+            dal.Description,
+            dal.Category,
+            dal.DisplayOrder,
+            dal.CreatedAt,
+            dal.UpdatedAt);
+    }
+
+    public static DalCapabilityEntity ToPersistence(this DomainCapabilityEntity domain)
+    {
+        return new DalCapabilityEntity(domain.Id)
+        {
+            KeyCode = domain.KeyCode.Value,
+            Name = domain.Name,
+            Description = domain.Description,
+            Category = domain.Category,
+            DisplayOrder = domain.DisplayOrder,
+            CreatedAt = domain.CreatedAt,
+            UpdatedAt = domain.UpdatedAt
+        };
+    }
+
+    public static DomainEmailOtpEntity ToDomain(this DalEmailOtpEntity dal)
+    {
+        var type = ParseEmailOtpType(dal.Type ?? string.Empty);
+        var verifiedAt = dal.VerifiedAt.HasValue
+            ? new DateTimeOffset(DateTime.SpecifyKind(dal.VerifiedAt.Value, DateTimeKind.Utc))
+            : (DateTimeOffset?)null;
+
+        return DomainEmailOtpEntity.Reconstitute(
+            dal.Id,
+            dal.UserId,
+            dal.Email ?? string.Empty,
+            dal.OtpCode ?? string.Empty,
+            type,
+            new DateTimeOffset(DateTime.SpecifyKind(dal.ExpiresAt, DateTimeKind.Utc)),
+            verifiedAt.HasValue ? verifiedAt.Value.UtcDateTime : null,
+            dal.IsUsed,
+            dal.CreatedAt,
+            dal.UpdatedAt);
+    }
+
+    public static DalEmailOtpEntity ToPersistence(this DomainEmailOtpEntity domain)
+    {
+        return new DalEmailOtpEntity(domain.Id)
+        {
+            UserId = domain.UserId,
+            Email = domain.Email.Value,
+            OtpCode = domain.OtpCode.Value,
+            Type = EmailOtpTypeStorage.ToPersistedString(domain.Type),
+            ExpiresAt = domain.ExpiresAt.UtcDateTime,
+            IsUsed = domain.IsUsed,
+            CreatedAt = domain.CreatedAt,
+            UpdatedAt = domain.UpdatedAt,
+            VerifiedAt = domain.VerifiedAt?.UtcDateTime
+        };
+    }
+
+    public static DomainAuditLogEntity ToDomain(this DalAuditLogEntity dal)
+    {
+        return DomainAuditLogEntity.Reconstitute(
+            dal.Id,
+            dal.ActorId,
+            dal.OrganizationId,
+            dal.Action ?? string.Empty,
+            dal.EntityType ?? string.Empty,
+            dal.EntityId,
+            dal.BeforeJson,
+            dal.AfterJson,
+            dal.ChangesJson,
+            dal.IpAddress?.ToString(),
+            dal.UserAgent,
+            dal.CreatedAt);
+    }
+
+    public static DalAuditLogEntity ToPersistence(this DomainAuditLogEntity domain)
+    {
+        return new DalAuditLogEntity(domain.Id)
+        {
+            ActorId = domain.ActorId,
+            OrganizationId = domain.OrganizationId,
+            Action = domain.Action,
+            EntityType = domain.EntityType,
+            EntityId = domain.EntityId,
+            BeforeJson = domain.BeforeJson,
+            AfterJson = domain.AfterJson,
+            ChangesJson = domain.ChangesJson,
+            IpAddress = string.IsNullOrWhiteSpace(domain.IpAddress)
+                ? null
+                : IPAddress.TryParse(domain.IpAddress, out var ip)
+                    ? ip
+                    : null,
+            UserAgent = domain.UserAgent,
+            CreatedAt = domain.CreatedAt
+        };
+    }
+
+    private static string? NullIfEmpty(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        var t = value.Trim();
+        return t.Length == 0 ? null : t;
+    }
+
+    private static DateOnly? NullableDateOnly(DateOnly value) => value == default ? null : value;
+
+    private static GenderType? MapGender(short? gender) => gender switch
+    {
+        null => null,
+        (short)GenderType.Other => GenderType.Other,
+        (short)GenderType.Male => GenderType.Male,
+        (short)GenderType.Female => GenderType.Female,
+        _ => GenderType.Other
+    };
+
+    private static EmailOtpType ParseEmailOtpType(string raw)
+    {
+        if (EmailOtpTypeStorage.TryParsePersisted(raw, out var fromStorage))
+        {
+            return fromStorage;
+        }
+
+        if (int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out var n) &&
+            Enum.IsDefined(typeof(EmailOtpType), n))
+        {
+            return (EmailOtpType)n;
+        }
+
+        if (Enum.TryParse(raw, true, out EmailOtpType byName))
+        {
+            return byName;
+        }
+
+        throw new InvalidOperationException($"Unknown email OTP type in storage: '{raw}'.");
+    }
+}
+
+internal static class EmailOtpTypeStorage
+{
+    private static readonly Dictionary<string, EmailOtpType> PersistedToDomain =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["verify_email"] = EmailOtpType.VerifyEmail,
+            ["reset_password"] = EmailOtpType.ResetPassword,
+            ["login"] = EmailOtpType.Login,
+            ["change_phone"] = EmailOtpType.ChangePhone,
+            ["invite_user"] = EmailOtpType.InviteUser
+        };
+
+    public static string ToPersistedString(EmailOtpType type) => type switch
+    {
+        EmailOtpType.VerifyEmail => "verify_email",
+        EmailOtpType.ResetPassword => "reset_password",
+        EmailOtpType.Login => "login",
+        EmailOtpType.ChangePhone => "change_phone",
+        EmailOtpType.InviteUser => "invite_user",
+        _ => ((int)type).ToString(CultureInfo.InvariantCulture)
+    };
+
+    public static bool TryParsePersisted(string raw, out EmailOtpType type)
+    {
+        if (PersistedToDomain.TryGetValue(raw.Trim(), out type))
+        {
+            return true;
+        }
+
+        type = default;
+        return false;
     }
 }
