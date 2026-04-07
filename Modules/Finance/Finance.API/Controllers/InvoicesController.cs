@@ -1,4 +1,3 @@
-using Finance.API;
 using Finance.Application.Dtos;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -128,6 +127,11 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
         }
 
+        if (!TryNormalizePaging(page, perPage, out var normalizedPage, out var normalizedPerPage, out var pagingError))
+        {
+            return BadRequest(new { error = pagingError });
+        }
+
         IReadOnlyList<string>? statusList = null;
         if (!string.IsNullOrWhiteSpace(statuses))
         {
@@ -142,11 +146,32 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
             fromDate,
             toDate,
             search,
-            page,
-            perPage,
+            normalizedPage,
+            normalizedPerPage,
             cancellationToken);
 
         return result.ToActionResult();
+    }
+
+    private static bool TryNormalizePaging(int page, int perPage, out int normalizedPage, out int normalizedPerPage, out string? error)
+    {
+        normalizedPage = page;
+        normalizedPerPage = perPage;
+        error = null;
+
+        if (page < 1)
+        {
+            error = "Page must be greater than or equal to 1.";
+            return false;
+        }
+
+        if (perPage < 1 || perPage > 200)
+        {
+            error = "PerPage must be between 1 and 200.";
+            return false;
+        }
+
+        return true;
     }
 }
 

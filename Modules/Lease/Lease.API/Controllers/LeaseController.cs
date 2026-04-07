@@ -29,7 +29,12 @@ public sealed class LeaseController(ILeaseApplicationService service, IBus bus) 
     public async Task<ActionResult<IReadOnlyList<LeaseDto>>> Search([FromQuery] string? statuses, [FromQuery] Guid? unitId, [FromQuery] string? search, [FromQuery] int page = 1, [FromQuery] int perPage = 20, CancellationToken cancellationToken = default)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.SearchLeasesAsync(orgId, statuses, unitId, search, page, perPage, cancellationToken));
+        if (!TryNormalizePaging(page, perPage, out var normalizedPage, out var normalizedPerPage, out var pagingError))
+        {
+            return BadRequest(new { error = pagingError });
+        }
+
+        return Ok(await service.SearchLeasesAsync(orgId, statuses, unitId, search, normalizedPage, normalizedPerPage, cancellationToken));
     }
 
     [HttpGet("leases/{leaseId:guid}")]
@@ -194,6 +199,27 @@ public sealed class LeaseController(ILeaseApplicationService service, IBus bus) 
         var runDate = asOfDate ?? DateOnly.FromDateTime(DateTime.UtcNow);
         await bus.Publish(new LeaseExpirySweepRequested { AsOfDate = runDate, CorrelationId = Guid.NewGuid() }, cancellationToken);
         return Accepted(new { queued = true, asOfDate = runDate });
+    }
+
+    private static bool TryNormalizePaging(int page, int perPage, out int normalizedPage, out int normalizedPerPage, out string? error)
+    {
+        normalizedPage = page;
+        normalizedPerPage = perPage;
+        error = null;
+
+        if (page < 1)
+        {
+            error = "Page must be greater than or equal to 1.";
+            return false;
+        }
+
+        if (perPage < 1 || perPage > 200)
+        {
+            error = "PerPage must be between 1 and 200.";
+            return false;
+        }
+
+        return true;
     }
 }
 

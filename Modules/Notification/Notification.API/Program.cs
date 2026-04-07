@@ -84,6 +84,8 @@ builder.Services.AddRabbitMqMessaging(builder.Configuration, x =>
     x.AddConsumer<SessionCreatedConsumer>();
     x.AddConsumer<SessionRevokedConsumer>();
     x.AddConsumer<UserEmailVerifiedConsumer>();
+    x.AddConsumer<LeadCreatedConsumer>();
+    x.AddConsumer<LeadStatusChangedConsumer>();
 });
 
 var app = builder.Build();

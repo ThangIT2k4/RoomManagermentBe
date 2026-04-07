@@ -136,15 +136,30 @@ public sealed class PropertyController(IPropertyApplicationService service) : Co
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
         }
 
+        if (!TryNormalizePaging(page, perPage, out var normalizedPage, out var normalizedPerPage, out var pagingError))
+        {
+            return BadRequest(new { error = pagingError });
+        }
+
         IReadOnlyCollection<short>? statusList = null;
         if (!string.IsNullOrWhiteSpace(statuses))
         {
-            statusList = statuses.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-                .Select(short.Parse)
-                .ToArray();
+            var tokens = statuses.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            var parsed = new List<short>(tokens.Length);
+            foreach (var token in tokens)
+            {
+                if (!short.TryParse(token, out var status))
+                {
+                    return BadRequest(new { error = $"Invalid unit status value '{token}'." });
+                }
+
+                parsed.Add(status);
+            }
+
+            statusList = parsed;
         }
 
-        var result = await service.SearchUnitsAsync(orgId, propertyId, statusList, unitType, minRent, maxRent, search, page, perPage, cancellationToken);
+        var result = await service.SearchUnitsAsync(orgId, propertyId, statusList, unitType, minRent, maxRent, search, normalizedPage, normalizedPerPage, cancellationToken);
         return Ok(result);
     }
 
@@ -266,7 +281,12 @@ public sealed class PropertyController(IPropertyApplicationService service) : Co
     public async Task<ActionResult<IReadOnlyList<VendorDto>>> SearchVendors([FromQuery] string? vendorType, [FromQuery] string? search, [FromQuery] int page = 1, [FromQuery] int perPage = 20, CancellationToken cancellationToken = default)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.SearchVendorsAsync(orgId, vendorType, search, page, perPage, cancellationToken));
+        if (!TryNormalizePaging(page, perPage, out var normalizedPage, out var normalizedPerPage, out var pagingError))
+        {
+            return BadRequest(new { error = pagingError });
+        }
+
+        return Ok(await service.SearchVendorsAsync(orgId, vendorType, search, normalizedPage, normalizedPerPage, cancellationToken));
     }
 
     [HttpPost("vendors")]
@@ -302,6 +322,27 @@ public sealed class PropertyController(IPropertyApplicationService service) : Co
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
         return await service.DeleteDocumentAsync(orgId, userId, documentId, cancellationToken) ? NoContent() : NotFound();
+    }
+
+    private static bool TryNormalizePaging(int page, int perPage, out int normalizedPage, out int normalizedPerPage, out string? error)
+    {
+        normalizedPage = page;
+        normalizedPerPage = perPage;
+        error = null;
+
+        if (page < 1)
+        {
+            error = "Page must be greater than or equal to 1.";
+            return false;
+        }
+
+        if (perPage < 1 || perPage > 200)
+        {
+            error = "PerPage must be between 1 and 200.";
+            return false;
+        }
+
+        return true;
     }
 }
 

@@ -94,7 +94,10 @@ public sealed class RedisOrganizationCacheService : IOrganizationCacheService
                 return _database;
             }
 
-            var connectionString = _configuration["Redis:ConnectionString"] ?? _configuration["Redis:Configuration"];
+            var connectionString =
+                _configuration["Redis:Configuration"]
+                ?? _configuration["Redis:ConnectionString"]
+                ?? _configuration.GetConnectionString("Redis");
             if (string.IsNullOrWhiteSpace(connectionString))
             {
                 return null;

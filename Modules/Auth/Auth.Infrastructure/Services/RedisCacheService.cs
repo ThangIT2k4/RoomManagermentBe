@@ -160,10 +160,22 @@ public sealed class RedisCacheService : ICacheService
 
     private string? BuildConnectionString()
     {
+        var configurationConnectionString = _configuration["Redis:Configuration"];
+        if (!string.IsNullOrWhiteSpace(configurationConnectionString))
+        {
+            return configurationConnectionString;
+        }
+
         var explicitConnectionString = _configuration["Redis:ConnectionString"];
         if (!string.IsNullOrWhiteSpace(explicitConnectionString))
         {
             return explicitConnectionString;
+        }
+
+        var fallbackConnectionString = _configuration.GetConnectionString("Redis");
+        if (!string.IsNullOrWhiteSpace(fallbackConnectionString))
+        {
+            return fallbackConnectionString;
         }
 
         var host = _configuration["Redis:Host"];

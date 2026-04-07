@@ -36,7 +36,12 @@ public sealed class OrganizationsController(IOrganizationApplicationService serv
     [HttpGet("{orgId:guid}/members")]
     public async Task<IActionResult> GetMembers([FromRoute] Guid orgId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
     {
-        var result = await service.GetMembersAsync(orgId, page, pageSize, cancellationToken);
+        if (!TryNormalizePaging(page, pageSize, out var normalizedPage, out var normalizedPageSize, out var pagingError))
+        {
+            return BadRequest(new { error = pagingError });
+        }
+
+        var result = await service.GetMembersAsync(orgId, normalizedPage, normalizedPageSize, cancellationToken);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 
@@ -152,7 +157,18 @@ public sealed class OrganizationsController(IOrganizationApplicationService serv
     [HttpGet("{orgId:guid}/quota/{featureKey}")]
     public async Task<IActionResult> Quota([FromRoute] Guid orgId, [FromRoute] string featureKey, [FromQuery] int currentUsage = 0, CancellationToken cancellationToken = default)
     {
-        var result = await service.CheckQuotaAsync(new CheckQuotaRequest(orgId, featureKey, currentUsage), cancellationToken);
+        if (currentUsage < 0)
+        {
+            return BadRequest(new { error = "CurrentUsage must be greater than or equal to 0." });
+        }
+
+        var normalizedFeatureKey = featureKey.Trim();
+        if (string.IsNullOrWhiteSpace(normalizedFeatureKey))
+        {
+            return BadRequest(new { error = "FeatureKey is required." });
+        }
+
+        var result = await service.CheckQuotaAsync(new CheckQuotaRequest(orgId, normalizedFeatureKey, currentUsage), cancellationToken);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 
@@ -161,6 +177,27 @@ public sealed class OrganizationsController(IOrganizationApplicationService serv
     {
         var result = await service.GetDashboardAsync(orgId, cancellationToken);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+    }
+
+    private static bool TryNormalizePaging(int page, int pageSize, out int normalizedPage, out int normalizedPageSize, out string? error)
+    {
+        normalizedPage = page;
+        normalizedPageSize = pageSize;
+        error = null;
+
+        if (page < 1)
+        {
+            error = "Page must be greater than or equal to 1.";
+            return false;
+        }
+
+        if (pageSize < 1 || pageSize > 200)
+        {
+            error = "PageSize must be between 1 and 200.";
+            return false;
+        }
+
+        return true;
     }
 }
 
