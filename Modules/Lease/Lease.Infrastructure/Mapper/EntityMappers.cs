@@ -13,9 +13,15 @@ internal static class EntityMappers
             dal.OrganizationId,
             dal.LeaseNo,
             dal.RentAmount,
+            dal.DepositAmount,
+            dal.CycleId,
+            dal.PaymentDay,
             dal.Status ?? string.Empty,
             dal.StartDate,
             dal.EndDate,
+            dal.ParentLeaseId,
+            dal.BookingId,
+            dal.Notes,
             dal.CreatedAt,
             dal.UpdatedAt);
     }

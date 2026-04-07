@@ -6,10 +6,14 @@
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
     <ProjectReference Include="..\DAL\DatabaseGeneric\RoomManagerment.Lease.csproj" />
     <ProjectReference Include="..\DAL\DatabaseSpecific\RoomManagerment.LeaseDBSpecific.csproj" />
     <ProjectReference Include="..\Lease.Application\Lease.Application.csproj" />
     <ProjectReference Include="..\Lease.Domain\Lease.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.4.1" />
   </ItemGroup>
 </Project>
 

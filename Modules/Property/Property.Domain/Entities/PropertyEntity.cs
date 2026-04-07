@@ -1,15 +1,18 @@
+using Property.Domain.Common;
+using Property.Domain.Events;
+using Property.Domain.ValueObjects;
+
 namespace Property.Domain.Entities;
 
-public sealed class PropertyEntity
+public sealed class PropertyEntity : AggregateRoot<Guid>
 {
-    public Guid Id { get; }
-    public Guid OrganizationId { get; }
-    public string Name { get; }
-    public string? Code { get; }
-    public short Status { get; }
-    public int TotalUnits { get; }
-    public DateTime CreatedAt { get; }
-    public DateTime? UpdatedAt { get; }
+    public Guid OrganizationId { get; private set; }
+    public string Name { get; private set; }
+    public string? Code { get; private set; }
+    public short Status { get; private set; }
+    public int TotalUnits { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public DateTime? UpdatedAt { get; private set; }
 
     private PropertyEntity(
         Guid id,
@@ -49,7 +52,9 @@ public sealed class PropertyEntity
             throw new ArgumentException("Name is required.", nameof(name));
         }
 
-        return new PropertyEntity(Guid.NewGuid(), organizationId, name.Trim(), code?.Trim(), status, totalUnits, createdAt ?? DateTime.UtcNow, null);
+        var entity = new PropertyEntity(Guid.NewGuid(), organizationId, name.Trim(), code is null ? null : PropertyCode.Create(code).Value, status, totalUnits, createdAt ?? DateTime.UtcNow, null);
+        entity.AddDomainEvent(new PropertyCreatedEvent(entity.Id, entity.OrganizationId, entity.Name, DateTimeOffset.UtcNow));
+        return entity;
     }
 
     public static PropertyEntity FromPersistence(
