@@ -1,0 +1,482 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--LLBLGen Pro v5.13 project file. Do not manually edit this file. Incorrect references could lead to an unloadable project file.-->
+<Project Version="5.13" TargetFrameworkName="LLBLGen Pro Runtime Framework" UseLegacyDefaults="false">
+  <Properties>
+    <Abbreviations />
+    <Property Name="AdditionalTaskPerformerFolder" Value="" />
+    <Property Name="AdditionalTasksFolder" Value="" />
+    <Property Name="AdditionalTemplatesFolder" Value="" />
+    <Property Name="AdditionalTypeConverterFolder" Value="" />
+    <Property Name="AddNewElementsAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AddNewFieldsAfterRefresh_v5" Value="true" />
+    <Property Name="AddNewFieldsAfterRelationalModelDataSync_v5" Value="true" />
+    <Property Name="AddNewViewsAsEntitiesAfterRefresh_v5" Value="false" />
+    <Property Name="AddNewViewsAsEntitiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="AutoAddManyToManyRelationships" Value="false" />
+    <Property Name="AutoAssignSequencesToIntegerPks" Value="true" />
+    <Property Name="AutoAssignTypeConverterToFieldMapping" Value="true" />
+    <Property Name="AutomaticallyGenerateSourceCodeOnProjectSave" Value="true" />
+    <Property Name="ConnectionStringKeyNamePattern" Value="ConnectionString.{$ProviderName}" />
+    <Property Name="DefaultDDLSQLScriptDestinationFolder" Value=".\DDLSQLScripts" />
+    <Property Name="DefaultDeleteRuleAction" Value="1" />
+    <Property Name="DefaultSourceCodeDestinationFolder" Value=".\Code" />
+    <Property Name="DefaultUpdateRuleAction" Value="0" />
+    <Property Name="DeleteObsoleteFiles" Value="true" />
+    <Property Name="ElementNamePrefixPattern" Value="{$SchemaName}" />
+    <Property Name="ElementNamePrefixPatternIsAppliedWhen" Value="1" />
+    <Property Name="EncodingToUse" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForTable" Value="0" />
+    <Property Name="EntityActionCombinationDefaultForView" Value="4" />
+    <Property Name="EntityFieldNameStripPattern" Value="{}{}" />
+    <Property Name="EntityNameStripPattern" Value="{tbl_}{}" />
+    <Property Name="ExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="FailCodeGenerationOnWriteError" Value="false" />
+    <Property Name="FieldMappedOntoRelatedFieldPattern" Value="{$RelatedFieldName}" />
+    <Property Name="FkFieldsAreNamedAfterTargetField" Value="true" />
+    <Property Name="ForeignKeyConstraintPattern" Value="FK_{$Guid}" />
+    <Property Name="ForeignKeyFieldPattern" Value="{$NavigatorName}{$RelatedFieldName}" />
+    <Property Name="GroupUsage" Value="0" />
+    <Property Name="IdentifyingFieldsFollowDBPrimaryKeyConstraints_v5" Value="true" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseInsensitiveDBs" Value="false" />
+    <Property Name="InsertUnderscoreAtWordBreakCaseSensitiveDBs" Value="false" />
+    <Property Name="LengthPrecisionScaleFollowDBLengthPrecisionScale_v5" Value="true" />
+    <Property Name="MakeElementNamePascalCasing" Value="true" />
+    <Property Name="NavigatorMappedOntoManyToManyPattern" Value="{$EndEntityName}CollectionVia{$IntermediateEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneManyToOnePattern" Value="{$EndEntityName$S}" />
+    <Property Name="NavigatorMappedOntoOneToManyPattern" Value="{$EndEntityName$P}" />
+    <Property Name="NonExcludableOrphanedElementDetectedAction" Value="3" />
+    <Property Name="PreferDecimalOverCurrencyTypes" Value="true" />
+    <Property Name="PreferNaturalCharacterTypes" Value="true" />
+    <Property Name="PreferSystemSequencesOverSchemaSequencesIfApplicable" Value="true" />
+    <Property Name="PreferVariableLengthTypes" Value="true" />
+    <Property Name="PrimaryKeyConstraintPattern" Value="PK_{$Guid}" />
+    <Property Name="ProjectCreator" Value="TranDucThang" />
+    <Property Name="ProjectName" Value="RoomManagerment.Property" />
+    <Property Name="ReflectNullabilityOfElementFieldInTargetField_v5" Value="false" />
+    <Property Name="ReflectTypeOfElementFieldInTargetField_v5" Value="true" />
+    <Property Name="RelationalModelDataElementNameCasingCaseInsensitiveDBs" Value="3" />
+    <Property Name="RelationalModelDataElementNameCasingCaseSensitiveDBs" Value="3" />
+    <Property Name="RelationshipsFollowDBForeignKeyConstraints_v5" Value="true" />
+    <Property Name="RemoveUnderscoresFromElementName" Value="true" />
+    <Property Name="RemoveUnmappedElementsAfterRefresh_v5" Value="false" />
+    <Property Name="RemoveUnmappedElementsAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRefresh" Value="false" />
+    <Property Name="ResetFieldOrderBasedOnTargetOrderAtRelationalModelDataSync" Value="false" />
+    <Property Name="RetrieveDBCustomProperties" Value="false" />
+    <Property Name="RootNamespace" Value="" />
+    <Property Name="SequenceNameMatchingPattern" Value="SEQ_{$TableName}" />
+    <Property Name="SequencePattern" Value="SEQ_{$EntityName}" />
+    <Property Name="SetGroupNameAfterSchemaName" Value="true" />
+    <Property Name="SetSchemaNameAfterGroupName" Value="true" />
+    <Property Name="SingularizeElementNames" Value="true" />
+    <Property Name="StoredProcNameStripPattern" Value="{pr_, sp_}{}" />
+    <Property Name="StoreTimeLastGeneratedIntoProject" Value="false" />
+    <Property Name="StoreTimeLastSyncIntoProject" Value="true" />
+    <Property Name="SyncCustomFieldOrderingWithTableFieldIndex" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="SyncRelationalModelDataElementNameWithModelElementName_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRefresh_v5" Value="false" />
+    <Property Name="SyncRenamedMappedElementNamesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="TableValuedFunctionNameStripPattern" Value="{fn_, pr_, sp_}{}" />
+    <Property Name="TargetPerEntityEdgesRequireBackingFkConstraint" Value="true" />
+    <Property Name="TypedViewFieldNameStripPattern" Value="{}{}" />
+    <Property Name="TypedViewMappedOnResultsetPattern" Value="{$ProcFunctionName}{$ResultsetName}Result" />
+    <Property Name="TypedViewNameStripPattern" Value="{vw_}{}" />
+    <Property Name="UniqueConstraintPattern" Value="UC_{$Guid}" />
+    <Property Name="UniqueConstraintsFollowDBUniqueConstraints_v5" Value="true" />
+    <Property Name="UpdateCustomPropertiesAfterRefresh_v5" Value="false" />
+    <Property Name="UpdateCustomPropertiesAfterRelationalModelDataSync_v5" Value="false" />
+    <Property Name="UseCustomFieldOrderingOnNewElements" Value="false" />
+  </Properties>
+  <TypeShortcuts />
+  <IgnoredWarnings />
+  <SavedSearchQueries />
+  <CodeGenerationCyclePreferences>
+    <OutputType Value="3">
+      <LastUsedPreferences>
+        <DestinationRootFolder Value="Z:\WorkSpace\Projects\RoomManagerment\RoomManagermentBe\Modules\Property\DAL" />
+        <FrameworkName Value="LLBLGen Pro Runtime Framework" />
+        <LanguageName Value="C#" />
+        <PlatformName Value=".NET 9" />
+        <PresetName Value="SD.Presets.Adapter.General.Netstandard" />
+        <RootNamespace Value="RoomManagerment.Property" />
+        <TemplateGroup Value="Adapter" />
+        <TemplateBindings>
+          <Binding Name="SD.TemplateBindings.PostgreSqlSpecific" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates.Net9" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates" />
+          <Binding Name="SD.TemplateBindings.General" />
+        </TemplateBindings>
+        <AdhocTemplateSets />
+      </LastUsedPreferences>
+    </OutputType>
+  </CodeGenerationCyclePreferences>
+  <OutputSettingValues>
+    <SettingValues>
+      <SettingValue Name="1:AdapterDbGenericSubFolderName" Value="DatabaseGeneric" Type="18" />
+      <SettingValue Name="1:AdapterDbSpecificNamespaceSuffix" Value="DatabaseSpecific" Type="18" />
+      <SettingValue Name="1:AdapterDbSpecificProjectFileSuffix" Value="DBSpecific" Type="18" />
+      <SettingValue Name="1:AdapterDbSpecificSubFolderName" Value="DatabaseSpecific" Type="18" />
+      <SettingValue Name="1:ConvertNulledReferenceTypesToDefaultValue" Value="true" Type="3" />
+      <SettingValue Name="1:EntityBaseClassNameDefault" Value="CommonEntityBase" Type="18" />
+      <SettingValue Name="1:FieldPropertyIsPublicDefault" Value="true" Type="3" />
+      <SettingValue Name="1:GenerateAsNullableTypeDefault" Value="true" Type="3" />
+      <SettingValue Name="1:GenerateEntityFieldFactory" Value="false" Type="3" />
+      <SettingValue Name="1:GenerateEntityFieldsFactory" Value="false" Type="3" />
+      <SettingValue Name="1:InlineValueTypedFields" Value="true" Type="3" />
+      <SettingValue Name="1:LazyLoadingWithoutResultReturnsNew" Value="false" Type="3" />
+      <SettingValue Name="1:NavigatorPropertyIsPublicDefault" Value="true" Type="3" />
+      <SettingValue Name="1:SupportedActionCombinations" Value="0,1,2,3,4,5,6,7" Type="18" />
+      <SettingValue Name="1:TdlEmitTimeDateInOutputFiles" Value="false" Type="3" />
+      <SettingValue Name="1:TypedListOutputTypeDefault" Value="PocoWithQuerySpecQuery" Type="18" />
+      <SettingValue Name="1:TypedViewOutputTypeDefault" Value="PocoWithQuerySpecQuery" Type="18" />
+    </SettingValues>
+  </OutputSettingValues>
+  <CodeGenerationMetaDataDefaults>
+    <TargetElement Type="256">
+      <Defaults>
+        <Attributes>
+          <Attribute Value="Browsable($false)" />
+        </Attributes>
+      </Defaults>
+    </TargetElement>
+  </CodeGenerationMetaDataDefaults>
+  <TargetDatabases>
+    <TargetDatabase Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F" SyncSource="2">
+      <ConnectionElements>
+        <ConnectionElement Name="ServerName" Value="room-managerment.postgres.database.azure.com" />
+        <ConnectionElement Name="CatalogName" Value="room_managerment" />
+        <ConnectionElement Name="UserID" Value="room_managerment" />
+        <ConnectionElement Name="Password" Value="" />
+        <ConnectionElement Name="PortNumber" Value="5432" />
+        <ConnectionElement Name="SslMode" Value="Require" />
+        <ConnectionElement Name="CustomFragments" Value="" />
+      </ConnectionElements>
+      <SystemSequences>
+        <Sequence Name="SystemIdentity" />
+      </SystemSequences>
+      <Catalogs>
+        <Catalog Name="room_managerment" SyncSource="2">
+          <Schemas>
+            <Schema Name="prop" SyncSource="2" LastSyncWithDatabase="2026-04-04T19:24:43.4103056Z">
+              <Tables>
+                <Table Name="amenities">
+                  <PkConstraintName Name="amenities_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="key_code" Ordinal="2" DbType="24" Length="100" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="200" />
+                    <Field Name="category" Ordinal="4" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="icon" Ordinal="5" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="8" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="9" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="documents">
+                  <PkConstraintName Name="documents_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="owner_type" Ordinal="2" DbType="24" Length="100" />
+                    <Field Name="owner_id" Ordinal="3" DbType="28" />
+                    <Field Name="file_url" Ordinal="4" DbType="19" Length="1073741824" />
+                    <Field Name="file_name" Ordinal="5" IsOptional="true" DbType="24" Length="500" />
+                    <Field Name="mime_type" Ordinal="6" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="file_size" Ordinal="7" IsOptional="true" DbType="10" Precision="20" />
+                    <Field Name="document_type" Ordinal="8" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="is_primary" Ordinal="9" HasDefaultValue="true" DefaultValue="false" DbType="0" />
+                    <Field Name="sort_order" Ordinal="10" HasDefaultValue="true" DefaultValue="0" DbType="9" Precision="10" />
+                    <Field Name="description" Ordinal="11" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="uploaded_by" Ordinal="12" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="13" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="14" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="15" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="16" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="meter_readings">
+                  <PkConstraintName Name="meter_readings_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="meter_id" Ordinal="2" DbType="28" />
+                    <Field Name="reading_date" Ordinal="3" DbType="5" />
+                    <Field Name="value" Ordinal="4" DbType="14" Precision="15" Scale="3" />
+                    <Field Name="image_url" Ordinal="5" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="taken_by" Ordinal="6" IsOptional="true" DbType="28" />
+                    <Field Name="note" Ordinal="7" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="8" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="meters">
+                  <PkConstraintName Name="meters_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="property_id" Ordinal="2" DbType="28" />
+                    <Field Name="unit_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="meter_type" Ordinal="4" DbType="24" Length="50" />
+                    <Field Name="meter_number" Ordinal="5" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="description" Ordinal="6" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="is_active" Ordinal="7" HasDefaultValue="true" DefaultValue="true" DbType="0" />
+                    <Field Name="created_at" Ordinal="8" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="9" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="10" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="11" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="properties">
+                  <PkConstraintName Name="properties_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="property_type_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="code" Ordinal="4" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="name" Ordinal="5" DbType="24" Length="255" />
+                    <Field Name="description" Ordinal="6" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="address" Ordinal="7" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="province_code" Ordinal="8" IsOptional="true" DbType="24" Length="10" />
+                    <Field Name="district_code" Ordinal="9" IsOptional="true" DbType="24" Length="10" />
+                    <Field Name="ward_code" Ordinal="10" IsOptional="true" DbType="24" Length="10" />
+                    <Field Name="street_code" Ordinal="11" IsOptional="true" DbType="24" Length="10" />
+                    <Field Name="latitude" Ordinal="12" IsOptional="true" DbType="14" Precision="10" Scale="7" />
+                    <Field Name="longitude" Ordinal="13" IsOptional="true" DbType="14" Precision="10" Scale="7" />
+                    <Field Name="number_of_floors" Ordinal="14" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="total_units" Ordinal="15" HasDefaultValue="true" DefaultValue="0" DbType="9" Precision="10" />
+                    <Field Name="status" Ordinal="16" HasDefaultValue="true" DefaultValue="1" DbType="8" Precision="5" />
+                    <Field Name="notes" Ordinal="17" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="18" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="19" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="20" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="21" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="properties_user">
+                  <PkConstraintName Name="properties_user_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="property_id" Ordinal="2" DbType="28" />
+                    <Field Name="user_id" Ordinal="3" DbType="28" />
+                    <Field Name="role_key" Ordinal="4" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="assigned_at" Ordinal="5" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
+                    <Field Name="updated_by" Ordinal="8" IsOptional="true" DbType="28" />
+                    <Field Name="deleted_at" Ordinal="9" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="10" IsOptional="true" DbType="28" />
+                  </Fields>
+                  <UniqueConstraints>
+                    <UniqueConstraint Name="properties_user_property_id_user_id_key">
+                      <Field Name="property_id" />
+                      <Field Name="user_id" />
+                    </UniqueConstraint>
+                  </UniqueConstraints>
+                </Table>
+                <Table Name="property_types">
+                  <PkConstraintName Name="property_types_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" IsOptional="true" DbType="28" />
+                    <Field Name="key_code" Ordinal="3" DbType="24" Length="50" />
+                    <Field Name="name" Ordinal="4" DbType="24" Length="200" />
+                    <Field Name="description" Ordinal="5" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="ticket_logs">
+                  <PkConstraintName Name="ticket_logs_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="ticket_id" Ordinal="2" DbType="28" />
+                    <Field Name="actor_id" Ordinal="3" DbType="28" />
+                    <Field Name="action" Ordinal="4" DbType="24" Length="100" />
+                    <Field Name="detail" Ordinal="5" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="cost_amount" Ordinal="6" IsOptional="true" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="cost_note" Ordinal="7" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="warranty_period_days" Ordinal="8" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="warranty_expires_at" Ordinal="9" IsOptional="true" DbType="23" />
+                    <Field Name="charge_to" Ordinal="10" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="linked_invoice_id" Ordinal="11" IsOptional="true" DbType="28" />
+                    <Field Name="vendor_id" Ordinal="12" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="13" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="14" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="15" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="ticket_priorities">
+                  <PkConstraintName Name="ticket_priorities_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="key_code" Ordinal="2" DbType="24" Length="50" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="100" />
+                    <Field Name="description" Ordinal="4" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="5" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="6" IsOptional="true" DbType="23" />
+                  </Fields>
+                </Table>
+                <Table Name="tickets">
+                  <PkConstraintName Name="tickets_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="property_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="unit_id" Ordinal="4" IsOptional="true" DbType="28" />
+                    <Field Name="lease_id" Ordinal="5" IsOptional="true" DbType="28" />
+                    <Field Name="created_by" Ordinal="6" DbType="28" />
+                    <Field Name="assigned_to" Ordinal="7" IsOptional="true" DbType="28" />
+                    <Field Name="title" Ordinal="8" DbType="24" Length="500" />
+                    <Field Name="description" Ordinal="9" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="priority_id" Ordinal="10" IsOptional="true" DbType="28" />
+                    <Field Name="status" Ordinal="11" HasDefaultValue="true" DefaultValue="'open'::character varying" DbType="24" Length="50" />
+                    <Field Name="cancelled_at" Ordinal="12" IsOptional="true" DbType="23" />
+                    <Field Name="cancelled_by" Ordinal="13" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="14" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="15" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="16" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="17" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="unit_amenities">
+                  <PkConstraintName Name="unit_amenities_pkey" />
+                  <Fields>
+                    <Field Name="unit_id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="amenity_id" Ordinal="2" IsPrimaryKey="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="units">
+                  <PkConstraintName Name="units_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="property_id" Ordinal="2" DbType="28" />
+                    <Field Name="code" Ordinal="3" DbType="24" Length="50" />
+                    <Field Name="name" Ordinal="4" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="floor" Ordinal="5" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="area_m2" Ordinal="6" IsOptional="true" DbType="14" Precision="10" Scale="2" />
+                    <Field Name="unit_type" Ordinal="7" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="base_rent" Ordinal="8" IsOptional="true" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="deposit_amount" Ordinal="9" IsOptional="true" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="max_occupancy" Ordinal="10" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="status" Ordinal="11" HasDefaultValue="true" DefaultValue="1" DbType="8" Precision="5" />
+                    <Field Name="note" Ordinal="12" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="13" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="14" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="15" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="16" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+                <Table Name="vendors">
+                  <PkConstraintName Name="vendors_pkey" />
+                  <Fields>
+                    <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="sepay_bank_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="name" Ordinal="4" DbType="24" Length="255" />
+                    <Field Name="tax_code" Ordinal="5" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="phone" Ordinal="6" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="email" Ordinal="7" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="address" Ordinal="8" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="account_number" Ordinal="9" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="account_holder_name" Ordinal="10" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="branch_name" Ordinal="11" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="branch_code" Ordinal="12" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="swift_code" Ordinal="13" IsOptional="true" DbType="24" Length="30" />
+                    <Field Name="banking_notes" Ordinal="14" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="contact_person" Ordinal="15" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="contact_phone" Ordinal="16" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="contact_email" Ordinal="17" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="business_license" Ordinal="18" IsOptional="true" DbType="24" Length="200" />
+                    <Field Name="vendor_type" Ordinal="19" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="status" Ordinal="20" HasDefaultValue="true" DefaultValue="1" DbType="8" Precision="5" />
+                    <Field Name="created_at" Ordinal="21" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="updated_at" Ordinal="22" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="23" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="24" IsOptional="true" DbType="28" />
+                  </Fields>
+                </Table>
+              </Tables>
+            </Schema>
+          </Schemas>
+          <ForeignKeyConstraints>
+            <ForeignKeyConstraint Name="prop:meter_readings:meter_readings_meter_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="prop:meters:id" FkField="prop:meter_readings:meter_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:meters:meters_property_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="prop:properties:id" FkField="prop:meters:property_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:meters:meters_unit_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="prop:units:id" FkField="prop:meters:unit_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:properties:properties_property_type_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="prop:property_types:id" FkField="prop:properties:property_type_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:properties_user:properties_user_property_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="prop:properties:id" FkField="prop:properties_user:property_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:ticket_logs:ticket_logs_ticket_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="prop:tickets:id" FkField="prop:ticket_logs:ticket_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:ticket_logs:ticket_logs_vendor_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="prop:vendors:id" FkField="prop:ticket_logs:vendor_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:tickets:tickets_priority_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="prop:ticket_priorities:id" FkField="prop:tickets:priority_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:tickets:tickets_property_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="prop:properties:id" FkField="prop:tickets:property_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:tickets:tickets_unit_id_fkey">
+              <FieldPairs>
+                <FieldPair PkField="prop:units:id" FkField="prop:tickets:unit_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:unit_amenities:unit_amenities_amenity_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="prop:amenities:id" FkField="prop:unit_amenities:amenity_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:unit_amenities:unit_amenities_unit_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="prop:units:id" FkField="prop:unit_amenities:unit_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="prop:units:units_property_id_fkey" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="prop:properties:id" FkField="prop:units:property_id" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+          </ForeignKeyConstraints>
+        </Catalog>
+      </Catalogs>
+    </TargetDatabase>
+  </TargetDatabases>
+  <MappingStores>
+    <MappingStore Type="88EBFD8C-CBDD-4452-88AF-1C99E41A123F">
+      <EntityMappings />
+      <TypedViewMappings />
+      <SPCallMappings />
+      <TvfCallMappings />
+      <TypeConversionDefinitions />
+    </MappingStore>
+  </MappingStores>
+  <ModelViews />
+</Project>

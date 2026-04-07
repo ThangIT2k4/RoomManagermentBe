@@ -113,6 +113,27 @@
       </LastUsedPreferences>
     </OutputType>
   </CodeGenerationCyclePreferences>
+  <OutputSettingValues>
+    <SettingValues>
+      <SettingValue Name="1:AdapterDbGenericSubFolderName" Value="DatabaseGeneric" Type="18" />
+      <SettingValue Name="1:AdapterDbSpecificNamespaceSuffix" Value="DatabaseSpecific" Type="18" />
+      <SettingValue Name="1:AdapterDbSpecificProjectFileSuffix" Value="DBSpecific" Type="18" />
+      <SettingValue Name="1:AdapterDbSpecificSubFolderName" Value="DatabaseSpecific" Type="18" />
+      <SettingValue Name="1:ConvertNulledReferenceTypesToDefaultValue" Value="true" Type="3" />
+      <SettingValue Name="1:EntityBaseClassNameDefault" Value="CommonEntityBase" Type="18" />
+      <SettingValue Name="1:FieldPropertyIsPublicDefault" Value="true" Type="3" />
+      <SettingValue Name="1:GenerateAsNullableTypeDefault" Value="true" Type="3" />
+      <SettingValue Name="1:GenerateEntityFieldFactory" Value="false" Type="3" />
+      <SettingValue Name="1:GenerateEntityFieldsFactory" Value="false" Type="3" />
+      <SettingValue Name="1:InlineValueTypedFields" Value="true" Type="3" />
+      <SettingValue Name="1:LazyLoadingWithoutResultReturnsNew" Value="false" Type="3" />
+      <SettingValue Name="1:NavigatorPropertyIsPublicDefault" Value="true" Type="3" />
+      <SettingValue Name="1:SupportedActionCombinations" Value="0,1,2,3,4,5,6,7" Type="18" />
+      <SettingValue Name="1:TdlEmitTimeDateInOutputFiles" Value="false" Type="3" />
+      <SettingValue Name="1:TypedListOutputTypeDefault" Value="PocoWithQuerySpecQuery" Type="18" />
+      <SettingValue Name="1:TypedViewOutputTypeDefault" Value="PocoWithQuerySpecQuery" Type="18" />
+    </SettingValues>
+  </OutputSettingValues>
   <CodeGenerationMetaDataDefaults>
     <TargetElement Type="256">
       <Defaults>
@@ -125,95 +146,99 @@
   <EntityModel>
     <ValueTypeDefinitions />
     <EntityDefinitions>
-      <EntityDefinition Name="Amenity" GroupName="Prop" ObjectID="0bb24b88-2a9e-429b-a37e-06c2938fe8fa">
+      <EntityDefinition Name="Amenity" GroupName="Prop" ObjectID="c55e0e50-17c3-4bb4-b46b-eb5b45341ff8">
         <Fields>
           <Field Name="Category" Type="string" IsOptional="true" MaxLength="100" />
           <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="CreatedBy" Type="guid" IsOptional="true" />
           <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
           <Field Name="DeletedBy" Type="guid" IsOptional="true" />
-          <Field Name="Icon" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="Icon" Type="string" IsOptional="true" MaxLength="255" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
-          <Field Name="KeyCode" Type="string" MaxLength="100" />
-          <Field Name="Name" Type="string" MaxLength="200" />
+          <Field Name="KeyCode" Type="string" MaxLength="50" />
+          <Field Name="Name" Type="string" MaxLength="255" />
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UpdatedBy" Type="guid" IsOptional="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="Document" GroupName="Prop" ObjectID="574f0ef7-75e0-49d0-8efb-a1d89630634b">
+      <EntityDefinition Name="Document" GroupName="Prop" ObjectID="adab72f5-a0d5-4fa6-9ef3-55c0847a4d29">
         <Fields>
           <Field Name="CreatedAt" Type="datetime" />
           <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
           <Field Name="DeletedBy" Type="guid" IsOptional="true" />
           <Field Name="Description" Type="string" IsOptional="true" MaxLength="1073741824" />
-          <Field Name="DocumentType" Type="string" IsOptional="true" MaxLength="100" />
-          <Field Name="FileName" Type="string" IsOptional="true" MaxLength="500" />
-          <Field Name="FileSize" Type="long" IsOptional="true" Precision="20" />
+          <Field Name="DocumentType" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="FileName" Type="string" MaxLength="255" />
+          <Field Name="FileSize" Type="long" Precision="20" />
           <Field Name="FileUrl" Type="string" MaxLength="1073741824" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
           <Field Name="IsPrimary" Type="bool" />
-          <Field Name="MimeType" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="MimeType" Type="string" MaxLength="100" />
+          <Field Name="OrganizationId" Type="guid" />
           <Field Name="OwnerId" Type="guid" />
-          <Field Name="OwnerType" Type="string" MaxLength="100" />
+          <Field Name="OwnerType" Type="string" MaxLength="50" />
           <Field Name="SortOrder" Type="int" Precision="10" />
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
-          <Field Name="UploadedBy" Type="guid" IsOptional="true" />
+          <Field Name="UploadedBy" Type="guid" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="Meter" GroupName="Prop" ObjectID="29720cd6-5e00-498e-96e0-6292edf4bc52">
+      <EntityDefinition Name="Meter" GroupName="Prop" ObjectID="49c5b621-15af-4af7-b88a-b606c6d6931f">
         <Fields>
           <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="CreatedBy" Type="guid" IsOptional="true" />
           <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
           <Field Name="DeletedBy" Type="guid" IsOptional="true" />
           <Field Name="Description" Type="string" IsOptional="true" MaxLength="1073741824" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
           <Field Name="IsActive" Type="bool" />
-          <Field Name="MeterNumber" Type="string" IsOptional="true" MaxLength="100" />
-          <Field Name="MeterType" Type="string" MaxLength="50" />
+          <Field Name="MeterNumber" Type="string" MaxLength="100" />
+          <Field Name="MeterType" Type="string" MaxLength="30" />
+          <Field Name="OrganizationId" Type="guid" />
           <Field Name="PropertyId" Type="guid" />
           <Field Name="UnitId" Type="guid" IsOptional="true" />
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UpdatedBy" Type="guid" IsOptional="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="MeterReading" GroupName="Prop" ObjectID="7b9da1b2-1920-4682-8d02-6c8cdbf31f09">
+      <EntityDefinition Name="MeterReading" GroupName="Prop" ObjectID="27dcf453-d502-4cb6-9a65-64242303ebf2">
         <Fields>
           <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="1073741824" />
           <Field Name="MeterId" Type="guid" />
           <Field Name="Note" Type="string" IsOptional="true" MaxLength="1073741824" />
           <Field Name="ReadingDate" Type="dateonly" />
           <Field Name="TakenBy" Type="guid" IsOptional="true" />
-          <Field Name="Value" Type="decimal" Precision="15" Scale="3" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="Value" Type="decimal" Precision="18" Scale="3" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="PropertiesUser" GroupName="Prop" ObjectID="98ed6d4c-3fec-4bb5-b441-36416f841e12">
+      <EntityDefinition Name="PropertiesUser" GroupName="Prop" ObjectID="7c05feaf-b03d-46b9-91b2-9b5735848cf7">
         <Fields>
           <Field Name="AssignedAt" Type="datetime" />
+          <Field Name="AssignedBy" Type="guid" IsOptional="true" />
           <Field Name="CreatedAt" Type="datetime" />
           <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
           <Field Name="DeletedBy" Type="guid" IsOptional="true" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
           <Field Name="PropertyId" Type="guid" />
-          <Field Name="RoleKey" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="RoleKey" Type="string" MaxLength="50" />
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
-          <Field Name="UpdatedBy" Type="guid" IsOptional="true" />
           <Field Name="UserId" Type="guid" />
         </Fields>
-        <UniqueConstraints>
-          <UniqueConstraint Name="PropertiesUserPropertyIdUserIdKey">
-            <Field Name="PropertyId" />
-            <Field Name="UserId" />
-          </UniqueConstraint>
-        </UniqueConstraints>
       </EntityDefinition>
-      <EntityDefinition Name="Property" GroupName="Prop" ObjectID="4d555b2d-adb0-4f7c-93f0-0a82759505b4">
+      <EntityDefinition Name="Property" GroupName="Prop" ObjectID="b8f8bfc9-e60c-40c1-94d7-89d39dc1fb5c">
         <Fields>
-          <Field Name="Address" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="Address" Type="string" MaxLength="1073741824" />
           <Field Name="Code" Type="string" IsOptional="true" MaxLength="50" />
           <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="CreatedBy" Type="guid" IsOptional="true" />
           <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
           <Field Name="DeletedBy" Type="guid" IsOptional="true" />
           <Field Name="Description" Type="string" IsOptional="true" MaxLength="1073741824" />
-          <Field Name="DistrictCode" Type="string" IsOptional="true" MaxLength="10" />
+          <Field Name="DistrictCode" Type="string" IsOptional="true" MaxLength="20" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
           <Field Name="Latitude" Type="decimal" IsOptional="true" Precision="10" Scale="7" />
           <Field Name="Longitude" Type="decimal" IsOptional="true" Precision="10" Scale="7" />
@@ -221,27 +246,32 @@
           <Field Name="Notes" Type="string" IsOptional="true" MaxLength="1073741824" />
           <Field Name="NumberOfFloors" Type="int" IsOptional="true" Precision="10" />
           <Field Name="OrganizationId" Type="guid" />
-          <Field Name="PropertyTypeId" Type="guid" IsOptional="true" />
-          <Field Name="ProvinceCode" Type="string" IsOptional="true" MaxLength="10" />
+          <Field Name="PropertyTypeId" Type="guid" />
+          <Field Name="ProvinceCode" Type="string" IsOptional="true" MaxLength="20" />
           <Field Name="Status" Type="short" Precision="5" />
-          <Field Name="StreetCode" Type="string" IsOptional="true" MaxLength="10" />
+          <Field Name="StreetCode" Type="string" IsOptional="true" MaxLength="20" />
           <Field Name="TotalUnits" Type="int" Precision="10" />
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
-          <Field Name="WardCode" Type="string" IsOptional="true" MaxLength="10" />
+          <Field Name="UpdatedBy" Type="guid" IsOptional="true" />
+          <Field Name="WardCode" Type="string" IsOptional="true" MaxLength="20" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="PropertyType" GroupName="Prop" ObjectID="37a16a18-be09-4b7e-a7dc-09db65834c01">
+      <EntityDefinition Name="PropertyType" GroupName="Prop" ObjectID="980b4329-7325-4fe9-9e67-7c6028d2dd0d">
         <Fields>
           <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="CreatedBy" Type="guid" IsOptional="true" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
+          <Field Name="DeletedBy" Type="guid" IsOptional="true" />
           <Field Name="Description" Type="string" IsOptional="true" MaxLength="1073741824" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
           <Field Name="KeyCode" Type="string" MaxLength="50" />
-          <Field Name="Name" Type="string" MaxLength="200" />
+          <Field Name="Name" Type="string" MaxLength="255" />
           <Field Name="OrganizationId" Type="guid" IsOptional="true" />
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UpdatedBy" Type="guid" IsOptional="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="Ticket" GroupName="Prop" ObjectID="072c3325-2451-488f-8335-e17840e945c7">
+      <EntityDefinition Name="Ticket" GroupName="Prop" ObjectID="1506d8a6-7fd3-471d-99f6-95df0415d48f">
         <Fields>
           <Field Name="AssignedTo" Type="guid" IsOptional="true" />
           <Field Name="CancelledAt" Type="datetime" IsOptional="true" />
@@ -250,24 +280,24 @@
           <Field Name="CreatedBy" Type="guid" />
           <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
           <Field Name="DeletedBy" Type="guid" IsOptional="true" />
-          <Field Name="Description" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="Description" Type="string" MaxLength="1073741824" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
           <Field Name="LeaseId" Type="guid" IsOptional="true" />
           <Field Name="OrganizationId" Type="guid" />
           <Field Name="PriorityId" Type="guid" IsOptional="true" />
-          <Field Name="PropertyId" Type="guid" IsOptional="true" />
-          <Field Name="Status" Type="string" MaxLength="50" />
+          <Field Name="PropertyId" Type="guid" />
+          <Field Name="Status" Type="string" MaxLength="30" />
           <Field Name="Title" Type="string" MaxLength="500" />
           <Field Name="UnitId" Type="guid" IsOptional="true" />
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="TicketLog" GroupName="Prop" ObjectID="dc0069f8-7fa1-4244-8ccf-bf642025004e">
+      <EntityDefinition Name="TicketLog" GroupName="Prop" ObjectID="f2c6ad39-ae24-4e81-af1b-d8814656b12d">
         <Fields>
-          <Field Name="Action" Type="string" MaxLength="100" />
+          <Field Name="Action" Type="string" MaxLength="50" />
           <Field Name="ActorId" Type="guid" />
-          <Field Name="ChargeTo" Type="string" IsOptional="true" MaxLength="50" />
-          <Field Name="CostAmount" Type="decimal" IsOptional="true" Precision="15" Scale="2" />
+          <Field Name="ChargeTo" Type="string" IsOptional="true" MaxLength="20" />
+          <Field Name="CostAmount" Type="decimal" IsOptional="true" Precision="18" Scale="2" />
           <Field Name="CostNote" Type="string" IsOptional="true" MaxLength="1073741824" />
           <Field Name="CreatedAt" Type="datetime" />
           <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
@@ -276,72 +306,79 @@
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
           <Field Name="LinkedInvoiceId" Type="guid" IsOptional="true" />
           <Field Name="TicketId" Type="guid" />
+          <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
           <Field Name="VendorId" Type="guid" IsOptional="true" />
           <Field Name="WarrantyExpiresAt" Type="datetime" IsOptional="true" />
           <Field Name="WarrantyPeriodDays" Type="int" IsOptional="true" Precision="10" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="TicketPriority" GroupName="Prop" ObjectID="a37298d5-cf46-495c-8d73-0afa49260ebf">
+      <EntityDefinition Name="TicketPriority" GroupName="Prop" ObjectID="8b147479-4dd3-4fd3-9fc5-0c74d964104a">
         <Fields>
           <Field Name="CreatedAt" Type="datetime" />
-          <Field Name="Description" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
-          <Field Name="KeyCode" Type="string" MaxLength="50" />
+          <Field Name="IsDefault" Type="bool" />
+          <Field Name="KeyCode" Type="string" MaxLength="30" />
           <Field Name="Name" Type="string" MaxLength="100" />
+          <Field Name="SortOrder" Type="int" Precision="10" />
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="Unit" GroupName="Prop" ObjectID="a2321c44-b7c2-4d71-8c0a-beb48a302d25">
+      <EntityDefinition Name="Unit" GroupName="Prop" ObjectID="52aeac9b-9c8b-4e41-ab52-82b912f17527">
         <Fields>
           <Field Name="AreaM2" Type="decimal" IsOptional="true" Precision="10" Scale="2" />
-          <Field Name="BaseRent" Type="decimal" IsOptional="true" Precision="15" Scale="2" />
+          <Field Name="BaseRent" Type="decimal" Precision="18" Scale="2" />
           <Field Name="Code" Type="string" MaxLength="50" />
           <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="CreatedBy" Type="guid" IsOptional="true" />
           <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
           <Field Name="DeletedBy" Type="guid" IsOptional="true" />
-          <Field Name="DepositAmount" Type="decimal" IsOptional="true" Precision="15" Scale="2" />
+          <Field Name="DepositAmount" Type="decimal" IsOptional="true" Precision="18" Scale="2" />
           <Field Name="Floor" Type="int" IsOptional="true" Precision="10" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
           <Field Name="MaxOccupancy" Type="int" IsOptional="true" Precision="10" />
-          <Field Name="Name" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="Name" Type="string" IsOptional="true" MaxLength="255" />
           <Field Name="Note" Type="string" IsOptional="true" MaxLength="1073741824" />
+          <Field Name="OrganizationId" Type="guid" />
           <Field Name="PropertyId" Type="guid" />
           <Field Name="Status" Type="short" Precision="5" />
           <Field Name="UnitType" Type="string" IsOptional="true" MaxLength="100" />
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UpdatedBy" Type="guid" IsOptional="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UnitAmenity" GroupName="Prop" ObjectID="76ddd029-592a-4fb3-b510-fe21566db3b1">
+      <EntityDefinition Name="UnitAmenity" GroupName="Prop" ObjectID="796f20c7-e200-44be-a9fa-23136dcdd9dc">
         <Fields>
           <Field Name="AmenityId" Type="guid" IsPrimaryKey="true" />
+          <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="CreatedBy" Type="guid" IsOptional="true" />
           <Field Name="UnitId" Type="guid" IsPrimaryKey="true" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="Vendor" GroupName="Prop" ObjectID="210f2771-2d3c-468c-a819-b4bc0b2c767b">
+      <EntityDefinition Name="Vendor" GroupName="Prop" ObjectID="66974d53-160e-42a5-9649-eb55867f0383">
         <Fields>
-          <Field Name="AccountHolderName" Type="string" IsOptional="true" MaxLength="200" />
-          <Field Name="AccountNumber" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="AccountHolderName" Type="string" IsOptional="true" MaxLength="255" />
+          <Field Name="AccountNumber" Type="string" IsOptional="true" MaxLength="100" />
           <Field Name="Address" Type="string" IsOptional="true" MaxLength="1073741824" />
-          <Field Name="BankingNotes" Type="string" IsOptional="true" MaxLength="1073741824" />
-          <Field Name="BranchCode" Type="string" IsOptional="true" MaxLength="50" />
-          <Field Name="BranchName" Type="string" IsOptional="true" MaxLength="200" />
-          <Field Name="BusinessLicense" Type="string" IsOptional="true" MaxLength="200" />
-          <Field Name="ContactEmail" Type="string" IsOptional="true" MaxLength="200" />
-          <Field Name="ContactPerson" Type="string" IsOptional="true" MaxLength="200" />
-          <Field Name="ContactPhone" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="BranchName" Type="string" IsOptional="true" MaxLength="255" />
+          <Field Name="BusinessLicense" Type="string" IsOptional="true" MaxLength="255" />
+          <Field Name="ContactEmail" Type="string" IsOptional="true" MaxLength="255" />
+          <Field Name="ContactPerson" Type="string" IsOptional="true" MaxLength="255" />
+          <Field Name="ContactPhone" Type="string" IsOptional="true" MaxLength="30" />
           <Field Name="CreatedAt" Type="datetime" />
+          <Field Name="CreatedBy" Type="guid" IsOptional="true" />
           <Field Name="DeletedAt" Type="datetime" IsOptional="true" />
           <Field Name="DeletedBy" Type="guid" IsOptional="true" />
-          <Field Name="Email" Type="string" IsOptional="true" MaxLength="200" />
+          <Field Name="Email" Type="string" IsOptional="true" MaxLength="255" />
           <Field Name="Id" Type="guid" IsPrimaryKey="true" />
           <Field Name="Name" Type="string" MaxLength="255" />
           <Field Name="OrganizationId" Type="guid" />
-          <Field Name="Phone" Type="string" IsOptional="true" MaxLength="50" />
+          <Field Name="Phone" Type="string" IsOptional="true" MaxLength="30" />
           <Field Name="SepayBankId" Type="guid" IsOptional="true" />
           <Field Name="Status" Type="short" Precision="5" />
-          <Field Name="SwiftCode" Type="string" IsOptional="true" MaxLength="30" />
-          <Field Name="TaxCode" Type="string" IsOptional="true" MaxLength="100" />
+          <Field Name="TaxCode" Type="string" IsOptional="true" MaxLength="50" />
           <Field Name="UpdatedAt" Type="datetime" IsOptional="true" />
+          <Field Name="UpdatedBy" Type="guid" IsOptional="true" />
           <Field Name="VendorType" Type="string" IsOptional="true" MaxLength="100" />
         </Fields>
       </EntityDefinition>
@@ -367,12 +404,12 @@
           <FieldFieldRelationship FkField="PropertyId" PkField="Id" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="Prop.Property.PropertyType-Prop.PropertyType.Properties" Start="Prop:Property" End="Prop:PropertyType" StartNavigator="PropertyType" EndNavigator="Properties" Type="4" EndIsOptional="true">
+      <NormalRelationship Name="Prop.Property.PropertyType-Prop.PropertyType.Properties" Start="Prop:Property" End="Prop:PropertyType" StartNavigator="PropertyType" EndNavigator="Properties" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="PropertyTypeId" PkField="Id" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="Prop.Ticket.Property-Prop.Property.Tickets" Start="Prop:Ticket" End="Prop:Property" StartNavigator="Property" EndNavigator="Tickets" Type="4" EndIsOptional="true">
+      <NormalRelationship Name="Prop.Ticket.Property-Prop.Property.Tickets" Start="Prop:Ticket" End="Prop:Property" StartNavigator="Property" EndNavigator="Tickets" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="PropertyId" PkField="Id" />
         </FieldRelationships>
@@ -430,43 +467,46 @@
         <Sequence Name="SystemIdentity" />
       </SystemSequences>
       <Catalogs>
-        <Catalog Name="room_managerment" SyncSource="2">
+        <Catalog Name="room_managerment">
           <Schemas>
-            <Schema Name="prop" SyncSource="2" LastSyncWithDatabase="2026-04-04T19:24:43.4103056Z">
+            <Schema Name="prop" SyncSource="2" LastSyncWithDatabase="2026-04-08T03:31:31.1205107Z">
               <Tables>
                 <Table Name="amenities">
                   <PkConstraintName Name="amenities_pkey" />
                   <Fields>
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
-                    <Field Name="key_code" Ordinal="2" DbType="24" Length="100" />
-                    <Field Name="name" Ordinal="3" DbType="24" Length="200" />
+                    <Field Name="key_code" Ordinal="2" DbType="24" Length="50" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="255" />
                     <Field Name="category" Ordinal="4" IsOptional="true" DbType="24" Length="100" />
-                    <Field Name="icon" Ordinal="5" IsOptional="true" DbType="24" Length="200" />
-                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_at" Ordinal="8" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_by" Ordinal="9" IsOptional="true" DbType="28" />
+                    <Field Name="icon" Ordinal="5" IsOptional="true" DbType="24" Length="255" />
+                    <Field Name="created_at" Ordinal="6" DbType="23" />
+                    <Field Name="created_by" Ordinal="7" IsOptional="true" DbType="28" />
+                    <Field Name="updated_at" Ordinal="8" IsOptional="true" DbType="23" />
+                    <Field Name="updated_by" Ordinal="9" IsOptional="true" DbType="28" />
+                    <Field Name="deleted_at" Ordinal="10" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="11" IsOptional="true" DbType="28" />
                   </Fields>
                 </Table>
                 <Table Name="documents">
                   <PkConstraintName Name="documents_pkey" />
                   <Fields>
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
-                    <Field Name="owner_type" Ordinal="2" DbType="24" Length="100" />
-                    <Field Name="owner_id" Ordinal="3" DbType="28" />
-                    <Field Name="file_url" Ordinal="4" DbType="19" Length="1073741824" />
-                    <Field Name="file_name" Ordinal="5" IsOptional="true" DbType="24" Length="500" />
-                    <Field Name="mime_type" Ordinal="6" IsOptional="true" DbType="24" Length="100" />
-                    <Field Name="file_size" Ordinal="7" IsOptional="true" DbType="10" Precision="20" />
-                    <Field Name="document_type" Ordinal="8" IsOptional="true" DbType="24" Length="100" />
-                    <Field Name="is_primary" Ordinal="9" HasDefaultValue="true" DefaultValue="false" DbType="0" />
-                    <Field Name="sort_order" Ordinal="10" HasDefaultValue="true" DefaultValue="0" DbType="9" Precision="10" />
-                    <Field Name="description" Ordinal="11" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="uploaded_by" Ordinal="12" IsOptional="true" DbType="28" />
-                    <Field Name="created_at" Ordinal="13" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="updated_at" Ordinal="14" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_at" Ordinal="15" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_by" Ordinal="16" IsOptional="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="owner_type" Ordinal="3" DbType="24" Length="50" />
+                    <Field Name="owner_id" Ordinal="4" DbType="28" />
+                    <Field Name="file_url" Ordinal="5" DbType="19" Length="1073741824" />
+                    <Field Name="file_name" Ordinal="6" DbType="24" Length="255" />
+                    <Field Name="mime_type" Ordinal="7" DbType="24" Length="100" />
+                    <Field Name="file_size" Ordinal="8" DbType="10" Precision="20" />
+                    <Field Name="document_type" Ordinal="9" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="description" Ordinal="10" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="is_primary" Ordinal="11" HasDefaultValue="true" DefaultValue="false" DbType="0" />
+                    <Field Name="sort_order" Ordinal="12" HasDefaultValue="true" DefaultValue="0" DbType="9" Precision="10" />
+                    <Field Name="uploaded_by" Ordinal="13" DbType="28" />
+                    <Field Name="created_at" Ordinal="14" DbType="23" />
+                    <Field Name="updated_at" Ordinal="15" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="16" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="17" IsOptional="true" DbType="28" />
                   </Fields>
                 </Table>
                 <Table Name="meter_readings">
@@ -475,27 +515,33 @@
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
                     <Field Name="meter_id" Ordinal="2" DbType="28" />
                     <Field Name="reading_date" Ordinal="3" DbType="5" />
-                    <Field Name="value" Ordinal="4" DbType="14" Precision="15" Scale="3" />
+                    <Field Name="value" Ordinal="4" DbType="14" Precision="18" Scale="3" />
                     <Field Name="image_url" Ordinal="5" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="taken_by" Ordinal="6" IsOptional="true" DbType="28" />
-                    <Field Name="note" Ordinal="7" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="created_at" Ordinal="8" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="note" Ordinal="6" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="taken_by" Ordinal="7" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="8" DbType="23" />
+                    <Field Name="updated_at" Ordinal="9" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="10" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="11" IsOptional="true" DbType="28" />
                   </Fields>
                 </Table>
                 <Table Name="meters">
                   <PkConstraintName Name="meters_pkey" />
                   <Fields>
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
-                    <Field Name="property_id" Ordinal="2" DbType="28" />
-                    <Field Name="unit_id" Ordinal="3" IsOptional="true" DbType="28" />
-                    <Field Name="meter_type" Ordinal="4" DbType="24" Length="50" />
-                    <Field Name="meter_number" Ordinal="5" IsOptional="true" DbType="24" Length="100" />
-                    <Field Name="description" Ordinal="6" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="is_active" Ordinal="7" HasDefaultValue="true" DefaultValue="true" DbType="0" />
-                    <Field Name="created_at" Ordinal="8" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="updated_at" Ordinal="9" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_at" Ordinal="10" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_by" Ordinal="11" IsOptional="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="property_id" Ordinal="3" DbType="28" />
+                    <Field Name="unit_id" Ordinal="4" IsOptional="true" DbType="28" />
+                    <Field Name="meter_type" Ordinal="5" DbType="24" Length="30" />
+                    <Field Name="meter_number" Ordinal="6" DbType="24" Length="100" />
+                    <Field Name="description" Ordinal="7" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="is_active" Ordinal="8" HasDefaultValue="true" DefaultValue="true" DbType="0" />
+                    <Field Name="created_at" Ordinal="9" DbType="23" />
+                    <Field Name="created_by" Ordinal="10" IsOptional="true" DbType="28" />
+                    <Field Name="updated_at" Ordinal="11" IsOptional="true" DbType="23" />
+                    <Field Name="updated_by" Ordinal="12" IsOptional="true" DbType="28" />
+                    <Field Name="deleted_at" Ordinal="13" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="14" IsOptional="true" DbType="28" />
                   </Fields>
                 </Table>
                 <Table Name="properties">
@@ -503,25 +549,27 @@
                   <Fields>
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
                     <Field Name="organization_id" Ordinal="2" DbType="28" />
-                    <Field Name="property_type_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="property_type_id" Ordinal="3" DbType="28" />
                     <Field Name="code" Ordinal="4" IsOptional="true" DbType="24" Length="50" />
                     <Field Name="name" Ordinal="5" DbType="24" Length="255" />
                     <Field Name="description" Ordinal="6" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="address" Ordinal="7" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="province_code" Ordinal="8" IsOptional="true" DbType="24" Length="10" />
-                    <Field Name="district_code" Ordinal="9" IsOptional="true" DbType="24" Length="10" />
-                    <Field Name="ward_code" Ordinal="10" IsOptional="true" DbType="24" Length="10" />
-                    <Field Name="street_code" Ordinal="11" IsOptional="true" DbType="24" Length="10" />
+                    <Field Name="address" Ordinal="7" DbType="19" Length="1073741824" />
+                    <Field Name="province_code" Ordinal="8" IsOptional="true" DbType="24" Length="20" />
+                    <Field Name="district_code" Ordinal="9" IsOptional="true" DbType="24" Length="20" />
+                    <Field Name="ward_code" Ordinal="10" IsOptional="true" DbType="24" Length="20" />
+                    <Field Name="street_code" Ordinal="11" IsOptional="true" DbType="24" Length="20" />
                     <Field Name="latitude" Ordinal="12" IsOptional="true" DbType="14" Precision="10" Scale="7" />
                     <Field Name="longitude" Ordinal="13" IsOptional="true" DbType="14" Precision="10" Scale="7" />
                     <Field Name="number_of_floors" Ordinal="14" IsOptional="true" DbType="9" Precision="10" />
                     <Field Name="total_units" Ordinal="15" HasDefaultValue="true" DefaultValue="0" DbType="9" Precision="10" />
                     <Field Name="status" Ordinal="16" HasDefaultValue="true" DefaultValue="1" DbType="8" Precision="5" />
                     <Field Name="notes" Ordinal="17" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="created_at" Ordinal="18" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="updated_at" Ordinal="19" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_at" Ordinal="20" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_by" Ordinal="21" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="18" DbType="23" />
+                    <Field Name="created_by" Ordinal="19" IsOptional="true" DbType="28" />
+                    <Field Name="updated_at" Ordinal="20" IsOptional="true" DbType="23" />
+                    <Field Name="updated_by" Ordinal="21" IsOptional="true" DbType="28" />
+                    <Field Name="deleted_at" Ordinal="22" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="23" IsOptional="true" DbType="28" />
                   </Fields>
                 </Table>
                 <Table Name="properties_user">
@@ -530,20 +578,14 @@
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
                     <Field Name="property_id" Ordinal="2" DbType="28" />
                     <Field Name="user_id" Ordinal="3" DbType="28" />
-                    <Field Name="role_key" Ordinal="4" IsOptional="true" DbType="24" Length="50" />
-                    <Field Name="assigned_at" Ordinal="5" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
-                    <Field Name="updated_by" Ordinal="8" IsOptional="true" DbType="28" />
+                    <Field Name="role_key" Ordinal="4" DbType="24" Length="50" />
+                    <Field Name="assigned_at" Ordinal="5" DbType="23" />
+                    <Field Name="assigned_by" Ordinal="6" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="7" DbType="23" />
+                    <Field Name="updated_at" Ordinal="8" IsOptional="true" DbType="23" />
                     <Field Name="deleted_at" Ordinal="9" IsOptional="true" DbType="23" />
                     <Field Name="deleted_by" Ordinal="10" IsOptional="true" DbType="28" />
                   </Fields>
-                  <UniqueConstraints>
-                    <UniqueConstraint Name="properties_user_property_id_user_id_key">
-                      <Field Name="property_id" />
-                      <Field Name="user_id" />
-                    </UniqueConstraint>
-                  </UniqueConstraints>
                 </Table>
                 <Table Name="property_types">
                   <PkConstraintName Name="property_types_pkey" />
@@ -551,10 +593,14 @@
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
                     <Field Name="organization_id" Ordinal="2" IsOptional="true" DbType="28" />
                     <Field Name="key_code" Ordinal="3" DbType="24" Length="50" />
-                    <Field Name="name" Ordinal="4" DbType="24" Length="200" />
+                    <Field Name="name" Ordinal="4" DbType="24" Length="255" />
                     <Field Name="description" Ordinal="5" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="created_at" Ordinal="6" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
+                    <Field Name="created_at" Ordinal="6" DbType="23" />
+                    <Field Name="created_by" Ordinal="7" IsOptional="true" DbType="28" />
+                    <Field Name="updated_at" Ordinal="8" IsOptional="true" DbType="23" />
+                    <Field Name="updated_by" Ordinal="9" IsOptional="true" DbType="28" />
+                    <Field Name="deleted_at" Ordinal="10" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="11" IsOptional="true" DbType="28" />
                   </Fields>
                 </Table>
                 <Table Name="ticket_logs">
@@ -563,29 +609,32 @@
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
                     <Field Name="ticket_id" Ordinal="2" DbType="28" />
                     <Field Name="actor_id" Ordinal="3" DbType="28" />
-                    <Field Name="action" Ordinal="4" DbType="24" Length="100" />
+                    <Field Name="action" Ordinal="4" DbType="24" Length="50" />
                     <Field Name="detail" Ordinal="5" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="cost_amount" Ordinal="6" IsOptional="true" DbType="14" Precision="15" Scale="2" />
+                    <Field Name="cost_amount" Ordinal="6" IsOptional="true" DbType="14" Precision="18" Scale="2" />
                     <Field Name="cost_note" Ordinal="7" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="warranty_period_days" Ordinal="8" IsOptional="true" DbType="9" Precision="10" />
-                    <Field Name="warranty_expires_at" Ordinal="9" IsOptional="true" DbType="23" />
-                    <Field Name="charge_to" Ordinal="10" IsOptional="true" DbType="24" Length="50" />
-                    <Field Name="linked_invoice_id" Ordinal="11" IsOptional="true" DbType="28" />
-                    <Field Name="vendor_id" Ordinal="12" IsOptional="true" DbType="28" />
-                    <Field Name="created_at" Ordinal="13" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="deleted_at" Ordinal="14" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_by" Ordinal="15" IsOptional="true" DbType="28" />
+                    <Field Name="vendor_id" Ordinal="8" IsOptional="true" DbType="28" />
+                    <Field Name="charge_to" Ordinal="9" IsOptional="true" DbType="24" Length="20" />
+                    <Field Name="warranty_period_days" Ordinal="10" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="warranty_expires_at" Ordinal="11" IsOptional="true" DbType="23" />
+                    <Field Name="linked_invoice_id" Ordinal="12" IsOptional="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="13" DbType="23" />
+                    <Field Name="updated_at" Ordinal="14" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="15" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="16" IsOptional="true" DbType="28" />
                   </Fields>
                 </Table>
                 <Table Name="ticket_priorities">
                   <PkConstraintName Name="ticket_priorities_pkey" />
                   <Fields>
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
-                    <Field Name="key_code" Ordinal="2" DbType="24" Length="50" />
+                    <Field Name="key_code" Ordinal="2" DbType="24" Length="30" />
                     <Field Name="name" Ordinal="3" DbType="24" Length="100" />
-                    <Field Name="description" Ordinal="4" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="created_at" Ordinal="5" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="updated_at" Ordinal="6" IsOptional="true" DbType="23" />
+                    <Field Name="sort_order" Ordinal="4" HasDefaultValue="true" DefaultValue="0" DbType="9" Precision="10" />
+                    <Field Name="is_default" Ordinal="5" HasDefaultValue="true" DefaultValue="false" DbType="0" />
+                    <Field Name="created_at" Ordinal="6" DbType="23" />
+                    <Field Name="updated_at" Ordinal="7" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_at" Ordinal="8" IsOptional="true" DbType="23" />
                   </Fields>
                 </Table>
                 <Table Name="tickets">
@@ -593,18 +642,18 @@
                   <Fields>
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
                     <Field Name="organization_id" Ordinal="2" DbType="28" />
-                    <Field Name="property_id" Ordinal="3" IsOptional="true" DbType="28" />
+                    <Field Name="property_id" Ordinal="3" DbType="28" />
                     <Field Name="unit_id" Ordinal="4" IsOptional="true" DbType="28" />
                     <Field Name="lease_id" Ordinal="5" IsOptional="true" DbType="28" />
                     <Field Name="created_by" Ordinal="6" DbType="28" />
                     <Field Name="assigned_to" Ordinal="7" IsOptional="true" DbType="28" />
                     <Field Name="title" Ordinal="8" DbType="24" Length="500" />
-                    <Field Name="description" Ordinal="9" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="description" Ordinal="9" DbType="19" Length="1073741824" />
                     <Field Name="priority_id" Ordinal="10" IsOptional="true" DbType="28" />
-                    <Field Name="status" Ordinal="11" HasDefaultValue="true" DefaultValue="'open'::character varying" DbType="24" Length="50" />
+                    <Field Name="status" Ordinal="11" HasDefaultValue="true" DefaultValue="'open'::character varying" DbType="24" Length="30" />
                     <Field Name="cancelled_at" Ordinal="12" IsOptional="true" DbType="23" />
                     <Field Name="cancelled_by" Ordinal="13" IsOptional="true" DbType="28" />
-                    <Field Name="created_at" Ordinal="14" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
+                    <Field Name="created_at" Ordinal="14" DbType="23" />
                     <Field Name="updated_at" Ordinal="15" IsOptional="true" DbType="23" />
                     <Field Name="deleted_at" Ordinal="16" IsOptional="true" DbType="23" />
                     <Field Name="deleted_by" Ordinal="17" IsOptional="true" DbType="28" />
@@ -615,27 +664,32 @@
                   <Fields>
                     <Field Name="unit_id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
                     <Field Name="amenity_id" Ordinal="2" IsPrimaryKey="true" DbType="28" />
+                    <Field Name="created_at" Ordinal="3" DbType="23" />
+                    <Field Name="created_by" Ordinal="4" IsOptional="true" DbType="28" />
                   </Fields>
                 </Table>
                 <Table Name="units">
                   <PkConstraintName Name="units_pkey" />
                   <Fields>
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
-                    <Field Name="property_id" Ordinal="2" DbType="28" />
-                    <Field Name="code" Ordinal="3" DbType="24" Length="50" />
-                    <Field Name="name" Ordinal="4" IsOptional="true" DbType="24" Length="200" />
-                    <Field Name="floor" Ordinal="5" IsOptional="true" DbType="9" Precision="10" />
-                    <Field Name="area_m2" Ordinal="6" IsOptional="true" DbType="14" Precision="10" Scale="2" />
-                    <Field Name="unit_type" Ordinal="7" IsOptional="true" DbType="24" Length="100" />
-                    <Field Name="base_rent" Ordinal="8" IsOptional="true" DbType="14" Precision="15" Scale="2" />
-                    <Field Name="deposit_amount" Ordinal="9" IsOptional="true" DbType="14" Precision="15" Scale="2" />
-                    <Field Name="max_occupancy" Ordinal="10" IsOptional="true" DbType="9" Precision="10" />
-                    <Field Name="status" Ordinal="11" HasDefaultValue="true" DefaultValue="1" DbType="8" Precision="5" />
-                    <Field Name="note" Ordinal="12" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="created_at" Ordinal="13" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="updated_at" Ordinal="14" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_at" Ordinal="15" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_by" Ordinal="16" IsOptional="true" DbType="28" />
+                    <Field Name="organization_id" Ordinal="2" DbType="28" />
+                    <Field Name="property_id" Ordinal="3" DbType="28" />
+                    <Field Name="code" Ordinal="4" DbType="24" Length="50" />
+                    <Field Name="name" Ordinal="5" IsOptional="true" DbType="24" Length="255" />
+                    <Field Name="floor" Ordinal="6" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="area_m2" Ordinal="7" IsOptional="true" DbType="14" Precision="10" Scale="2" />
+                    <Field Name="unit_type" Ordinal="8" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="base_rent" Ordinal="9" DbType="14" Precision="18" Scale="2" />
+                    <Field Name="deposit_amount" Ordinal="10" IsOptional="true" DbType="14" Precision="18" Scale="2" />
+                    <Field Name="max_occupancy" Ordinal="11" IsOptional="true" DbType="9" Precision="10" />
+                    <Field Name="status" Ordinal="12" HasDefaultValue="true" DefaultValue="1" DbType="8" Precision="5" />
+                    <Field Name="note" Ordinal="13" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="created_at" Ordinal="14" DbType="23" />
+                    <Field Name="created_by" Ordinal="15" IsOptional="true" DbType="28" />
+                    <Field Name="updated_at" Ordinal="16" IsOptional="true" DbType="23" />
+                    <Field Name="updated_by" Ordinal="17" IsOptional="true" DbType="28" />
+                    <Field Name="deleted_at" Ordinal="18" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="19" IsOptional="true" DbType="28" />
                   </Fields>
                 </Table>
                 <Table Name="vendors">
@@ -643,28 +697,27 @@
                   <Fields>
                     <Field Name="id" Ordinal="1" IsPrimaryKey="true" DbType="28" />
                     <Field Name="organization_id" Ordinal="2" DbType="28" />
-                    <Field Name="sepay_bank_id" Ordinal="3" IsOptional="true" DbType="28" />
-                    <Field Name="name" Ordinal="4" DbType="24" Length="255" />
-                    <Field Name="tax_code" Ordinal="5" IsOptional="true" DbType="24" Length="100" />
-                    <Field Name="phone" Ordinal="6" IsOptional="true" DbType="24" Length="50" />
-                    <Field Name="email" Ordinal="7" IsOptional="true" DbType="24" Length="200" />
-                    <Field Name="address" Ordinal="8" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="account_number" Ordinal="9" IsOptional="true" DbType="24" Length="50" />
-                    <Field Name="account_holder_name" Ordinal="10" IsOptional="true" DbType="24" Length="200" />
-                    <Field Name="branch_name" Ordinal="11" IsOptional="true" DbType="24" Length="200" />
-                    <Field Name="branch_code" Ordinal="12" IsOptional="true" DbType="24" Length="50" />
-                    <Field Name="swift_code" Ordinal="13" IsOptional="true" DbType="24" Length="30" />
-                    <Field Name="banking_notes" Ordinal="14" IsOptional="true" DbType="19" Length="1073741824" />
-                    <Field Name="contact_person" Ordinal="15" IsOptional="true" DbType="24" Length="200" />
-                    <Field Name="contact_phone" Ordinal="16" IsOptional="true" DbType="24" Length="50" />
-                    <Field Name="contact_email" Ordinal="17" IsOptional="true" DbType="24" Length="200" />
-                    <Field Name="business_license" Ordinal="18" IsOptional="true" DbType="24" Length="200" />
-                    <Field Name="vendor_type" Ordinal="19" IsOptional="true" DbType="24" Length="100" />
-                    <Field Name="status" Ordinal="20" HasDefaultValue="true" DefaultValue="1" DbType="8" Precision="5" />
-                    <Field Name="created_at" Ordinal="21" HasDefaultValue="true" DefaultValue="now()" DbType="23" />
-                    <Field Name="updated_at" Ordinal="22" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_at" Ordinal="23" IsOptional="true" DbType="23" />
-                    <Field Name="deleted_by" Ordinal="24" IsOptional="true" DbType="28" />
+                    <Field Name="name" Ordinal="3" DbType="24" Length="255" />
+                    <Field Name="tax_code" Ordinal="4" IsOptional="true" DbType="24" Length="50" />
+                    <Field Name="phone" Ordinal="5" IsOptional="true" DbType="24" Length="30" />
+                    <Field Name="email" Ordinal="6" IsOptional="true" DbType="24" Length="255" />
+                    <Field Name="address" Ordinal="7" IsOptional="true" DbType="19" Length="1073741824" />
+                    <Field Name="vendor_type" Ordinal="8" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="contact_person" Ordinal="9" IsOptional="true" DbType="24" Length="255" />
+                    <Field Name="contact_phone" Ordinal="10" IsOptional="true" DbType="24" Length="30" />
+                    <Field Name="contact_email" Ordinal="11" IsOptional="true" DbType="24" Length="255" />
+                    <Field Name="business_license" Ordinal="12" IsOptional="true" DbType="24" Length="255" />
+                    <Field Name="sepay_bank_id" Ordinal="13" IsOptional="true" DbType="28" />
+                    <Field Name="account_number" Ordinal="14" IsOptional="true" DbType="24" Length="100" />
+                    <Field Name="account_holder_name" Ordinal="15" IsOptional="true" DbType="24" Length="255" />
+                    <Field Name="branch_name" Ordinal="16" IsOptional="true" DbType="24" Length="255" />
+                    <Field Name="status" Ordinal="17" HasDefaultValue="true" DefaultValue="1" DbType="8" Precision="5" />
+                    <Field Name="created_at" Ordinal="18" DbType="23" />
+                    <Field Name="created_by" Ordinal="19" IsOptional="true" DbType="28" />
+                    <Field Name="updated_at" Ordinal="20" IsOptional="true" DbType="23" />
+                    <Field Name="updated_by" Ordinal="21" IsOptional="true" DbType="28" />
+                    <Field Name="deleted_at" Ordinal="22" IsOptional="true" DbType="23" />
+                    <Field Name="deleted_by" Ordinal="23" IsOptional="true" DbType="28" />
                   </Fields>
                 </Table>
               </Tables>
@@ -748,6 +801,7 @@
           <FieldMappings>
             <FieldMapping FieldName="Category" TargetFieldName="category" />
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="CreatedBy" TargetFieldName="created_by" />
             <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
             <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
             <FieldMapping FieldName="Icon" TargetFieldName="icon" />
@@ -755,6 +809,7 @@
             <FieldMapping FieldName="KeyCode" TargetFieldName="key_code" />
             <FieldMapping FieldName="Name" TargetFieldName="name" />
             <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UpdatedBy" TargetFieldName="updated_by" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName="Prop:Document" TargetName="room_managerment:prop:documents">
@@ -770,6 +825,7 @@
             <FieldMapping FieldName="Id" TargetFieldName="id" />
             <FieldMapping FieldName="IsPrimary" TargetFieldName="is_primary" />
             <FieldMapping FieldName="MimeType" TargetFieldName="mime_type" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
             <FieldMapping FieldName="OwnerId" TargetFieldName="owner_id" />
             <FieldMapping FieldName="OwnerType" TargetFieldName="owner_type" />
             <FieldMapping FieldName="SortOrder" TargetFieldName="sort_order" />
@@ -780,6 +836,7 @@
         <EntityMapping EntityName="Prop:Meter" TargetName="room_managerment:prop:meters">
           <FieldMappings>
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="CreatedBy" TargetFieldName="created_by" />
             <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
             <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
             <FieldMapping FieldName="Description" TargetFieldName="description" />
@@ -787,26 +844,32 @@
             <FieldMapping FieldName="IsActive" TargetFieldName="is_active" />
             <FieldMapping FieldName="MeterNumber" TargetFieldName="meter_number" />
             <FieldMapping FieldName="MeterType" TargetFieldName="meter_type" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
             <FieldMapping FieldName="PropertyId" TargetFieldName="property_id" />
             <FieldMapping FieldName="UnitId" TargetFieldName="unit_id" />
             <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UpdatedBy" TargetFieldName="updated_by" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName="Prop:MeterReading" TargetName="room_managerment:prop:meter_readings">
           <FieldMappings>
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
             <FieldMapping FieldName="Id" TargetFieldName="id" />
             <FieldMapping FieldName="ImageUrl" TargetFieldName="image_url" />
             <FieldMapping FieldName="MeterId" TargetFieldName="meter_id" />
             <FieldMapping FieldName="Note" TargetFieldName="note" />
             <FieldMapping FieldName="ReadingDate" TargetFieldName="reading_date" />
             <FieldMapping FieldName="TakenBy" TargetFieldName="taken_by" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
             <FieldMapping FieldName="Value" TargetFieldName="value" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName="Prop:PropertiesUser" TargetName="room_managerment:prop:properties_user">
           <FieldMappings>
             <FieldMapping FieldName="AssignedAt" TargetFieldName="assigned_at" />
+            <FieldMapping FieldName="AssignedBy" TargetFieldName="assigned_by" />
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
             <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
             <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
@@ -814,7 +877,6 @@
             <FieldMapping FieldName="PropertyId" TargetFieldName="property_id" />
             <FieldMapping FieldName="RoleKey" TargetFieldName="role_key" />
             <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
-            <FieldMapping FieldName="UpdatedBy" TargetFieldName="updated_by" />
             <FieldMapping FieldName="UserId" TargetFieldName="user_id" />
           </FieldMappings>
         </EntityMapping>
@@ -823,6 +885,7 @@
             <FieldMapping FieldName="Address" TargetFieldName="address" />
             <FieldMapping FieldName="Code" TargetFieldName="code" />
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="CreatedBy" TargetFieldName="created_by" />
             <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
             <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
             <FieldMapping FieldName="Description" TargetFieldName="description" />
@@ -840,18 +903,23 @@
             <FieldMapping FieldName="StreetCode" TargetFieldName="street_code" />
             <FieldMapping FieldName="TotalUnits" TargetFieldName="total_units" />
             <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UpdatedBy" TargetFieldName="updated_by" />
             <FieldMapping FieldName="WardCode" TargetFieldName="ward_code" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName="Prop:PropertyType" TargetName="room_managerment:prop:property_types">
           <FieldMappings>
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="CreatedBy" TargetFieldName="created_by" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
+            <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
             <FieldMapping FieldName="Description" TargetFieldName="description" />
             <FieldMapping FieldName="Id" TargetFieldName="id" />
             <FieldMapping FieldName="KeyCode" TargetFieldName="key_code" />
             <FieldMapping FieldName="Name" TargetFieldName="name" />
             <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
             <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UpdatedBy" TargetFieldName="updated_by" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName="Prop:Ticket" TargetName="room_managerment:prop:tickets">
@@ -889,6 +957,7 @@
             <FieldMapping FieldName="Id" TargetFieldName="id" />
             <FieldMapping FieldName="LinkedInvoiceId" TargetFieldName="linked_invoice_id" />
             <FieldMapping FieldName="TicketId" TargetFieldName="ticket_id" />
+            <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
             <FieldMapping FieldName="VendorId" TargetFieldName="vendor_id" />
             <FieldMapping FieldName="WarrantyExpiresAt" TargetFieldName="warranty_expires_at" />
             <FieldMapping FieldName="WarrantyPeriodDays" TargetFieldName="warranty_period_days" />
@@ -897,10 +966,12 @@
         <EntityMapping EntityName="Prop:TicketPriority" TargetName="room_managerment:prop:ticket_priorities">
           <FieldMappings>
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
-            <FieldMapping FieldName="Description" TargetFieldName="description" />
+            <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
             <FieldMapping FieldName="Id" TargetFieldName="id" />
+            <FieldMapping FieldName="IsDefault" TargetFieldName="is_default" />
             <FieldMapping FieldName="KeyCode" TargetFieldName="key_code" />
             <FieldMapping FieldName="Name" TargetFieldName="name" />
+            <FieldMapping FieldName="SortOrder" TargetFieldName="sort_order" />
             <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
           </FieldMappings>
         </EntityMapping>
@@ -910,6 +981,7 @@
             <FieldMapping FieldName="BaseRent" TargetFieldName="base_rent" />
             <FieldMapping FieldName="Code" TargetFieldName="code" />
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="CreatedBy" TargetFieldName="created_by" />
             <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
             <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
             <FieldMapping FieldName="DepositAmount" TargetFieldName="deposit_amount" />
@@ -918,15 +990,19 @@
             <FieldMapping FieldName="MaxOccupancy" TargetFieldName="max_occupancy" />
             <FieldMapping FieldName="Name" TargetFieldName="name" />
             <FieldMapping FieldName="Note" TargetFieldName="note" />
+            <FieldMapping FieldName="OrganizationId" TargetFieldName="organization_id" />
             <FieldMapping FieldName="PropertyId" TargetFieldName="property_id" />
             <FieldMapping FieldName="Status" TargetFieldName="status" />
             <FieldMapping FieldName="UnitType" TargetFieldName="unit_type" />
             <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UpdatedBy" TargetFieldName="updated_by" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName="Prop:UnitAmenity" TargetName="room_managerment:prop:unit_amenities">
           <FieldMappings>
             <FieldMapping FieldName="AmenityId" TargetFieldName="amenity_id" />
+            <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="CreatedBy" TargetFieldName="created_by" />
             <FieldMapping FieldName="UnitId" TargetFieldName="unit_id" />
           </FieldMappings>
         </EntityMapping>
@@ -935,14 +1011,13 @@
             <FieldMapping FieldName="AccountHolderName" TargetFieldName="account_holder_name" />
             <FieldMapping FieldName="AccountNumber" TargetFieldName="account_number" />
             <FieldMapping FieldName="Address" TargetFieldName="address" />
-            <FieldMapping FieldName="BankingNotes" TargetFieldName="banking_notes" />
-            <FieldMapping FieldName="BranchCode" TargetFieldName="branch_code" />
             <FieldMapping FieldName="BranchName" TargetFieldName="branch_name" />
             <FieldMapping FieldName="BusinessLicense" TargetFieldName="business_license" />
             <FieldMapping FieldName="ContactEmail" TargetFieldName="contact_email" />
             <FieldMapping FieldName="ContactPerson" TargetFieldName="contact_person" />
             <FieldMapping FieldName="ContactPhone" TargetFieldName="contact_phone" />
             <FieldMapping FieldName="CreatedAt" TargetFieldName="created_at" />
+            <FieldMapping FieldName="CreatedBy" TargetFieldName="created_by" />
             <FieldMapping FieldName="DeletedAt" TargetFieldName="deleted_at" />
             <FieldMapping FieldName="DeletedBy" TargetFieldName="deleted_by" />
             <FieldMapping FieldName="Email" TargetFieldName="email" />
@@ -952,9 +1027,9 @@
             <FieldMapping FieldName="Phone" TargetFieldName="phone" />
             <FieldMapping FieldName="SepayBankId" TargetFieldName="sepay_bank_id" />
             <FieldMapping FieldName="Status" TargetFieldName="status" />
-            <FieldMapping FieldName="SwiftCode" TargetFieldName="swift_code" />
             <FieldMapping FieldName="TaxCode" TargetFieldName="tax_code" />
             <FieldMapping FieldName="UpdatedAt" TargetFieldName="updated_at" />
+            <FieldMapping FieldName="UpdatedBy" TargetFieldName="updated_by" />
             <FieldMapping FieldName="VendorType" TargetFieldName="vendor_type" />
           </FieldMappings>
         </EntityMapping>

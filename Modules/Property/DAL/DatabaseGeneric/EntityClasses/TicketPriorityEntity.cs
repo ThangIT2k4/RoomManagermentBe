@@ -20,18 +20,16 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'TicketPriority'.<br/><br/></summary>
 	[Serializable]
 	public partial class TicketPriorityEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<TicketEntity> _tickets;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static TicketPriorityEntityStaticMetaData _staticMetaData = new TicketPriorityEntityStaticMetaData();
 		private static TicketPriorityRelations _relationsFactory = new TicketPriorityRelations();
 
@@ -114,7 +112,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -129,7 +126,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -149,12 +145,12 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)TicketPriorityFieldIndex.CreatedAt, value); }
 		}
 
-		/// <summary>The Description property of the Entity TicketPriority<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ticket_priorities"."description".<br/>Table field type characteristics (type, precision, scale, length): Text, 0, 0, 1073741824.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String Description
+		/// <summary>The DeletedAt property of the Entity TicketPriority<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ticket_priorities"."deleted_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> DeletedAt
 		{
-			get { return (System.String)GetValue((int)TicketPriorityFieldIndex.Description, true); }
-			set { SetValue((int)TicketPriorityFieldIndex.Description, value); }
+			get { return (Nullable<System.DateTime>)GetValue((int)TicketPriorityFieldIndex.DeletedAt, false); }
+			set { SetValue((int)TicketPriorityFieldIndex.DeletedAt, value); }
 		}
 
 		/// <summary>The Id property of the Entity TicketPriority<br/><br/></summary>
@@ -165,8 +161,16 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)TicketPriorityFieldIndex.Id, value); }
 		}
 
+		/// <summary>The IsDefault property of the Entity TicketPriority<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ticket_priorities"."is_default".<br/>Table field type characteristics (type, precision, scale, length): Boolean, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean IsDefault
+		{
+			get { return (System.Boolean)GetValue((int)TicketPriorityFieldIndex.IsDefault, true); }
+			set { SetValue((int)TicketPriorityFieldIndex.IsDefault, value); }
+		}
+
 		/// <summary>The KeyCode property of the Entity TicketPriority<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ticket_priorities"."key_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ticket_priorities"."key_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String KeyCode
 		{
 			get { return (System.String)GetValue((int)TicketPriorityFieldIndex.KeyCode, true); }
@@ -181,6 +185,14 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)TicketPriorityFieldIndex.Name, value); }
 		}
 
+		/// <summary>The SortOrder property of the Entity TicketPriority<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ticket_priorities"."sort_order".<br/>Table field type characteristics (type, precision, scale, length): Integer, 10, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 SortOrder
+		{
+			get { return (System.Int32)GetValue((int)TicketPriorityFieldIndex.SortOrder, true); }
+			set { SetValue((int)TicketPriorityFieldIndex.SortOrder, value); }
+		}
+
 		/// <summary>The UpdatedAt property of the Entity TicketPriority<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ticket_priorities"."updated_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> UpdatedAt
@@ -192,9 +204,9 @@ namespace RoomManagerment.Property.EntityClasses
 		/// <summary>Gets the EntityCollection with the related entities of type 'TicketEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(TicketEntity))]
 		public virtual EntityCollection<TicketEntity> Tickets { get { return GetOrCreateEntityCollection<TicketEntity, TicketEntityFactory>("TicketPriority", true, false, ref _tickets); } }
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -205,14 +217,18 @@ namespace RoomManagerment.Property
 	{
 		///<summary>CreatedAt. </summary>
 		CreatedAt,
-		///<summary>Description. </summary>
-		Description,
+		///<summary>DeletedAt. </summary>
+		DeletedAt,
 		///<summary>Id. </summary>
 		Id,
+		///<summary>IsDefault. </summary>
+		IsDefault,
 		///<summary>KeyCode. </summary>
 		KeyCode,
 		///<summary>Name. </summary>
 		Name,
+		///<summary>SortOrder. </summary>
+		SortOrder,
 		///<summary>UpdatedAt. </summary>
 		UpdatedAt,
 		/// <summary></summary>

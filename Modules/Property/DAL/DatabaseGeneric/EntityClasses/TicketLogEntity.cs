@@ -20,19 +20,17 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'TicketLog'.<br/><br/></summary>
 	[Serializable]
 	public partial class TicketLogEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private TicketEntity _ticket;
 		private VendorEntity _vendor;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static TicketLogEntityStaticMetaData _staticMetaData = new TicketLogEntityStaticMetaData();
 		private static TicketLogRelations _relationsFactory = new TicketLogRelations();
 
@@ -122,7 +120,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -137,7 +134,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -154,7 +150,7 @@ namespace RoomManagerment.Property.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathVendor { get { return _staticMetaData.GetPrefetchPathElement("Vendor", CommonEntityBase.CreateEntityCollection<VendorEntity>()); } }
 
 		/// <summary>The Action property of the Entity TicketLog<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ticket_logs"."action".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ticket_logs"."action".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Action
 		{
 			get { return (System.String)GetValue((int)TicketLogFieldIndex.Action, true); }
@@ -170,7 +166,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The ChargeTo property of the Entity TicketLog<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ticket_logs"."charge_to".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ticket_logs"."charge_to".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ChargeTo
 		{
 			get { return (System.String)GetValue((int)TicketLogFieldIndex.ChargeTo, true); }
@@ -178,7 +174,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The CostAmount property of the Entity TicketLog<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ticket_logs"."cost_amount".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 15, 2, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "ticket_logs"."cost_amount".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 2, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Decimal> CostAmount
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)TicketLogFieldIndex.CostAmount, false); }
@@ -249,6 +245,14 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)TicketLogFieldIndex.TicketId, value); }
 		}
 
+		/// <summary>The UpdatedAt property of the Entity TicketLog<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ticket_logs"."updated_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> UpdatedAt
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)TicketLogFieldIndex.UpdatedAt, false); }
+			set { SetValue((int)TicketLogFieldIndex.UpdatedAt, value); }
+		}
+
 		/// <summary>The VendorId property of the Entity TicketLog<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ticket_logs"."vendor_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Guid> VendorId
@@ -288,9 +292,9 @@ namespace RoomManagerment.Property.EntityClasses
 			get { return _vendor; }
 			set { SetSingleRelatedEntityNavigator(value, "Vendor"); }
 		}
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -323,6 +327,8 @@ namespace RoomManagerment.Property
 		LinkedInvoiceId,
 		///<summary>TicketId. </summary>
 		TicketId,
+		///<summary>UpdatedAt. </summary>
+		UpdatedAt,
 		///<summary>VendorId. </summary>
 		VendorId,
 		///<summary>WarrantyExpiresAt. </summary>

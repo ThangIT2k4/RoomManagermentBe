@@ -20,20 +20,18 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'Meter'.<br/><br/></summary>
 	[Serializable]
 	public partial class MeterEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<MeterReadingEntity> _meterReadings;
 		private PropertyEntity _property;
 		private UnitEntity _unit;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static MeterEntityStaticMetaData _staticMetaData = new MeterEntityStaticMetaData();
 		private static MeterRelations _relationsFactory = new MeterRelations();
 
@@ -130,7 +128,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -145,7 +142,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -171,6 +167,14 @@ namespace RoomManagerment.Property.EntityClasses
 		{
 			get { return (System.DateTime)GetValue((int)MeterFieldIndex.CreatedAt, true); }
 			set { SetValue((int)MeterFieldIndex.CreatedAt, value); }
+		}
+
+		/// <summary>The CreatedBy property of the Entity Meter<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "meters"."created_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> CreatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)MeterFieldIndex.CreatedBy, false); }
+			set { SetValue((int)MeterFieldIndex.CreatedBy, value); }
 		}
 
 		/// <summary>The DeletedAt property of the Entity Meter<br/><br/></summary>
@@ -214,7 +218,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The MeterNumber property of the Entity Meter<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "meters"."meter_number".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "meters"."meter_number".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String MeterNumber
 		{
 			get { return (System.String)GetValue((int)MeterFieldIndex.MeterNumber, true); }
@@ -222,11 +226,19 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The MeterType property of the Entity Meter<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "meters"."meter_type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "meters"."meter_type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String MeterType
 		{
 			get { return (System.String)GetValue((int)MeterFieldIndex.MeterType, true); }
 			set { SetValue((int)MeterFieldIndex.MeterType, value); }
+		}
+
+		/// <summary>The OrganizationId property of the Entity Meter<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "meters"."organization_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Guid OrganizationId
+		{
+			get { return (System.Guid)GetValue((int)MeterFieldIndex.OrganizationId, true); }
+			set { SetValue((int)MeterFieldIndex.OrganizationId, value); }
 		}
 
 		/// <summary>The PropertyId property of the Entity Meter<br/><br/></summary>
@@ -253,6 +265,14 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)MeterFieldIndex.UpdatedAt, value); }
 		}
 
+		/// <summary>The UpdatedBy property of the Entity Meter<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "meters"."updated_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> UpdatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)MeterFieldIndex.UpdatedBy, false); }
+			set { SetValue((int)MeterFieldIndex.UpdatedBy, value); }
+		}
+
 		/// <summary>Gets the EntityCollection with the related entities of type 'MeterReadingEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(MeterReadingEntity))]
 		public virtual EntityCollection<MeterReadingEntity> MeterReadings { get { return GetOrCreateEntityCollection<MeterReadingEntity, MeterReadingEntityFactory>("Meter", true, false, ref _meterReadings); } }
@@ -272,9 +292,9 @@ namespace RoomManagerment.Property.EntityClasses
 			get { return _unit; }
 			set { SetSingleRelatedEntityNavigator(value, "Unit"); }
 		}
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -285,6 +305,8 @@ namespace RoomManagerment.Property
 	{
 		///<summary>CreatedAt. </summary>
 		CreatedAt,
+		///<summary>CreatedBy. </summary>
+		CreatedBy,
 		///<summary>DeletedAt. </summary>
 		DeletedAt,
 		///<summary>DeletedBy. </summary>
@@ -299,12 +321,16 @@ namespace RoomManagerment.Property
 		MeterNumber,
 		///<summary>MeterType. </summary>
 		MeterType,
+		///<summary>OrganizationId. </summary>
+		OrganizationId,
 		///<summary>PropertyId. </summary>
 		PropertyId,
 		///<summary>UnitId. </summary>
 		UnitId,
 		///<summary>UpdatedAt. </summary>
 		UpdatedAt,
+		///<summary>UpdatedBy. </summary>
+		UpdatedBy,
 		/// <summary></summary>
 		AmountOfFields
 	}

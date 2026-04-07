@@ -20,18 +20,16 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'MeterReading'.<br/><br/></summary>
 	[Serializable]
 	public partial class MeterReadingEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private MeterEntity _meter;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static MeterReadingEntityStaticMetaData _staticMetaData = new MeterReadingEntityStaticMetaData();
 		private static MeterReadingRelations _relationsFactory = new MeterReadingRelations();
 
@@ -114,7 +112,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -129,7 +126,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -147,6 +143,22 @@ namespace RoomManagerment.Property.EntityClasses
 		{
 			get { return (System.DateTime)GetValue((int)MeterReadingFieldIndex.CreatedAt, true); }
 			set { SetValue((int)MeterReadingFieldIndex.CreatedAt, value); }
+		}
+
+		/// <summary>The DeletedAt property of the Entity MeterReading<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "meter_readings"."deleted_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> DeletedAt
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)MeterReadingFieldIndex.DeletedAt, false); }
+			set { SetValue((int)MeterReadingFieldIndex.DeletedAt, value); }
+		}
+
+		/// <summary>The DeletedBy property of the Entity MeterReading<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "meter_readings"."deleted_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> DeletedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)MeterReadingFieldIndex.DeletedBy, false); }
+			set { SetValue((int)MeterReadingFieldIndex.DeletedBy, value); }
 		}
 
 		/// <summary>The Id property of the Entity MeterReading<br/><br/></summary>
@@ -197,8 +209,16 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)MeterReadingFieldIndex.TakenBy, value); }
 		}
 
+		/// <summary>The UpdatedAt property of the Entity MeterReading<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "meter_readings"."updated_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> UpdatedAt
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)MeterReadingFieldIndex.UpdatedAt, false); }
+			set { SetValue((int)MeterReadingFieldIndex.UpdatedAt, value); }
+		}
+
 		/// <summary>The Value property of the Entity MeterReading<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "meter_readings"."value".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 15, 3, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "meter_readings"."value".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 3, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Decimal Value
 		{
 			get { return (System.Decimal)GetValue((int)MeterReadingFieldIndex.Value, true); }
@@ -212,9 +232,9 @@ namespace RoomManagerment.Property.EntityClasses
 			get { return _meter; }
 			set { SetSingleRelatedEntityNavigator(value, "Meter"); }
 		}
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -225,6 +245,10 @@ namespace RoomManagerment.Property
 	{
 		///<summary>CreatedAt. </summary>
 		CreatedAt,
+		///<summary>DeletedAt. </summary>
+		DeletedAt,
+		///<summary>DeletedBy. </summary>
+		DeletedBy,
 		///<summary>Id. </summary>
 		Id,
 		///<summary>ImageUrl. </summary>
@@ -237,6 +261,8 @@ namespace RoomManagerment.Property
 		ReadingDate,
 		///<summary>TakenBy. </summary>
 		TakenBy,
+		///<summary>UpdatedAt. </summary>
+		UpdatedAt,
 		///<summary>Value. </summary>
 		Value,
 		/// <summary></summary>

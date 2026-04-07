@@ -20,22 +20,20 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'Property'.<br/><br/></summary>
 	[Serializable]
 	public partial class PropertyEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<MeterEntity> _meters;
 		private EntityCollection<PropertiesUserEntity> _propertiesUsers;
 		private EntityCollection<TicketEntity> _tickets;
 		private EntityCollection<UnitEntity> _units;
 		private PropertyTypeEntity _propertyType;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static PropertyEntityStaticMetaData _staticMetaData = new PropertyEntityStaticMetaData();
 		private static PropertyRelations _relationsFactory = new PropertyRelations();
 
@@ -146,7 +144,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -161,7 +158,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -190,7 +186,7 @@ namespace RoomManagerment.Property.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathPropertyType { get { return _staticMetaData.GetPrefetchPathElement("PropertyType", CommonEntityBase.CreateEntityCollection<PropertyTypeEntity>()); } }
 
 		/// <summary>The Address property of the Entity Property<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "properties"."address".<br/>Table field type characteristics (type, precision, scale, length): Text, 0, 0, 1073741824.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "properties"."address".<br/>Table field type characteristics (type, precision, scale, length): Text, 0, 0, 1073741824.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Address
 		{
 			get { return (System.String)GetValue((int)PropertyFieldIndex.Address, true); }
@@ -211,6 +207,14 @@ namespace RoomManagerment.Property.EntityClasses
 		{
 			get { return (System.DateTime)GetValue((int)PropertyFieldIndex.CreatedAt, true); }
 			set { SetValue((int)PropertyFieldIndex.CreatedAt, value); }
+		}
+
+		/// <summary>The CreatedBy property of the Entity Property<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "properties"."created_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> CreatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)PropertyFieldIndex.CreatedBy, false); }
+			set { SetValue((int)PropertyFieldIndex.CreatedBy, value); }
 		}
 
 		/// <summary>The DeletedAt property of the Entity Property<br/><br/></summary>
@@ -238,7 +242,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The DistrictCode property of the Entity Property<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "properties"."district_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "properties"."district_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String DistrictCode
 		{
 			get { return (System.String)GetValue((int)PropertyFieldIndex.DistrictCode, true); }
@@ -302,15 +306,15 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The PropertyTypeId property of the Entity Property<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "properties"."property_type_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Guid> PropertyTypeId
+		/// <remarks>Mapped on  table field: "properties"."property_type_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Guid PropertyTypeId
 		{
-			get { return (Nullable<System.Guid>)GetValue((int)PropertyFieldIndex.PropertyTypeId, false); }
+			get { return (System.Guid)GetValue((int)PropertyFieldIndex.PropertyTypeId, true); }
 			set { SetValue((int)PropertyFieldIndex.PropertyTypeId, value); }
 		}
 
 		/// <summary>The ProvinceCode property of the Entity Property<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "properties"."province_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "properties"."province_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ProvinceCode
 		{
 			get { return (System.String)GetValue((int)PropertyFieldIndex.ProvinceCode, true); }
@@ -326,7 +330,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The StreetCode property of the Entity Property<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "properties"."street_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "properties"."street_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String StreetCode
 		{
 			get { return (System.String)GetValue((int)PropertyFieldIndex.StreetCode, true); }
@@ -349,8 +353,16 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)PropertyFieldIndex.UpdatedAt, value); }
 		}
 
+		/// <summary>The UpdatedBy property of the Entity Property<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "properties"."updated_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> UpdatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)PropertyFieldIndex.UpdatedBy, false); }
+			set { SetValue((int)PropertyFieldIndex.UpdatedBy, value); }
+		}
+
 		/// <summary>The WardCode property of the Entity Property<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "properties"."ward_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 10.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "properties"."ward_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 20.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String WardCode
 		{
 			get { return (System.String)GetValue((int)PropertyFieldIndex.WardCode, true); }
@@ -380,9 +392,9 @@ namespace RoomManagerment.Property.EntityClasses
 			get { return _propertyType; }
 			set { SetSingleRelatedEntityNavigator(value, "PropertyType"); }
 		}
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -397,6 +409,8 @@ namespace RoomManagerment.Property
 		Code,
 		///<summary>CreatedAt. </summary>
 		CreatedAt,
+		///<summary>CreatedBy. </summary>
+		CreatedBy,
 		///<summary>DeletedAt. </summary>
 		DeletedAt,
 		///<summary>DeletedBy. </summary>
@@ -431,6 +445,8 @@ namespace RoomManagerment.Property
 		TotalUnits,
 		///<summary>UpdatedAt. </summary>
 		UpdatedAt,
+		///<summary>UpdatedBy. </summary>
+		UpdatedBy,
 		///<summary>WardCode. </summary>
 		WardCode,
 		/// <summary></summary>

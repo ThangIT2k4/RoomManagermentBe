@@ -20,19 +20,17 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'UnitAmenity'.<br/><br/></summary>
 	[Serializable]
 	public partial class UnitAmenityEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private AmenityEntity _amenity;
 		private UnitEntity _unit;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static UnitAmenityEntityStaticMetaData _staticMetaData = new UnitAmenityEntityStaticMetaData();
 		private static UnitAmenityRelations _relationsFactory = new UnitAmenityRelations();
 
@@ -125,7 +123,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -140,7 +137,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -162,6 +158,22 @@ namespace RoomManagerment.Property.EntityClasses
 		{
 			get { return (System.Guid)GetValue((int)UnitAmenityFieldIndex.AmenityId, true); }
 			set { SetValue((int)UnitAmenityFieldIndex.AmenityId, value); }
+		}
+
+		/// <summary>The CreatedAt property of the Entity UnitAmenity<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "unit_amenities"."created_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.DateTime CreatedAt
+		{
+			get { return (System.DateTime)GetValue((int)UnitAmenityFieldIndex.CreatedAt, true); }
+			set { SetValue((int)UnitAmenityFieldIndex.CreatedAt, value); }
+		}
+
+		/// <summary>The CreatedBy property of the Entity UnitAmenity<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "unit_amenities"."created_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> CreatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)UnitAmenityFieldIndex.CreatedBy, false); }
+			set { SetValue((int)UnitAmenityFieldIndex.CreatedBy, value); }
 		}
 
 		/// <summary>The UnitId property of the Entity UnitAmenity<br/><br/></summary>
@@ -187,9 +199,9 @@ namespace RoomManagerment.Property.EntityClasses
 			get { return _unit; }
 			set { SetSingleRelatedEntityNavigator(value, "Unit"); }
 		}
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -200,6 +212,10 @@ namespace RoomManagerment.Property
 	{
 		///<summary>AmenityId. </summary>
 		AmenityId,
+		///<summary>CreatedAt. </summary>
+		CreatedAt,
+		///<summary>CreatedBy. </summary>
+		CreatedBy,
 		///<summary>UnitId. </summary>
 		UnitId,
 		/// <summary></summary>

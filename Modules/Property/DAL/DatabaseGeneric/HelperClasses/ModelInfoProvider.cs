@@ -63,13 +63,15 @@ namespace RoomManagerment.Property.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(AmenityFieldIndex), "AmenityEntity");
 			this.AddElementFieldInfo("AmenityEntity", "Category", typeof(System.String), false, false, false, true,  (int)AmenityFieldIndex.Category, 100, 0, 0);
 			this.AddElementFieldInfo("AmenityEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)AmenityFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("AmenityEntity", "CreatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)AmenityFieldIndex.CreatedBy, 0, 0, 0);
 			this.AddElementFieldInfo("AmenityEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AmenityFieldIndex.DeletedAt, 0, 0, 0);
 			this.AddElementFieldInfo("AmenityEntity", "DeletedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)AmenityFieldIndex.DeletedBy, 0, 0, 0);
-			this.AddElementFieldInfo("AmenityEntity", "Icon", typeof(System.String), false, false, false, true,  (int)AmenityFieldIndex.Icon, 200, 0, 0);
+			this.AddElementFieldInfo("AmenityEntity", "Icon", typeof(System.String), false, false, false, true,  (int)AmenityFieldIndex.Icon, 255, 0, 0);
 			this.AddElementFieldInfo("AmenityEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)AmenityFieldIndex.Id, 0, 0, 0);
-			this.AddElementFieldInfo("AmenityEntity", "KeyCode", typeof(System.String), false, false, false, false,  (int)AmenityFieldIndex.KeyCode, 100, 0, 0);
-			this.AddElementFieldInfo("AmenityEntity", "Name", typeof(System.String), false, false, false, false,  (int)AmenityFieldIndex.Name, 200, 0, 0);
+			this.AddElementFieldInfo("AmenityEntity", "KeyCode", typeof(System.String), false, false, false, false,  (int)AmenityFieldIndex.KeyCode, 50, 0, 0);
+			this.AddElementFieldInfo("AmenityEntity", "Name", typeof(System.String), false, false, false, false,  (int)AmenityFieldIndex.Name, 255, 0, 0);
 			this.AddElementFieldInfo("AmenityEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AmenityFieldIndex.UpdatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("AmenityEntity", "UpdatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)AmenityFieldIndex.UpdatedBy, 0, 0, 0);
 		}
 
 		/// <summary>Inits DocumentEntity's info objects</summary>
@@ -80,18 +82,19 @@ namespace RoomManagerment.Property.HelperClasses
 			this.AddElementFieldInfo("DocumentEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)DocumentFieldIndex.DeletedAt, 0, 0, 0);
 			this.AddElementFieldInfo("DocumentEntity", "DeletedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)DocumentFieldIndex.DeletedBy, 0, 0, 0);
 			this.AddElementFieldInfo("DocumentEntity", "Description", typeof(System.String), false, false, false, true,  (int)DocumentFieldIndex.Description, 1073741824, 0, 0);
-			this.AddElementFieldInfo("DocumentEntity", "DocumentType", typeof(System.String), false, false, false, true,  (int)DocumentFieldIndex.DocumentType, 100, 0, 0);
-			this.AddElementFieldInfo("DocumentEntity", "FileName", typeof(System.String), false, false, false, true,  (int)DocumentFieldIndex.FileName, 500, 0, 0);
-			this.AddElementFieldInfo("DocumentEntity", "FileSize", typeof(Nullable<System.Int64>), false, false, false, true,  (int)DocumentFieldIndex.FileSize, 0, 0, 20);
+			this.AddElementFieldInfo("DocumentEntity", "DocumentType", typeof(System.String), false, false, false, true,  (int)DocumentFieldIndex.DocumentType, 50, 0, 0);
+			this.AddElementFieldInfo("DocumentEntity", "FileName", typeof(System.String), false, false, false, false,  (int)DocumentFieldIndex.FileName, 255, 0, 0);
+			this.AddElementFieldInfo("DocumentEntity", "FileSize", typeof(System.Int64), false, false, false, false,  (int)DocumentFieldIndex.FileSize, 0, 0, 20);
 			this.AddElementFieldInfo("DocumentEntity", "FileUrl", typeof(System.String), false, false, false, false,  (int)DocumentFieldIndex.FileUrl, 1073741824, 0, 0);
 			this.AddElementFieldInfo("DocumentEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)DocumentFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("DocumentEntity", "IsPrimary", typeof(System.Boolean), false, false, false, false,  (int)DocumentFieldIndex.IsPrimary, 0, 0, 0);
-			this.AddElementFieldInfo("DocumentEntity", "MimeType", typeof(System.String), false, false, false, true,  (int)DocumentFieldIndex.MimeType, 100, 0, 0);
+			this.AddElementFieldInfo("DocumentEntity", "MimeType", typeof(System.String), false, false, false, false,  (int)DocumentFieldIndex.MimeType, 100, 0, 0);
+			this.AddElementFieldInfo("DocumentEntity", "OrganizationId", typeof(System.Guid), false, false, false, false,  (int)DocumentFieldIndex.OrganizationId, 0, 0, 0);
 			this.AddElementFieldInfo("DocumentEntity", "OwnerId", typeof(System.Guid), false, false, false, false,  (int)DocumentFieldIndex.OwnerId, 0, 0, 0);
-			this.AddElementFieldInfo("DocumentEntity", "OwnerType", typeof(System.String), false, false, false, false,  (int)DocumentFieldIndex.OwnerType, 100, 0, 0);
+			this.AddElementFieldInfo("DocumentEntity", "OwnerType", typeof(System.String), false, false, false, false,  (int)DocumentFieldIndex.OwnerType, 50, 0, 0);
 			this.AddElementFieldInfo("DocumentEntity", "SortOrder", typeof(System.Int32), false, false, false, false,  (int)DocumentFieldIndex.SortOrder, 0, 0, 10);
 			this.AddElementFieldInfo("DocumentEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)DocumentFieldIndex.UpdatedAt, 0, 0, 0);
-			this.AddElementFieldInfo("DocumentEntity", "UploadedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)DocumentFieldIndex.UploadedBy, 0, 0, 0);
+			this.AddElementFieldInfo("DocumentEntity", "UploadedBy", typeof(System.Guid), false, false, false, false,  (int)DocumentFieldIndex.UploadedBy, 0, 0, 0);
 		}
 
 		/// <summary>Inits MeterEntity's info objects</summary>
@@ -99,16 +102,19 @@ namespace RoomManagerment.Property.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(MeterFieldIndex), "MeterEntity");
 			this.AddElementFieldInfo("MeterEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)MeterFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("MeterEntity", "CreatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)MeterFieldIndex.CreatedBy, 0, 0, 0);
 			this.AddElementFieldInfo("MeterEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)MeterFieldIndex.DeletedAt, 0, 0, 0);
 			this.AddElementFieldInfo("MeterEntity", "DeletedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)MeterFieldIndex.DeletedBy, 0, 0, 0);
 			this.AddElementFieldInfo("MeterEntity", "Description", typeof(System.String), false, false, false, true,  (int)MeterFieldIndex.Description, 1073741824, 0, 0);
 			this.AddElementFieldInfo("MeterEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)MeterFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("MeterEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)MeterFieldIndex.IsActive, 0, 0, 0);
-			this.AddElementFieldInfo("MeterEntity", "MeterNumber", typeof(System.String), false, false, false, true,  (int)MeterFieldIndex.MeterNumber, 100, 0, 0);
-			this.AddElementFieldInfo("MeterEntity", "MeterType", typeof(System.String), false, false, false, false,  (int)MeterFieldIndex.MeterType, 50, 0, 0);
+			this.AddElementFieldInfo("MeterEntity", "MeterNumber", typeof(System.String), false, false, false, false,  (int)MeterFieldIndex.MeterNumber, 100, 0, 0);
+			this.AddElementFieldInfo("MeterEntity", "MeterType", typeof(System.String), false, false, false, false,  (int)MeterFieldIndex.MeterType, 30, 0, 0);
+			this.AddElementFieldInfo("MeterEntity", "OrganizationId", typeof(System.Guid), false, false, false, false,  (int)MeterFieldIndex.OrganizationId, 0, 0, 0);
 			this.AddElementFieldInfo("MeterEntity", "PropertyId", typeof(System.Guid), false, true, false, false,  (int)MeterFieldIndex.PropertyId, 0, 0, 0);
 			this.AddElementFieldInfo("MeterEntity", "UnitId", typeof(Nullable<System.Guid>), false, true, false, true,  (int)MeterFieldIndex.UnitId, 0, 0, 0);
 			this.AddElementFieldInfo("MeterEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)MeterFieldIndex.UpdatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("MeterEntity", "UpdatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)MeterFieldIndex.UpdatedBy, 0, 0, 0);
 		}
 
 		/// <summary>Inits MeterReadingEntity's info objects</summary>
@@ -116,13 +122,16 @@ namespace RoomManagerment.Property.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(MeterReadingFieldIndex), "MeterReadingEntity");
 			this.AddElementFieldInfo("MeterReadingEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)MeterReadingFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("MeterReadingEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)MeterReadingFieldIndex.DeletedAt, 0, 0, 0);
+			this.AddElementFieldInfo("MeterReadingEntity", "DeletedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)MeterReadingFieldIndex.DeletedBy, 0, 0, 0);
 			this.AddElementFieldInfo("MeterReadingEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)MeterReadingFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("MeterReadingEntity", "ImageUrl", typeof(System.String), false, false, false, true,  (int)MeterReadingFieldIndex.ImageUrl, 1073741824, 0, 0);
 			this.AddElementFieldInfo("MeterReadingEntity", "MeterId", typeof(System.Guid), false, true, false, false,  (int)MeterReadingFieldIndex.MeterId, 0, 0, 0);
 			this.AddElementFieldInfo("MeterReadingEntity", "Note", typeof(System.String), false, false, false, true,  (int)MeterReadingFieldIndex.Note, 1073741824, 0, 0);
 			this.AddElementFieldInfo("MeterReadingEntity", "ReadingDate", typeof(System.DateOnly), false, false, false, false,  (int)MeterReadingFieldIndex.ReadingDate, 0, 0, 0);
 			this.AddElementFieldInfo("MeterReadingEntity", "TakenBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)MeterReadingFieldIndex.TakenBy, 0, 0, 0);
-			this.AddElementFieldInfo("MeterReadingEntity", "Value", typeof(System.Decimal), false, false, false, false,  (int)MeterReadingFieldIndex.Value, 0, 3, 15);
+			this.AddElementFieldInfo("MeterReadingEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)MeterReadingFieldIndex.UpdatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("MeterReadingEntity", "Value", typeof(System.Decimal), false, false, false, false,  (int)MeterReadingFieldIndex.Value, 0, 3, 18);
 		}
 
 		/// <summary>Inits PropertiesUserEntity's info objects</summary>
@@ -130,14 +139,14 @@ namespace RoomManagerment.Property.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(PropertiesUserFieldIndex), "PropertiesUserEntity");
 			this.AddElementFieldInfo("PropertiesUserEntity", "AssignedAt", typeof(System.DateTime), false, false, false, false,  (int)PropertiesUserFieldIndex.AssignedAt, 0, 0, 0);
+			this.AddElementFieldInfo("PropertiesUserEntity", "AssignedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)PropertiesUserFieldIndex.AssignedBy, 0, 0, 0);
 			this.AddElementFieldInfo("PropertiesUserEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)PropertiesUserFieldIndex.CreatedAt, 0, 0, 0);
 			this.AddElementFieldInfo("PropertiesUserEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)PropertiesUserFieldIndex.DeletedAt, 0, 0, 0);
 			this.AddElementFieldInfo("PropertiesUserEntity", "DeletedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)PropertiesUserFieldIndex.DeletedBy, 0, 0, 0);
 			this.AddElementFieldInfo("PropertiesUserEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)PropertiesUserFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("PropertiesUserEntity", "PropertyId", typeof(System.Guid), false, true, false, false,  (int)PropertiesUserFieldIndex.PropertyId, 0, 0, 0);
-			this.AddElementFieldInfo("PropertiesUserEntity", "RoleKey", typeof(System.String), false, false, false, true,  (int)PropertiesUserFieldIndex.RoleKey, 50, 0, 0);
+			this.AddElementFieldInfo("PropertiesUserEntity", "RoleKey", typeof(System.String), false, false, false, false,  (int)PropertiesUserFieldIndex.RoleKey, 50, 0, 0);
 			this.AddElementFieldInfo("PropertiesUserEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)PropertiesUserFieldIndex.UpdatedAt, 0, 0, 0);
-			this.AddElementFieldInfo("PropertiesUserEntity", "UpdatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)PropertiesUserFieldIndex.UpdatedBy, 0, 0, 0);
 			this.AddElementFieldInfo("PropertiesUserEntity", "UserId", typeof(System.Guid), false, false, false, false,  (int)PropertiesUserFieldIndex.UserId, 0, 0, 0);
 		}
 
@@ -145,13 +154,14 @@ namespace RoomManagerment.Property.HelperClasses
 		private void InitPropertyEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(PropertyFieldIndex), "PropertyEntity");
-			this.AddElementFieldInfo("PropertyEntity", "Address", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.Address, 1073741824, 0, 0);
+			this.AddElementFieldInfo("PropertyEntity", "Address", typeof(System.String), false, false, false, false,  (int)PropertyFieldIndex.Address, 1073741824, 0, 0);
 			this.AddElementFieldInfo("PropertyEntity", "Code", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.Code, 50, 0, 0);
 			this.AddElementFieldInfo("PropertyEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)PropertyFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("PropertyEntity", "CreatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)PropertyFieldIndex.CreatedBy, 0, 0, 0);
 			this.AddElementFieldInfo("PropertyEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)PropertyFieldIndex.DeletedAt, 0, 0, 0);
 			this.AddElementFieldInfo("PropertyEntity", "DeletedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)PropertyFieldIndex.DeletedBy, 0, 0, 0);
 			this.AddElementFieldInfo("PropertyEntity", "Description", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.Description, 1073741824, 0, 0);
-			this.AddElementFieldInfo("PropertyEntity", "DistrictCode", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.DistrictCode, 10, 0, 0);
+			this.AddElementFieldInfo("PropertyEntity", "DistrictCode", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.DistrictCode, 20, 0, 0);
 			this.AddElementFieldInfo("PropertyEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)PropertyFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("PropertyEntity", "Latitude", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)PropertyFieldIndex.Latitude, 0, 7, 10);
 			this.AddElementFieldInfo("PropertyEntity", "Longitude", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)PropertyFieldIndex.Longitude, 0, 7, 10);
@@ -159,13 +169,14 @@ namespace RoomManagerment.Property.HelperClasses
 			this.AddElementFieldInfo("PropertyEntity", "Notes", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.Notes, 1073741824, 0, 0);
 			this.AddElementFieldInfo("PropertyEntity", "NumberOfFloors", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PropertyFieldIndex.NumberOfFloors, 0, 0, 10);
 			this.AddElementFieldInfo("PropertyEntity", "OrganizationId", typeof(System.Guid), false, false, false, false,  (int)PropertyFieldIndex.OrganizationId, 0, 0, 0);
-			this.AddElementFieldInfo("PropertyEntity", "PropertyTypeId", typeof(Nullable<System.Guid>), false, true, false, true,  (int)PropertyFieldIndex.PropertyTypeId, 0, 0, 0);
-			this.AddElementFieldInfo("PropertyEntity", "ProvinceCode", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.ProvinceCode, 10, 0, 0);
+			this.AddElementFieldInfo("PropertyEntity", "PropertyTypeId", typeof(System.Guid), false, true, false, false,  (int)PropertyFieldIndex.PropertyTypeId, 0, 0, 0);
+			this.AddElementFieldInfo("PropertyEntity", "ProvinceCode", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.ProvinceCode, 20, 0, 0);
 			this.AddElementFieldInfo("PropertyEntity", "Status", typeof(System.Int16), false, false, false, false,  (int)PropertyFieldIndex.Status, 0, 0, 5);
-			this.AddElementFieldInfo("PropertyEntity", "StreetCode", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.StreetCode, 10, 0, 0);
+			this.AddElementFieldInfo("PropertyEntity", "StreetCode", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.StreetCode, 20, 0, 0);
 			this.AddElementFieldInfo("PropertyEntity", "TotalUnits", typeof(System.Int32), false, false, false, false,  (int)PropertyFieldIndex.TotalUnits, 0, 0, 10);
 			this.AddElementFieldInfo("PropertyEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)PropertyFieldIndex.UpdatedAt, 0, 0, 0);
-			this.AddElementFieldInfo("PropertyEntity", "WardCode", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.WardCode, 10, 0, 0);
+			this.AddElementFieldInfo("PropertyEntity", "UpdatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)PropertyFieldIndex.UpdatedBy, 0, 0, 0);
+			this.AddElementFieldInfo("PropertyEntity", "WardCode", typeof(System.String), false, false, false, true,  (int)PropertyFieldIndex.WardCode, 20, 0, 0);
 		}
 
 		/// <summary>Inits PropertyTypeEntity's info objects</summary>
@@ -173,12 +184,16 @@ namespace RoomManagerment.Property.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(PropertyTypeFieldIndex), "PropertyTypeEntity");
 			this.AddElementFieldInfo("PropertyTypeEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)PropertyTypeFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("PropertyTypeEntity", "CreatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)PropertyTypeFieldIndex.CreatedBy, 0, 0, 0);
+			this.AddElementFieldInfo("PropertyTypeEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)PropertyTypeFieldIndex.DeletedAt, 0, 0, 0);
+			this.AddElementFieldInfo("PropertyTypeEntity", "DeletedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)PropertyTypeFieldIndex.DeletedBy, 0, 0, 0);
 			this.AddElementFieldInfo("PropertyTypeEntity", "Description", typeof(System.String), false, false, false, true,  (int)PropertyTypeFieldIndex.Description, 1073741824, 0, 0);
 			this.AddElementFieldInfo("PropertyTypeEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)PropertyTypeFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("PropertyTypeEntity", "KeyCode", typeof(System.String), false, false, false, false,  (int)PropertyTypeFieldIndex.KeyCode, 50, 0, 0);
-			this.AddElementFieldInfo("PropertyTypeEntity", "Name", typeof(System.String), false, false, false, false,  (int)PropertyTypeFieldIndex.Name, 200, 0, 0);
+			this.AddElementFieldInfo("PropertyTypeEntity", "Name", typeof(System.String), false, false, false, false,  (int)PropertyTypeFieldIndex.Name, 255, 0, 0);
 			this.AddElementFieldInfo("PropertyTypeEntity", "OrganizationId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)PropertyTypeFieldIndex.OrganizationId, 0, 0, 0);
 			this.AddElementFieldInfo("PropertyTypeEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)PropertyTypeFieldIndex.UpdatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("PropertyTypeEntity", "UpdatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)PropertyTypeFieldIndex.UpdatedBy, 0, 0, 0);
 		}
 
 		/// <summary>Inits TicketEntity's info objects</summary>
@@ -192,13 +207,13 @@ namespace RoomManagerment.Property.HelperClasses
 			this.AddElementFieldInfo("TicketEntity", "CreatedBy", typeof(System.Guid), false, false, false, false,  (int)TicketFieldIndex.CreatedBy, 0, 0, 0);
 			this.AddElementFieldInfo("TicketEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TicketFieldIndex.DeletedAt, 0, 0, 0);
 			this.AddElementFieldInfo("TicketEntity", "DeletedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)TicketFieldIndex.DeletedBy, 0, 0, 0);
-			this.AddElementFieldInfo("TicketEntity", "Description", typeof(System.String), false, false, false, true,  (int)TicketFieldIndex.Description, 1073741824, 0, 0);
+			this.AddElementFieldInfo("TicketEntity", "Description", typeof(System.String), false, false, false, false,  (int)TicketFieldIndex.Description, 1073741824, 0, 0);
 			this.AddElementFieldInfo("TicketEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)TicketFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("TicketEntity", "LeaseId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)TicketFieldIndex.LeaseId, 0, 0, 0);
 			this.AddElementFieldInfo("TicketEntity", "OrganizationId", typeof(System.Guid), false, false, false, false,  (int)TicketFieldIndex.OrganizationId, 0, 0, 0);
 			this.AddElementFieldInfo("TicketEntity", "PriorityId", typeof(Nullable<System.Guid>), false, true, false, true,  (int)TicketFieldIndex.PriorityId, 0, 0, 0);
-			this.AddElementFieldInfo("TicketEntity", "PropertyId", typeof(Nullable<System.Guid>), false, true, false, true,  (int)TicketFieldIndex.PropertyId, 0, 0, 0);
-			this.AddElementFieldInfo("TicketEntity", "Status", typeof(System.String), false, false, false, false,  (int)TicketFieldIndex.Status, 50, 0, 0);
+			this.AddElementFieldInfo("TicketEntity", "PropertyId", typeof(System.Guid), false, true, false, false,  (int)TicketFieldIndex.PropertyId, 0, 0, 0);
+			this.AddElementFieldInfo("TicketEntity", "Status", typeof(System.String), false, false, false, false,  (int)TicketFieldIndex.Status, 30, 0, 0);
 			this.AddElementFieldInfo("TicketEntity", "Title", typeof(System.String), false, false, false, false,  (int)TicketFieldIndex.Title, 500, 0, 0);
 			this.AddElementFieldInfo("TicketEntity", "UnitId", typeof(Nullable<System.Guid>), false, true, false, true,  (int)TicketFieldIndex.UnitId, 0, 0, 0);
 			this.AddElementFieldInfo("TicketEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TicketFieldIndex.UpdatedAt, 0, 0, 0);
@@ -208,10 +223,10 @@ namespace RoomManagerment.Property.HelperClasses
 		private void InitTicketLogEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(TicketLogFieldIndex), "TicketLogEntity");
-			this.AddElementFieldInfo("TicketLogEntity", "Action", typeof(System.String), false, false, false, false,  (int)TicketLogFieldIndex.Action, 100, 0, 0);
+			this.AddElementFieldInfo("TicketLogEntity", "Action", typeof(System.String), false, false, false, false,  (int)TicketLogFieldIndex.Action, 50, 0, 0);
 			this.AddElementFieldInfo("TicketLogEntity", "ActorId", typeof(System.Guid), false, false, false, false,  (int)TicketLogFieldIndex.ActorId, 0, 0, 0);
-			this.AddElementFieldInfo("TicketLogEntity", "ChargeTo", typeof(System.String), false, false, false, true,  (int)TicketLogFieldIndex.ChargeTo, 50, 0, 0);
-			this.AddElementFieldInfo("TicketLogEntity", "CostAmount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TicketLogFieldIndex.CostAmount, 0, 2, 15);
+			this.AddElementFieldInfo("TicketLogEntity", "ChargeTo", typeof(System.String), false, false, false, true,  (int)TicketLogFieldIndex.ChargeTo, 20, 0, 0);
+			this.AddElementFieldInfo("TicketLogEntity", "CostAmount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)TicketLogFieldIndex.CostAmount, 0, 2, 18);
 			this.AddElementFieldInfo("TicketLogEntity", "CostNote", typeof(System.String), false, false, false, true,  (int)TicketLogFieldIndex.CostNote, 1073741824, 0, 0);
 			this.AddElementFieldInfo("TicketLogEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)TicketLogFieldIndex.CreatedAt, 0, 0, 0);
 			this.AddElementFieldInfo("TicketLogEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TicketLogFieldIndex.DeletedAt, 0, 0, 0);
@@ -220,6 +235,7 @@ namespace RoomManagerment.Property.HelperClasses
 			this.AddElementFieldInfo("TicketLogEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)TicketLogFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("TicketLogEntity", "LinkedInvoiceId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)TicketLogFieldIndex.LinkedInvoiceId, 0, 0, 0);
 			this.AddElementFieldInfo("TicketLogEntity", "TicketId", typeof(System.Guid), false, true, false, false,  (int)TicketLogFieldIndex.TicketId, 0, 0, 0);
+			this.AddElementFieldInfo("TicketLogEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TicketLogFieldIndex.UpdatedAt, 0, 0, 0);
 			this.AddElementFieldInfo("TicketLogEntity", "VendorId", typeof(Nullable<System.Guid>), false, true, false, true,  (int)TicketLogFieldIndex.VendorId, 0, 0, 0);
 			this.AddElementFieldInfo("TicketLogEntity", "WarrantyExpiresAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TicketLogFieldIndex.WarrantyExpiresAt, 0, 0, 0);
 			this.AddElementFieldInfo("TicketLogEntity", "WarrantyPeriodDays", typeof(Nullable<System.Int32>), false, false, false, true,  (int)TicketLogFieldIndex.WarrantyPeriodDays, 0, 0, 10);
@@ -230,10 +246,12 @@ namespace RoomManagerment.Property.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(TicketPriorityFieldIndex), "TicketPriorityEntity");
 			this.AddElementFieldInfo("TicketPriorityEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)TicketPriorityFieldIndex.CreatedAt, 0, 0, 0);
-			this.AddElementFieldInfo("TicketPriorityEntity", "Description", typeof(System.String), false, false, false, true,  (int)TicketPriorityFieldIndex.Description, 1073741824, 0, 0);
+			this.AddElementFieldInfo("TicketPriorityEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TicketPriorityFieldIndex.DeletedAt, 0, 0, 0);
 			this.AddElementFieldInfo("TicketPriorityEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)TicketPriorityFieldIndex.Id, 0, 0, 0);
-			this.AddElementFieldInfo("TicketPriorityEntity", "KeyCode", typeof(System.String), false, false, false, false,  (int)TicketPriorityFieldIndex.KeyCode, 50, 0, 0);
+			this.AddElementFieldInfo("TicketPriorityEntity", "IsDefault", typeof(System.Boolean), false, false, false, false,  (int)TicketPriorityFieldIndex.IsDefault, 0, 0, 0);
+			this.AddElementFieldInfo("TicketPriorityEntity", "KeyCode", typeof(System.String), false, false, false, false,  (int)TicketPriorityFieldIndex.KeyCode, 30, 0, 0);
 			this.AddElementFieldInfo("TicketPriorityEntity", "Name", typeof(System.String), false, false, false, false,  (int)TicketPriorityFieldIndex.Name, 100, 0, 0);
+			this.AddElementFieldInfo("TicketPriorityEntity", "SortOrder", typeof(System.Int32), false, false, false, false,  (int)TicketPriorityFieldIndex.SortOrder, 0, 0, 10);
 			this.AddElementFieldInfo("TicketPriorityEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)TicketPriorityFieldIndex.UpdatedAt, 0, 0, 0);
 		}
 
@@ -242,21 +260,24 @@ namespace RoomManagerment.Property.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(UnitFieldIndex), "UnitEntity");
 			this.AddElementFieldInfo("UnitEntity", "AreaM2", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)UnitFieldIndex.AreaM2, 0, 2, 10);
-			this.AddElementFieldInfo("UnitEntity", "BaseRent", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)UnitFieldIndex.BaseRent, 0, 2, 15);
+			this.AddElementFieldInfo("UnitEntity", "BaseRent", typeof(System.Decimal), false, false, false, false,  (int)UnitFieldIndex.BaseRent, 0, 2, 18);
 			this.AddElementFieldInfo("UnitEntity", "Code", typeof(System.String), false, false, false, false,  (int)UnitFieldIndex.Code, 50, 0, 0);
 			this.AddElementFieldInfo("UnitEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)UnitFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("UnitEntity", "CreatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)UnitFieldIndex.CreatedBy, 0, 0, 0);
 			this.AddElementFieldInfo("UnitEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)UnitFieldIndex.DeletedAt, 0, 0, 0);
 			this.AddElementFieldInfo("UnitEntity", "DeletedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)UnitFieldIndex.DeletedBy, 0, 0, 0);
-			this.AddElementFieldInfo("UnitEntity", "DepositAmount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)UnitFieldIndex.DepositAmount, 0, 2, 15);
+			this.AddElementFieldInfo("UnitEntity", "DepositAmount", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)UnitFieldIndex.DepositAmount, 0, 2, 18);
 			this.AddElementFieldInfo("UnitEntity", "Floor", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UnitFieldIndex.Floor, 0, 0, 10);
 			this.AddElementFieldInfo("UnitEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)UnitFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("UnitEntity", "MaxOccupancy", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UnitFieldIndex.MaxOccupancy, 0, 0, 10);
-			this.AddElementFieldInfo("UnitEntity", "Name", typeof(System.String), false, false, false, true,  (int)UnitFieldIndex.Name, 200, 0, 0);
+			this.AddElementFieldInfo("UnitEntity", "Name", typeof(System.String), false, false, false, true,  (int)UnitFieldIndex.Name, 255, 0, 0);
 			this.AddElementFieldInfo("UnitEntity", "Note", typeof(System.String), false, false, false, true,  (int)UnitFieldIndex.Note, 1073741824, 0, 0);
+			this.AddElementFieldInfo("UnitEntity", "OrganizationId", typeof(System.Guid), false, false, false, false,  (int)UnitFieldIndex.OrganizationId, 0, 0, 0);
 			this.AddElementFieldInfo("UnitEntity", "PropertyId", typeof(System.Guid), false, true, false, false,  (int)UnitFieldIndex.PropertyId, 0, 0, 0);
 			this.AddElementFieldInfo("UnitEntity", "Status", typeof(System.Int16), false, false, false, false,  (int)UnitFieldIndex.Status, 0, 0, 5);
 			this.AddElementFieldInfo("UnitEntity", "UnitType", typeof(System.String), false, false, false, true,  (int)UnitFieldIndex.UnitType, 100, 0, 0);
 			this.AddElementFieldInfo("UnitEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)UnitFieldIndex.UpdatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("UnitEntity", "UpdatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)UnitFieldIndex.UpdatedBy, 0, 0, 0);
 		}
 
 		/// <summary>Inits UnitAmenityEntity's info objects</summary>
@@ -264,6 +285,8 @@ namespace RoomManagerment.Property.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(UnitAmenityFieldIndex), "UnitAmenityEntity");
 			this.AddElementFieldInfo("UnitAmenityEntity", "AmenityId", typeof(System.Guid), true, true, false, false,  (int)UnitAmenityFieldIndex.AmenityId, 0, 0, 0);
+			this.AddElementFieldInfo("UnitAmenityEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)UnitAmenityFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("UnitAmenityEntity", "CreatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)UnitAmenityFieldIndex.CreatedBy, 0, 0, 0);
 			this.AddElementFieldInfo("UnitAmenityEntity", "UnitId", typeof(System.Guid), true, true, false, false,  (int)UnitAmenityFieldIndex.UnitId, 0, 0, 0);
 		}
 
@@ -271,29 +294,28 @@ namespace RoomManagerment.Property.HelperClasses
 		private void InitVendorEntityInfo()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(VendorFieldIndex), "VendorEntity");
-			this.AddElementFieldInfo("VendorEntity", "AccountHolderName", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.AccountHolderName, 200, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "AccountNumber", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.AccountNumber, 50, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "AccountHolderName", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.AccountHolderName, 255, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "AccountNumber", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.AccountNumber, 100, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "Address", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.Address, 1073741824, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "BankingNotes", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.BankingNotes, 1073741824, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "BranchCode", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.BranchCode, 50, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "BranchName", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.BranchName, 200, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "BusinessLicense", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.BusinessLicense, 200, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "ContactEmail", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.ContactEmail, 200, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "ContactPerson", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.ContactPerson, 200, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "ContactPhone", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.ContactPhone, 50, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "BranchName", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.BranchName, 255, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "BusinessLicense", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.BusinessLicense, 255, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "ContactEmail", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.ContactEmail, 255, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "ContactPerson", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.ContactPerson, 255, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "ContactPhone", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.ContactPhone, 30, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "CreatedAt", typeof(System.DateTime), false, false, false, false,  (int)VendorFieldIndex.CreatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "CreatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)VendorFieldIndex.CreatedBy, 0, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "DeletedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)VendorFieldIndex.DeletedAt, 0, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "DeletedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)VendorFieldIndex.DeletedBy, 0, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "Email", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.Email, 200, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "Email", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.Email, 255, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "Id", typeof(System.Guid), true, false, false, false,  (int)VendorFieldIndex.Id, 0, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "Name", typeof(System.String), false, false, false, false,  (int)VendorFieldIndex.Name, 255, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "OrganizationId", typeof(System.Guid), false, false, false, false,  (int)VendorFieldIndex.OrganizationId, 0, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "Phone", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.Phone, 50, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "Phone", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.Phone, 30, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "SepayBankId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)VendorFieldIndex.SepayBankId, 0, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "Status", typeof(System.Int16), false, false, false, false,  (int)VendorFieldIndex.Status, 0, 0, 5);
-			this.AddElementFieldInfo("VendorEntity", "SwiftCode", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.SwiftCode, 30, 0, 0);
-			this.AddElementFieldInfo("VendorEntity", "TaxCode", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.TaxCode, 100, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "TaxCode", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.TaxCode, 50, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "UpdatedAt", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)VendorFieldIndex.UpdatedAt, 0, 0, 0);
+			this.AddElementFieldInfo("VendorEntity", "UpdatedBy", typeof(Nullable<System.Guid>), false, false, false, true,  (int)VendorFieldIndex.UpdatedBy, 0, 0, 0);
 			this.AddElementFieldInfo("VendorEntity", "VendorType", typeof(System.String), false, false, false, true,  (int)VendorFieldIndex.VendorType, 100, 0, 0);
 		}
 	}

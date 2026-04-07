@@ -20,18 +20,16 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'PropertyType'.<br/><br/></summary>
 	[Serializable]
 	public partial class PropertyTypeEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<PropertyEntity> _properties;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static PropertyTypeEntityStaticMetaData _staticMetaData = new PropertyTypeEntityStaticMetaData();
 		private static PropertyTypeRelations _relationsFactory = new PropertyTypeRelations();
 
@@ -114,7 +112,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -129,7 +126,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -147,6 +143,30 @@ namespace RoomManagerment.Property.EntityClasses
 		{
 			get { return (System.DateTime)GetValue((int)PropertyTypeFieldIndex.CreatedAt, true); }
 			set { SetValue((int)PropertyTypeFieldIndex.CreatedAt, value); }
+		}
+
+		/// <summary>The CreatedBy property of the Entity PropertyType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "property_types"."created_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> CreatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)PropertyTypeFieldIndex.CreatedBy, false); }
+			set { SetValue((int)PropertyTypeFieldIndex.CreatedBy, value); }
+		}
+
+		/// <summary>The DeletedAt property of the Entity PropertyType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "property_types"."deleted_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> DeletedAt
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)PropertyTypeFieldIndex.DeletedAt, false); }
+			set { SetValue((int)PropertyTypeFieldIndex.DeletedAt, value); }
+		}
+
+		/// <summary>The DeletedBy property of the Entity PropertyType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "property_types"."deleted_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> DeletedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)PropertyTypeFieldIndex.DeletedBy, false); }
+			set { SetValue((int)PropertyTypeFieldIndex.DeletedBy, value); }
 		}
 
 		/// <summary>The Description property of the Entity PropertyType<br/><br/></summary>
@@ -174,7 +194,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The Name property of the Entity PropertyType<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "property_types"."name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 200.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "property_types"."name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)PropertyTypeFieldIndex.Name, true); }
@@ -197,12 +217,20 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)PropertyTypeFieldIndex.UpdatedAt, value); }
 		}
 
+		/// <summary>The UpdatedBy property of the Entity PropertyType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "property_types"."updated_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> UpdatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)PropertyTypeFieldIndex.UpdatedBy, false); }
+			set { SetValue((int)PropertyTypeFieldIndex.UpdatedBy, value); }
+		}
+
 		/// <summary>Gets the EntityCollection with the related entities of type 'PropertyEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(PropertyEntity))]
 		public virtual EntityCollection<PropertyEntity> Properties { get { return GetOrCreateEntityCollection<PropertyEntity, PropertyEntityFactory>("PropertyType", true, false, ref _properties); } }
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -213,6 +241,12 @@ namespace RoomManagerment.Property
 	{
 		///<summary>CreatedAt. </summary>
 		CreatedAt,
+		///<summary>CreatedBy. </summary>
+		CreatedBy,
+		///<summary>DeletedAt. </summary>
+		DeletedAt,
+		///<summary>DeletedBy. </summary>
+		DeletedBy,
 		///<summary>Description. </summary>
 		Description,
 		///<summary>Id. </summary>
@@ -225,6 +259,8 @@ namespace RoomManagerment.Property
 		OrganizationId,
 		///<summary>UpdatedAt. </summary>
 		UpdatedAt,
+		///<summary>UpdatedBy. </summary>
+		UpdatedBy,
 		/// <summary></summary>
 		AmountOfFields
 	}

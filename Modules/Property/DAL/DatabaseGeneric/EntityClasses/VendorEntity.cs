@@ -20,18 +20,16 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'Vendor'.<br/><br/></summary>
 	[Serializable]
 	public partial class VendorEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<TicketLogEntity> _ticketLogs;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static VendorEntityStaticMetaData _staticMetaData = new VendorEntityStaticMetaData();
 		private static VendorRelations _relationsFactory = new VendorRelations();
 
@@ -114,7 +112,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -130,7 +127,6 @@ namespace RoomManagerment.Property.EntityClasses
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
 
-
 			OnInitialized();
 		}
 
@@ -142,7 +138,7 @@ namespace RoomManagerment.Property.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathTicketLogs { get { return _staticMetaData.GetPrefetchPathElement("TicketLogs", CommonEntityBase.CreateEntityCollection<TicketLogEntity>()); } }
 
 		/// <summary>The AccountHolderName property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."account_holder_name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 200.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "vendors"."account_holder_name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountHolderName
 		{
 			get { return (System.String)GetValue((int)VendorFieldIndex.AccountHolderName, true); }
@@ -150,7 +146,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The AccountNumber property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."account_number".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "vendors"."account_number".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String AccountNumber
 		{
 			get { return (System.String)GetValue((int)VendorFieldIndex.AccountNumber, true); }
@@ -165,24 +161,8 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)VendorFieldIndex.Address, value); }
 		}
 
-		/// <summary>The BankingNotes property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."banking_notes".<br/>Table field type characteristics (type, precision, scale, length): Text, 0, 0, 1073741824.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String BankingNotes
-		{
-			get { return (System.String)GetValue((int)VendorFieldIndex.BankingNotes, true); }
-			set { SetValue((int)VendorFieldIndex.BankingNotes, value); }
-		}
-
-		/// <summary>The BranchCode property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."branch_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String BranchCode
-		{
-			get { return (System.String)GetValue((int)VendorFieldIndex.BranchCode, true); }
-			set { SetValue((int)VendorFieldIndex.BranchCode, value); }
-		}
-
 		/// <summary>The BranchName property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."branch_name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 200.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "vendors"."branch_name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String BranchName
 		{
 			get { return (System.String)GetValue((int)VendorFieldIndex.BranchName, true); }
@@ -190,7 +170,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The BusinessLicense property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."business_license".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 200.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "vendors"."business_license".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String BusinessLicense
 		{
 			get { return (System.String)GetValue((int)VendorFieldIndex.BusinessLicense, true); }
@@ -198,7 +178,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The ContactEmail property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."contact_email".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 200.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "vendors"."contact_email".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ContactEmail
 		{
 			get { return (System.String)GetValue((int)VendorFieldIndex.ContactEmail, true); }
@@ -206,7 +186,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The ContactPerson property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."contact_person".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 200.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "vendors"."contact_person".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ContactPerson
 		{
 			get { return (System.String)GetValue((int)VendorFieldIndex.ContactPerson, true); }
@@ -214,7 +194,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The ContactPhone property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."contact_phone".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "vendors"."contact_phone".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ContactPhone
 		{
 			get { return (System.String)GetValue((int)VendorFieldIndex.ContactPhone, true); }
@@ -227,6 +207,14 @@ namespace RoomManagerment.Property.EntityClasses
 		{
 			get { return (System.DateTime)GetValue((int)VendorFieldIndex.CreatedAt, true); }
 			set { SetValue((int)VendorFieldIndex.CreatedAt, value); }
+		}
+
+		/// <summary>The CreatedBy property of the Entity Vendor<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "vendors"."created_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> CreatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)VendorFieldIndex.CreatedBy, false); }
+			set { SetValue((int)VendorFieldIndex.CreatedBy, value); }
 		}
 
 		/// <summary>The DeletedAt property of the Entity Vendor<br/><br/></summary>
@@ -246,7 +234,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The Email property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."email".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 200.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "vendors"."email".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Email
 		{
 			get { return (System.String)GetValue((int)VendorFieldIndex.Email, true); }
@@ -278,7 +266,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The Phone property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."phone".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "vendors"."phone".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Phone
 		{
 			get { return (System.String)GetValue((int)VendorFieldIndex.Phone, true); }
@@ -301,16 +289,8 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)VendorFieldIndex.Status, value); }
 		}
 
-		/// <summary>The SwiftCode property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."swift_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String SwiftCode
-		{
-			get { return (System.String)GetValue((int)VendorFieldIndex.SwiftCode, true); }
-			set { SetValue((int)VendorFieldIndex.SwiftCode, value); }
-		}
-
 		/// <summary>The TaxCode property of the Entity Vendor<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "vendors"."tax_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "vendors"."tax_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String TaxCode
 		{
 			get { return (System.String)GetValue((int)VendorFieldIndex.TaxCode, true); }
@@ -325,6 +305,14 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)VendorFieldIndex.UpdatedAt, value); }
 		}
 
+		/// <summary>The UpdatedBy property of the Entity Vendor<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "vendors"."updated_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> UpdatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)VendorFieldIndex.UpdatedBy, false); }
+			set { SetValue((int)VendorFieldIndex.UpdatedBy, value); }
+		}
+
 		/// <summary>The VendorType property of the Entity Vendor<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "vendors"."vendor_type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String VendorType
@@ -336,9 +324,9 @@ namespace RoomManagerment.Property.EntityClasses
 		/// <summary>Gets the EntityCollection with the related entities of type 'TicketLogEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(TicketLogEntity))]
 		public virtual EntityCollection<TicketLogEntity> TicketLogs { get { return GetOrCreateEntityCollection<TicketLogEntity, TicketLogEntityFactory>("Vendor", true, false, ref _ticketLogs); } }
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -353,10 +341,6 @@ namespace RoomManagerment.Property
 		AccountNumber,
 		///<summary>Address. </summary>
 		Address,
-		///<summary>BankingNotes. </summary>
-		BankingNotes,
-		///<summary>BranchCode. </summary>
-		BranchCode,
 		///<summary>BranchName. </summary>
 		BranchName,
 		///<summary>BusinessLicense. </summary>
@@ -369,6 +353,8 @@ namespace RoomManagerment.Property
 		ContactPhone,
 		///<summary>CreatedAt. </summary>
 		CreatedAt,
+		///<summary>CreatedBy. </summary>
+		CreatedBy,
 		///<summary>DeletedAt. </summary>
 		DeletedAt,
 		///<summary>DeletedBy. </summary>
@@ -387,12 +373,12 @@ namespace RoomManagerment.Property
 		SepayBankId,
 		///<summary>Status. </summary>
 		Status,
-		///<summary>SwiftCode. </summary>
-		SwiftCode,
 		///<summary>TaxCode. </summary>
 		TaxCode,
 		///<summary>UpdatedAt. </summary>
 		UpdatedAt,
+		///<summary>UpdatedBy. </summary>
+		UpdatedBy,
 		///<summary>VendorType. </summary>
 		VendorType,
 		/// <summary></summary>

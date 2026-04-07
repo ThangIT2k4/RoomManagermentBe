@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DAL\DatabaseGeneric\RoomManagerment.Property.csproj" />
+    <ProjectReference Include="..\DAL\DatabaseSpecific\RoomManagerment.PropertyDBSpecific.csproj" />
     <ProjectReference Include="..\Property.Domain\Property.Domain.csproj" />
   </ItemGroup>
 </Project>

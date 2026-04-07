@@ -20,18 +20,16 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'Amenity'.<br/><br/></summary>
 	[Serializable]
 	public partial class AmenityEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<UnitAmenityEntity> _unitAmenities;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static AmenityEntityStaticMetaData _staticMetaData = new AmenityEntityStaticMetaData();
 		private static AmenityRelations _relationsFactory = new AmenityRelations();
 
@@ -114,7 +112,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -129,7 +126,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -157,6 +153,14 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)AmenityFieldIndex.CreatedAt, value); }
 		}
 
+		/// <summary>The CreatedBy property of the Entity Amenity<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "amenities"."created_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> CreatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)AmenityFieldIndex.CreatedBy, false); }
+			set { SetValue((int)AmenityFieldIndex.CreatedBy, value); }
+		}
+
 		/// <summary>The DeletedAt property of the Entity Amenity<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "amenities"."deleted_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> DeletedAt
@@ -174,7 +178,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The Icon property of the Entity Amenity<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "amenities"."icon".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 200.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "amenities"."icon".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Icon
 		{
 			get { return (System.String)GetValue((int)AmenityFieldIndex.Icon, true); }
@@ -190,7 +194,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The KeyCode property of the Entity Amenity<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "amenities"."key_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "amenities"."key_code".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String KeyCode
 		{
 			get { return (System.String)GetValue((int)AmenityFieldIndex.KeyCode, true); }
@@ -198,7 +202,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The Name property of the Entity Amenity<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "amenities"."name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 200.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "amenities"."name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)AmenityFieldIndex.Name, true); }
@@ -213,12 +217,20 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)AmenityFieldIndex.UpdatedAt, value); }
 		}
 
+		/// <summary>The UpdatedBy property of the Entity Amenity<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "amenities"."updated_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> UpdatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)AmenityFieldIndex.UpdatedBy, false); }
+			set { SetValue((int)AmenityFieldIndex.UpdatedBy, value); }
+		}
+
 		/// <summary>Gets the EntityCollection with the related entities of type 'UnitAmenityEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(UnitAmenityEntity))]
 		public virtual EntityCollection<UnitAmenityEntity> UnitAmenities { get { return GetOrCreateEntityCollection<UnitAmenityEntity, UnitAmenityEntityFactory>("Amenity", true, false, ref _unitAmenities); } }
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -231,6 +243,8 @@ namespace RoomManagerment.Property
 		Category,
 		///<summary>CreatedAt. </summary>
 		CreatedAt,
+		///<summary>CreatedBy. </summary>
+		CreatedBy,
 		///<summary>DeletedAt. </summary>
 		DeletedAt,
 		///<summary>DeletedBy. </summary>
@@ -245,6 +259,8 @@ namespace RoomManagerment.Property
 		Name,
 		///<summary>UpdatedAt. </summary>
 		UpdatedAt,
+		///<summary>UpdatedBy. </summary>
+		UpdatedBy,
 		/// <summary></summary>
 		AmountOfFields
 	}

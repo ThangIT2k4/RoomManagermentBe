@@ -20,21 +20,19 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'Ticket'.<br/><br/></summary>
 	[Serializable]
 	public partial class TicketEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<TicketLogEntity> _ticketLogs;
 		private PropertyEntity _property;
 		private TicketPriorityEntity _ticketPriority;
 		private UnitEntity _unit;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static TicketEntityStaticMetaData _staticMetaData = new TicketEntityStaticMetaData();
 		private static TicketRelations _relationsFactory = new TicketRelations();
 
@@ -138,7 +136,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -153,7 +150,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -234,7 +230,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The Description property of the Entity Ticket<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "tickets"."description".<br/>Table field type characteristics (type, precision, scale, length): Text, 0, 0, 1073741824.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "tickets"."description".<br/>Table field type characteristics (type, precision, scale, length): Text, 0, 0, 1073741824.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)TicketFieldIndex.Description, true); }
@@ -274,15 +270,15 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The PropertyId property of the Entity Ticket<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "tickets"."property_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Guid> PropertyId
+		/// <remarks>Mapped on  table field: "tickets"."property_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Guid PropertyId
 		{
-			get { return (Nullable<System.Guid>)GetValue((int)TicketFieldIndex.PropertyId, false); }
+			get { return (System.Guid)GetValue((int)TicketFieldIndex.PropertyId, true); }
 			set { SetValue((int)TicketFieldIndex.PropertyId, value); }
 		}
 
 		/// <summary>The Status property of the Entity Ticket<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "tickets"."status".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "tickets"."status".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 30.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Status
 		{
 			get { return (System.String)GetValue((int)TicketFieldIndex.Status, true); }
@@ -340,9 +336,9 @@ namespace RoomManagerment.Property.EntityClasses
 			get { return _unit; }
 			set { SetSingleRelatedEntityNavigator(value, "Unit"); }
 		}
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }

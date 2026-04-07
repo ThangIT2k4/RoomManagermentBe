@@ -20,17 +20,15 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'Document'.<br/><br/></summary>
 	[Serializable]
 	public partial class DocumentEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static DocumentEntityStaticMetaData _staticMetaData = new DocumentEntityStaticMetaData();
 		private static DocumentRelations _relationsFactory = new DocumentRelations();
 
@@ -106,7 +104,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -121,7 +118,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -162,7 +158,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The DocumentType property of the Entity Document<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "documents"."document_type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "documents"."document_type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String DocumentType
 		{
 			get { return (System.String)GetValue((int)DocumentFieldIndex.DocumentType, true); }
@@ -170,7 +166,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The FileName property of the Entity Document<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "documents"."file_name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 500.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "documents"."file_name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String FileName
 		{
 			get { return (System.String)GetValue((int)DocumentFieldIndex.FileName, true); }
@@ -178,10 +174,10 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The FileSize property of the Entity Document<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "documents"."file_size".<br/>Table field type characteristics (type, precision, scale, length): Bigint, 20, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> FileSize
+		/// <remarks>Mapped on  table field: "documents"."file_size".<br/>Table field type characteristics (type, precision, scale, length): Bigint, 20, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 FileSize
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)DocumentFieldIndex.FileSize, false); }
+			get { return (System.Int64)GetValue((int)DocumentFieldIndex.FileSize, true); }
 			set { SetValue((int)DocumentFieldIndex.FileSize, value); }
 		}
 
@@ -210,11 +206,19 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The MimeType property of the Entity Document<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "documents"."mime_type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "documents"."mime_type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String MimeType
 		{
 			get { return (System.String)GetValue((int)DocumentFieldIndex.MimeType, true); }
 			set { SetValue((int)DocumentFieldIndex.MimeType, value); }
+		}
+
+		/// <summary>The OrganizationId property of the Entity Document<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "documents"."organization_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Guid OrganizationId
+		{
+			get { return (System.Guid)GetValue((int)DocumentFieldIndex.OrganizationId, true); }
+			set { SetValue((int)DocumentFieldIndex.OrganizationId, value); }
 		}
 
 		/// <summary>The OwnerId property of the Entity Document<br/><br/></summary>
@@ -226,7 +230,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The OwnerType property of the Entity Document<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "documents"."owner_type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 100.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// <remarks>Mapped on  table field: "documents"."owner_type".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String OwnerType
 		{
 			get { return (System.String)GetValue((int)DocumentFieldIndex.OwnerType, true); }
@@ -250,15 +254,15 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The UploadedBy property of the Entity Document<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "documents"."uploaded_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Guid> UploadedBy
+		/// <remarks>Mapped on  table field: "documents"."uploaded_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Guid UploadedBy
 		{
-			get { return (Nullable<System.Guid>)GetValue((int)DocumentFieldIndex.UploadedBy, false); }
+			get { return (System.Guid)GetValue((int)DocumentFieldIndex.UploadedBy, true); }
 			set { SetValue((int)DocumentFieldIndex.UploadedBy, value); }
 		}
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -289,6 +293,8 @@ namespace RoomManagerment.Property
 		IsPrimary,
 		///<summary>MimeType. </summary>
 		MimeType,
+		///<summary>OrganizationId. </summary>
+		OrganizationId,
 		///<summary>OwnerId. </summary>
 		OwnerId,
 		///<summary>OwnerType. </summary>

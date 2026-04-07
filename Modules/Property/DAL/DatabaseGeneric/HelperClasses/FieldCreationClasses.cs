@@ -17,6 +17,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 Category { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(AmenityFieldIndex.Category); }}
 		/// <summary>Creates a new AmenityEntity.CreatedAt field instance</summary>
 		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(AmenityFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new AmenityEntity.CreatedBy field instance</summary>
+		public static EntityField2 CreatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(AmenityFieldIndex.CreatedBy); }}
 		/// <summary>Creates a new AmenityEntity.DeletedAt field instance</summary>
 		public static EntityField2 DeletedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(AmenityFieldIndex.DeletedAt); }}
 		/// <summary>Creates a new AmenityEntity.DeletedBy field instance</summary>
@@ -31,6 +33,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 Name { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(AmenityFieldIndex.Name); }}
 		/// <summary>Creates a new AmenityEntity.UpdatedAt field instance</summary>
 		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(AmenityFieldIndex.UpdatedAt); }}
+		/// <summary>Creates a new AmenityEntity.UpdatedBy field instance</summary>
+		public static EntityField2 UpdatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(AmenityFieldIndex.UpdatedBy); }}
 	}
 
 	/// <summary>Field Creation Class for entity DocumentEntity</summary>
@@ -58,6 +62,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 IsPrimary { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DocumentFieldIndex.IsPrimary); }}
 		/// <summary>Creates a new DocumentEntity.MimeType field instance</summary>
 		public static EntityField2 MimeType { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DocumentFieldIndex.MimeType); }}
+		/// <summary>Creates a new DocumentEntity.OrganizationId field instance</summary>
+		public static EntityField2 OrganizationId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DocumentFieldIndex.OrganizationId); }}
 		/// <summary>Creates a new DocumentEntity.OwnerId field instance</summary>
 		public static EntityField2 OwnerId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(DocumentFieldIndex.OwnerId); }}
 		/// <summary>Creates a new DocumentEntity.OwnerType field instance</summary>
@@ -75,6 +81,8 @@ namespace RoomManagerment.Property.HelperClasses
 	{
 		/// <summary>Creates a new MeterEntity.CreatedAt field instance</summary>
 		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new MeterEntity.CreatedBy field instance</summary>
+		public static EntityField2 CreatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterFieldIndex.CreatedBy); }}
 		/// <summary>Creates a new MeterEntity.DeletedAt field instance</summary>
 		public static EntityField2 DeletedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterFieldIndex.DeletedAt); }}
 		/// <summary>Creates a new MeterEntity.DeletedBy field instance</summary>
@@ -89,12 +97,16 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 MeterNumber { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterFieldIndex.MeterNumber); }}
 		/// <summary>Creates a new MeterEntity.MeterType field instance</summary>
 		public static EntityField2 MeterType { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterFieldIndex.MeterType); }}
+		/// <summary>Creates a new MeterEntity.OrganizationId field instance</summary>
+		public static EntityField2 OrganizationId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterFieldIndex.OrganizationId); }}
 		/// <summary>Creates a new MeterEntity.PropertyId field instance</summary>
 		public static EntityField2 PropertyId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterFieldIndex.PropertyId); }}
 		/// <summary>Creates a new MeterEntity.UnitId field instance</summary>
 		public static EntityField2 UnitId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterFieldIndex.UnitId); }}
 		/// <summary>Creates a new MeterEntity.UpdatedAt field instance</summary>
 		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterFieldIndex.UpdatedAt); }}
+		/// <summary>Creates a new MeterEntity.UpdatedBy field instance</summary>
+		public static EntityField2 UpdatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterFieldIndex.UpdatedBy); }}
 	}
 
 	/// <summary>Field Creation Class for entity MeterReadingEntity</summary>
@@ -102,6 +114,10 @@ namespace RoomManagerment.Property.HelperClasses
 	{
 		/// <summary>Creates a new MeterReadingEntity.CreatedAt field instance</summary>
 		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterReadingFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new MeterReadingEntity.DeletedAt field instance</summary>
+		public static EntityField2 DeletedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterReadingFieldIndex.DeletedAt); }}
+		/// <summary>Creates a new MeterReadingEntity.DeletedBy field instance</summary>
+		public static EntityField2 DeletedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterReadingFieldIndex.DeletedBy); }}
 		/// <summary>Creates a new MeterReadingEntity.Id field instance</summary>
 		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterReadingFieldIndex.Id); }}
 		/// <summary>Creates a new MeterReadingEntity.ImageUrl field instance</summary>
@@ -114,6 +130,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 ReadingDate { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterReadingFieldIndex.ReadingDate); }}
 		/// <summary>Creates a new MeterReadingEntity.TakenBy field instance</summary>
 		public static EntityField2 TakenBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterReadingFieldIndex.TakenBy); }}
+		/// <summary>Creates a new MeterReadingEntity.UpdatedAt field instance</summary>
+		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterReadingFieldIndex.UpdatedAt); }}
 		/// <summary>Creates a new MeterReadingEntity.Value field instance</summary>
 		public static EntityField2 Value { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(MeterReadingFieldIndex.Value); }}
 	}
@@ -123,6 +141,8 @@ namespace RoomManagerment.Property.HelperClasses
 	{
 		/// <summary>Creates a new PropertiesUserEntity.AssignedAt field instance</summary>
 		public static EntityField2 AssignedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertiesUserFieldIndex.AssignedAt); }}
+		/// <summary>Creates a new PropertiesUserEntity.AssignedBy field instance</summary>
+		public static EntityField2 AssignedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertiesUserFieldIndex.AssignedBy); }}
 		/// <summary>Creates a new PropertiesUserEntity.CreatedAt field instance</summary>
 		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertiesUserFieldIndex.CreatedAt); }}
 		/// <summary>Creates a new PropertiesUserEntity.DeletedAt field instance</summary>
@@ -137,8 +157,6 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 RoleKey { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertiesUserFieldIndex.RoleKey); }}
 		/// <summary>Creates a new PropertiesUserEntity.UpdatedAt field instance</summary>
 		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertiesUserFieldIndex.UpdatedAt); }}
-		/// <summary>Creates a new PropertiesUserEntity.UpdatedBy field instance</summary>
-		public static EntityField2 UpdatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertiesUserFieldIndex.UpdatedBy); }}
 		/// <summary>Creates a new PropertiesUserEntity.UserId field instance</summary>
 		public static EntityField2 UserId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertiesUserFieldIndex.UserId); }}
 	}
@@ -152,6 +170,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 Code { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyFieldIndex.Code); }}
 		/// <summary>Creates a new PropertyEntity.CreatedAt field instance</summary>
 		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new PropertyEntity.CreatedBy field instance</summary>
+		public static EntityField2 CreatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyFieldIndex.CreatedBy); }}
 		/// <summary>Creates a new PropertyEntity.DeletedAt field instance</summary>
 		public static EntityField2 DeletedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyFieldIndex.DeletedAt); }}
 		/// <summary>Creates a new PropertyEntity.DeletedBy field instance</summary>
@@ -186,6 +206,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 TotalUnits { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyFieldIndex.TotalUnits); }}
 		/// <summary>Creates a new PropertyEntity.UpdatedAt field instance</summary>
 		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyFieldIndex.UpdatedAt); }}
+		/// <summary>Creates a new PropertyEntity.UpdatedBy field instance</summary>
+		public static EntityField2 UpdatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyFieldIndex.UpdatedBy); }}
 		/// <summary>Creates a new PropertyEntity.WardCode field instance</summary>
 		public static EntityField2 WardCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyFieldIndex.WardCode); }}
 	}
@@ -195,6 +217,12 @@ namespace RoomManagerment.Property.HelperClasses
 	{
 		/// <summary>Creates a new PropertyTypeEntity.CreatedAt field instance</summary>
 		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyTypeFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new PropertyTypeEntity.CreatedBy field instance</summary>
+		public static EntityField2 CreatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyTypeFieldIndex.CreatedBy); }}
+		/// <summary>Creates a new PropertyTypeEntity.DeletedAt field instance</summary>
+		public static EntityField2 DeletedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyTypeFieldIndex.DeletedAt); }}
+		/// <summary>Creates a new PropertyTypeEntity.DeletedBy field instance</summary>
+		public static EntityField2 DeletedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyTypeFieldIndex.DeletedBy); }}
 		/// <summary>Creates a new PropertyTypeEntity.Description field instance</summary>
 		public static EntityField2 Description { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyTypeFieldIndex.Description); }}
 		/// <summary>Creates a new PropertyTypeEntity.Id field instance</summary>
@@ -207,6 +235,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 OrganizationId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyTypeFieldIndex.OrganizationId); }}
 		/// <summary>Creates a new PropertyTypeEntity.UpdatedAt field instance</summary>
 		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyTypeFieldIndex.UpdatedAt); }}
+		/// <summary>Creates a new PropertyTypeEntity.UpdatedBy field instance</summary>
+		public static EntityField2 UpdatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(PropertyTypeFieldIndex.UpdatedBy); }}
 	}
 
 	/// <summary>Field Creation Class for entity TicketEntity</summary>
@@ -275,6 +305,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 LinkedInvoiceId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketLogFieldIndex.LinkedInvoiceId); }}
 		/// <summary>Creates a new TicketLogEntity.TicketId field instance</summary>
 		public static EntityField2 TicketId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketLogFieldIndex.TicketId); }}
+		/// <summary>Creates a new TicketLogEntity.UpdatedAt field instance</summary>
+		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketLogFieldIndex.UpdatedAt); }}
 		/// <summary>Creates a new TicketLogEntity.VendorId field instance</summary>
 		public static EntityField2 VendorId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketLogFieldIndex.VendorId); }}
 		/// <summary>Creates a new TicketLogEntity.WarrantyExpiresAt field instance</summary>
@@ -288,14 +320,18 @@ namespace RoomManagerment.Property.HelperClasses
 	{
 		/// <summary>Creates a new TicketPriorityEntity.CreatedAt field instance</summary>
 		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketPriorityFieldIndex.CreatedAt); }}
-		/// <summary>Creates a new TicketPriorityEntity.Description field instance</summary>
-		public static EntityField2 Description { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketPriorityFieldIndex.Description); }}
+		/// <summary>Creates a new TicketPriorityEntity.DeletedAt field instance</summary>
+		public static EntityField2 DeletedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketPriorityFieldIndex.DeletedAt); }}
 		/// <summary>Creates a new TicketPriorityEntity.Id field instance</summary>
 		public static EntityField2 Id { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketPriorityFieldIndex.Id); }}
+		/// <summary>Creates a new TicketPriorityEntity.IsDefault field instance</summary>
+		public static EntityField2 IsDefault { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketPriorityFieldIndex.IsDefault); }}
 		/// <summary>Creates a new TicketPriorityEntity.KeyCode field instance</summary>
 		public static EntityField2 KeyCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketPriorityFieldIndex.KeyCode); }}
 		/// <summary>Creates a new TicketPriorityEntity.Name field instance</summary>
 		public static EntityField2 Name { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketPriorityFieldIndex.Name); }}
+		/// <summary>Creates a new TicketPriorityEntity.SortOrder field instance</summary>
+		public static EntityField2 SortOrder { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketPriorityFieldIndex.SortOrder); }}
 		/// <summary>Creates a new TicketPriorityEntity.UpdatedAt field instance</summary>
 		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(TicketPriorityFieldIndex.UpdatedAt); }}
 	}
@@ -311,6 +347,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 Code { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.Code); }}
 		/// <summary>Creates a new UnitEntity.CreatedAt field instance</summary>
 		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new UnitEntity.CreatedBy field instance</summary>
+		public static EntityField2 CreatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.CreatedBy); }}
 		/// <summary>Creates a new UnitEntity.DeletedAt field instance</summary>
 		public static EntityField2 DeletedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.DeletedAt); }}
 		/// <summary>Creates a new UnitEntity.DeletedBy field instance</summary>
@@ -327,6 +365,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 Name { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.Name); }}
 		/// <summary>Creates a new UnitEntity.Note field instance</summary>
 		public static EntityField2 Note { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.Note); }}
+		/// <summary>Creates a new UnitEntity.OrganizationId field instance</summary>
+		public static EntityField2 OrganizationId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.OrganizationId); }}
 		/// <summary>Creates a new UnitEntity.PropertyId field instance</summary>
 		public static EntityField2 PropertyId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.PropertyId); }}
 		/// <summary>Creates a new UnitEntity.Status field instance</summary>
@@ -335,6 +375,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 UnitType { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.UnitType); }}
 		/// <summary>Creates a new UnitEntity.UpdatedAt field instance</summary>
 		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.UpdatedAt); }}
+		/// <summary>Creates a new UnitEntity.UpdatedBy field instance</summary>
+		public static EntityField2 UpdatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitFieldIndex.UpdatedBy); }}
 	}
 
 	/// <summary>Field Creation Class for entity UnitAmenityEntity</summary>
@@ -342,6 +384,10 @@ namespace RoomManagerment.Property.HelperClasses
 	{
 		/// <summary>Creates a new UnitAmenityEntity.AmenityId field instance</summary>
 		public static EntityField2 AmenityId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitAmenityFieldIndex.AmenityId); }}
+		/// <summary>Creates a new UnitAmenityEntity.CreatedAt field instance</summary>
+		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitAmenityFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new UnitAmenityEntity.CreatedBy field instance</summary>
+		public static EntityField2 CreatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitAmenityFieldIndex.CreatedBy); }}
 		/// <summary>Creates a new UnitAmenityEntity.UnitId field instance</summary>
 		public static EntityField2 UnitId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(UnitAmenityFieldIndex.UnitId); }}
 	}
@@ -355,10 +401,6 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 AccountNumber { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.AccountNumber); }}
 		/// <summary>Creates a new VendorEntity.Address field instance</summary>
 		public static EntityField2 Address { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.Address); }}
-		/// <summary>Creates a new VendorEntity.BankingNotes field instance</summary>
-		public static EntityField2 BankingNotes { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.BankingNotes); }}
-		/// <summary>Creates a new VendorEntity.BranchCode field instance</summary>
-		public static EntityField2 BranchCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.BranchCode); }}
 		/// <summary>Creates a new VendorEntity.BranchName field instance</summary>
 		public static EntityField2 BranchName { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.BranchName); }}
 		/// <summary>Creates a new VendorEntity.BusinessLicense field instance</summary>
@@ -371,6 +413,8 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 ContactPhone { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.ContactPhone); }}
 		/// <summary>Creates a new VendorEntity.CreatedAt field instance</summary>
 		public static EntityField2 CreatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.CreatedAt); }}
+		/// <summary>Creates a new VendorEntity.CreatedBy field instance</summary>
+		public static EntityField2 CreatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.CreatedBy); }}
 		/// <summary>Creates a new VendorEntity.DeletedAt field instance</summary>
 		public static EntityField2 DeletedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.DeletedAt); }}
 		/// <summary>Creates a new VendorEntity.DeletedBy field instance</summary>
@@ -389,12 +433,12 @@ namespace RoomManagerment.Property.HelperClasses
 		public static EntityField2 SepayBankId { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.SepayBankId); }}
 		/// <summary>Creates a new VendorEntity.Status field instance</summary>
 		public static EntityField2 Status { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.Status); }}
-		/// <summary>Creates a new VendorEntity.SwiftCode field instance</summary>
-		public static EntityField2 SwiftCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.SwiftCode); }}
 		/// <summary>Creates a new VendorEntity.TaxCode field instance</summary>
 		public static EntityField2 TaxCode { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.TaxCode); }}
 		/// <summary>Creates a new VendorEntity.UpdatedAt field instance</summary>
 		public static EntityField2 UpdatedAt { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.UpdatedAt); }}
+		/// <summary>Creates a new VendorEntity.UpdatedBy field instance</summary>
+		public static EntityField2 UpdatedBy { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.UpdatedBy); }}
 		/// <summary>Creates a new VendorEntity.VendorType field instance</summary>
 		public static EntityField2 VendorType { get { return ModelInfoProviderSingleton.GetInstance().CreateField2(VendorFieldIndex.VendorType); }}
 	}

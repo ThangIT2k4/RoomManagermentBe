@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Property.Application;
 using Property.Application.Services;
 using Property.Domain.Repositories;
 using Property.Infrastructure.Repositories;
@@ -13,6 +14,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IDataAccessAdapterFactory, DataAccessAdapterFactory>();
+        services.AddScoped<IPropertyApplicationService, PropertyApplicationService>();
         services.AddScoped<DataAccessAdapter>(provider =>
         {
             var factory = provider.GetRequiredService<IDataAccessAdapterFactory>();
@@ -21,6 +23,15 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IPropertyRepository, PropertyRepository>();
+        services.AddScoped<IUnitRepository, UnitRepository>();
+        services.AddScoped<ITicketRepository, TicketRepository>();
+        services.AddScoped<IMeterRepository, MeterRepository>();
+        services.AddScoped<IMeterReadingRepository, MeterReadingRepository>();
+        services.AddScoped<IAmenityRepository, AmenityRepository>();
+        services.AddScoped<IPropertyTypeRepository, PropertyTypeRepository>();
+        services.AddScoped<IPropertyStaffRepository, PropertyStaffRepository>();
+        services.AddScoped<IVendorRepository, VendorRepository>();
+        services.AddScoped<IDocumentRepository, DocumentRepository>();
         return services;
     }
 }

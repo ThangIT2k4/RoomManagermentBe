@@ -20,18 +20,16 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'PropertiesUser'.<br/><br/></summary>
 	[Serializable]
 	public partial class PropertiesUserEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private PropertyEntity _property;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static PropertiesUserEntityStaticMetaData _staticMetaData = new PropertiesUserEntityStaticMetaData();
 		private static PropertiesUserRelations _relationsFactory = new PropertiesUserRelations();
 
@@ -101,16 +99,6 @@ namespace RoomManagerment.Property.EntityClasses
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		/// <summary>Method which will construct a filter (predicate expression) for the unique constraint defined on the fields: PropertyId , UserId .</summary>
-		/// <returns>true if succeeded and the contents is read, false otherwise</returns>
-		public IPredicateExpression ConstructFilterForUCPropertyIdUserId()
-		{
-			var filter = new PredicateExpression();
-			filter.Add(RoomManagerment.Property.HelperClasses.PropertiesUserFields.PropertyId == this.Fields.GetCurrentValue((int)PropertiesUserFieldIndex.PropertyId));
-			filter.Add(RoomManagerment.Property.HelperClasses.PropertiesUserFields.UserId == this.Fields.GetCurrentValue((int)PropertiesUserFieldIndex.UserId));
- 			return filter;
-		}
-
 		/// <summary>Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Property' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoProperty() { return CreateRelationInfoForNavigator("Property"); }
@@ -124,7 +112,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -139,7 +126,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -157,6 +143,14 @@ namespace RoomManagerment.Property.EntityClasses
 		{
 			get { return (System.DateTime)GetValue((int)PropertiesUserFieldIndex.AssignedAt, true); }
 			set { SetValue((int)PropertiesUserFieldIndex.AssignedAt, value); }
+		}
+
+		/// <summary>The AssignedBy property of the Entity PropertiesUser<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "properties_user"."assigned_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> AssignedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)PropertiesUserFieldIndex.AssignedBy, false); }
+			set { SetValue((int)PropertiesUserFieldIndex.AssignedBy, value); }
 		}
 
 		/// <summary>The CreatedAt property of the Entity PropertiesUser<br/><br/></summary>
@@ -200,7 +194,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The RoleKey property of the Entity PropertiesUser<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "properties_user"."role_key".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "properties_user"."role_key".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 50.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String RoleKey
 		{
 			get { return (System.String)GetValue((int)PropertiesUserFieldIndex.RoleKey, true); }
@@ -213,14 +207,6 @@ namespace RoomManagerment.Property.EntityClasses
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)PropertiesUserFieldIndex.UpdatedAt, false); }
 			set { SetValue((int)PropertiesUserFieldIndex.UpdatedAt, value); }
-		}
-
-		/// <summary>The UpdatedBy property of the Entity PropertiesUser<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "properties_user"."updated_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Guid> UpdatedBy
-		{
-			get { return (Nullable<System.Guid>)GetValue((int)PropertiesUserFieldIndex.UpdatedBy, false); }
-			set { SetValue((int)PropertiesUserFieldIndex.UpdatedBy, value); }
 		}
 
 		/// <summary>The UserId property of the Entity PropertiesUser<br/><br/></summary>
@@ -238,9 +224,9 @@ namespace RoomManagerment.Property.EntityClasses
 			get { return _property; }
 			set { SetSingleRelatedEntityNavigator(value, "Property"); }
 		}
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -251,6 +237,8 @@ namespace RoomManagerment.Property
 	{
 		///<summary>AssignedAt. </summary>
 		AssignedAt,
+		///<summary>AssignedBy. </summary>
+		AssignedBy,
 		///<summary>CreatedAt. </summary>
 		CreatedAt,
 		///<summary>DeletedAt. </summary>
@@ -265,8 +253,6 @@ namespace RoomManagerment.Property
 		RoleKey,
 		///<summary>UpdatedAt. </summary>
 		UpdatedAt,
-		///<summary>UpdatedBy. </summary>
-		UpdatedBy,
 		///<summary>UserId. </summary>
 		UserId,
 		/// <summary></summary>

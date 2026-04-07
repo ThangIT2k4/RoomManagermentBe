@@ -54,69 +54,78 @@ namespace RoomManagerment.Property.DatabaseSpecific
 		/// <summary>Inits AmenityEntity's mappings</summary>
 		private void InitAmenityEntityMappings()
 		{
-			this.AddElementMapping("AmenityEntity", @"room_managerment", @"prop", "amenities", 9, 0);
+			this.AddElementMapping("AmenityEntity", @"room_managerment", @"prop", "amenities", 11, 0);
 			this.AddElementFieldMapping("AmenityEntity", "Category", "category", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("AmenityEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
-			this.AddElementFieldMapping("AmenityEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
-			this.AddElementFieldMapping("AmenityEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 3);
-			this.AddElementFieldMapping("AmenityEntity", "Icon", "icon", true, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("AmenityEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 5);
-			this.AddElementFieldMapping("AmenityEntity", "KeyCode", "key_code", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 6);
-			this.AddElementFieldMapping("AmenityEntity", "Name", "name", false, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("AmenityEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 8);
+			this.AddElementFieldMapping("AmenityEntity", "CreatedBy", "created_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
+			this.AddElementFieldMapping("AmenityEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
+			this.AddElementFieldMapping("AmenityEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 4);
+			this.AddElementFieldMapping("AmenityEntity", "Icon", "icon", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("AmenityEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 6);
+			this.AddElementFieldMapping("AmenityEntity", "KeyCode", "key_code", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("AmenityEntity", "Name", "name", false, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("AmenityEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 9);
+			this.AddElementFieldMapping("AmenityEntity", "UpdatedBy", "updated_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 10);
 		}
 
 		/// <summary>Inits DocumentEntity's mappings</summary>
 		private void InitDocumentEntityMappings()
 		{
-			this.AddElementMapping("DocumentEntity", @"room_managerment", @"prop", "documents", 16, 0);
+			this.AddElementMapping("DocumentEntity", @"room_managerment", @"prop", "documents", 17, 0);
 			this.AddElementFieldMapping("DocumentEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
 			this.AddElementFieldMapping("DocumentEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
 			this.AddElementFieldMapping("DocumentEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
 			this.AddElementFieldMapping("DocumentEntity", "Description", "description", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("DocumentEntity", "DocumentType", "document_type", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("DocumentEntity", "FileName", "file_name", true, "Varchar", 500, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("DocumentEntity", "FileSize", "file_size", true, "Bigint", 0, 20, 0, false, "", null, typeof(System.Int64), 6);
+			this.AddElementFieldMapping("DocumentEntity", "DocumentType", "document_type", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("DocumentEntity", "FileName", "file_name", false, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("DocumentEntity", "FileSize", "file_size", false, "Bigint", 0, 20, 0, false, "", null, typeof(System.Int64), 6);
 			this.AddElementFieldMapping("DocumentEntity", "FileUrl", "file_url", false, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("DocumentEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 8);
 			this.AddElementFieldMapping("DocumentEntity", "IsPrimary", "is_primary", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
-			this.AddElementFieldMapping("DocumentEntity", "MimeType", "mime_type", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 10);
-			this.AddElementFieldMapping("DocumentEntity", "OwnerId", "owner_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 11);
-			this.AddElementFieldMapping("DocumentEntity", "OwnerType", "owner_type", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 12);
-			this.AddElementFieldMapping("DocumentEntity", "SortOrder", "sort_order", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 13);
-			this.AddElementFieldMapping("DocumentEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 14);
-			this.AddElementFieldMapping("DocumentEntity", "UploadedBy", "uploaded_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 15);
+			this.AddElementFieldMapping("DocumentEntity", "MimeType", "mime_type", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("DocumentEntity", "OrganizationId", "organization_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 11);
+			this.AddElementFieldMapping("DocumentEntity", "OwnerId", "owner_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 12);
+			this.AddElementFieldMapping("DocumentEntity", "OwnerType", "owner_type", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("DocumentEntity", "SortOrder", "sort_order", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 14);
+			this.AddElementFieldMapping("DocumentEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 15);
+			this.AddElementFieldMapping("DocumentEntity", "UploadedBy", "uploaded_by", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 16);
 		}
 
 		/// <summary>Inits MeterEntity's mappings</summary>
 		private void InitMeterEntityMappings()
 		{
-			this.AddElementMapping("MeterEntity", @"room_managerment", @"prop", "meters", 11, 0);
+			this.AddElementMapping("MeterEntity", @"room_managerment", @"prop", "meters", 14, 0);
 			this.AddElementFieldMapping("MeterEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
-			this.AddElementFieldMapping("MeterEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
-			this.AddElementFieldMapping("MeterEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
-			this.AddElementFieldMapping("MeterEntity", "Description", "description", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("MeterEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 4);
-			this.AddElementFieldMapping("MeterEntity", "IsActive", "is_active", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
-			this.AddElementFieldMapping("MeterEntity", "MeterNumber", "meter_number", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 6);
-			this.AddElementFieldMapping("MeterEntity", "MeterType", "meter_type", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("MeterEntity", "PropertyId", "property_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 8);
-			this.AddElementFieldMapping("MeterEntity", "UnitId", "unit_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 9);
-			this.AddElementFieldMapping("MeterEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 10);
+			this.AddElementFieldMapping("MeterEntity", "CreatedBy", "created_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 1);
+			this.AddElementFieldMapping("MeterEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
+			this.AddElementFieldMapping("MeterEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 3);
+			this.AddElementFieldMapping("MeterEntity", "Description", "description", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("MeterEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 5);
+			this.AddElementFieldMapping("MeterEntity", "IsActive", "is_active", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
+			this.AddElementFieldMapping("MeterEntity", "MeterNumber", "meter_number", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("MeterEntity", "MeterType", "meter_type", false, "Varchar", 30, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("MeterEntity", "OrganizationId", "organization_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 9);
+			this.AddElementFieldMapping("MeterEntity", "PropertyId", "property_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 10);
+			this.AddElementFieldMapping("MeterEntity", "UnitId", "unit_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 11);
+			this.AddElementFieldMapping("MeterEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 12);
+			this.AddElementFieldMapping("MeterEntity", "UpdatedBy", "updated_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 13);
 		}
 
 		/// <summary>Inits MeterReadingEntity's mappings</summary>
 		private void InitMeterReadingEntityMappings()
 		{
-			this.AddElementMapping("MeterReadingEntity", @"room_managerment", @"prop", "meter_readings", 8, 0);
+			this.AddElementMapping("MeterReadingEntity", @"room_managerment", @"prop", "meter_readings", 11, 0);
 			this.AddElementFieldMapping("MeterReadingEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
-			this.AddElementFieldMapping("MeterReadingEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 1);
-			this.AddElementFieldMapping("MeterReadingEntity", "ImageUrl", "image_url", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("MeterReadingEntity", "MeterId", "meter_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 3);
-			this.AddElementFieldMapping("MeterReadingEntity", "Note", "note", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("MeterReadingEntity", "ReadingDate", "reading_date", false, "Date", 0, 0, 0, false, "", null, typeof(System.DateOnly), 5);
-			this.AddElementFieldMapping("MeterReadingEntity", "TakenBy", "taken_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 6);
-			this.AddElementFieldMapping("MeterReadingEntity", "Value", "value", false, "Numeric", 0, 15, 3, false, "", null, typeof(System.Decimal), 7);
+			this.AddElementFieldMapping("MeterReadingEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
+			this.AddElementFieldMapping("MeterReadingEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
+			this.AddElementFieldMapping("MeterReadingEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 3);
+			this.AddElementFieldMapping("MeterReadingEntity", "ImageUrl", "image_url", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("MeterReadingEntity", "MeterId", "meter_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 5);
+			this.AddElementFieldMapping("MeterReadingEntity", "Note", "note", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("MeterReadingEntity", "ReadingDate", "reading_date", false, "Date", 0, 0, 0, false, "", null, typeof(System.DateOnly), 7);
+			this.AddElementFieldMapping("MeterReadingEntity", "TakenBy", "taken_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 8);
+			this.AddElementFieldMapping("MeterReadingEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 9);
+			this.AddElementFieldMapping("MeterReadingEntity", "Value", "value", false, "Numeric", 0, 18, 3, false, "", null, typeof(System.Decimal), 10);
 		}
 
 		/// <summary>Inits PropertiesUserEntity's mappings</summary>
@@ -124,55 +133,61 @@ namespace RoomManagerment.Property.DatabaseSpecific
 		{
 			this.AddElementMapping("PropertiesUserEntity", @"room_managerment", @"prop", "properties_user", 10, 0);
 			this.AddElementFieldMapping("PropertiesUserEntity", "AssignedAt", "assigned_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
-			this.AddElementFieldMapping("PropertiesUserEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
-			this.AddElementFieldMapping("PropertiesUserEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
-			this.AddElementFieldMapping("PropertiesUserEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 3);
-			this.AddElementFieldMapping("PropertiesUserEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 4);
-			this.AddElementFieldMapping("PropertiesUserEntity", "PropertyId", "property_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 5);
-			this.AddElementFieldMapping("PropertiesUserEntity", "RoleKey", "role_key", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 6);
-			this.AddElementFieldMapping("PropertiesUserEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
-			this.AddElementFieldMapping("PropertiesUserEntity", "UpdatedBy", "updated_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 8);
+			this.AddElementFieldMapping("PropertiesUserEntity", "AssignedBy", "assigned_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 1);
+			this.AddElementFieldMapping("PropertiesUserEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
+			this.AddElementFieldMapping("PropertiesUserEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
+			this.AddElementFieldMapping("PropertiesUserEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 4);
+			this.AddElementFieldMapping("PropertiesUserEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 5);
+			this.AddElementFieldMapping("PropertiesUserEntity", "PropertyId", "property_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 6);
+			this.AddElementFieldMapping("PropertiesUserEntity", "RoleKey", "role_key", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("PropertiesUserEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 8);
 			this.AddElementFieldMapping("PropertiesUserEntity", "UserId", "user_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 9);
 		}
 
 		/// <summary>Inits PropertyEntity's mappings</summary>
 		private void InitPropertyEntityMappings()
 		{
-			this.AddElementMapping("PropertyEntity", @"room_managerment", @"prop", "properties", 21, 0);
-			this.AddElementFieldMapping("PropertyEntity", "Address", "address", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 0);
+			this.AddElementMapping("PropertyEntity", @"room_managerment", @"prop", "properties", 23, 0);
+			this.AddElementFieldMapping("PropertyEntity", "Address", "address", false, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("PropertyEntity", "Code", "code", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("PropertyEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
-			this.AddElementFieldMapping("PropertyEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
-			this.AddElementFieldMapping("PropertyEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 4);
-			this.AddElementFieldMapping("PropertyEntity", "Description", "description", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("PropertyEntity", "DistrictCode", "district_code", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 6);
-			this.AddElementFieldMapping("PropertyEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 7);
-			this.AddElementFieldMapping("PropertyEntity", "Latitude", "latitude", true, "Numeric", 0, 10, 7, false, "", null, typeof(System.Decimal), 8);
-			this.AddElementFieldMapping("PropertyEntity", "Longitude", "longitude", true, "Numeric", 0, 10, 7, false, "", null, typeof(System.Decimal), 9);
-			this.AddElementFieldMapping("PropertyEntity", "Name", "name", false, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 10);
-			this.AddElementFieldMapping("PropertyEntity", "Notes", "notes", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 11);
-			this.AddElementFieldMapping("PropertyEntity", "NumberOfFloors", "number_of_floors", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 12);
-			this.AddElementFieldMapping("PropertyEntity", "OrganizationId", "organization_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 13);
-			this.AddElementFieldMapping("PropertyEntity", "PropertyTypeId", "property_type_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 14);
-			this.AddElementFieldMapping("PropertyEntity", "ProvinceCode", "province_code", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 15);
-			this.AddElementFieldMapping("PropertyEntity", "Status", "status", false, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 16);
-			this.AddElementFieldMapping("PropertyEntity", "StreetCode", "street_code", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 17);
-			this.AddElementFieldMapping("PropertyEntity", "TotalUnits", "total_units", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 18);
-			this.AddElementFieldMapping("PropertyEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 19);
-			this.AddElementFieldMapping("PropertyEntity", "WardCode", "ward_code", true, "Varchar", 10, 0, 0, false, "", null, typeof(System.String), 20);
+			this.AddElementFieldMapping("PropertyEntity", "CreatedBy", "created_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 3);
+			this.AddElementFieldMapping("PropertyEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
+			this.AddElementFieldMapping("PropertyEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 5);
+			this.AddElementFieldMapping("PropertyEntity", "Description", "description", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("PropertyEntity", "DistrictCode", "district_code", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("PropertyEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 8);
+			this.AddElementFieldMapping("PropertyEntity", "Latitude", "latitude", true, "Numeric", 0, 10, 7, false, "", null, typeof(System.Decimal), 9);
+			this.AddElementFieldMapping("PropertyEntity", "Longitude", "longitude", true, "Numeric", 0, 10, 7, false, "", null, typeof(System.Decimal), 10);
+			this.AddElementFieldMapping("PropertyEntity", "Name", "name", false, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("PropertyEntity", "Notes", "notes", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("PropertyEntity", "NumberOfFloors", "number_of_floors", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 13);
+			this.AddElementFieldMapping("PropertyEntity", "OrganizationId", "organization_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 14);
+			this.AddElementFieldMapping("PropertyEntity", "PropertyTypeId", "property_type_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 15);
+			this.AddElementFieldMapping("PropertyEntity", "ProvinceCode", "province_code", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 16);
+			this.AddElementFieldMapping("PropertyEntity", "Status", "status", false, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 17);
+			this.AddElementFieldMapping("PropertyEntity", "StreetCode", "street_code", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 18);
+			this.AddElementFieldMapping("PropertyEntity", "TotalUnits", "total_units", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 19);
+			this.AddElementFieldMapping("PropertyEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 20);
+			this.AddElementFieldMapping("PropertyEntity", "UpdatedBy", "updated_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 21);
+			this.AddElementFieldMapping("PropertyEntity", "WardCode", "ward_code", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 22);
 		}
 
 		/// <summary>Inits PropertyTypeEntity's mappings</summary>
 		private void InitPropertyTypeEntityMappings()
 		{
-			this.AddElementMapping("PropertyTypeEntity", @"room_managerment", @"prop", "property_types", 7, 0);
+			this.AddElementMapping("PropertyTypeEntity", @"room_managerment", @"prop", "property_types", 11, 0);
 			this.AddElementFieldMapping("PropertyTypeEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
-			this.AddElementFieldMapping("PropertyTypeEntity", "Description", "description", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("PropertyTypeEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
-			this.AddElementFieldMapping("PropertyTypeEntity", "KeyCode", "key_code", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("PropertyTypeEntity", "Name", "name", false, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("PropertyTypeEntity", "OrganizationId", "organization_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 5);
-			this.AddElementFieldMapping("PropertyTypeEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 6);
+			this.AddElementFieldMapping("PropertyTypeEntity", "CreatedBy", "created_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 1);
+			this.AddElementFieldMapping("PropertyTypeEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
+			this.AddElementFieldMapping("PropertyTypeEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 3);
+			this.AddElementFieldMapping("PropertyTypeEntity", "Description", "description", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("PropertyTypeEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 5);
+			this.AddElementFieldMapping("PropertyTypeEntity", "KeyCode", "key_code", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("PropertyTypeEntity", "Name", "name", false, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("PropertyTypeEntity", "OrganizationId", "organization_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 8);
+			this.AddElementFieldMapping("PropertyTypeEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 9);
+			this.AddElementFieldMapping("PropertyTypeEntity", "UpdatedBy", "updated_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 10);
 		}
 
 		/// <summary>Inits TicketEntity's mappings</summary>
@@ -186,13 +201,13 @@ namespace RoomManagerment.Property.DatabaseSpecific
 			this.AddElementFieldMapping("TicketEntity", "CreatedBy", "created_by", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 4);
 			this.AddElementFieldMapping("TicketEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 5);
 			this.AddElementFieldMapping("TicketEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 6);
-			this.AddElementFieldMapping("TicketEntity", "Description", "description", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("TicketEntity", "Description", "description", false, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("TicketEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 8);
 			this.AddElementFieldMapping("TicketEntity", "LeaseId", "lease_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 9);
 			this.AddElementFieldMapping("TicketEntity", "OrganizationId", "organization_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 10);
 			this.AddElementFieldMapping("TicketEntity", "PriorityId", "priority_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 11);
-			this.AddElementFieldMapping("TicketEntity", "PropertyId", "property_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 12);
-			this.AddElementFieldMapping("TicketEntity", "Status", "status", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("TicketEntity", "PropertyId", "property_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 12);
+			this.AddElementFieldMapping("TicketEntity", "Status", "status", false, "Varchar", 30, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("TicketEntity", "Title", "title", false, "Varchar", 500, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("TicketEntity", "UnitId", "unit_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 15);
 			this.AddElementFieldMapping("TicketEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 16);
@@ -201,11 +216,11 @@ namespace RoomManagerment.Property.DatabaseSpecific
 		/// <summary>Inits TicketLogEntity's mappings</summary>
 		private void InitTicketLogEntityMappings()
 		{
-			this.AddElementMapping("TicketLogEntity", @"room_managerment", @"prop", "ticket_logs", 15, 0);
-			this.AddElementFieldMapping("TicketLogEntity", "Action", "action", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 0);
+			this.AddElementMapping("TicketLogEntity", @"room_managerment", @"prop", "ticket_logs", 16, 0);
+			this.AddElementFieldMapping("TicketLogEntity", "Action", "action", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 0);
 			this.AddElementFieldMapping("TicketLogEntity", "ActorId", "actor_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 1);
-			this.AddElementFieldMapping("TicketLogEntity", "ChargeTo", "charge_to", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("TicketLogEntity", "CostAmount", "cost_amount", true, "Numeric", 0, 15, 2, false, "", null, typeof(System.Decimal), 3);
+			this.AddElementFieldMapping("TicketLogEntity", "ChargeTo", "charge_to", true, "Varchar", 20, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("TicketLogEntity", "CostAmount", "cost_amount", true, "Numeric", 0, 18, 2, false, "", null, typeof(System.Decimal), 3);
 			this.AddElementFieldMapping("TicketLogEntity", "CostNote", "cost_note", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("TicketLogEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 5);
 			this.AddElementFieldMapping("TicketLogEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 6);
@@ -214,81 +229,88 @@ namespace RoomManagerment.Property.DatabaseSpecific
 			this.AddElementFieldMapping("TicketLogEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 9);
 			this.AddElementFieldMapping("TicketLogEntity", "LinkedInvoiceId", "linked_invoice_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 10);
 			this.AddElementFieldMapping("TicketLogEntity", "TicketId", "ticket_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 11);
-			this.AddElementFieldMapping("TicketLogEntity", "VendorId", "vendor_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 12);
-			this.AddElementFieldMapping("TicketLogEntity", "WarrantyExpiresAt", "warranty_expires_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 13);
-			this.AddElementFieldMapping("TicketLogEntity", "WarrantyPeriodDays", "warranty_period_days", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 14);
+			this.AddElementFieldMapping("TicketLogEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 12);
+			this.AddElementFieldMapping("TicketLogEntity", "VendorId", "vendor_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 13);
+			this.AddElementFieldMapping("TicketLogEntity", "WarrantyExpiresAt", "warranty_expires_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 14);
+			this.AddElementFieldMapping("TicketLogEntity", "WarrantyPeriodDays", "warranty_period_days", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 15);
 		}
 
 		/// <summary>Inits TicketPriorityEntity's mappings</summary>
 		private void InitTicketPriorityEntityMappings()
 		{
-			this.AddElementMapping("TicketPriorityEntity", @"room_managerment", @"prop", "ticket_priorities", 6, 0);
+			this.AddElementMapping("TicketPriorityEntity", @"room_managerment", @"prop", "ticket_priorities", 8, 0);
 			this.AddElementFieldMapping("TicketPriorityEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 0);
-			this.AddElementFieldMapping("TicketPriorityEntity", "Description", "description", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("TicketPriorityEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
 			this.AddElementFieldMapping("TicketPriorityEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
-			this.AddElementFieldMapping("TicketPriorityEntity", "KeyCode", "key_code", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("TicketPriorityEntity", "Name", "name", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("TicketPriorityEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 5);
+			this.AddElementFieldMapping("TicketPriorityEntity", "IsDefault", "is_default", false, "Boolean", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
+			this.AddElementFieldMapping("TicketPriorityEntity", "KeyCode", "key_code", false, "Varchar", 30, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("TicketPriorityEntity", "Name", "name", false, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("TicketPriorityEntity", "SortOrder", "sort_order", false, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
+			this.AddElementFieldMapping("TicketPriorityEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
 		}
 
 		/// <summary>Inits UnitEntity's mappings</summary>
 		private void InitUnitEntityMappings()
 		{
-			this.AddElementMapping("UnitEntity", @"room_managerment", @"prop", "units", 16, 0);
+			this.AddElementMapping("UnitEntity", @"room_managerment", @"prop", "units", 19, 0);
 			this.AddElementFieldMapping("UnitEntity", "AreaM2", "area_m2", true, "Numeric", 0, 10, 2, false, "", null, typeof(System.Decimal), 0);
-			this.AddElementFieldMapping("UnitEntity", "BaseRent", "base_rent", true, "Numeric", 0, 15, 2, false, "", null, typeof(System.Decimal), 1);
+			this.AddElementFieldMapping("UnitEntity", "BaseRent", "base_rent", false, "Numeric", 0, 18, 2, false, "", null, typeof(System.Decimal), 1);
 			this.AddElementFieldMapping("UnitEntity", "Code", "code", false, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("UnitEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
-			this.AddElementFieldMapping("UnitEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
-			this.AddElementFieldMapping("UnitEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 5);
-			this.AddElementFieldMapping("UnitEntity", "DepositAmount", "deposit_amount", true, "Numeric", 0, 15, 2, false, "", null, typeof(System.Decimal), 6);
-			this.AddElementFieldMapping("UnitEntity", "Floor", "floor", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
-			this.AddElementFieldMapping("UnitEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 8);
-			this.AddElementFieldMapping("UnitEntity", "MaxOccupancy", "max_occupancy", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
-			this.AddElementFieldMapping("UnitEntity", "Name", "name", true, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 10);
-			this.AddElementFieldMapping("UnitEntity", "Note", "note", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 11);
-			this.AddElementFieldMapping("UnitEntity", "PropertyId", "property_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 12);
-			this.AddElementFieldMapping("UnitEntity", "Status", "status", false, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 13);
-			this.AddElementFieldMapping("UnitEntity", "UnitType", "unit_type", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("UnitEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 15);
+			this.AddElementFieldMapping("UnitEntity", "CreatedBy", "created_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 4);
+			this.AddElementFieldMapping("UnitEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 5);
+			this.AddElementFieldMapping("UnitEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 6);
+			this.AddElementFieldMapping("UnitEntity", "DepositAmount", "deposit_amount", true, "Numeric", 0, 18, 2, false, "", null, typeof(System.Decimal), 7);
+			this.AddElementFieldMapping("UnitEntity", "Floor", "floor", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("UnitEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 9);
+			this.AddElementFieldMapping("UnitEntity", "MaxOccupancy", "max_occupancy", true, "Integer", 0, 10, 0, false, "", null, typeof(System.Int32), 10);
+			this.AddElementFieldMapping("UnitEntity", "Name", "name", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("UnitEntity", "Note", "note", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("UnitEntity", "OrganizationId", "organization_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 13);
+			this.AddElementFieldMapping("UnitEntity", "PropertyId", "property_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 14);
+			this.AddElementFieldMapping("UnitEntity", "Status", "status", false, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 15);
+			this.AddElementFieldMapping("UnitEntity", "UnitType", "unit_type", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 16);
+			this.AddElementFieldMapping("UnitEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 17);
+			this.AddElementFieldMapping("UnitEntity", "UpdatedBy", "updated_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 18);
 		}
 
 		/// <summary>Inits UnitAmenityEntity's mappings</summary>
 		private void InitUnitAmenityEntityMappings()
 		{
-			this.AddElementMapping("UnitAmenityEntity", @"room_managerment", @"prop", "unit_amenities", 2, 0);
+			this.AddElementMapping("UnitAmenityEntity", @"room_managerment", @"prop", "unit_amenities", 4, 0);
 			this.AddElementFieldMapping("UnitAmenityEntity", "AmenityId", "amenity_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 0);
-			this.AddElementFieldMapping("UnitAmenityEntity", "UnitId", "unit_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 1);
+			this.AddElementFieldMapping("UnitAmenityEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 1);
+			this.AddElementFieldMapping("UnitAmenityEntity", "CreatedBy", "created_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 2);
+			this.AddElementFieldMapping("UnitAmenityEntity", "UnitId", "unit_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 3);
 		}
 
 		/// <summary>Inits VendorEntity's mappings</summary>
 		private void InitVendorEntityMappings()
 		{
-			this.AddElementMapping("VendorEntity", @"room_managerment", @"prop", "vendors", 24, 0);
-			this.AddElementFieldMapping("VendorEntity", "AccountHolderName", "account_holder_name", true, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 0);
-			this.AddElementFieldMapping("VendorEntity", "AccountNumber", "account_number", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementMapping("VendorEntity", @"room_managerment", @"prop", "vendors", 23, 0);
+			this.AddElementFieldMapping("VendorEntity", "AccountHolderName", "account_holder_name", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 0);
+			this.AddElementFieldMapping("VendorEntity", "AccountNumber", "account_number", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("VendorEntity", "Address", "address", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("VendorEntity", "BankingNotes", "banking_notes", true, "Text", 1073741824, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("VendorEntity", "BranchCode", "branch_code", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("VendorEntity", "BranchName", "branch_name", true, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("VendorEntity", "BusinessLicense", "business_license", true, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 6);
-			this.AddElementFieldMapping("VendorEntity", "ContactEmail", "contact_email", true, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("VendorEntity", "ContactPerson", "contact_person", true, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 8);
-			this.AddElementFieldMapping("VendorEntity", "ContactPhone", "contact_phone", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 9);
-			this.AddElementFieldMapping("VendorEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 10);
-			this.AddElementFieldMapping("VendorEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 11);
-			this.AddElementFieldMapping("VendorEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 12);
-			this.AddElementFieldMapping("VendorEntity", "Email", "email", true, "Varchar", 200, 0, 0, false, "", null, typeof(System.String), 13);
-			this.AddElementFieldMapping("VendorEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 14);
-			this.AddElementFieldMapping("VendorEntity", "Name", "name", false, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 15);
-			this.AddElementFieldMapping("VendorEntity", "OrganizationId", "organization_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 16);
-			this.AddElementFieldMapping("VendorEntity", "Phone", "phone", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 17);
-			this.AddElementFieldMapping("VendorEntity", "SepayBankId", "sepay_bank_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 18);
-			this.AddElementFieldMapping("VendorEntity", "Status", "status", false, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 19);
-			this.AddElementFieldMapping("VendorEntity", "SwiftCode", "swift_code", true, "Varchar", 30, 0, 0, false, "", null, typeof(System.String), 20);
-			this.AddElementFieldMapping("VendorEntity", "TaxCode", "tax_code", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 21);
-			this.AddElementFieldMapping("VendorEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 22);
-			this.AddElementFieldMapping("VendorEntity", "VendorType", "vendor_type", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 23);
+			this.AddElementFieldMapping("VendorEntity", "BranchName", "branch_name", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("VendorEntity", "BusinessLicense", "business_license", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("VendorEntity", "ContactEmail", "contact_email", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("VendorEntity", "ContactPerson", "contact_person", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("VendorEntity", "ContactPhone", "contact_phone", true, "Varchar", 30, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("VendorEntity", "CreatedAt", "created_at", false, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 8);
+			this.AddElementFieldMapping("VendorEntity", "CreatedBy", "created_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 9);
+			this.AddElementFieldMapping("VendorEntity", "DeletedAt", "deleted_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 10);
+			this.AddElementFieldMapping("VendorEntity", "DeletedBy", "deleted_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 11);
+			this.AddElementFieldMapping("VendorEntity", "Email", "email", true, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("VendorEntity", "Id", "id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 13);
+			this.AddElementFieldMapping("VendorEntity", "Name", "name", false, "Varchar", 255, 0, 0, false, "", null, typeof(System.String), 14);
+			this.AddElementFieldMapping("VendorEntity", "OrganizationId", "organization_id", false, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 15);
+			this.AddElementFieldMapping("VendorEntity", "Phone", "phone", true, "Varchar", 30, 0, 0, false, "", null, typeof(System.String), 16);
+			this.AddElementFieldMapping("VendorEntity", "SepayBankId", "sepay_bank_id", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 17);
+			this.AddElementFieldMapping("VendorEntity", "Status", "status", false, "Smallint", 0, 5, 0, false, "", null, typeof(System.Int16), 18);
+			this.AddElementFieldMapping("VendorEntity", "TaxCode", "tax_code", true, "Varchar", 50, 0, 0, false, "", null, typeof(System.String), 19);
+			this.AddElementFieldMapping("VendorEntity", "UpdatedAt", "updated_at", true, "TimestampTz", 0, 0, 0, false, "", null, typeof(System.DateTime), 20);
+			this.AddElementFieldMapping("VendorEntity", "UpdatedBy", "updated_by", true, "Uuid", 0, 0, 0, false, "", null, typeof(System.Guid), 21);
+			this.AddElementFieldMapping("VendorEntity", "VendorType", "vendor_type", true, "Varchar", 100, 0, 0, false, "", null, typeof(System.String), 22);
 		}
 
 	}

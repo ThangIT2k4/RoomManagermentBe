@@ -20,21 +20,19 @@ namespace RoomManagerment.Property.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
 	/// <summary>Entity class which represents the entity 'Unit'.<br/><br/></summary>
 	[Serializable]
 	public partial class UnitEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-	
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		private EntityCollection<MeterEntity> _meters;
 		private EntityCollection<TicketEntity> _tickets;
 		private EntityCollection<UnitAmenityEntity> _unitAmenities;
 		private PropertyEntity _property;
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 		private static UnitEntityStaticMetaData _staticMetaData = new UnitEntityStaticMetaData();
 		private static UnitRelations _relationsFactory = new UnitRelations();
 
@@ -138,7 +136,6 @@ namespace RoomManagerment.Property.EntityClasses
 			PerformDependencyInjection();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 			OnInitClassMembersComplete();
 		}
 
@@ -153,7 +150,6 @@ namespace RoomManagerment.Property.EntityClasses
 			InitClassMembers();
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 			OnInitialized();
 		}
@@ -186,10 +182,10 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The BaseRent property of the Entity Unit<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "units"."base_rent".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 15, 2, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Decimal> BaseRent
+		/// <remarks>Mapped on  table field: "units"."base_rent".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 2, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Decimal BaseRent
 		{
-			get { return (Nullable<System.Decimal>)GetValue((int)UnitFieldIndex.BaseRent, false); }
+			get { return (System.Decimal)GetValue((int)UnitFieldIndex.BaseRent, true); }
 			set { SetValue((int)UnitFieldIndex.BaseRent, value); }
 		}
 
@@ -209,6 +205,14 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)UnitFieldIndex.CreatedAt, value); }
 		}
 
+		/// <summary>The CreatedBy property of the Entity Unit<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "units"."created_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> CreatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)UnitFieldIndex.CreatedBy, false); }
+			set { SetValue((int)UnitFieldIndex.CreatedBy, value); }
+		}
+
 		/// <summary>The DeletedAt property of the Entity Unit<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "units"."deleted_at".<br/>Table field type characteristics (type, precision, scale, length): TimestampTz, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.DateTime> DeletedAt
@@ -226,7 +230,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The DepositAmount property of the Entity Unit<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "units"."deposit_amount".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 15, 2, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "units"."deposit_amount".<br/>Table field type characteristics (type, precision, scale, length): Numeric, 18, 2, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual Nullable<System.Decimal> DepositAmount
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)UnitFieldIndex.DepositAmount, false); }
@@ -258,7 +262,7 @@ namespace RoomManagerment.Property.EntityClasses
 		}
 
 		/// <summary>The Name property of the Entity Unit<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "units"."name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 200.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		/// <remarks>Mapped on  table field: "units"."name".<br/>Table field type characteristics (type, precision, scale, length): Varchar, 0, 0, 255.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)UnitFieldIndex.Name, true); }
@@ -271,6 +275,14 @@ namespace RoomManagerment.Property.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UnitFieldIndex.Note, true); }
 			set { SetValue((int)UnitFieldIndex.Note, value); }
+		}
+
+		/// <summary>The OrganizationId property of the Entity Unit<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "units"."organization_id".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Guid OrganizationId
+		{
+			get { return (System.Guid)GetValue((int)UnitFieldIndex.OrganizationId, true); }
+			set { SetValue((int)UnitFieldIndex.OrganizationId, value); }
 		}
 
 		/// <summary>The PropertyId property of the Entity Unit<br/><br/></summary>
@@ -305,6 +317,14 @@ namespace RoomManagerment.Property.EntityClasses
 			set { SetValue((int)UnitFieldIndex.UpdatedAt, value); }
 		}
 
+		/// <summary>The UpdatedBy property of the Entity Unit<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "units"."updated_by".<br/>Table field type characteristics (type, precision, scale, length): Uuid, 0, 0, 0.<br/>Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> UpdatedBy
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)UnitFieldIndex.UpdatedBy, false); }
+			set { SetValue((int)UnitFieldIndex.UpdatedBy, value); }
+		}
+
 		/// <summary>Gets the EntityCollection with the related entities of type 'MeterEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(MeterEntity))]
 		public virtual EntityCollection<MeterEntity> Meters { get { return GetOrCreateEntityCollection<MeterEntity, MeterEntityFactory>("Unit", true, false, ref _meters); } }
@@ -324,9 +344,9 @@ namespace RoomManagerment.Property.EntityClasses
 			get { return _property; }
 			set { SetSingleRelatedEntityNavigator(value, "Property"); }
 		}
+
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-
 
 	}
 }
@@ -343,6 +363,8 @@ namespace RoomManagerment.Property
 		Code,
 		///<summary>CreatedAt. </summary>
 		CreatedAt,
+		///<summary>CreatedBy. </summary>
+		CreatedBy,
 		///<summary>DeletedAt. </summary>
 		DeletedAt,
 		///<summary>DeletedBy. </summary>
@@ -359,6 +381,8 @@ namespace RoomManagerment.Property
 		Name,
 		///<summary>Note. </summary>
 		Note,
+		///<summary>OrganizationId. </summary>
+		OrganizationId,
 		///<summary>PropertyId. </summary>
 		PropertyId,
 		///<summary>Status. </summary>
@@ -367,6 +391,8 @@ namespace RoomManagerment.Property
 		UnitType,
 		///<summary>UpdatedAt. </summary>
 		UpdatedAt,
+		///<summary>UpdatedBy. </summary>
+		UpdatedBy,
 		/// <summary></summary>
 		AmountOfFields
 	}

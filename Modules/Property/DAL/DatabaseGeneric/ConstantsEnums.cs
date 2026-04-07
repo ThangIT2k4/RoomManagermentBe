@@ -47,6 +47,5 @@ namespace RoomManagerment.Property
 	// __LLBLGENPRO_USER_CODE_REGION_START CustomUserConstants
 	// __LLBLGENPRO_USER_CODE_REGION_END
 
-
 }
 

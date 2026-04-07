@@ -1,0 +1,28 @@
+using Property.Domain.Repositories;
+using RoomManagerment.Property.DatabaseSpecific;
+using RoomManagerment.Property.EntityClasses;
+using RoomManagerment.Property.Linq;
+using SD.LLBLGen.Pro.LinqSupportClasses;
+
+namespace Property.Infrastructure.Repositories;
+
+public sealed class TicketRepository(DataAccessAdapter adapter) : ITicketRepository
+{
+    public async Task<TicketEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var linq = new LinqMetaData(adapter);
+        return await linq.Ticket.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<TicketEntity> AddAsync(TicketEntity entity, CancellationToken cancellationToken = default)
+    {
+        await adapter.SaveEntityAsync(entity, true, false, cancellationToken);
+        return entity;
+    }
+
+    public async Task<TicketEntity> UpdateAsync(TicketEntity entity, CancellationToken cancellationToken = default)
+    {
+        await adapter.SaveEntityAsync(entity, true, false, cancellationToken);
+        return entity;
+    }
+}
