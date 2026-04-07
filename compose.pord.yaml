@@ -158,6 +158,105 @@ services:
     networks:
       - rm-network
 
+  # ---------------- CRM API ----------------
+  crm-api:
+    build:
+      context: .
+      dockerfile: ./Modules/CRM/CRM.API/Dockerfile
+    container_name: rm-crm-api
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:${CRM_API_PORT:-5005}
+      ConnectionStrings__CRM: Host=postgres;Port=5432;Database=${CRM_DB:-roommanager_crm};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      ConnectionStrings__Redis: ${REDIS_CONFIGURATION:-redis:6379}
+      RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
+      RabbitMq__Port: ${RABBITMQ_PORT:-5672}
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rm-network
+
+  # ---------------- PROPERTY API ----------------
+  property-api:
+    build:
+      context: .
+      dockerfile: ./Modules/Property/Property.API/Dockerfile
+    container_name: rm-property-api
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:${PROPERTY_API_PORT:-5007}
+      ConnectionStrings__Property: Host=postgres;Port=5432;Database=${PROPERTY_DB:-roommanager_property};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rm-network
+
+  # ---------------- LEASE API ----------------
+  lease-api:
+    build:
+      context: .
+      dockerfile: ./Modules/Lease/Lease.API/Dockerfile
+    container_name: rm-lease-api
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:${LEASE_API_PORT:-5008}
+      ConnectionStrings__Lease: Host=postgres;Port=5432;Database=${LEASE_DB:-roommanager_lease};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
+      RabbitMq__Port: ${RABBITMQ_PORT:-5672}
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rm-network
+
+  # ---------------- ORGANIZATION API ----------------
+  organization-api:
+    build:
+      context: .
+      dockerfile: ./Modules/Organization/Organization.API/Dockerfile
+    container_name: rm-organization-api
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:${ORGANIZATION_API_PORT:-5014}
+      ConnectionStrings__Organization: Host=postgres;Port=5432;Database=${ORGANIZATION_DB:-roommanager_organization};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      Redis__Configuration: ${REDIS_CONFIGURATION:-redis:6379}
+      RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
+      RabbitMq__Port: ${RABBITMQ_PORT:-5672}
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rm-network
+
   # ---------------- NOTIFICATION API ----------------
   notification-api:
     build:
@@ -212,6 +311,14 @@ services:
       finance-api:
         condition: service_started
       external-api:
+        condition: service_started
+      crm-api:
+        condition: service_started
+      property-api:
+        condition: service_started
+      lease-api:
+        condition: service_started
+      organization-api:
         condition: service_started
       notification-api:
         condition: service_started
