@@ -122,11 +122,11 @@ public sealed class UserRepository(
             .Take(paging.PageSize)
             .ToListAsync(cancellationToken);
 
-        return PagedResult<UserEntity>.Create(
+        return new PagedResult<UserEntity>(
             items.Select(x => x.ToDomain()).ToList(),
+            (int)totalCount,
             paging.PageNumber,
-            paging.PageSize,
-            totalCount);
+            paging.PageSize);
     }
 
     public async Task<long> CountAsync(

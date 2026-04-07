@@ -23,13 +23,42 @@ public sealed class OrganizationRepository(DataAccessAdapter adapter) : IOrganiz
             Id = organization.Id,
             Name = organization.Name,
             Code = organization.Code,
-            Status = organization.Status,
+            Status = (short)organization.Status,
+            Email = organization.Email,
+            Phone = organization.Phone,
+            Mail = organization.Mail,
+            TaxCode = organization.TaxCode,
+            Address = organization.Address,
             HasEverPaid = organization.HasEverPaid,
             CreatedAt = organization.CreatedAt,
             UpdatedAt = organization.UpdatedAt
         };
 
         await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
+        return organization;
+    }
+
+    public async Task<OrganizationEntity> UpdateAsync(OrganizationEntity organization, CancellationToken cancellationToken = default)
+    {
+        var dal = await new LinqMetaData(adapter)
+            .Organization
+            .Where(x => x.Id == organization.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (dal is null)
+        {
+            throw new InvalidOperationException($"Organization {organization.Id} not found.");
+        }
+
+        dal.Name = organization.Name;
+        dal.Status = (short)organization.Status;
+        dal.Email = organization.Email;
+        dal.Phone = organization.Phone;
+        dal.Mail = organization.Mail;
+        dal.TaxCode = organization.TaxCode;
+        dal.Address = organization.Address;
+        dal.UpdatedAt = organization.UpdatedAt;
+        await adapter.SaveEntityAsync(dal, false, false, cancellationToken);
         return organization;
     }
 }

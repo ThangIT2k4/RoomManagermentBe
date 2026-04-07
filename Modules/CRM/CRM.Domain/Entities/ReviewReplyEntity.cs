@@ -1,10 +1,11 @@
+using CRM.Domain.Common;
 using CRM.Domain.Exceptions;
+using CRM.Domain.Events;
 
 namespace CRM.Domain.Entities;
 
-public sealed class ReviewReplyEntity
+public sealed class ReviewReplyEntity : AggregateRoot<Guid>
 {
-    public Guid Id { get; private set; }
     public Guid ReviewId { get; private set; }
     public Guid UserId { get; private set; }
     public string Content { get; private set; }
@@ -50,5 +51,17 @@ public sealed class ReviewReplyEntity
     public static ReviewReplyEntity Reconstitute(Guid id, Guid reviewId, Guid userId, string content, DateTime createdAt, DateTime? updatedAt)
     {
         return new ReviewReplyEntity(id, reviewId, userId, content, createdAt, updatedAt);
+    }
+
+    public void UpdateContent(string content, DateTime? updatedAt = null)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            throw new DomainValidationException("Content is required.");
+        }
+
+        Content = content.Trim();
+        UpdatedAt = updatedAt ?? DateTime.UtcNow;
+        AddDomainEvent(new ReviewReplyUpdatedEvent(Id, ReviewId, UserId, DateTimeOffset.UtcNow));
     }
 }

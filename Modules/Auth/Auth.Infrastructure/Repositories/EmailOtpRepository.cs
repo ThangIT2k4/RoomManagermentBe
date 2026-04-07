@@ -75,11 +75,11 @@ public sealed class EmailOtpRepository(
             .Take(paging.PageSize)
             .ToListAsync(cancellationToken);
 
-        return PagedResult<EmailOtpEntity>.Create(
+        return new PagedResult<EmailOtpEntity>(
             items.Select(x => x.ToDomain()).ToList(),
+            (int)totalCount,
             paging.PageNumber,
-            paging.PageSize,
-            totalCount);
+            paging.PageSize);
     }
 
     public async Task<bool> HasUnexpiredOtpAsync(

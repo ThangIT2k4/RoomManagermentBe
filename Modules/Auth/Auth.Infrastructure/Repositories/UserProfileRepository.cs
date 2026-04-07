@@ -54,11 +54,11 @@ public sealed class UserProfileRepository(
         // Auth DB has no organization on users; avoid returning global rows when a tenant filter was requested.
         if (organizationId.HasValue)
         {
-            return PagedResult<UserProfileEntity>.Create(
+            return new PagedResult<UserProfileEntity>(
                 Array.Empty<UserProfileEntity>(),
+                0,
                 paging.PageNumber,
-                paging.PageSize,
-                0);
+                paging.PageSize);
         }
 
         var linq = new LinqMetaData(adapter);
@@ -102,11 +102,11 @@ public sealed class UserProfileRepository(
             .Take(paging.PageSize)
             .ToListAsync(cancellationToken);
 
-        return PagedResult<UserProfileEntity>.Create(
+        return new PagedResult<UserProfileEntity>(
             pageRows.Select(p => p.ToDomain()).ToList(),
+            (int)totalCount,
             paging.PageNumber,
-            paging.PageSize,
-            totalCount);
+            paging.PageSize);
     }
 
     private async Task PublishDomainEventsAsync(UserProfileEntity profile, CancellationToken cancellationToken)

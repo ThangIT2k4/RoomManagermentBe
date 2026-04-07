@@ -1,10 +1,11 @@
+using CRM.Domain.Common;
 using CRM.Domain.Exceptions;
+using CRM.Domain.Events;
 
 namespace CRM.Domain.Entities;
 
-public sealed class ReviewEntity
+public sealed class ReviewEntity : AggregateRoot<Guid>
 {
-    public Guid Id { get; private set; }
     public Guid OrganizationId { get; private set; }
     public Guid UnitId { get; private set; }
     public Guid UserId { get; private set; }
@@ -89,5 +90,30 @@ public sealed class ReviewEntity
         DateTime? updatedAt)
     {
         return new ReviewEntity(id, organizationId, unitId, userId, rating, content, isPublic, createdAt, updatedAt);
+    }
+
+    public void Update(short rating, string? content, bool? isPublic = null, DateTime? updatedAt = null)
+    {
+        if (rating is < 1 or > 5)
+        {
+            throw new DomainValidationException("Rating must be between 1 and 5.");
+        }
+
+        Rating = rating;
+        Content = content?.Trim();
+        if (isPublic.HasValue)
+        {
+            IsPublic = isPublic.Value;
+        }
+
+        UpdatedAt = updatedAt ?? DateTime.UtcNow;
+        AddDomainEvent(new ReviewUpdatedEvent(Id, OrganizationId, Rating, IsPublic, DateTimeOffset.UtcNow));
+    }
+
+    public void Hide(string? reason = null, DateTime? updatedAt = null)
+    {
+        IsPublic = false;
+        UpdatedAt = updatedAt ?? DateTime.UtcNow;
+        AddDomainEvent(new ReviewVisibilityChangedEvent(Id, OrganizationId, false, reason, DateTimeOffset.UtcNow));
     }
 }

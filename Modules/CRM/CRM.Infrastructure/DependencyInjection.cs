@@ -15,8 +15,14 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IDataAccessAdapterFactory, DataAccessAdapterFactory>();
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis") ?? "localhost:6379,abortConnect=false,connectTimeout=2000,syncTimeout=2000";
+            options.InstanceName = "crm";
+        });
         services.AddRabbitMqMessaging(configuration);
         services.AddScoped<ICrmApplicationService, CrmApplicationService>();
+        services.AddScoped<ICrmCacheService, RedisCrmCacheService>();
         services.AddSingleton<RabbitMqIntegrationEventPublisher>();
         services.AddSingleton<IIntegrationEventPublisher>(sp => sp.GetRequiredService<RabbitMqIntegrationEventPublisher>());
         services.AddHostedService<RabbitMqIntegrationEventBackgroundService>();
@@ -29,6 +35,12 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ILeadRepository, LeadRepository>();
+        services.AddScoped<IViewingRepository, ViewingRepository>();
+        services.AddScoped<IBookingDepositRepository, BookingDepositRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<IReviewReplyRepository, ReviewReplyRepository>();
+        services.AddScoped<ICommissionPolicyRepository, CommissionPolicyRepository>();
+        services.AddScoped<ICommissionEventRepository, CommissionEventRepository>();
         return services;
     }
 }

@@ -173,7 +173,7 @@ public sealed class AuthApplicationService(
         return Result<PagedUsersResult>.Success(new PagedUsersResult(
             paged.Items.Select(MapUser).ToList(),
             paged.TotalCount,
-            paged.PageNumber,
+            paged.Page,
             paged.PageSize,
             paged.TotalPages));
     }
@@ -361,7 +361,7 @@ public sealed class AuthApplicationService(
         return Result<PagedSessionsResult>.Success(new PagedSessionsResult(
             paged.Items.Select(MapSession).ToList(),
             paged.TotalCount,
-            paged.PageNumber,
+            paged.Page,
             paged.PageSize,
             paged.TotalPages));
     }

@@ -37,6 +37,30 @@ internal static class CrmIntegrationEventMapper
                     SourceService = "CRM"
                 }),
 
+            ViewingStatusChangedEvent e => new IntegrationEventEnvelope(
+                ExchangeName,
+                "ViewingStatusChangedIntegrationEvent",
+                new
+                {
+                    ViewingId = e.ViewingId,
+                    PreviousStatus = e.PreviousStatus,
+                    CurrentStatus = e.CurrentStatus,
+                    OccurredAt = e.OccurredOn.UtcDateTime,
+                    SourceService = "CRM"
+                }),
+
+            BookingDepositStatusChangedEvent e => new IntegrationEventEnvelope(
+                ExchangeName,
+                "BookingDepositStatusChangedIntegrationEvent",
+                new
+                {
+                    BookingDepositId = e.BookingDepositId,
+                    PreviousStatus = e.PreviousStatus,
+                    CurrentStatus = e.CurrentStatus,
+                    OccurredAt = e.OccurredOn.UtcDateTime,
+                    SourceService = "CRM"
+                }),
+
             _ => null
         };
 

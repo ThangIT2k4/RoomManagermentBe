@@ -1,5 +1,6 @@
 using CRM.API.Common;
 using CRM.Application.Features.Leads;
+using CRM.Application.Features.UseCases;
 using CRM.Application.Services;
 using FluentValidation;
 using FluentValidation.Results;
@@ -37,6 +38,14 @@ public sealed class LeadsController(
     public async Task<ActionResult<LeadDto>> GetLeadById([FromRoute] Guid leadId, CancellationToken cancellationToken)
     {
         var result = await crmService.GetLeadByIdAsync(leadId, cancellationToken);
+        return result.ToActionResult();
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(GetLeadsResult), StatusCodes.Status200OK)]
+    public async Task<ActionResult<GetLeadsResult>> GetLeads([FromQuery] Guid organizationId, [FromQuery] string? search, [FromQuery] string? status, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
+    {
+        var result = await crmService.GetLeadsAsync(new GetLeadsQuery(organizationId, search, status, new PagingRequest(pageNumber, pageSize)), cancellationToken);
         return result.ToActionResult();
     }
 

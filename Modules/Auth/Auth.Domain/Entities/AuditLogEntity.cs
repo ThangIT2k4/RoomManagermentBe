@@ -63,5 +63,32 @@ public sealed class AuditLogEntity : AggregateRoot<Guid>
             userAgent?.Trim(),
             createdAt ?? DateTime.UtcNow);
     }
+
+    public static AuditLogEntity Reconstitute(
+        Guid id,
+        Guid? actorId,
+        Guid? organizationId,
+        string action,
+        string entityType,
+        Guid? entityId,
+        string? beforeJson,
+        string? afterJson,
+        string? changesJson,
+        string? ipAddress,
+        string? userAgent,
+        DateTime createdAt)
+        => new(
+            id,
+            actorId,
+            organizationId,
+            action,
+            entityType,
+            entityId,
+            beforeJson,
+            afterJson,
+            changesJson,
+            ipAddress,
+            userAgent,
+            createdAt);
 }
 

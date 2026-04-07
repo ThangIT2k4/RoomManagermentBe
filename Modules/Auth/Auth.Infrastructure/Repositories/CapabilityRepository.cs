@@ -81,11 +81,11 @@ public sealed class CapabilityRepository(
             .Take(paging.PageSize)
             .ToListAsync(cancellationToken);
 
-        return PagedResult<CapabilityEntity>.Create(
+        return new PagedResult<CapabilityEntity>(
             items.Select(x => x.ToDomain()).ToList(),
+            (int)totalCount,
             paging.PageNumber,
-            paging.PageSize,
-            totalCount);
+            paging.PageSize);
     }
 
     public async Task<bool> ExistsByKeyCodeAsync(

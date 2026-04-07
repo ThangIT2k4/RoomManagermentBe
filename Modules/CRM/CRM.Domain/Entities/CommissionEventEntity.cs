@@ -1,13 +1,13 @@
 using CRM.Domain.Common;
 using CRM.Domain.Enums;
 using CRM.Domain.Exceptions;
+using CRM.Domain.Events;
 using CRM.Domain.ValueObjects;
 
 namespace CRM.Domain.Entities;
 
-public sealed class CommissionEventEntity
+public sealed class CommissionEventEntity : AggregateRoot<Guid>
 {
-    public Guid Id { get; private set; }
     public Guid OrganizationId { get; private set; }
     public Guid? PolicyId { get; private set; }
     public Guid? AgentId { get; private set; }
@@ -83,5 +83,23 @@ public sealed class CommissionEventEntity
         DateTime? updatedAt)
     {
         return new CommissionEventEntity(id, organizationId, policyId, agentId, commissionTotal, occurredAt, status, triggerEvent, createdAt, updatedAt);
+    }
+
+    public void Approve(DateTime? updatedAt = null) => UpdateStatus(CommissionEventStatus.Approved, updatedAt);
+
+    public void Reject(DateTime? updatedAt = null) => UpdateStatus(CommissionEventStatus.Rejected, updatedAt);
+
+    private void UpdateStatus(CommissionEventStatus next, DateTime? updatedAt)
+    {
+        var current = EnumValueParser.ParseRequired<CommissionEventStatus>(Status, nameof(Status));
+        var target = next.ToString().ToLowerInvariant();
+        if (string.Equals(Status, target, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        Status = target;
+        UpdatedAt = updatedAt ?? DateTime.UtcNow;
+        AddDomainEvent(new CommissionEventStatusChangedEvent(Id, OrganizationId, current.ToString().ToLowerInvariant(), target, DateTimeOffset.UtcNow));
     }
 }

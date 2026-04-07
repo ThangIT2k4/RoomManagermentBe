@@ -1,12 +1,12 @@
 using CRM.Domain.Common;
 using CRM.Domain.Enums;
 using CRM.Domain.Exceptions;
+using CRM.Domain.Events;
 
 namespace CRM.Domain.Entities;
 
-public sealed class CommissionPolicyEntity
+public sealed class CommissionPolicyEntity : AggregateRoot<Guid>
 {
-    public Guid Id { get; private set; }
     public Guid OrganizationId { get; private set; }
     public string Title { get; private set; }
     public string CalcType { get; private set; }
@@ -75,5 +75,19 @@ public sealed class CommissionPolicyEntity
         DateTime? updatedAt)
     {
         return new CommissionPolicyEntity(id, organizationId, title, calcType, triggerEvent, isActive, createdAt, updatedAt);
+    }
+
+    public void Activate(DateTime? updatedAt = null)
+    {
+        IsActive = true;
+        UpdatedAt = updatedAt ?? DateTime.UtcNow;
+        AddDomainEvent(new CommissionPolicyStateChangedEvent(Id, OrganizationId, IsActive, DateTimeOffset.UtcNow));
+    }
+
+    public void Deactivate(DateTime? updatedAt = null)
+    {
+        IsActive = false;
+        UpdatedAt = updatedAt ?? DateTime.UtcNow;
+        AddDomainEvent(new CommissionPolicyStateChangedEvent(Id, OrganizationId, IsActive, DateTimeOffset.UtcNow));
     }
 }

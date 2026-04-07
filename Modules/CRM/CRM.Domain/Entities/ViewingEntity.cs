@@ -1,12 +1,12 @@
 using CRM.Domain.Common;
 using CRM.Domain.Enums;
 using CRM.Domain.Exceptions;
+using CRM.Domain.Events;
 
 namespace CRM.Domain.Entities;
 
-public sealed class ViewingEntity
+public sealed class ViewingEntity : AggregateRoot<Guid>
 {
-    public Guid Id { get; private set; }
     public Guid OrganizationId { get; private set; }
     public Guid? LeadId { get; private set; }
     public Guid? AgentId { get; private set; }
@@ -77,4 +77,51 @@ public sealed class ViewingEntity
     {
         return new ViewingEntity(id, organizationId, leadId, agentId, scheduleAt, status, note, createdAt, updatedAt);
     }
+
+    public void Confirm(DateTime? updatedAt = null)
+    {
+        EnsureTransition("scheduled", "confirmed");
+        Status = "confirmed";
+        UpdatedAt = updatedAt ?? DateTime.UtcNow;
+        AddDomainEvent(new ViewingStatusChangedEvent(Id, "scheduled", Status, DateTimeOffset.UtcNow));
+    }
+
+    public void Complete(string? resultNote = null, DateTime? updatedAt = null)
+    {
+        var normalized = NormalizeStatus(Status);
+        if (normalized is not ("scheduled" or "confirmed"))
+        {
+            throw new DomainValidationException("Viewing can only be completed from scheduled/confirmed.");
+        }
+
+        Status = ViewingStatus.Completed.ToString().ToLowerInvariant();
+        Note = string.IsNullOrWhiteSpace(resultNote) ? Note : resultNote.Trim();
+        UpdatedAt = updatedAt ?? DateTime.UtcNow;
+        AddDomainEvent(new ViewingStatusChangedEvent(Id, normalized, Status, DateTimeOffset.UtcNow));
+    }
+
+    public void Cancel(string? reason = null, DateTime? updatedAt = null)
+    {
+        var normalized = NormalizeStatus(Status);
+        if (normalized is not ("scheduled" or "confirmed"))
+        {
+            throw new DomainValidationException("Viewing can only be cancelled from scheduled/confirmed.");
+        }
+
+        Status = ViewingStatus.Cancelled.ToString().ToLowerInvariant();
+        Note = string.IsNullOrWhiteSpace(reason) ? Note : reason.Trim();
+        UpdatedAt = updatedAt ?? DateTime.UtcNow;
+        AddDomainEvent(new ViewingStatusChangedEvent(Id, normalized, Status, DateTimeOffset.UtcNow));
+    }
+
+    private void EnsureTransition(string expected, string next)
+    {
+        var current = NormalizeStatus(Status);
+        if (!string.Equals(current, expected, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new DomainValidationException($"Invalid viewing status transition from '{current}' to '{next}'.");
+        }
+    }
+
+    private static string NormalizeStatus(string value) => value.Trim().ToLowerInvariant();
 }

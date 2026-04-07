@@ -1,13 +1,13 @@
 using CRM.Domain.Common;
 using CRM.Domain.Enums;
 using CRM.Domain.Exceptions;
+using CRM.Domain.Events;
 using CRM.Domain.ValueObjects;
 
 namespace CRM.Domain.Entities;
 
-public sealed class BookingDepositEntity
+public sealed class BookingDepositEntity : AggregateRoot<Guid>
 {
-    public Guid Id { get; private set; }
     public Guid OrganizationId { get; private set; }
     public Guid? LeadId { get; private set; }
     public Guid? ViewingId { get; private set; }
@@ -77,5 +77,25 @@ public sealed class BookingDepositEntity
         DateTime? updatedAt)
     {
         return new BookingDepositEntity(id, organizationId, leadId, viewingId, amount, depositType, paymentStatus, createdAt, updatedAt);
+    }
+
+    public void Approve(DateTime? updatedAt = null) => SetPaymentStatus(Enums.PaymentStatus.Approved, updatedAt);
+
+    public void MarkPaid(DateTime? updatedAt = null) => SetPaymentStatus(Enums.PaymentStatus.Paid, updatedAt);
+
+    public void Cancel(DateTime? updatedAt = null) => SetPaymentStatus(Enums.PaymentStatus.Cancelled, updatedAt);
+
+    private void SetPaymentStatus(Enums.PaymentStatus nextStatus, DateTime? updatedAt)
+    {
+        var current = EnumValueParser.ParseRequired<Enums.PaymentStatus>(PaymentStatus, nameof(PaymentStatus));
+        var target = nextStatus.ToString().ToLowerInvariant();
+        if (string.Equals(PaymentStatus, target, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        PaymentStatus = target;
+        UpdatedAt = updatedAt ?? DateTime.UtcNow;
+        AddDomainEvent(new BookingDepositStatusChangedEvent(Id, current.ToString().ToLowerInvariant(), target, DateTimeOffset.UtcNow));
     }
 }

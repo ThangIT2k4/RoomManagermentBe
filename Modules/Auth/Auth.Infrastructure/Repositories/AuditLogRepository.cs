@@ -76,10 +76,10 @@ public sealed class AuditLogRepository(DataAccessAdapter adapter) : IAuditLogRep
             .Take(paging.PageSize)
             .ToListAsync(cancellationToken);
 
-        return PagedResult<AuditLogEntity>.Create(
+        return new PagedResult<AuditLogEntity>(
             items.Select(x => x.ToDomain()).ToList(),
+            (int)totalCount,
             paging.PageNumber,
-            paging.PageSize,
-            totalCount);
+            paging.PageSize);
     }
 }

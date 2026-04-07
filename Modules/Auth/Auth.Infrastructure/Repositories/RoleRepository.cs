@@ -79,11 +79,11 @@ public sealed class RoleRepository(
             .Take(paging.PageSize)
             .ToListAsync(cancellationToken);
 
-        return PagedResult<RoleEntity>.Create(
+        return new PagedResult<RoleEntity>(
             items.Select(x => x.ToDomain()).ToList(),
+            (int)totalCount,
             paging.PageNumber,
-            paging.PageSize,
-            totalCount);
+            paging.PageSize);
     }
 
     public async Task<bool> ExistsByKeyCodeAsync(
