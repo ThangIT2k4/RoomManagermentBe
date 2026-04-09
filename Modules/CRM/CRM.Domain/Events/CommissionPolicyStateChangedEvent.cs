@@ -6,4 +6,4 @@ public sealed record CommissionPolicyStateChangedEvent(
     Guid PolicyId,
     Guid OrganizationId,
     bool IsActive,
-    DateTimeOffset OccurredOn) : DomainEvent;
+    DateTimeOffset OccurredOn) : DomainEvent(OccurredOn);

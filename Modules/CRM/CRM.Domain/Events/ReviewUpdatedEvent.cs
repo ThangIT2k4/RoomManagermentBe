@@ -7,4 +7,4 @@ public sealed record ReviewUpdatedEvent(
     Guid OrganizationId,
     short Rating,
     bool IsPublic,
-    DateTimeOffset OccurredOn) : DomainEvent;
+    DateTimeOffset OccurredOn) : DomainEvent(OccurredOn);

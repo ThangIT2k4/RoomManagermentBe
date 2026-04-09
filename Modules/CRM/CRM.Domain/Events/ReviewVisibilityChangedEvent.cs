@@ -7,4 +7,4 @@ public sealed record ReviewVisibilityChangedEvent(
     Guid OrganizationId,
     bool IsPublic,
     string? Reason,
-    DateTimeOffset OccurredOn) : DomainEvent;
+    DateTimeOffset OccurredOn) : DomainEvent(OccurredOn);

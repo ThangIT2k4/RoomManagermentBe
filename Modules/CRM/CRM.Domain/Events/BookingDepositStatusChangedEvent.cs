@@ -6,4 +6,4 @@ public sealed record BookingDepositStatusChangedEvent(
     Guid BookingDepositId,
     string PreviousStatus,
     string CurrentStatus,
-    DateTimeOffset OccurredOn) : DomainEvent;
+    DateTimeOffset OccurredOn) : DomainEvent(OccurredOn);

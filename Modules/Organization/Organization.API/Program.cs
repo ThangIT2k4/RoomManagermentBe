@@ -18,15 +18,21 @@ builder.Services.AddProblemDetails();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
+var listenUrls =
+    Environment.GetEnvironmentVariable("ASPNETCORE_URLS")
+    ?? builder.Configuration["urls"];
+var listensHttps = listenUrls?.Contains("https://", StringComparison.OrdinalIgnoreCase) == true;
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+if (listensHttps)
+    app.UseHttpsRedirection();
+
 app.UseSerilogRequestLogging();
 app.MapControllers();
 
-var port = Environment.GetEnvironmentVariable("ORGANIZATION_API_PORT") ?? "5014";
-var protocol = app.Environment.IsDevelopment() ? "http" : "https";
-app.Run($"{protocol}://0.0.0.0:{port}");
+app.Run();

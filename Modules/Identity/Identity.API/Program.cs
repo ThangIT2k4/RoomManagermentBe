@@ -103,6 +103,11 @@ builder.Services.AddRabbitMqMessaging(builder.Configuration);
 
 var app = builder.Build();
 
+var listenUrls =
+    Environment.GetEnvironmentVariable("ASPNETCORE_URLS")
+    ?? builder.Configuration["urls"];
+var listensHttps = listenUrls?.Contains("https://", StringComparison.OrdinalIgnoreCase) == true;
+
 // ===== MIDDLEWARE PIPELINE =====
 
 // 1. Exception Handling (FIRST)
@@ -112,12 +117,13 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStatusCodePages();
 
-// 2. HSTS + HTTPS
-if (!app.Environment.IsDevelopment())
+// 2. HSTS + HTTPS (only when Kestrel actually listens on HTTPS)
+if (!app.Environment.IsDevelopment() && listensHttps)
 {
     app.UseHsts();
 }
-app.UseHttpsRedirection();
+if (listensHttps)
+    app.UseHttpsRedirection();
 
 // 3. Forwarded Headers (BEFORE Rate Limiting)
 app.UseForwardedHeaders();
@@ -154,18 +160,13 @@ if (!app.Environment.IsDevelopment())
     app.Map("/error", HandleException);
 }
 
-// Read port from environment or launchSettings, with fallback
-var port = Environment.GetEnvironmentVariable("IDENTITY_API_PORT") ?? "5099";
-var protocol = app.Environment.IsDevelopment() ? "http" : "https";
-
 try
 {
-    Log.Information("Identity API attempting to bind on {Protocol}://0.0.0.0:{Port}", protocol, port);
-    app.Run($"{protocol}://0.0.0.0:{port}");
+    app.Run();
 }
 catch (IOException ex) when (ex.InnerException is SocketException)
 {
-    Log.Fatal(ex, "Failed to bind to port {Port}. Port may already be in use", port);
+    Log.Fatal(ex, "Failed to bind. ASPNETCORE_URLS={Urls}", listenUrls);
     throw;
 }
 

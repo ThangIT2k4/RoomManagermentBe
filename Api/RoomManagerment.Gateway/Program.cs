@@ -176,6 +176,11 @@ builder.Services.AddOpenApiDocument();
 
 var app = builder.Build();
 
+var listenUrls =
+    Environment.GetEnvironmentVariable("ASPNETCORE_URLS")
+    ?? builder.Configuration["urls"];
+var listensHttps = listenUrls?.Contains("https://", StringComparison.OrdinalIgnoreCase) == true;
+
 #region ===== MIDDLEWARE PIPELINE =====
 
 // Exception handling
@@ -186,13 +191,14 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStatusCodePages();
 
-// HTTPS
-if (!app.Environment.IsDevelopment())
+// HTTPS (only when Kestrel listens on HTTPS — Docker typically uses http:// in ASPNETCORE_URLS)
+if (!app.Environment.IsDevelopment() && listensHttps)
 {
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+if (listensHttps)
+    app.UseHttpsRedirection();
 
 // Forwarded headers
 app.UseForwardedHeaders();
@@ -230,18 +236,13 @@ if (!app.Environment.IsDevelopment())
 
 #endregion
 
-// Read port from environment or launchSettings, with fallback
-var port = Environment.GetEnvironmentVariable("GATEWAY_API_PORT") ?? "5000";
-var protocol = app.Environment.IsDevelopment() ? "http" : "https";
-
 try
 {
-    Log.Information("Gateway attempting to bind on {Protocol}://0.0.0.0:{Port}", protocol, port);
-    app.Run($"{protocol}://0.0.0.0:{port}");
+    app.Run();
 }
 catch (IOException ex) when (ex.InnerException is SocketException)
 {
-    Log.Fatal(ex, "Failed to bind to port {Port}. Port may already be in use", port);
+    Log.Fatal(ex, "Failed to bind. ASPNETCORE_URLS={Urls}", listenUrls);
     throw;
 }
 

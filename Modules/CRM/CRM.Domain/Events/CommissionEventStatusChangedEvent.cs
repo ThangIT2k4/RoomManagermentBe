@@ -7,4 +7,4 @@ public sealed record CommissionEventStatusChangedEvent(
     Guid OrganizationId,
     string PreviousStatus,
     string CurrentStatus,
-    DateTimeOffset OccurredOn) : DomainEvent;
+    DateTimeOffset OccurredOn) : DomainEvent(OccurredOn);

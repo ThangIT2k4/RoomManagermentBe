@@ -7,16 +7,16 @@ namespace Finance.Infrastructure.Services;
 public sealed class FinanceRabbitMqIntegrationEventBackgroundService : BackgroundService
 {
     private readonly FinanceRabbitMqIntegrationEventPublisher _publisher;
-    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IBus _bus;
     private readonly ILogger<FinanceRabbitMqIntegrationEventBackgroundService> _logger;
 
     public FinanceRabbitMqIntegrationEventBackgroundService(
         FinanceRabbitMqIntegrationEventPublisher publisher,
-        IPublishEndpoint publishEndpoint,
+        IBus bus,
         ILogger<FinanceRabbitMqIntegrationEventBackgroundService> logger)
     {
         _publisher = publisher;
-        _publishEndpoint = publishEndpoint;
+        _bus = bus;
         _logger = logger;
     }
 
@@ -34,7 +34,7 @@ public sealed class FinanceRabbitMqIntegrationEventBackgroundService : Backgroun
         {
             try
             {
-                await _publishEndpoint.Publish(envelope.Message, envelope.Message.GetType(), stoppingToken);
+                await _bus.Publish(envelope.Message, envelope.Message.GetType(), stoppingToken);
                 return;
             }
             catch (Exception ex)

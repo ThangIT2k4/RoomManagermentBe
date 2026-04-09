@@ -59,9 +59,9 @@
 /home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/Finance.API.pdb
 /home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/Finance.API.genruntimeconfig.cache
 /home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/ref/Finance.API.dll
-/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/staticwebassets/msbuild.Finance.API.Microsoft.AspNetCore.StaticWebAssets.props
-/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/staticwebassets/msbuild.Finance.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/staticwebassets/msbuild.build.Finance.API.props
-/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/staticwebassets/msbuild.buildMultiTargeting.Finance.API.props
-/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/staticwebassets/msbuild.buildTransitive.Finance.API.props
-/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/staticwebassets.pack.json
+/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/rpswa.dswa.cache.json
+/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/rjimswa.dswa.cache.json
+/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/rjsmrazor.dswa.cache.json
+/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/rjsmcshtml.dswa.cache.json
+/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/staticwebassets.build.json.cache
+/home/thang/projects/WorkSpace/Projects/RoomManagerment/RoomManagermentBe/Modules/Finance/Finance.API/obj/Debug/net9.0/swae.build.ex.cache

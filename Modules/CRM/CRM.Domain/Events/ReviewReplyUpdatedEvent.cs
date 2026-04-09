@@ -6,4 +6,4 @@ public sealed record ReviewReplyUpdatedEvent(
     Guid ReplyId,
     Guid ReviewId,
     Guid UserId,
-    DateTimeOffset OccurredOn) : DomainEvent;
+    DateTimeOffset OccurredOn) : DomainEvent(OccurredOn);

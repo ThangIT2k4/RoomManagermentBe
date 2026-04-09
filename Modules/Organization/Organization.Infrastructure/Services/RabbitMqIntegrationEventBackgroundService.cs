@@ -7,16 +7,16 @@ namespace Organization.Infrastructure.Services;
 public sealed class RabbitMqIntegrationEventBackgroundService : BackgroundService
 {
     private readonly RabbitMqIntegrationEventPublisher _publisher;
-    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IBus _bus;
     private readonly ILogger<RabbitMqIntegrationEventBackgroundService> _logger;
 
     public RabbitMqIntegrationEventBackgroundService(
         RabbitMqIntegrationEventPublisher publisher,
-        IPublishEndpoint publishEndpoint,
+        IBus bus,
         ILogger<RabbitMqIntegrationEventBackgroundService> logger)
     {
         _publisher = publisher;
-        _publishEndpoint = publishEndpoint;
+        _bus = bus;
         _logger = logger;
     }
 
@@ -28,7 +28,7 @@ public sealed class RabbitMqIntegrationEventBackgroundService : BackgroundServic
             {
                 try
                 {
-                    await _publishEndpoint.Publish(envelope.Message, envelope.Message.GetType(), stoppingToken);
+                    await _bus.Publish(envelope.Message, envelope.Message.GetType(), stoppingToken);
                     break;
                 }
                 catch (Exception ex)

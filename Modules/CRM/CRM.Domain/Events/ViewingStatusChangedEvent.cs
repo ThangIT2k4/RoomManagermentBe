@@ -6,4 +6,4 @@ public sealed record ViewingStatusChangedEvent(
     Guid ViewingId,
     string PreviousStatus,
     string CurrentStatus,
-    DateTimeOffset OccurredOn) : DomainEvent;
+    DateTimeOffset OccurredOn) : DomainEvent(OccurredOn);

@@ -117,14 +117,21 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
+var listenUrls =
+    Environment.GetEnvironmentVariable("ASPNETCORE_URLS")
+    ?? builder.Configuration["urls"];
+var listensHttps = listenUrls?.Contains("https://", StringComparison.OrdinalIgnoreCase) == true;
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/error");
-    app.UseHsts();
+    if (listensHttps)
+        app.UseHsts();
 }
 
 app.UseStatusCodePages();
-app.UseHttpsRedirection();
+if (listensHttps)
+    app.UseHttpsRedirection();
 app.UseForwardedHeaders();
 app.UseSerilogRequestLogging();
 app.UseCors("ApiPolicy");
@@ -158,6 +165,4 @@ if (!app.Environment.IsDevelopment())
     });
 }
 
-var port = Environment.GetEnvironmentVariable("AUTH_API_PORT") ?? "5002";
-var protocol = app.Environment.IsDevelopment() ? "http" : "https";
-app.Run($"{protocol}://0.0.0.0:{port}");
+app.Run();

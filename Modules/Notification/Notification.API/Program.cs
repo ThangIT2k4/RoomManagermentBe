@@ -90,6 +90,11 @@ builder.Services.AddRabbitMqMessaging(builder.Configuration, x =>
 
 var app = builder.Build();
 
+var listenUrls =
+    Environment.GetEnvironmentVariable("ASPNETCORE_URLS")
+    ?? builder.Configuration["urls"];
+var listensHttps = listenUrls?.Contains("https://", StringComparison.OrdinalIgnoreCase) == true;
+
 // ===== MIDDLEWARE PIPELINE =====
 if (!app.Environment.IsDevelopment())
 {
@@ -97,11 +102,12 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStatusCodePages();
 
-if (!app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment() && listensHttps)
 {
     app.UseHsts();
 }
-app.UseHttpsRedirection();
+if (listensHttps)
+    app.UseHttpsRedirection();
 
 app.UseForwardedHeaders();
 app.UseSerilogRequestLogging();
@@ -146,17 +152,13 @@ if (!app.Environment.IsDevelopment())
     app.Map("/error", HandleException);
 }
 
-var port = Environment.GetEnvironmentVariable("NOTIFICATION_API_PORT") ?? "5001";
-var protocol = app.Environment.IsDevelopment() ? "http" : "https";
-
 try
 {
-    Log.Information("Notification API attempting to bind on {Protocol}://0.0.0.0:{Port}", protocol, port);
-    app.Run($"{protocol}://0.0.0.0:{port}");
+    app.Run();
 }
 catch (IOException ex) when (ex.InnerException is SocketException)
 {
-    Log.Fatal(ex, "Failed to bind to port {Port}. Port may already be in use", port);
+    Log.Fatal(ex, "Failed to bind. ASPNETCORE_URLS={Urls}", listenUrls);
     throw;
 }
 

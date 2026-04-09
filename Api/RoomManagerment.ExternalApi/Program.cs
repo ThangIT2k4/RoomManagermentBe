@@ -32,19 +32,25 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSerilogRequestLogging();
-app.UseHttpsRedirection();
+
+var urls =
+    Environment.GetEnvironmentVariable("ASPNETCORE_URLS")
+    ?? builder.Configuration["urls"];
+if (urls?.Contains("https://", StringComparison.OrdinalIgnoreCase) == true)
+{
+    app.UseHttpsRedirection();
+}
+
 app.MapControllers();
 
-var port = Environment.GetEnvironmentVariable("EXTERNAL_API_PORT") ?? "5004";
-var protocol = app.Environment.IsDevelopment() ? "http" : "https";
+Log.Information("External API ASPNETCORE_URLS: {Urls}", urls ?? "(Kestrel defaults)");
 
 try
 {
-    Log.Information("External API attempting to bind on {Protocol}://0.0.0.0:{Port}", protocol, port);
-    app.Run($"{protocol}://0.0.0.0:{port}");
+    app.Run();
 }
 catch (IOException ex) when (ex.InnerException is SocketException)
 {
-    Log.Fatal(ex, "Failed to bind to port {Port}. Port may already be in use", port);
+    Log.Fatal(ex, "Failed to bind. ASPNETCORE_URLS={Urls}", urls);
     throw;
 }
