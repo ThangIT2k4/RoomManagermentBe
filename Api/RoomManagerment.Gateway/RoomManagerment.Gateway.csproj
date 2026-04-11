@@ -22,8 +22,4 @@
         <PackageReference Include="Serilog.Sinks.File" Version="8.0.0-dev-02318" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="Properties\launchSettings.json" />
-    </ItemGroup>
-
 </Project>

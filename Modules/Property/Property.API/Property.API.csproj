@@ -5,6 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.11.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Property.Application\Property.Application.csproj" />
     <ProjectReference Include="..\Property.Infrastructure\Property.Infrastructure.csproj" />
   </ItemGroup>

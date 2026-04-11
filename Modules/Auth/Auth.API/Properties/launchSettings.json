@@ -5,20 +5,22 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "http://localhost:5002",
+      "applicationUrl": "http://localhost:5202",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "AUTH_API_PORT": "5002"
+        "AUTH_API_PORT": "5202",
+        "AUTH_CONNECTION_STRING": "Host=localhost;Port=5433;Database=room_managerment;Username=room_managerment;Password=abc123!@#"
       }
     },
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "https://localhost:5006;http://localhost:5002",
+      "applicationUrl": "https://localhost:5006;http://localhost:5202",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "AUTH_API_PORT": "5002"
+        "AUTH_API_PORT": "5202",
+        "AUTH_CONNECTION_STRING": "Host=localhost;Port=5433;Database=room_managerment;Username=room_managerment;Password=abc123!@#"
       }
     }
   }

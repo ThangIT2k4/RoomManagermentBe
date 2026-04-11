@@ -1,3 +1,4 @@
+using Scalar.AspNetCore;
 using RoomManagerment.ExternalApi.Consumers;
 using RoomManagerment.Messaging.Extensions;
 using Serilog;
@@ -29,6 +30,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("/swagger");
 }
 
 app.UseSerilogRequestLogging();
@@ -36,7 +38,8 @@ app.UseSerilogRequestLogging();
 var urls =
     Environment.GetEnvironmentVariable("ASPNETCORE_URLS")
     ?? builder.Configuration["urls"];
-if (urls?.Contains("https://", StringComparison.OrdinalIgnoreCase) == true)
+if (!app.Environment.IsDevelopment()
+    && urls?.Contains("https://", StringComparison.OrdinalIgnoreCase) == true)
 {
     app.UseHttpsRedirection();
 }
@@ -49,8 +52,19 @@ try
 {
     app.Run();
 }
-catch (IOException ex) when (ex.InnerException is SocketException)
+catch (IOException ex) when (ex.InnerException is SocketException se)
 {
-    Log.Fatal(ex, "Failed to bind. ASPNETCORE_URLS={Urls}", urls);
+    if (se.SocketErrorCode == SocketError.AddressAlreadyInUse)
+    {
+        Log.Fatal(
+            ex,
+            "Port already in use (duplicate External API or compound run?). ss -tlnp | grep 5204. ASPNETCORE_URLS={Urls}",
+            urls);
+    }
+    else
+    {
+        Log.Fatal(ex, "Failed to bind. ASPNETCORE_URLS={Urls}", urls);
+    }
+
     throw;
 }

@@ -5,20 +5,20 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "http://localhost:5014",
+      "applicationUrl": "http://localhost:5208",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ORGANIZATION_API_PORT": "5014"
+        "ORGANIZATION_API_PORT": "5208"
       }
     },
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "https://localhost:7214;http://localhost:5014",
+      "applicationUrl": "https://localhost:7214;http://localhost:5208",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ORGANIZATION_API_PORT": "5014"
+        "ORGANIZATION_API_PORT": "5208"
       }
     }
   }

@@ -2,6 +2,7 @@ using System.Threading.RateLimiting;
 using Finance.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
+using Scalar.AspNetCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +54,7 @@ app.UseRateLimiter();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("/swagger");
 }
 
 app.MapControllers();
@@ -77,6 +79,6 @@ if (!app.Environment.IsDevelopment())
         });
 }
 
-var port = Environment.GetEnvironmentVariable("FINANCE_API_PORT") ?? "5003";
+var port = Environment.GetEnvironmentVariable("FINANCE_API_PORT") ?? "5203";
 app.Urls.Add($"http://0.0.0.0:{port}");
 app.Run();

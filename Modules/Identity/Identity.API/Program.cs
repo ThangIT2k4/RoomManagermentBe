@@ -8,6 +8,7 @@ using Serilog;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
+using Scalar.AspNetCore;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using System.Net.Sockets;
@@ -149,6 +150,7 @@ app.UseRateLimiter();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("/swagger");
 }
 
 // 10. Map Controllers

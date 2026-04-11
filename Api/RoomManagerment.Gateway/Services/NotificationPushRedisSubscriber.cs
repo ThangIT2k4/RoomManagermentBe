@@ -14,6 +14,7 @@ namespace RoomManagerment.Gateway.Services;
 public class NotificationPushRedisSubscriber : BackgroundService
 {
     private const string PushChannelName = "RoomManagerment:Notification:Push";
+    private static readonly TimeSpan RetryDelay = TimeSpan.FromSeconds(5);
     private readonly IConnectionMultiplexer _redis;
     private readonly IHubContext<NotificationsHub> _hubContext;
     private readonly ILogger<NotificationPushRedisSubscriber> _logger;
@@ -30,27 +31,56 @@ public class NotificationPushRedisSubscriber : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var sub = _redis.GetSubscriber();
-        await sub.SubscribeAsync(RedisChannel.Literal(PushChannelName), async (_, value) =>
+        while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
-                var json = value.ToString();
-                if (string.IsNullOrEmpty(json)) return;
+                var sub = _redis.GetSubscriber();
+                await sub.SubscribeAsync(RedisChannel.Literal(PushChannelName), async (_, value) =>
+                {
+                    try
+                    {
+                        var json = value.ToString();
+                        if (string.IsNullOrEmpty(json)) return;
 
-                var msg = JsonSerializer.Deserialize<PushMessage>(json);
-                if (msg?.UserId == null || msg.UserId == Guid.Empty) return;
+                        var msg = JsonSerializer.Deserialize<PushMessage>(json);
+                        if (msg is null || msg.UserId == Guid.Empty) return;
 
-                var groupName = NotificationsHub.GroupPrefix + msg.UserId.ToString();
-                await _hubContext.Clients.Group(groupName)
-                    .SendAsync(NotificationsHub.EventNotificationCreated, msg.Payload ?? new object(), stoppingToken);
+                        var groupName = NotificationsHub.GroupPrefix + msg.UserId.ToString();
+                        await _hubContext.Clients.Group(groupName)
+                            .SendAsync(NotificationsHub.EventNotificationCreated, msg.Payload ?? new object(), stoppingToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "NotificationPushRedisSubscriber: process message failed");
+                    }
+                });
+
+                _logger.LogInformation("Subscribed Redis channel {Channel}", PushChannelName);
+                await Task.Delay(Timeout.Infinite, stoppingToken);
+            }
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+            {
+                break;
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "NotificationPushRedisSubscriber: process message failed");
+                _logger.LogWarning(
+                    ex,
+                    "NotificationPushRedisSubscriber: cannot subscribe to Redis channel {Channel}. Retrying in {DelaySeconds}s",
+                    PushChannelName,
+                    RetryDelay.TotalSeconds);
+
+                try
+                {
+                    await Task.Delay(RetryDelay, stoppingToken);
+                }
+                catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+                {
+                    break;
+                }
             }
-        });
-        await Task.Delay(Timeout.Infinite, stoppingToken);
+        }
     }
 
     public sealed class PushMessage

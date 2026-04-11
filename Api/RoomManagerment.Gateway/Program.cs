@@ -2,6 +2,7 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
+using StackExchange.Redis;
 using System.Net.Sockets;
 using IOException = System.IO.IOException;
 
@@ -32,13 +33,17 @@ builder.Host.UseSerilog((ctx, lc) =>
 var redisConfig = builder.Configuration["Redis:Configuration"]
     ?? builder.Configuration.GetConnectionString("Redis")
     ?? "redis:6379";
+var redisOptions = ConfigurationOptions.Parse(redisConfig);
+redisOptions.AbortOnConnectFail = false;
+redisOptions.ConnectRetry = 3;
+redisOptions.ConnectTimeout = 5000;
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = redisConfig;
+    options.ConfigurationOptions = redisOptions;
     options.InstanceName = builder.Configuration["Redis:InstanceName"] ?? "RoomManagementGateway:";
 });
 builder.Services.AddSingleton<StackExchange.Redis.IConnectionMultiplexer>(_ =>
-    StackExchange.Redis.ConnectionMultiplexer.Connect(redisConfig));
+    StackExchange.Redis.ConnectionMultiplexer.Connect(redisOptions));
 builder.Services.AddHostedService<RoomManagerment.Gateway.Services.NotificationPushRedisSubscriber>();
 
 #endregion
@@ -172,8 +177,6 @@ builder.Services.AddOpenApiDocument();
 
 #endregion
 
-builder.Services.AddOpenApiDocument();
-
 var app = builder.Build();
 
 var listenUrls =
@@ -240,9 +243,20 @@ try
 {
     app.Run();
 }
-catch (IOException ex) when (ex.InnerException is SocketException)
+catch (IOException ex) when (ex.InnerException is SocketException se)
 {
-    Log.Fatal(ex, "Failed to bind. ASPNETCORE_URLS={Urls}", listenUrls);
+    if (se.SocketErrorCode == SocketError.AddressAlreadyInUse)
+    {
+        Log.Fatal(
+            ex,
+            "Port already in use (duplicate Gateway or compound run?). ss -tlnp | grep 5200. ASPNETCORE_URLS={Urls}",
+            listenUrls);
+    }
+    else
+    {
+        Log.Fatal(ex, "Failed to bind. ASPNETCORE_URLS={Urls}", listenUrls);
+    }
+
     throw;
 }
 

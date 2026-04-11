@@ -5,6 +5,7 @@ using Notification.API.Common;
 using Notification.Infrastructure;
 using Notification.Infrastructure.Consumers;
 using RoomManagerment.Messaging.Extensions;
+using Scalar.AspNetCore;
 using Serilog;
 using System.Net.Sockets;
 using System.Threading.RateLimiting;
@@ -106,7 +107,7 @@ if (!app.Environment.IsDevelopment() && listensHttps)
 {
     app.UseHsts();
 }
-if (listensHttps)
+if (!app.Environment.IsDevelopment() && listensHttps)
     app.UseHttpsRedirection();
 
 app.UseForwardedHeaders();
@@ -143,6 +144,7 @@ app.Use(async (context, next) =>
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("/swagger");
 }
 
 app.MapControllers();
@@ -156,9 +158,20 @@ try
 {
     app.Run();
 }
-catch (IOException ex) when (ex.InnerException is SocketException)
+catch (IOException ex) when (ex.InnerException is SocketException se)
 {
-    Log.Fatal(ex, "Failed to bind. ASPNETCORE_URLS={Urls}", listenUrls);
+    if (se.SocketErrorCode == SocketError.AddressAlreadyInUse)
+    {
+        Log.Fatal(
+            ex,
+            "Port already in use (another Notification.API instance or duplicate entry in a compound run?). Stop the other process: ss -tlnp | grep 5201. ASPNETCORE_URLS={Urls}",
+            listenUrls);
+    }
+    else
+    {
+        Log.Fatal(ex, "Failed to bind. ASPNETCORE_URLS={Urls}", listenUrls);
+    }
+
     throw;
 }
 

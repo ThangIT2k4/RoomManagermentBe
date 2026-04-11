@@ -1,4 +1,5 @@
 using Organization.Infrastructure;
+using Scalar.AspNetCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,7 @@ var listensHttps = listenUrls?.Contains("https://", StringComparison.OrdinalIgno
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("/swagger");
 }
 
 if (listensHttps)
