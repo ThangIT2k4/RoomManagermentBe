@@ -1,49 +1,61 @@
 using Microsoft.AspNetCore.Mvc;
 using Property.API;
 using Property.Application.Dtos;
-using Property.Application.Services;
+using Property.Application.Features.Amenities.DeleteAmenity;
+using Property.Application.Features.Amenities.GetAmenities;
+using Property.Application.Features.Amenities.UpsertAmenity;
+using Property.Application.Features.Dashboard.GetDashboardSummary;
+using Property.Application.Features.Documents.DeleteDocument;
+using Property.Application.Features.Documents.GetDocuments;
+using Property.Application.Features.Documents.UploadDocument;
+using Property.Application.Features.Meters.AddMeterReading;
+using Property.Application.Features.Meters.CreateMeter;
+using Property.Application.Features.Properties.CreateProperty;
+using Property.Application.Features.Properties.DeleteProperty;
+using Property.Application.Features.Properties.UpdateProperty;
+using Property.Application.Features.PropertyTypes.DeletePropertyType;
+using Property.Application.Features.PropertyTypes.GetPropertyTypes;
+using Property.Application.Features.PropertyTypes.UpsertPropertyType;
+using Property.Application.Features.Staff.AssignStaff;
+using Property.Application.Features.Staff.UnassignStaff;
+using Property.Application.Features.Tickets.ChangeTicketStatus;
+using Property.Application.Features.Tickets.CreateTicket;
+using Property.Application.Features.Units.CreateUnit;
+using Property.Application.Features.Units.DeleteUnit;
+using Property.Application.Features.Units.SearchUnits;
+using Property.Application.Features.Units.SetUnitStatus;
+using Property.Application.Features.Units.UpdateUnit;
+using Property.Application.Features.Vendors.DeleteVendor;
+using Property.Application.Features.Vendors.SearchVendors;
+using Property.Application.Features.Vendors.UpsertVendor;
+using RoomManagerment.Shared.Messaging;
 
 namespace Property.Api.Controllers;
 
 [ApiController]
 [Route("api/property")]
-public sealed class PropertyController(IPropertyApplicationService service) : ControllerBase
+public sealed class PropertyController(IAppSender sender) : ControllerBase
 {
     [HttpPost("properties")]
     public async Task<ActionResult<PropertyDto>> CreateProperty([FromBody] CreatePropertyRequest request, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var result = await service.CreatePropertyAsync(orgId, userId, request, cancellationToken);
-        return Ok(result);
+        return Ok(await sender.Send(new CreatePropertyCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpPut("properties/{propertyId:guid}")]
     public async Task<ActionResult<PropertyDto>> UpdateProperty(Guid propertyId, [FromBody] UpdatePropertyBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var result = await service.UpdatePropertyAsync(orgId, userId, new UpdatePropertyRequest(
-            propertyId,
-            body.PropertyTypeId,
-            body.Name,
-            body.Address,
-            body.Description,
-            body.ProvinceCode,
-            body.DistrictCode,
-            body.WardCode,
-            body.StreetCode,
-            body.Latitude,
-            body.Longitude,
-            body.NumberOfFloors,
-            body.Status,
-            body.Notes), cancellationToken);
+        var result = await sender.Send(new UpdatePropertyCommand(orgId, userId, new UpdatePropertyRequest(
+            propertyId, body.PropertyTypeId, body.Name, body.Address, body.Description,
+            body.ProvinceCode, body.DistrictCode, body.WardCode, body.StreetCode,
+            body.Latitude, body.Longitude, body.NumberOfFloors, body.Status, body.Notes)), cancellationToken);
+
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -51,46 +63,31 @@ public sealed class PropertyController(IPropertyApplicationService service) : Co
     public async Task<IActionResult> DeleteProperty(Guid propertyId, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var deleted = await service.DeletePropertyAsync(orgId, userId, propertyId, cancellationToken);
-        return deleted ? NoContent() : NotFound();
+        return await sender.Send(new DeletePropertyCommand(orgId, userId, propertyId), cancellationToken)
+            ? NoContent()
+            : NotFound();
     }
 
     [HttpPost("units")]
     public async Task<ActionResult<UnitDto>> CreateUnit([FromBody] CreateUnitRequest request, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        return Ok(await service.CreateUnitAsync(orgId, userId, request, cancellationToken));
+        return Ok(await sender.Send(new CreateUnitCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpPut("units/{unitId:guid}")]
     public async Task<ActionResult<UnitDto>> UpdateUnit(Guid unitId, [FromBody] UpdateUnitBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var result = await service.UpdateUnitAsync(orgId, userId, new UpdateUnitRequest(
-            unitId,
-            body.Code,
-            body.Name,
-            body.Floor,
-            body.AreaM2,
-            body.UnitType,
-            body.BaseRent,
-            body.DepositAmount,
-            body.MaxOccupancy,
-            body.Note,
-            body.Status,
-            body.AmenityIds), cancellationToken);
+        var result = await sender.Send(new UpdateUnitCommand(orgId, userId, new UpdateUnitRequest(
+            unitId, body.Code, body.Name, body.Floor, body.AreaM2, body.UnitType,
+            body.BaseRent, body.DepositAmount, body.MaxOccupancy, body.Note, body.Status, body.AmenityIds)), cancellationToken);
 
         return result is null ? NotFound() : Ok(result);
     }
@@ -99,24 +96,22 @@ public sealed class PropertyController(IPropertyApplicationService service) : Co
     public async Task<IActionResult> DeleteUnit(Guid unitId, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var deleted = await service.DeleteUnitAsync(orgId, userId, unitId, cancellationToken);
-        return deleted ? NoContent() : NotFound();
+        return await sender.Send(new DeleteUnitCommand(orgId, userId, unitId), cancellationToken)
+            ? NoContent()
+            : NotFound();
     }
 
     [HttpPost("units/{unitId:guid}/status")]
     public async Task<IActionResult> ChangeUnitStatus(Guid unitId, [FromBody] ChangeUnitStatusBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var changed = await service.SetUnitStatusAsync(orgId, userId, unitId, body.Status, body.Reason, cancellationToken);
-        return changed ? Ok() : NotFound();
+        return await sender.Send(new SetUnitStatusCommand(orgId, userId, unitId, body.Status, body.Reason), cancellationToken)
+            ? Ok()
+            : NotFound();
     }
 
     [HttpGet("units")]
@@ -132,14 +127,10 @@ public sealed class PropertyController(IPropertyApplicationService service) : Co
         CancellationToken cancellationToken = default)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
         if (!TryNormalizePaging(page, perPage, out var normalizedPage, out var normalizedPerPage, out var pagingError))
-        {
             return BadRequest(new { error = pagingError });
-        }
 
         IReadOnlyCollection<short>? statusList = null;
         if (!string.IsNullOrWhiteSpace(statuses))
@@ -149,41 +140,31 @@ public sealed class PropertyController(IPropertyApplicationService service) : Co
             foreach (var token in tokens)
             {
                 if (!short.TryParse(token, out var status))
-                {
                     return BadRequest(new { error = $"Invalid unit status value '{token}'." });
-                }
-
                 parsed.Add(status);
             }
-
             statusList = parsed;
         }
 
-        var result = await service.SearchUnitsAsync(orgId, propertyId, statusList, unitType, minRent, maxRent, search, normalizedPage, normalizedPerPage, cancellationToken);
-        return Ok(result);
+        return Ok(await sender.Send(new SearchUnitsQuery(orgId, propertyId, statusList, unitType, minRent, maxRent, search, normalizedPage, normalizedPerPage), cancellationToken));
     }
 
     [HttpPost("tickets")]
     public async Task<ActionResult<TicketDto>> CreateTicket([FromBody] CreateTicketRequest request, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var result = await service.CreateTicketAsync(orgId, userId, request, cancellationToken);
-        return Ok(result);
+        return Ok(await sender.Send(new CreateTicketCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpPost("tickets/{ticketId:guid}/status")]
     public async Task<ActionResult<TicketDto>> ChangeTicketStatus(Guid ticketId, [FromBody] ChangeTicketStatusBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var result = await service.ChangeTicketStatusAsync(orgId, userId, new TicketStatusRequest(ticketId, body.Status, body.Note, body.AssignedTo), cancellationToken);
+        var result = await sender.Send(new ChangeTicketStatusCommand(orgId, userId, new TicketStatusRequest(ticketId, body.Status, body.Note, body.AssignedTo)), cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -191,137 +172,149 @@ public sealed class PropertyController(IPropertyApplicationService service) : Co
     public async Task<ActionResult<MeterDto>> CreateMeter([FromBody] CreateMeterRequest request, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var result = await service.CreateMeterAsync(orgId, userId, request, cancellationToken);
-        return Ok(result);
+        return Ok(await sender.Send(new CreateMeterCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpPost("meters/{meterId:guid}/readings")]
     public async Task<IActionResult> AddMeterReading(Guid meterId, [FromBody] AddMeterReadingBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var ok = await service.AddMeterReadingAsync(orgId, userId, new AddMeterReadingRequest(meterId, body.ReadingDate, body.Value, body.ImageUrl, body.Note), cancellationToken);
-        return ok ? Ok() : NotFound();
+        return await sender.Send(new AddMeterReadingCommand(orgId, userId, new AddMeterReadingRequest(meterId, body.ReadingDate, body.Value, body.ImageUrl, body.Note)), cancellationToken)
+            ? Ok()
+            : NotFound();
     }
 
     [HttpGet("dashboard/property-summary")]
     public async Task<ActionResult<DashboardSummaryDto>> Dashboard(CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _))
-        {
             return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        }
 
-        var result = await service.GetDashboardSummaryAsync(orgId, cancellationToken);
-        return Ok(result);
+        return Ok(await sender.Send(new GetDashboardSummaryQuery(orgId), cancellationToken));
     }
 
     [HttpGet("amenities")]
     public async Task<ActionResult<IReadOnlyList<AmenityDto>>> GetAmenities([FromQuery] string? category, CancellationToken cancellationToken)
-        => Ok(await service.GetAmenitiesAsync(category, cancellationToken));
+        => Ok(await sender.Send(new GetAmenitiesQuery(category), cancellationToken));
 
     [HttpPost("amenities")]
     public async Task<ActionResult<AmenityDto>> UpsertAmenity([FromBody] UpsertAmenityRequest request, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.UpsertAmenityAsync(orgId, userId, request, cancellationToken));
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return Ok(await sender.Send(new UpsertAmenityCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpDelete("amenities/{amenityId:guid}")]
     public async Task<IActionResult> DeleteAmenity(Guid amenityId, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out _, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return await service.DeleteAmenityAsync(userId, amenityId, cancellationToken) ? NoContent() : NotFound();
+        if (!HttpContext.TryGetOrgAndUser(out _, out var userId))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return await sender.Send(new DeleteAmenityCommand(userId, amenityId), cancellationToken)
+            ? NoContent()
+            : NotFound();
     }
 
     [HttpGet("property-types")]
     public async Task<ActionResult<IReadOnlyList<PropertyTypeDto>>> GetPropertyTypes(CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.GetPropertyTypesAsync(orgId, cancellationToken));
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out _))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return Ok(await sender.Send(new GetPropertyTypesQuery(orgId), cancellationToken));
     }
 
     [HttpPost("property-types")]
     public async Task<ActionResult<PropertyTypeDto>> UpsertPropertyType([FromBody] UpsertPropertyTypeRequest request, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.UpsertPropertyTypeAsync(orgId, userId, request, cancellationToken));
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return Ok(await sender.Send(new UpsertPropertyTypeCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpDelete("property-types/{propertyTypeId:guid}")]
     public async Task<IActionResult> DeletePropertyType(Guid propertyTypeId, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return await service.DeletePropertyTypeAsync(orgId, userId, propertyTypeId, cancellationToken) ? NoContent() : NotFound();
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return await sender.Send(new DeletePropertyTypeCommand(orgId, userId, propertyTypeId), cancellationToken)
+            ? NoContent()
+            : NotFound();
     }
 
     [HttpPost("properties/{propertyId:guid}/staff")]
     public async Task<ActionResult<PropertyStaffDto>> AssignStaff(Guid propertyId, [FromBody] AssignStaffBody body, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        var result = await service.AssignStaffAsync(orgId, userId, new AssignPropertyStaffRequest(propertyId, body.UserId, body.RoleKey), cancellationToken);
-        return Ok(result);
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return Ok(await sender.Send(new AssignStaffCommand(orgId, userId, new AssignPropertyStaffRequest(propertyId, body.UserId, body.RoleKey)), cancellationToken));
     }
 
     [HttpDelete("properties/{propertyId:guid}/staff/{userId:guid}")]
     public async Task<IActionResult> UnassignStaff(Guid propertyId, Guid userId, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var actorId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return await service.UnassignStaffAsync(orgId, actorId, propertyId, userId, cancellationToken) ? NoContent() : NotFound();
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var actorId))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return await sender.Send(new UnassignStaffCommand(orgId, actorId, propertyId, userId), cancellationToken)
+            ? NoContent()
+            : NotFound();
     }
 
     [HttpGet("vendors")]
     public async Task<ActionResult<IReadOnlyList<VendorDto>>> SearchVendors([FromQuery] string? vendorType, [FromQuery] string? search, [FromQuery] int page = 1, [FromQuery] int perPage = 20, CancellationToken cancellationToken = default)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out _))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
         if (!TryNormalizePaging(page, perPage, out var normalizedPage, out var normalizedPerPage, out var pagingError))
-        {
             return BadRequest(new { error = pagingError });
-        }
-
-        return Ok(await service.SearchVendorsAsync(orgId, vendorType, search, normalizedPage, normalizedPerPage, cancellationToken));
+        return Ok(await sender.Send(new SearchVendorsQuery(orgId, vendorType, search, normalizedPage, normalizedPerPage), cancellationToken));
     }
 
     [HttpPost("vendors")]
     public async Task<ActionResult<VendorDto>> UpsertVendor([FromBody] UpsertVendorRequest request, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.UpsertVendorAsync(orgId, userId, request, cancellationToken));
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return Ok(await sender.Send(new UpsertVendorCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpDelete("vendors/{vendorId:guid}")]
     public async Task<IActionResult> DeleteVendor(Guid vendorId, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return await service.DeleteVendorAsync(orgId, userId, vendorId, cancellationToken) ? NoContent() : NotFound();
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return await sender.Send(new DeleteVendorCommand(orgId, userId, vendorId), cancellationToken)
+            ? NoContent()
+            : NotFound();
     }
 
     [HttpPost("documents")]
     public async Task<ActionResult<DocumentDto>> UploadDocument([FromBody] UploadDocumentRequest request, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.UploadDocumentAsync(orgId, userId, request, cancellationToken));
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return Ok(await sender.Send(new UploadDocumentCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpGet("documents")]
     public async Task<ActionResult<IReadOnlyList<DocumentDto>>> GetDocuments([FromQuery] string ownerType, [FromQuery] Guid ownerId, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.GetDocumentsAsync(orgId, ownerType, ownerId, cancellationToken));
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out _))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return Ok(await sender.Send(new GetDocumentsQuery(orgId, ownerType, ownerId), cancellationToken));
     }
 
     [HttpDelete("documents/{documentId:guid}")]
     public async Task<IActionResult> DeleteDocument(Guid documentId, CancellationToken cancellationToken)
     {
-        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return await service.DeleteDocumentAsync(orgId, userId, documentId, cancellationToken) ? NoContent() : NotFound();
+        if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
+            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+        return await sender.Send(new DeleteDocumentCommand(orgId, userId, documentId), cancellationToken)
+            ? NoContent()
+            : NotFound();
     }
 
     private static bool TryNormalizePaging(int page, int perPage, out int normalizedPage, out int normalizedPerPage, out string? error)

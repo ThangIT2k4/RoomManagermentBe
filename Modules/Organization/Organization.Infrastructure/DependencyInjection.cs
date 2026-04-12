@@ -1,13 +1,12 @@
-using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Organization.Application;
 using Organization.Application.Services;
 using Organization.Domain.Repositories;
 using Organization.Infrastructure.Repositories;
 using Organization.Infrastructure.Services;
-using RoomManagerment.Organizations.DatabaseSpecific;
 using RoomManagerment.Messaging.Extensions;
+using RoomManagerment.Organizations.DatabaseSpecific;
+using RoomManagerment.Shared.Messaging;
 
 namespace Organization.Infrastructure;
 
@@ -15,9 +14,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddApplication();
         services.AddRabbitMqMessaging(configuration);
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(OrganizationApplicationService).Assembly));
+        services.AddOrganizationApplicationRequestHandlers();
+        services.AddScoped<IAppSender, AppRequestSender>();
         services.AddScoped<IMediatorGateway, MediatorGateway>();
         services.AddScoped<IDataAccessAdapterFactory, DataAccessAdapterFactory>();
         services.AddScoped<DataAccessAdapter>(provider =>
@@ -39,4 +38,3 @@ public static class DependencyInjection
         return services;
     }
 }
-

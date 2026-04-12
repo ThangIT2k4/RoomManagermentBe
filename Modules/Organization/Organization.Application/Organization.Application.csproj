@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Organization.Domain\Organization.Domain.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Shared\RoomManagerment.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />

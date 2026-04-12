@@ -11,9 +11,9 @@
     <ProjectReference Include="..\Organization.Application\Organization.Application.csproj" />
     <ProjectReference Include="..\Organization.Domain\Organization.Domain.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Shared\RoomManagerment.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="13.1.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.22" />
   </ItemGroup>
 </Project>

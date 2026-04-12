@@ -5,7 +5,7 @@ using RoomManagerment.Property.EntityClasses;
 using RoomManagerment.Property.Linq;
 using SD.LLBLGen.Pro.LinqSupportClasses;
 
-namespace Property.Application;
+namespace Property.Infrastructure.Services;
 
 public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapterFactory) : IPropertyApplicationService
 {
@@ -214,7 +214,6 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
     public async Task<TicketDto?> ChangeTicketStatusAsync(Guid organizationId, Guid userId, TicketStatusRequest request, CancellationToken cancellationToken = default)
     {
         ValidateOrgAndUser(organizationId, userId);
-        _ = userId;
         _ = request.Note;
         using var adapter = (DataAccessAdapter)adapterFactory.CreateAdapter();
         var linq = new LinqMetaData(adapter);
@@ -269,7 +268,8 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
             .Select(x => (decimal?)x.Value)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (lastValue.HasValue && request.Value < lastValue.Value) throw new InvalidOperationException("New reading must be greater than or equal to latest reading.");
+        if (lastValue.HasValue && request.Value < lastValue.Value)
+            throw new InvalidOperationException("New reading must be greater than or equal to latest reading.");
 
         var existed = await linq.MeterReading.AnyAsync(x => x.MeterId == request.MeterId && x.ReadingDate == request.ReadingDate && x.DeletedAt == null, cancellationToken);
         if (existed) throw new InvalidOperationException("Reading already exists for the same date.");
@@ -309,7 +309,6 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
     public async Task<AmenityDto> UpsertAmenityAsync(Guid organizationId, Guid userId, UpsertAmenityRequest request, CancellationToken cancellationToken = default)
     {
         _ = organizationId;
-        _ = userId;
         using var adapter = (DataAccessAdapter)adapterFactory.CreateAdapter();
         AmenityEntity entity;
         if (request.Id.HasValue)
@@ -348,9 +347,7 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
         var linq = new LinqMetaData(adapter);
         var query = linq.Amenity.Where(x => x.DeletedAt == null);
         if (!string.IsNullOrWhiteSpace(category))
-        {
             query = query.Where(x => x.Category == category);
-        }
 
         var rows = await query.OrderBy(x => x.Name).ToListAsync(cancellationToken);
         return rows.Select(x => new AmenityDto(x.Id, x.KeyCode, x.Name, x.Category, x.Icon)).ToList();
@@ -430,6 +427,7 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
 
     public async Task<PropertyStaffDto> AssignStaffAsync(Guid organizationId, Guid userId, AssignPropertyStaffRequest request, CancellationToken cancellationToken = default)
     {
+        _ = organizationId;
         using var adapter = (DataAccessAdapter)adapterFactory.CreateAdapter();
         var entity = new PropertiesUserEntity
         {
@@ -441,7 +439,6 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
             CreatedAt = DateTime.UtcNow
         };
 
-        _ = organizationId;
         await adapter.SaveEntityAsync(entity, true, false, cancellationToken);
         return new PropertyStaffDto(entity.Id, entity.PropertyId, entity.UserId, entity.RoleKey, entity.AssignedAt);
     }

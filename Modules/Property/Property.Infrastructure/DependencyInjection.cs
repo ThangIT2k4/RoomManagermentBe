@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Property.Application;
 using Property.Application.Services;
 using Property.Domain.Repositories;
 using Property.Infrastructure.Repositories;
 using Property.Infrastructure.Services;
 using RoomManagerment.Property.DatabaseSpecific;
+using RoomManagerment.Shared.Messaging;
 
 namespace Property.Infrastructure;
 
@@ -13,6 +13,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddPropertyApplicationRequestHandlers();
+        services.AddScoped<IAppSender, AppRequestSender>();
+        services.AddScoped<IMediatorGateway, MediatorGateway>();
         services.AddScoped<IDataAccessAdapterFactory, DataAccessAdapterFactory>();
         services.AddScoped<IPropertyApplicationService, PropertyApplicationService>();
         services.AddScoped<DataAccessAdapter>(provider =>
@@ -35,4 +38,3 @@ public static class DependencyInjection
         return services;
     }
 }
-
