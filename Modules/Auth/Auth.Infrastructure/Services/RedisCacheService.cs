@@ -40,7 +40,7 @@ public sealed class RedisCacheService : ICacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis get failed for key {CacheKey}.", key);
+            _logger.LogWarning(ex, "Redis get thất bại với khóa {CacheKey}.", key);
             return default;
         }
     }
@@ -67,7 +67,7 @@ public sealed class RedisCacheService : ICacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis set failed for key {CacheKey}.", key);
+            _logger.LogWarning(ex, "Redis set thất bại với khóa {CacheKey}.", key);
         }
     }
 
@@ -85,7 +85,7 @@ public sealed class RedisCacheService : ICacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis remove failed for key {CacheKey}.", key);
+            _logger.LogWarning(ex, "Redis remove thất bại với khóa {CacheKey}.", key);
         }
     }
 
@@ -113,7 +113,7 @@ public sealed class RedisCacheService : ICacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis pattern removal failed for pattern {Pattern}.", pattern);
+            _logger.LogWarning(ex, "Redis xóa theo mẫu thất bại với pattern {Pattern}.", pattern);
         }
     }
 
@@ -146,7 +146,7 @@ public sealed class RedisCacheService : ICacheService
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Redis connection failed. Cache will operate in no-op mode.");
+                _logger.LogWarning(ex, "Kết nối Redis thất bại. Cache sẽ hoạt động ở chế độ no-op.");
                 _redis = null;
                 _database = null;
                 return null;

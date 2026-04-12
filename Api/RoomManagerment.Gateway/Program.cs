@@ -1,6 +1,8 @@
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
+using RoomManagerment.Gateway.Models;
+using RoomManagerment.Shared.Http;
 using Serilog;
 using StackExchange.Redis;
 using System.Net.Sockets;
@@ -230,6 +232,9 @@ if (app.Environment.IsDevelopment())
 
 // Reverse proxy
 app.MapReverseProxy();
+
+app.MapGet("/api/gateway/health", () =>
+    Results.Json(ApiResponse<GatewayHealthPayload>.Succeed(new GatewayHealthPayload())));
 
 // Error endpoint
 if (!app.Environment.IsDevelopment())

@@ -66,6 +66,22 @@ public static class ApiResultHttpExtensions
             StatusCode = StatusCodes.Status500InternalServerError
         };
 
+    /// <summary>Maps an <see cref="Error"/> to <see cref="ApiResponse{T}"/> with the appropriate status code (e.g. dashboard built from another <see cref="Result"/>).</summary>
+    public static ActionResult<ApiResponse<T>> ToApiFailureResult<T>(this ControllerBase controller, Error? error) =>
+        controller.ToApiFailureObjectResult<T>(error);
+
+    public static ActionResult<ApiResponse<T>> ApiNotFound<T>(this ControllerBase _, string message) =>
+        new ObjectResult(ApiResponse<T>.Failure(message))
+        {
+            StatusCode = StatusCodes.Status404NotFound
+        };
+
+    public static ActionResult<ApiResponse<T>> ApiNotImplemented<T>(this ControllerBase _, string message) =>
+        new ObjectResult(ApiResponse<T>.Failure(message))
+        {
+            StatusCode = StatusCodes.Status501NotImplemented
+        };
+
     private static ActionResult<ApiResponse<T>> ToApiFailureObjectResult<T>(this ControllerBase controller, Error? error)
     {
         var message = FormatErrorMessage(error);

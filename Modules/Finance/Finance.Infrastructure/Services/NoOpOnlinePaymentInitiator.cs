@@ -14,6 +14,6 @@ public sealed class NoOpOnlinePaymentInitiator : IOnlinePaymentInitiator
             Result<OnlinePaymentInitiationResult>.Failure(
                 new Error(
                     "Finance.Online.NotImplemented",
-                    "Online payment (SePay/VNPay/MoMo) is not wired yet. Integrate IOnlinePaymentInitiator in Infrastructure.")));
+                    "Thanh toán online (SePay/VNPay/MoMo) chưa được cấu hình. Hãy tích hợp IOnlinePaymentInitiator trong lớp Infrastructure.")));
     }
 }

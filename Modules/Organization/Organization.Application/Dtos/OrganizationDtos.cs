@@ -50,3 +50,16 @@ public sealed record InvitationPreviewDto(
 public sealed record DashboardDto(
     OrganizationDto Organization,
     IReadOnlyList<OrganizationMemberDto> Members);
+
+public sealed record MemberCapabilityCheckDto(bool Allowed);
+
+public sealed record OrganizationRemoveMemberResponse();
+public sealed record OrganizationChangeMemberRoleResponse();
+public sealed record OrganizationDeactivateMemberResponse();
+public sealed record OrganizationActivateMemberResponse();
+public sealed record OrganizationSetPrimaryBankingResponse();
+public sealed record OrganizationRemoveBankingResponse();
+public sealed record OrganizationCancelInvitationResponse();
+public sealed record OrganizationAcceptInvitationResponse();
+public sealed record OrganizationUpsertEmailSettingsResponse();
+public sealed record OrganizationAdminReservedResponse();

@@ -36,7 +36,7 @@ public sealed class InvoiceRepository(DataAccessAdapter adapter) : IInvoiceRepos
     {
         var linq = new LinqMetaData(adapter);
         var dal = await linq.Invoice.Where(x => x.Id == invoice.Id).FirstOrDefaultAsync(cancellationToken)
-                  ?? throw new InvalidOperationException("Invoice not found for update.");
+                  ?? throw new InvalidOperationException("Không tìm thấy hóa đơn để cập nhật.");
 
         dal.OrganizationId = invoice.OrganizationId;
         dal.LeaseId = invoice.LeaseId;

@@ -42,7 +42,7 @@ public sealed class UserProfileRepository(
             var existing = await linq.UserProfile.Where(x => x.UserId == profile.Id).FirstOrDefaultAsync(cancellationToken);
             if (existing is null)
             {
-                throw new InvalidOperationException("User profile not found for update.");
+                throw new InvalidOperationException("Không tìm thấy hồ sơ người dùng để cập nhật.");
             }
 
             var dal = profile.ToPersistence();

@@ -16,7 +16,7 @@ public sealed class RedisCrmCacheService(IDistributedCache cache, ILogger<RedisC
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Redis cache get failed for key {Key}. Fallback to DB.", key);
+            logger.LogWarning(ex, "Redis cache get thất bại với khóa {Key}. Chuyển sang đọc DB.", key);
             return default;
         }
     }
@@ -33,7 +33,7 @@ public sealed class RedisCrmCacheService(IDistributedCache cache, ILogger<RedisC
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Redis cache set failed for key {Key}.", key);
+            logger.LogWarning(ex, "Redis cache set thất bại với khóa {Key}.", key);
         }
     }
 
@@ -45,7 +45,7 @@ public sealed class RedisCrmCacheService(IDistributedCache cache, ILogger<RedisC
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Redis cache remove failed for key {Key}.", key);
+            logger.LogWarning(ex, "Redis cache remove thất bại với khóa {Key}.", key);
         }
     }
 }

@@ -29,7 +29,7 @@ public sealed class RabbitMqIntegrationEventPublisher : IIntegrationEventPublish
 
         if (!_channel.Writer.TryWrite(envelope))
         {
-            _logger.LogWarning("Unable to queue CRM integration event {EventType}.", domainEvent.GetType().Name);
+            _logger.LogWarning("Không thể đưa CRM integration event {EventType} vào hàng đợi.", domainEvent.GetType().Name);
         }
 
         return ValueTask.CompletedTask;

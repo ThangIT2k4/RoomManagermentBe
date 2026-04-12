@@ -24,7 +24,7 @@ internal static class AuthDataAccessGuard
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Auth data access failed. Repository={Repository} Operation={Operation}", repositoryName, operation);
+            logger.LogError(ex, "Truy cập dữ liệu Auth thất bại. Repository={Repository} Operation={Operation}", repositoryName, operation);
             throw;
         }
     }
@@ -46,7 +46,7 @@ internal static class AuthDataAccessGuard
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Auth data access failed. Repository={Repository} Operation={Operation}", repositoryName, operation);
+            logger.LogError(ex, "Truy cập dữ liệu Auth thất bại. Repository={Repository} Operation={Operation}", repositoryName, operation);
             throw;
         }
     }

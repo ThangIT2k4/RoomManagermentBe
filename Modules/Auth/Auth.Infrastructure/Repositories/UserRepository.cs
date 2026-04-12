@@ -194,7 +194,7 @@ public sealed class UserRepository(
         {
             if (deletedAt.Kind != DateTimeKind.Utc)
             {
-                throw new ArgumentException("deletedAt must be UTC.", nameof(deletedAt));
+                throw new ArgumentException("deletedAt phải ở định dạng UTC.", nameof(deletedAt));
             }
 
             var dal = await GetDbByIdAsync(userId, cancellationToken);

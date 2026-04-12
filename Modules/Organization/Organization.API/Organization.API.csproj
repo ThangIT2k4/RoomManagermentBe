@@ -16,6 +16,7 @@
     <PackageReference Include="Serilog.Sinks.File" Version="8.0.0-dev-02318" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Shared\RoomManagerment.Shared.csproj" />
     <ProjectReference Include="..\Organization.Application\Organization.Application.csproj" />
     <ProjectReference Include="..\Organization.Infrastructure\Organization.Infrastructure.csproj" />
   </ItemGroup>

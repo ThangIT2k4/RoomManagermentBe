@@ -1,5 +1,6 @@
 using Organization.Application.Common;
 using Organization.Application.Dtos;
+using RoomManagerment.Shared.Common;
 using Organization.Application.Services;
 using Organization.Domain.Entities;
 using Organization.Domain.Events;

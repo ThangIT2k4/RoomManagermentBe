@@ -35,13 +35,13 @@ public sealed class AuthApplicationService(
         {
             if (string.IsNullOrWhiteSpace(request.Password))
             {
-                return Result<RegisterResult>.Failure(Error.BadRequest("Auth.Password.Empty", "Password is required."));
+                return Result<RegisterResult>.Failure(Error.BadRequest("Auth.Password.Empty", "Mật khẩu là bắt buộc."));
             }
 
             var email = Email.Create(request.Email);
             if (await userRepository.ExistsByEmailAsync(email, cancellationToken: cancellationToken))
             {
-                return Result<RegisterResult>.Failure(Error.Conflict("Auth.Email.Exists", "Email already exists."));
+                return Result<RegisterResult>.Failure(Error.Conflict("Auth.Email.Exists", "Email đã tồn tại."));
             }
 
             Username? username = null;
@@ -50,7 +50,7 @@ public sealed class AuthApplicationService(
                 username = Username.Create(request.Username);
                 if (await userRepository.ExistsByUsernameAsync(username, cancellationToken: cancellationToken))
                 {
-                    return Result<RegisterResult>.Failure(Error.Conflict("Auth.Username.Exists", "Username already exists."));
+                    return Result<RegisterResult>.Failure(Error.Conflict("Auth.Username.Exists", "Tên đăng nhập đã tồn tại."));
                 }
             }
 
@@ -79,7 +79,7 @@ public sealed class AuthApplicationService(
                 cancellationToken);
             if (otpResult.IsFailure)
             {
-                return Result<RegisterResult>.Failure(otpResult.Error ?? Error.BadRequest("Auth.Otp.Failed", "Could not issue verification OTP."));
+                return Result<RegisterResult>.Failure(otpResult.Error ?? Error.BadRequest("Auth.Otp.Failed", "Không thể tạo OTP xác thực."));
             }
 
             return Result<RegisterResult>.Success(new RegisterResult(MapUser(user)));
@@ -90,7 +90,7 @@ public sealed class AuthApplicationService(
         {
             if (string.IsNullOrWhiteSpace(request.Login) || string.IsNullOrWhiteSpace(request.Password))
             {
-                return Result<LoginResult>.Failure(Error.BadRequest("Auth.Login.Invalid", "Login or password is invalid."));
+                return Result<LoginResult>.Failure(Error.BadRequest("Auth.Login.Invalid", "Tên đăng nhập hoặc mật khẩu không hợp lệ."));
             }
 
             UserEntity? user;
@@ -105,22 +105,22 @@ public sealed class AuthApplicationService(
 
             if (user is null || user.PasswordHash is null)
             {
-                return Result<LoginResult>.Failure(Error.Unauthorized("Auth.Login.Failed", "Invalid credentials."));
+                return Result<LoginResult>.Failure(Error.Unauthorized("Auth.Login.Failed", "Thông tin đăng nhập không hợp lệ."));
             }
 
             if (user.Status == UserStatus.Inactive)
             {
-                return Result<LoginResult>.Failure(Error.Forbidden("Auth.Login.NotVerified", "Account is not verified. Please verify your email."));
+                return Result<LoginResult>.Failure(Error.Forbidden("Auth.Login.NotVerified", "Tài khoản chưa được xác thực. Vui lòng xác thực email của bạn."));
             }
 
             if (user.Status == UserStatus.Banned)
             {
-                return Result<LoginResult>.Failure(Error.Forbidden("Auth.Login.Banned", "Account is locked."));
+                return Result<LoginResult>.Failure(Error.Forbidden("Auth.Login.Banned", "Tài khoản đã bị khóa."));
             }
 
             if (!passwordHasher.Verify(request.Password, user.PasswordHash.Value))
             {
-                return Result<LoginResult>.Failure(Error.Unauthorized("Auth.Login.Failed", "Invalid credentials."));
+                return Result<LoginResult>.Failure(Error.Unauthorized("Auth.Login.Failed", "Thông tin đăng nhập không hợp lệ."));
             }
 
             user.RecordLogin(DateTime.UtcNow, null, request.IpAddress);
@@ -129,7 +129,7 @@ public sealed class AuthApplicationService(
             var sessionResult = await CreateSessionAsync(new CreateSessionRequest(user.Id, request.IpAddress, request.UserAgent, request.RememberMe), cancellationToken);
             if (sessionResult.IsFailure || sessionResult.Value is null)
             {
-                return Result<LoginResult>.Failure(sessionResult.Error ?? Error.BadRequest("Auth.Session.Failed", "Cannot create session."));
+                return Result<LoginResult>.Failure(sessionResult.Error ?? Error.BadRequest("Auth.Session.Failed", "Không thể tạo phiên đăng nhập."));
             }
 
             return Result<LoginResult>.Success(new LoginResult(MapUser(user), sessionResult.Value));
@@ -148,13 +148,13 @@ public sealed class AuthApplicationService(
             var session = await sessionRepository.GetByIdAsync(request.SessionId, cancellationToken);
             if (session is null || session.IsExpired(DateTimeOffset.UtcNow))
             {
-                return Result<UserDto>.Failure(Error.Unauthorized("Auth.Session.NotFound", "Session not found or expired."));
+                return Result<UserDto>.Failure(Error.Unauthorized("Auth.Session.NotFound", "Không tìm thấy phiên đăng nhập hoặc phiên đã hết hạn."));
             }
 
             var user = await userRepository.GetByIdAsync(session.UserId, cancellationToken);
             if (user is null)
             {
-                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "Không tìm thấy người dùng."));
             }
 
             return Result<UserDto>.Success(MapUser(user));
@@ -166,7 +166,7 @@ public sealed class AuthApplicationService(
             var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
             if (user is null)
             {
-                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "Không tìm thấy người dùng."));
             }
 
             return Result<UserDto>.Success(MapUser(user));
@@ -190,7 +190,7 @@ public sealed class AuthApplicationService(
             var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
             if (user is null)
             {
-                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "Không tìm thấy người dùng."));
             }
 
             if (!string.IsNullOrWhiteSpace(request.Email))
@@ -198,7 +198,7 @@ public sealed class AuthApplicationService(
                 var email = Email.Create(request.Email);
                 if (await userRepository.ExistsByEmailAsync(email, request.UserId, cancellationToken))
                 {
-                    return Result<UserDto>.Failure(Error.Conflict("Auth.Email.Exists", "Email already exists."));
+                    return Result<UserDto>.Failure(Error.Conflict("Auth.Email.Exists", "Email đã tồn tại."));
                 }
                 user.ChangeEmail(email, DateTime.UtcNow);
             }
@@ -208,7 +208,7 @@ public sealed class AuthApplicationService(
                 var username = Username.Create(request.Username);
                 if (await userRepository.ExistsByUsernameAsync(username, request.UserId, cancellationToken))
                 {
-                    return Result<UserDto>.Failure(Error.Conflict("Auth.Username.Exists", "Username already exists."));
+                    return Result<UserDto>.Failure(Error.Conflict("Auth.Username.Exists", "Tên đăng nhập đã tồn tại."));
                 }
                 user.ChangeUsername(username, DateTime.UtcNow);
             }
@@ -240,12 +240,12 @@ public sealed class AuthApplicationService(
             var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
             if (user is null || user.PasswordHash is null)
             {
-                return Result.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+                return Result.Failure(Error.NotFound("Auth.User.NotFound", "Không tìm thấy người dùng."));
             }
 
             if (!passwordHasher.Verify(request.CurrentPassword, user.PasswordHash.Value))
             {
-                return Result.Failure(Error.BadRequest("Auth.Password.Invalid", "Current password is invalid."));
+                return Result.Failure(Error.BadRequest("Auth.Password.Invalid", "Mật khẩu hiện tại không hợp lệ."));
             }
 
             user.SetPassword(PasswordHash.Create(passwordHasher.Hash(request.NewPassword)), DateTime.UtcNow);
@@ -268,13 +268,13 @@ public sealed class AuthApplicationService(
             var otp = await VerifyOtpCoreAsync(request.Email, OtpPurpose.ResetPassword, request.OtpCode, cancellationToken);
             if (otp is null)
             {
-                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP is invalid or expired."));
+                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP không hợp lệ hoặc đã hết hạn."));
             }
 
             var user = await userRepository.GetByEmailAsync(Email.Create(request.Email), cancellationToken);
             if (user is null)
             {
-                return Result.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+                return Result.Failure(Error.NotFound("Auth.User.NotFound", "Không tìm thấy người dùng."));
             }
 
             user.SetPassword(PasswordHash.Create(passwordHasher.Hash(request.NewPassword)), DateTime.UtcNow);
@@ -312,7 +312,7 @@ public sealed class AuthApplicationService(
         {
             var otp = await VerifyOtpCoreAsync(request.Email, request.Purpose, request.OtpCode, cancellationToken);
             return otp is null
-                ? Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP is invalid or expired."))
+                ? Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP không hợp lệ hoặc đã hết hạn."))
                 : Result.Success();
         });
 
@@ -322,23 +322,23 @@ public sealed class AuthApplicationService(
             var otp = await VerifyOtpCoreAsync(request.Email, OtpPurpose.VerifyEmail, request.OtpCode, cancellationToken);
             if (otp is null)
             {
-                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP is invalid or expired."));
+                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP không hợp lệ hoặc đã hết hạn."));
             }
 
             if (!otp.UserId.HasValue || otp.UserId.Value == Guid.Empty)
             {
-                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP is not bound to a user."));
+                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP không được gắn với người dùng nào."));
             }
 
             var user = await userRepository.GetByIdAsync(otp.UserId.Value, cancellationToken);
             if (user is null)
             {
-                return Result.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+                return Result.Failure(Error.NotFound("Auth.User.NotFound", "Không tìm thấy người dùng."));
             }
 
             if (!string.Equals(user.Email.Value, request.Email.Trim(), StringComparison.OrdinalIgnoreCase))
             {
-                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP does not match this email."));
+                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP không khớp với email này."));
             }
 
             user.VerifyEmailAndActivate(DateTime.UtcNow);
@@ -389,7 +389,7 @@ public sealed class AuthApplicationService(
             var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
             if (user is null)
             {
-                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "Không tìm thấy người dùng."));
             }
 
             ApplyStatus(user, request.Status, DateTime.UtcNow);
@@ -404,7 +404,7 @@ public sealed class AuthApplicationService(
             var profile = await linq.UserProfile.Where(x => x.UserId == request.UserId).FirstOrDefaultAsync(cancellationToken);
             if (profile is null)
             {
-                return Result<UserProfileDto>.Failure(Error.NotFound("Auth.Profile.NotFound", "Profile not found."));
+                return Result<UserProfileDto>.Failure(Error.NotFound("Auth.Profile.NotFound", "Không tìm thấy hồ sơ người dùng."));
             }
 
             return Result<UserProfileDto>.Success(MapProfile(profile));
@@ -535,7 +535,7 @@ public sealed class AuthApplicationService(
                 user.Ban(changedAt);
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(status), "Invalid user status.");
+                throw new ArgumentOutOfRangeException(nameof(status), "Trạng thái người dùng không hợp lệ.");
         }
     }
 

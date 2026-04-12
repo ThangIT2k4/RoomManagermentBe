@@ -53,7 +53,7 @@ public sealed class CapabilityRepository(
             var existing = await linq.Capability.Where(x => x.Id == capability.Id).FirstOrDefaultAsync(cancellationToken);
             if (existing is null)
             {
-                throw new InvalidOperationException("Capability not found for update.");
+                throw new InvalidOperationException("Không tìm thấy quyền năng để cập nhật.");
             }
 
             var dal = capability.ToPersistence();

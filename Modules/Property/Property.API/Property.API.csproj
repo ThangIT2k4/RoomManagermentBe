@@ -11,6 +11,7 @@
     <PackageReference Include="SD.Tools.OrmProfiler.Interceptor.NetCore" Version="2.0.8" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Shared\RoomManagerment.Shared.csproj" />
     <ProjectReference Include="..\Property.Application\Property.Application.csproj" />
     <ProjectReference Include="..\Property.Infrastructure\Property.Infrastructure.csproj" />
   </ItemGroup>

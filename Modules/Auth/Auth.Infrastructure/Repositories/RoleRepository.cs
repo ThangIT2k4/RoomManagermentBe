@@ -53,7 +53,7 @@ public sealed class RoleRepository(
             var existing = await linq.Role.Where(x => x.Id == role.Id).FirstOrDefaultAsync(cancellationToken);
             if (existing is null)
             {
-                throw new InvalidOperationException("Role not found for update.");
+                throw new InvalidOperationException("Không tìm thấy vai trò để cập nhật.");
             }
 
             var dal = role.ToPersistence();

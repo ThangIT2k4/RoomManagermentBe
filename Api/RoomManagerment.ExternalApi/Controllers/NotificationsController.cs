@@ -1,6 +1,8 @@
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.ExternalApi.Models;
 using RoomManagerment.Messaging.Contracts.Events;
+using RoomManagerment.Shared.Http;
 
 namespace RoomManagerment.ExternalApi.Controllers;
 
@@ -13,7 +15,7 @@ namespace RoomManagerment.ExternalApi.Controllers;
 public class NotificationsController(IPublishEndpoint publishEndpoint) : ControllerBase
 {
     [HttpPost("send")]
-    public async Task<IActionResult> SendNotification(
+    public async Task<ActionResult<ApiResponse<ExternalNotificationQueuedResponse>>> SendNotification(
         [FromBody] SendNotificationRequest request,
         CancellationToken cancellationToken)
     {
@@ -28,7 +30,9 @@ public class NotificationsController(IPublishEndpoint publishEndpoint) : Control
             Metadata = request.Metadata
         }, cancellationToken);
 
-        return Accepted(new { message = "Notification queued successfully" });
+        return Accepted(ApiResponse<ExternalNotificationQueuedResponse>.Succeed(
+            new ExternalNotificationQueuedResponse(),
+            "Notification queued successfully"));
     }
 }
 

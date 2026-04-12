@@ -57,7 +57,7 @@ public sealed class EmailOtpRepository(
             var existing = await linq.EmailOtp.Where(x => x.Id == otp.Id).FirstOrDefaultAsync(cancellationToken);
             if (existing is null)
             {
-                throw new InvalidOperationException("Email OTP not found for update.");
+                throw new InvalidOperationException("Không tìm thấy OTP email để cập nhật.");
             }
 
             var dal = otp.ToPersistence();

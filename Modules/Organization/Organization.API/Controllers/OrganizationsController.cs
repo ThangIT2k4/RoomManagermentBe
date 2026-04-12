@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Organization.Application.Common;
 using Organization.Application.Dtos;
 using Organization.Application.Features.Banking.AddBanking;
 using Organization.Application.Features.Banking.RemoveBanking;
@@ -20,6 +21,8 @@ using Organization.Application.Features.Organizations.OnboardOrganization;
 using Organization.Application.Features.Organizations.UpdateOrganization;
 using Organization.Application.Features.Quota.CheckQuota;
 using Organization.Application.Features.Settings.UpsertEmailSettings;
+using RoomManagerment.Shared.Extensions;
+using RoomManagerment.Shared.Http;
 using RoomManagerment.Shared.Messaging;
 
 namespace Organization.API.Controllers;
@@ -29,168 +32,179 @@ namespace Organization.API.Controllers;
 public sealed class OrganizationsController(IAppSender sender) : ControllerBase
 {
     [HttpGet("{orgId:guid}")]
-    public async Task<IActionResult> Get([FromRoute] Guid orgId, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationDto>>> Get([FromRoute] Guid orgId, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetOrganizationQuery(orgId), cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : NotFound(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPut("{orgId:guid}/onboard")]
-    public async Task<IActionResult> Onboard([FromRoute] Guid orgId, [FromBody] OnboardOrganizationRequestBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationDto>>> Onboard([FromRoute] Guid orgId, [FromBody] OnboardOrganizationRequestBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(
             new OnboardOrganizationCommand(orgId, body.ActorUserId, body.Name, body.Phone, body.Email, body.TaxCode, body.Address),
             cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPut("{orgId:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid orgId, [FromBody] UpdateOrganizationRequestBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationDto>>> Update([FromRoute] Guid orgId, [FromBody] UpdateOrganizationRequestBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(
             new UpdateOrganizationCommand(orgId, body.ActorUserId, body.Name, body.Phone, body.Email, body.PublicMail, body.TaxCode, body.Address),
             cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     [HttpGet("{orgId:guid}/members")]
-    public async Task<IActionResult> GetMembers([FromRoute] Guid orgId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ApiResponse<PagedResponse<OrganizationMemberDto>>>> GetMembers([FromRoute] Guid orgId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
     {
         if (!TryNormalizePaging(page, pageSize, out var normalizedPage, out var normalizedPageSize, out var pagingError))
-            return BadRequest(new { error = pagingError });
+        {
+            return this.ApiBadRequest<PagedResponse<OrganizationMemberDto>>(pagingError ?? "Invalid paging.");
+        }
 
         var result = await sender.Send(new GetMembersQuery(orgId, normalizedPage, normalizedPageSize), cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPost("{orgId:guid}/members")]
-    public async Task<IActionResult> UpsertMember([FromRoute] Guid orgId, [FromBody] UpsertMemberRequestBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationMemberDto>>> UpsertMember([FromRoute] Guid orgId, [FromBody] UpsertMemberRequestBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new UpsertMemberCommand(orgId, body.UserId, body.RoleId, body.ActorUserId), cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     [HttpDelete("{orgId:guid}/members/{userId:guid}")]
-    public async Task<IActionResult> RemoveMember([FromRoute] Guid orgId, [FromRoute] Guid userId, [FromBody] RemoveMemberRequestBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationRemoveMemberResponse>>> RemoveMember([FromRoute] Guid orgId, [FromRoute] Guid userId, [FromBody] RemoveMemberRequestBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new RemoveMemberCommand(orgId, userId, body.ActorUserId, body.Reason), cancellationToken);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+        return this.ToApiVoidActionResult<OrganizationRemoveMemberResponse>(result);
     }
 
     [HttpPut("{orgId:guid}/members/{userId:guid}/role")]
-    public async Task<IActionResult> ChangeRole([FromRoute] Guid orgId, [FromRoute] Guid userId, [FromBody] ChangeMemberRoleRequestBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationChangeMemberRoleResponse>>> ChangeRole([FromRoute] Guid orgId, [FromRoute] Guid userId, [FromBody] ChangeMemberRoleRequestBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new ChangeMemberRoleCommand(orgId, userId, body.RoleId, body.ActorUserId), cancellationToken);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+        return this.ToApiVoidActionResult<OrganizationChangeMemberRoleResponse>(result);
     }
 
     [HttpPost("{orgId:guid}/members/{userId:guid}/deactivate")]
-    public async Task<IActionResult> Deactivate([FromRoute] Guid orgId, [FromRoute] Guid userId, [FromBody] ActivationRequestBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationDeactivateMemberResponse>>> Deactivate([FromRoute] Guid orgId, [FromRoute] Guid userId, [FromBody] ActivationRequestBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new ChangeMemberActivationCommand(orgId, userId, false, body.ActorUserId, body.Reason), cancellationToken);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+        return this.ToApiVoidActionResult<OrganizationDeactivateMemberResponse>(result);
     }
 
     [HttpPost("{orgId:guid}/members/{userId:guid}/activate")]
-    public async Task<IActionResult> Activate([FromRoute] Guid orgId, [FromRoute] Guid userId, [FromBody] ActivationRequestBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationActivateMemberResponse>>> Activate([FromRoute] Guid orgId, [FromRoute] Guid userId, [FromBody] ActivationRequestBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new ChangeMemberActivationCommand(orgId, userId, true, body.ActorUserId, body.Reason), cancellationToken);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+        return this.ToApiVoidActionResult<OrganizationActivateMemberResponse>(result);
     }
 
     [HttpGet("{orgId:guid}/members/{userId:guid}/can/{capabilityKey}")]
-    public async Task<IActionResult> Can([FromRoute] Guid orgId, [FromRoute] Guid userId, [FromRoute] string capabilityKey, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<MemberCapabilityCheckDto>>> Can([FromRoute] Guid orgId, [FromRoute] Guid userId, [FromRoute] string capabilityKey, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new CanMemberQuery(orgId, userId, capabilityKey), cancellationToken);
-        return result.IsSuccess ? Ok(new { allowed = result.Value }) : BadRequest(result.Error);
+        if (result.IsFailure)
+        {
+            return this.ToApiFailureResult<MemberCapabilityCheckDto>(result.Error);
+        }
+
+        return Ok(ApiResponse<MemberCapabilityCheckDto>.Succeed(new MemberCapabilityCheckDto(result.Value)));
     }
 
     [HttpPost("{orgId:guid}/banking")]
-    public async Task<IActionResult> AddBanking([FromRoute] Guid orgId, [FromBody] AddBankingRequestBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationBankingDto>>> AddBanking([FromRoute] Guid orgId, [FromBody] AddBankingRequestBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(
             new AddOrganizationBankingCommand(orgId, body.ActorUserId, body.SepayBankId, body.AccountNumber, body.AccountHolderName, body.BranchName, body.BranchCode, body.SwiftCode, body.IsPrimary),
             cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPost("{orgId:guid}/banking/{bankingId:guid}/set-primary")]
-    public async Task<IActionResult> SetPrimaryBanking([FromRoute] Guid orgId, [FromRoute] Guid bankingId, [FromBody] ActorBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationSetPrimaryBankingResponse>>> SetPrimaryBanking([FromRoute] Guid orgId, [FromRoute] Guid bankingId, [FromBody] ActorBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new SetPrimaryBankingCommand(orgId, bankingId, body.ActorUserId), cancellationToken);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+        return this.ToApiVoidActionResult<OrganizationSetPrimaryBankingResponse>(result);
     }
 
     [HttpDelete("{orgId:guid}/banking/{bankingId:guid}")]
-    public async Task<IActionResult> RemoveBanking([FromRoute] Guid orgId, [FromRoute] Guid bankingId, [FromBody] ActorBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationRemoveBankingResponse>>> RemoveBanking([FromRoute] Guid orgId, [FromRoute] Guid bankingId, [FromBody] ActorBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new RemoveBankingCommand(orgId, bankingId, body.ActorUserId), cancellationToken);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+        return this.ToApiVoidActionResult<OrganizationRemoveBankingResponse>(result);
     }
 
     [HttpPost("{orgId:guid}/invitations")]
-    public async Task<IActionResult> SendInvitation([FromRoute] Guid orgId, [FromBody] SendInvitationRequestBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<InvitationPreviewDto>>> SendInvitation([FromRoute] Guid orgId, [FromBody] SendInvitationRequestBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new SendInvitationCommand(orgId, body.Email, body.RoleId, body.ActorUserId, body.Note), cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     [HttpDelete("{orgId:guid}/invitations/{membershipId:guid}")]
-    public async Task<IActionResult> CancelInvitation([FromRoute] Guid orgId, [FromRoute] Guid membershipId, [FromBody] ActorBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationCancelInvitationResponse>>> CancelInvitation([FromRoute] Guid orgId, [FromRoute] Guid membershipId, [FromBody] ActorBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new CancelInvitationCommand(orgId, membershipId, body.ActorUserId), cancellationToken);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+        return this.ToApiVoidActionResult<OrganizationCancelInvitationResponse>(result);
     }
 
     [HttpPost("{orgId:guid}/invitations/{membershipId:guid}/resend")]
-    public async Task<IActionResult> ResendInvitation([FromRoute] Guid orgId, [FromRoute] Guid membershipId, [FromBody] ActorBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<InvitationPreviewDto>>> ResendInvitation([FromRoute] Guid orgId, [FromRoute] Guid membershipId, [FromBody] ActorBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new ResendInvitationCommand(orgId, membershipId, body.ActorUserId), cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     [HttpGet("invitations/{token}")]
-    public async Task<IActionResult> GetInvitation([FromRoute] string token, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<InvitationPreviewDto>>> GetInvitation([FromRoute] string token, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetInvitationQuery(token), cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : NotFound(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPost("invitations/{token}/accept-existing")]
-    public async Task<IActionResult> AcceptInvitation([FromRoute] string token, [FromBody] AcceptInvitationBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationAcceptInvitationResponse>>> AcceptInvitation([FromRoute] string token, [FromBody] AcceptInvitationBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new AcceptInvitationCommand(token, body.UserId), cancellationToken);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+        return this.ToApiVoidActionResult<OrganizationAcceptInvitationResponse>(result);
     }
 
     [HttpPut("{orgId:guid}/email-settings")]
-    public async Task<IActionResult> UpsertEmailSettings([FromRoute] Guid orgId, [FromBody] UpsertEmailSettingsBody body, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<OrganizationUpsertEmailSettingsResponse>>> UpsertEmailSettings([FromRoute] Guid orgId, [FromBody] UpsertEmailSettingsBody body, CancellationToken cancellationToken)
     {
         var result = await sender.Send(
             new UpsertEmailSettingsCommand(orgId, body.ActorUserId, body.FromName, body.FromEmail, body.Provider, body.SmtpHost, body.SmtpPort, body.SmtpEncryption, body.SmtpUsername, body.SmtpPassword),
             cancellationToken);
-        return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+        return this.ToApiVoidActionResult<OrganizationUpsertEmailSettingsResponse>(result);
     }
 
     [HttpGet("{orgId:guid}/quota/{featureKey}")]
-    public async Task<IActionResult> Quota([FromRoute] Guid orgId, [FromRoute] string featureKey, [FromQuery] int currentUsage = 0, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ApiResponse<QuotaResultDto>>> Quota([FromRoute] Guid orgId, [FromRoute] string featureKey, [FromQuery] int currentUsage = 0, CancellationToken cancellationToken = default)
     {
         if (currentUsage < 0)
-            return BadRequest(new { error = "CurrentUsage must be greater than or equal to 0." });
+        {
+            return this.ApiBadRequest<QuotaResultDto>("CurrentUsage must be greater than or equal to 0.");
+        }
 
         var normalizedFeatureKey = featureKey.Trim();
         if (string.IsNullOrWhiteSpace(normalizedFeatureKey))
-            return BadRequest(new { error = "FeatureKey is required." });
+        {
+            return this.ApiBadRequest<QuotaResultDto>("FeatureKey is required.");
+        }
 
         var result = await sender.Send(new CheckQuotaQuery(orgId, normalizedFeatureKey, currentUsage), cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     [HttpGet("{orgId:guid}/dashboard")]
-    public async Task<IActionResult> Dashboard([FromRoute] Guid orgId, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<DashboardDto>>> Dashboard([FromRoute] Guid orgId, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetDashboardQuery(orgId), cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+        return this.ToApiActionResult(result);
     }
 
     private static bool TryNormalizePaging(int page, int pageSize, out int normalizedPage, out int normalizedPageSize, out string? error)

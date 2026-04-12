@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Shared\RoomManagerment.Shared.csproj" />
         <ProjectReference Include="..\Notification.Application\Notification.Application.csproj" />
         <ProjectReference Include="..\Notification.Infrastructure\Notification.Infrastructure.csproj" />
     </ItemGroup>

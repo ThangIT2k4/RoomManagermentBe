@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Organization.Application.Dtos;
+using RoomManagerment.Shared.Extensions;
+using RoomManagerment.Shared.Http;
 
 namespace Organization.API.Controllers;
 
@@ -16,9 +19,7 @@ public sealed class AdminController : ControllerBase
     [HttpPost("subscription-plans")]
     [HttpPut("subscription-plans/{id:guid}")]
     [HttpDelete("subscription-plans/{id:guid}")]
-    public IActionResult NotImplementedYet()
-        => StatusCode(StatusCodes.Status501NotImplemented, new
-        {
-            message = "Endpoint contract is reserved. Business flow is implemented via Organization application service and domain model scaffold."
-        });
+    public ActionResult<ApiResponse<OrganizationAdminReservedResponse>> NotImplementedYet()
+        => this.ApiNotImplemented<OrganizationAdminReservedResponse>(
+            "Endpoint contract is reserved. Business flow is implemented via Organization application service and domain model scaffold.");
 }

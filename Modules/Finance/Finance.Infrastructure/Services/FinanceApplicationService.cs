@@ -33,36 +33,36 @@ public sealed class FinanceApplicationService(
     {
         if (items.Count == 0)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "At least one line item is required."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Hóa đơn phải có ít nhất một dòng chi tiết."));
         }
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         if (invoiceDate > today.AddDays(30))
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Date", "Invoice date cannot be more than 30 days in the future."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Date", "Ngày lập hóa đơn không được vượt quá 30 ngày trong tương lai."));
         }
 
         var lease = await leaseReadGateway.GetLeaseAsync(leaseId, organizationId, cancellationToken);
         if (lease is null)
         {
-            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Lease.NotFound", "Lease was not found for this organization."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Lease.NotFound", "Không tìm thấy hợp đồng thuê trong tổ chức này."));
         }
 
         if (!lease.Status.Equals("active", StringComparison.OrdinalIgnoreCase))
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Lease.Inactive", "Lease must be active to create an invoice."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Lease.Inactive", "Hợp đồng thuê phải ở trạng thái hoạt động để tạo hóa đơn."));
         }
 
         if (items.Any(i => i.Quantity < 0 || i.UnitPrice < 0))
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Line quantities and unit prices must be non-negative."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Số lượng và đơn giá của dòng chi tiết không được âm."));
         }
 
         var total = items.Sum(i => Math.Round(i.Quantity * i.UnitPrice, 2, MidpointRounding.AwayFromZero));
 
         if (total <= 0)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Total", "Total amount must be greater than zero."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Total", "Tổng tiền hóa đơn phải lớn hơn 0."));
         }
 
         List<InvoiceItemEntity> lineEntities;
@@ -101,9 +101,9 @@ public sealed class FinanceApplicationService(
             await invoiceItemRepository.AddRangeAsync(lineEntities, cancellationToken);
             return Result<InvoiceDto>.Success(await MapInvoiceDetailAsync(invoice, cancellationToken));
         }
-        catch (ArgumentException ex)
+        catch (ArgumentException)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Invalid", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Invalid", "Thông tin hóa đơn không hợp lệ."));
         }
     }
 
@@ -118,30 +118,30 @@ public sealed class FinanceApplicationService(
     {
         if (items.Count == 0)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "At least one line item is required."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Hóa đơn phải có ít nhất một dòng chi tiết."));
         }
 
         var existing = await invoiceRepository.GetByIdAsync(invoiceId, organizationId, cancellationToken);
         if (existing is null)
         {
-            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Không tìm thấy hóa đơn."));
         }
 
         if (!InvoiceRules.CanEdit(existing.Status))
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.State", "Only draft invoices can be edited."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.State", "Chỉ hóa đơn ở trạng thái nháp mới được chỉnh sửa."));
         }
 
         if (items.Any(i => i.Quantity < 0 || i.UnitPrice < 0))
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Line quantities and unit prices must be non-negative."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Số lượng và đơn giá của dòng chi tiết không được âm."));
         }
 
         var total = items.Sum(i => Math.Round(i.Quantity * i.UnitPrice, 2, MidpointRounding.AwayFromZero));
 
         if (total <= 0)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Total", "Total amount must be greater than zero."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Total", "Tổng tiền hóa đơn phải lớn hơn 0."));
         }
 
         try
@@ -165,13 +165,13 @@ public sealed class FinanceApplicationService(
             await invoiceItemRepository.AddRangeAsync(lineEntities, cancellationToken);
             return Result<InvoiceDto>.Success(await MapInvoiceDetailAsync(existing, cancellationToken));
         }
-        catch (ArgumentException ex)
+        catch (ArgumentException)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Invalid", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Invalid", "Thông tin hóa đơn không hợp lệ."));
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.State", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.State", "Trạng thái hóa đơn không hợp lệ cho thao tác này."));
         }
     }
 
@@ -183,22 +183,22 @@ public sealed class FinanceApplicationService(
         var invoice = await invoiceRepository.GetByIdAsync(invoiceId, organizationId, cancellationToken);
         if (invoice is null)
         {
-            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Không tìm thấy hóa đơn."));
         }
 
         var lines = await invoiceItemRepository.ListActiveByInvoiceIdAsync(invoiceId, cancellationToken);
         if (lines.Count == 0)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Invoice must have at least one line to publish."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Hóa đơn phải có ít nhất một dòng chi tiết để phát hành."));
         }
 
         try
         {
             invoice.Publish();
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.State", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.State", "Trạng thái hóa đơn không hợp lệ cho thao tác này."));
         }
 
         await invoiceRepository.UpdateAsync(invoice, cancellationToken);
@@ -211,10 +211,8 @@ public sealed class FinanceApplicationService(
                 await integrationEventPublisher.PublishAsync(
                     new NotificationRequestedEvent(
                         uid,
-                        $"Invoice #{invoice.InvoiceNo}",
-                        $"You have a new invoice for {invoice.TotalAmount} due on {invoice.DueDate:yyyy-MM-dd}.",
-                        "Info",
-                        null),
+                        $"Hóa đơn #{invoice.InvoiceNo}",
+                        $"Bạn có hóa đơn mới với số tiền {invoice.TotalAmount}, hạn thanh toán {invoice.DueDate:yyyy-MM-dd}."),
                     cancellationToken);
             }
         }
@@ -232,7 +230,7 @@ public sealed class FinanceApplicationService(
         var invoice = await invoiceRepository.GetByIdAsync(invoiceId, organizationId, cancellationToken);
         if (invoice is null)
         {
-            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Không tìm thấy hóa đơn."));
         }
 
         var previous = invoice.Status;
@@ -240,9 +238,9 @@ public sealed class FinanceApplicationService(
         {
             invoice.Cancel();
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Cancel", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Cancel", "Không thể hủy hóa đơn ở trạng thái hiện tại."));
         }
 
         await invoiceRepository.UpdateAsync(invoice, cancellationToken);
@@ -255,10 +253,10 @@ public sealed class FinanceApplicationService(
             if (lease?.PrimaryResidentUserId is { } uid && uid != Guid.Empty)
             {
                 var msg = string.IsNullOrWhiteSpace(reason)
-                    ? $"Invoice #{invoice.InvoiceNo} has been cancelled."
-                    : $"Invoice #{invoice.InvoiceNo} has been cancelled. Reason: {reason}";
+                    ? $"Hóa đơn #{invoice.InvoiceNo} đã bị hủy."
+                    : $"Hóa đơn #{invoice.InvoiceNo} đã bị hủy. Lý do: {reason}";
                 await integrationEventPublisher.PublishAsync(
-                    new NotificationRequestedEvent(uid, "Invoice cancelled", msg, "Warning", null),
+                    new NotificationRequestedEvent(uid, "Hóa đơn đã bị hủy", msg, "Warning"),
                     cancellationToken);
             }
         }
@@ -274,7 +272,7 @@ public sealed class FinanceApplicationService(
         var invoice = await invoiceRepository.GetByIdAsync(invoiceId, organizationId, cancellationToken);
         if (invoice is null)
         {
-            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Không tìm thấy hóa đơn."));
         }
 
         return Result<InvoiceDto>.Success(await MapInvoiceDetailAsync(invoice, cancellationToken));
@@ -288,13 +286,13 @@ public sealed class FinanceApplicationService(
         var invoice = await invoiceRepository.GetByIdAsync(invoiceId, cancellationToken);
         if (invoice is null || string.Equals(invoice.Status, InvoiceStatuses.Draft, StringComparison.OrdinalIgnoreCase))
         {
-            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Không tìm thấy hóa đơn."));
         }
 
         var leaseIds = await leaseReadGateway.GetLeaseIdsForResidentUserAsync(tenantUserId, cancellationToken);
         if (invoice.LeaseId is null || !leaseIds.Contains(invoice.LeaseId.Value))
         {
-            return Result<InvoiceDto>.Failure(Error.Forbidden("Finance.Invoice.Forbidden", "You cannot access this invoice."));
+            return Result<InvoiceDto>.Failure(Error.Forbidden("Finance.Invoice.Forbidden", "Bạn không có quyền truy cập hóa đơn này."));
         }
 
         return Result<InvoiceDto>.Success(await MapInvoiceDetailAsync(invoice, cancellationToken));
@@ -343,24 +341,24 @@ public sealed class FinanceApplicationService(
     {
         if (request.MethodId == Guid.Empty)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Method", "Payment method is required."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Method", "Phương thức thanh toán là bắt buộc."));
         }
 
         var invoice = await invoiceRepository.GetByIdAsync(request.InvoiceId, request.OrganizationId, cancellationToken);
         if (invoice is null)
         {
-            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Không tìm thấy hóa đơn."));
         }
 
         if (!InvoiceRules.CanRecordPayment(invoice.Status))
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.State", "Cannot record payment for this invoice status."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.State", "Không thể ghi nhận thanh toán cho trạng thái hóa đơn này."));
         }
 
         var remaining = invoice.TotalAmount - invoice.PaidAmount;
         if (request.Amount <= 0 || request.Amount > remaining)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Amount", "Amount must be positive and not greater than balance due."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Amount", "Số tiền phải lớn hơn 0 và không vượt quá số dư cần thanh toán."));
         }
 
         var paidAt = request.PaidAtUtc.Kind == DateTimeKind.Utc
@@ -369,7 +367,7 @@ public sealed class FinanceApplicationService(
 
         if (paidAt > DateTime.UtcNow.AddDays(1))
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Date", "Paid date cannot be far in the future."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Date", "Thời điểm thanh toán không được quá xa trong tương lai."));
         }
 
         var payload = string.IsNullOrWhiteSpace(request.Note)
@@ -387,16 +385,16 @@ public sealed class FinanceApplicationService(
         if (!string.IsNullOrWhiteSpace(request.ReferenceCode)
             && await paymentRepository.ExistsByReferenceCodeAsync(request.ReferenceCode.Trim(), cancellationToken))
         {
-            return Result<InvoiceDto>.Failure(Error.Conflict("Finance.Payment.Duplicate", "Reference code already used."));
+            return Result<InvoiceDto>.Failure(Error.Conflict("Finance.Payment.Duplicate", "Mã tham chiếu đã được sử dụng."));
         }
 
         try
         {
             invoice.ApplyPayment(request.Amount);
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
-            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Apply", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Apply", "Không thể áp dụng thanh toán cho hóa đơn này."));
         }
 
         await paymentRepository.AddAsync(payment, cancellationToken);
@@ -411,10 +409,8 @@ public sealed class FinanceApplicationService(
                 await integrationEventPublisher.PublishAsync(
                     new NotificationRequestedEvent(
                         uid,
-                        "Payment received",
-                        $"Invoice #{invoice.InvoiceNo} is paid in full.",
-                        "Info",
-                        null),
+                        "Đã nhận thanh toán",
+                        $"Hóa đơn #{invoice.InvoiceNo} đã được thanh toán đầy đủ."),
                     cancellationToken);
             }
         }
@@ -473,13 +469,13 @@ public sealed class FinanceApplicationService(
         if (await depositRefundRepository.HasPendingOrApprovedForLeaseAsync(request.LeaseId, cancellationToken))
         {
             return Result<DepositRefundDto>.Failure(
-                Error.Conflict("Finance.DepositRefund.Pending", "A deposit refund is already pending for this lease."));
+                Error.Conflict("Finance.DepositRefund.Pending", "Đã có yêu cầu hoàn cọc đang chờ xử lý cho hợp đồng này."));
         }
 
         var lease = await leaseReadGateway.GetLeaseAsync(request.LeaseId, request.OrganizationId, cancellationToken);
         if (lease is null)
         {
-            return Result<DepositRefundDto>.Failure(Error.NotFound("Finance.Lease.NotFound", "Lease was not found."));
+            return Result<DepositRefundDto>.Failure(Error.NotFound("Finance.Lease.NotFound", "Không tìm thấy hợp đồng thuê."));
         }
 
         try
@@ -499,18 +495,16 @@ public sealed class FinanceApplicationService(
                 await integrationEventPublisher.PublishAsync(
                     new NotificationRequestedEvent(
                         uid,
-                        "Deposit refund requested",
-                        $"A deposit refund of {request.Amount} has been requested.",
-                        "Info",
-                        null),
+                        "Yêu cầu hoàn cọc",
+                        $"Đã tạo yêu cầu hoàn cọc với số tiền {request.Amount}."),
                     cancellationToken);
             }
 
             return Result<DepositRefundDto>.Success(MapDeposit(entity));
         }
-        catch (ArgumentException ex)
+        catch (ArgumentException)
         {
-            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.Invalid", ex.Message));
+            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.Invalid", "Thông tin hoàn cọc không hợp lệ."));
         }
     }
 
@@ -523,7 +517,7 @@ public sealed class FinanceApplicationService(
         var entity = await depositRefundRepository.GetByIdAsync(refundId, organizationId, cancellationToken);
         if (entity is null)
         {
-            return Result<DepositRefundDto>.Failure(Error.NotFound("Finance.DepositRefund.NotFound", "Refund not found."));
+            return Result<DepositRefundDto>.Failure(Error.NotFound("Finance.DepositRefund.NotFound", "Không tìm thấy yêu cầu hoàn cọc."));
         }
 
         try
@@ -539,18 +533,16 @@ public sealed class FinanceApplicationService(
                 await integrationEventPublisher.PublishAsync(
                     new NotificationRequestedEvent(
                         tid,
-                        "Deposit refunded",
-                        $"{entity.Amount} has been refunded.",
-                        "Info",
-                        null),
+                        "Hoàn cọc thành công",
+                        $"Số tiền {entity.Amount} đã được hoàn trả."),
                     cancellationToken);
             }
 
             return Result<DepositRefundDto>.Success(MapDeposit(entity));
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
-            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.State", ex.Message));
+            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.State", "Trạng thái yêu cầu hoàn cọc không hợp lệ cho thao tác này."));
         }
     }
 
@@ -563,12 +555,12 @@ public sealed class FinanceApplicationService(
         var entity = await depositRefundRepository.GetByIdAsync(refundId, organizationId, cancellationToken);
         if (entity is null)
         {
-            return Result<DepositRefundDto>.Failure(Error.NotFound("Finance.DepositRefund.NotFound", "Refund not found."));
+            return Result<DepositRefundDto>.Failure(Error.NotFound("Finance.DepositRefund.NotFound", "Không tìm thấy yêu cầu hoàn cọc."));
         }
 
         if (string.IsNullOrWhiteSpace(request.Reason))
         {
-            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.Reason", "Reason is required."));
+            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.Reason", "Lý do là bắt buộc."));
         }
 
         try
@@ -581,25 +573,24 @@ public sealed class FinanceApplicationService(
                 await integrationEventPublisher.PublishAsync(
                     new NotificationRequestedEvent(
                         tid,
-                        "Deposit refund forfeited",
+                        "Yêu cầu hoàn cọc bị từ chối",
                         request.Reason,
-                        "Warning",
-                        null),
+                        "Warning"),
                     cancellationToken);
             }
 
             return Result<DepositRefundDto>.Success(MapDeposit(entity));
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
-            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.State", ex.Message));
+            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.State", "Trạng thái yêu cầu hoàn cọc không hợp lệ cho thao tác này."));
         }
     }
 
     public Task<Result<int>> RunAutoInvoiceGenerationAsync(DateOnly runDate, CancellationToken cancellationToken = default)
     {
         logger.LogInformation(
-            "Auto invoice generation stub for {RunDate}. Connect Lease + meter services to implement UC-F02.",
+            "Stub tạo hóa đơn tự động cho {RunDate}. Hãy tích hợp Lease + meter service để hoàn thiện UC-F02.",
             runDate);
         return Task.FromResult(Result<int>.Success(0));
     }
@@ -624,21 +615,20 @@ public sealed class FinanceApplicationService(
                         await integrationEventPublisher.PublishAsync(
                             new NotificationRequestedEvent(
                                 uid,
-                                $"Invoice #{inv.InvoiceNo} overdue",
-                                $"Balance due: {inv.TotalAmount - inv.PaidAmount}.",
-                                "Warning",
-                                null),
+                                $"Hóa đơn #{inv.InvoiceNo} đã quá hạn",
+                                $"Số tiền còn nợ: {inv.TotalAmount - inv.PaidAmount}.",
+                                "Warning"),
                             cancellationToken);
                     }
                 }
             }
             catch (InvalidOperationException ex)
             {
-                logger.LogWarning(ex, "Domain rule prevented marking invoice {InvoiceId} overdue", inv.Id);
+                logger.LogWarning(ex, "Rule domain ngăn đánh dấu hóa đơn {InvoiceId} thành quá hạn", inv.Id);
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
-                logger.LogError(ex, "Infrastructure failure marking invoice {InvoiceId} overdue — aborting sweep", inv.Id);
+                logger.LogError(ex, "Lỗi hạ tầng khi đánh dấu hóa đơn {InvoiceId} quá hạn — dừng quá trình quét", inv.Id);
                 throw;
             }
         }

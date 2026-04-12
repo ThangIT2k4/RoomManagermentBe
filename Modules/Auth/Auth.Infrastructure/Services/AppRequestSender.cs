@@ -17,7 +17,7 @@ public sealed class AppRequestSender(IServiceProvider serviceProvider, ILogger<A
         ArgumentNullException.ThrowIfNull(request);
         var requestType = request.GetType();
         var requestName = requestType.Name;
-        logger.LogInformation("Handling {RequestName}", requestName);
+        logger.LogInformation("Đang xử lý {RequestName}", requestName);
         var sw = Stopwatch.StartNew();
 
         try
@@ -28,31 +28,31 @@ public sealed class AppRequestSender(IServiceProvider serviceProvider, ILogger<A
                 if (validationOutcome is { Count: > 0 })
                 {
                     sw.Stop();
-                    logger.LogInformation("Handled {RequestName} in {ElapsedMs}ms (validation failed)", requestName, sw.ElapsedMilliseconds);
+                    logger.LogInformation("Đã xử lý {RequestName} trong {ElapsedMs}ms (validate thất bại)", requestName, sw.ElapsedMilliseconds);
                     return CreateValidationFailure<TResponse>(validationOutcome);
                 }
             }
 
             var handler = ResolveHandler(requestType, typeof(TResponse));
             var handleMethod = handler.GetType().GetMethod("Handle")
-                ?? throw new InvalidOperationException($"Handler {handler.GetType().Name} has no Handle method.");
+                ?? throw new InvalidOperationException($"Handler {handler.GetType().Name} không có phương thức Handle.");
             var task = (Task)handleMethod.Invoke(handler, [request, cancellationToken])!;
             await task.ConfigureAwait(false);
             var resultProperty = task.GetType().GetProperty("Result")
-                ?? throw new InvalidOperationException("Handler did not return a Task with Result.");
+                ?? throw new InvalidOperationException("Handler không trả về Task có thuộc tính Result.");
             var response = resultProperty.GetValue(task);
             if (response is null)
             {
-                throw new InvalidOperationException("Handler returned null.");
+                throw new InvalidOperationException("Handler trả về null.");
             }
 
             sw.Stop();
-            logger.LogInformation("Handled {RequestName} in {ElapsedMs}ms", requestName, sw.ElapsedMilliseconds);
+            logger.LogInformation("Đã xử lý {RequestName} trong {ElapsedMs}ms", requestName, sw.ElapsedMilliseconds);
             return (TResponse)response;
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            logger.LogError(ex, "Unhandled exception in handler for {RequestName}", requestName);
+            logger.LogError(ex, "Ngoại lệ chưa được xử lý trong handler của {RequestName}", requestName);
             throw;
         }
     }
@@ -99,7 +99,7 @@ public sealed class AppRequestSender(IServiceProvider serviceProvider, ILogger<A
             .Select(f => new ValidationFieldError(f.PropertyName, f.ErrorMessage))
             .ToList();
         var summary = string.Join("; ", failures.Select(f => f.ErrorMessage).Distinct());
-        var error = Error.Validation("Validation.Failed", string.IsNullOrWhiteSpace(summary) ? "Validation failed." : summary, fieldErrors);
+        var error = Error.Validation("Validation.Failed", string.IsNullOrWhiteSpace(summary) ? "Xác thực dữ liệu thất bại." : summary, fieldErrors);
 
         if (typeof(TResponse) == typeof(Result))
         {
@@ -108,12 +108,11 @@ public sealed class AppRequestSender(IServiceProvider serviceProvider, ILogger<A
 
         if (typeof(TResponse).IsGenericType && typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
         {
-            var resultType = typeof(TResponse).GetGenericArguments()[0];
             var failureMethod = typeof(TResponse).GetMethod("Failure", [typeof(Error)])
-                ?? throw new InvalidOperationException($"{typeof(TResponse).Name} has no static Failure(Error).");
+                ?? throw new InvalidOperationException($"{typeof(TResponse).Name} không có phương thức tĩnh Failure(Error).");
             return (TResponse)failureMethod.Invoke(null, [error])!;
         }
 
-        throw new InvalidOperationException($"{typeof(TResponse).Name} is not a Result type; validation cannot be synthesized.");
+        throw new InvalidOperationException($"{typeof(TResponse).Name} không phải kiểu Result; không thể tổng hợp lỗi validation.");
     }
 }

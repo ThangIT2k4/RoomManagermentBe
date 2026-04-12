@@ -40,7 +40,7 @@ public sealed class FinanceRedisCacheService : ICacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis get failed for key {CacheKey}.", key);
+            _logger.LogWarning(ex, "Redis get thất bại với khóa {CacheKey}.", key);
             return default;
         }
     }
@@ -67,7 +67,7 @@ public sealed class FinanceRedisCacheService : ICacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis set failed for key {CacheKey}.", key);
+            _logger.LogWarning(ex, "Redis set thất bại với khóa {CacheKey}.", key);
         }
     }
 
@@ -85,7 +85,7 @@ public sealed class FinanceRedisCacheService : ICacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis remove failed for key {CacheKey}.", key);
+            _logger.LogWarning(ex, "Redis remove thất bại với khóa {CacheKey}.", key);
         }
     }
 
@@ -118,7 +118,7 @@ public sealed class FinanceRedisCacheService : ICacheService
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Redis connection failed. Finance cache will operate in no-op mode.");
+                _logger.LogWarning(ex, "Kết nối Redis thất bại. Cache Finance sẽ hoạt động ở chế độ no-op.");
                 _redis = null;
                 _database = null;
                 return null;

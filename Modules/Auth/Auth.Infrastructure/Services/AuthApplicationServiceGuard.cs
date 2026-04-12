@@ -24,8 +24,8 @@ internal static class AuthApplicationServiceGuard
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Auth application operation failed: {Operation}", operation);
-            return Result.Failure(Error.Unexpected("Auth.Unexpected", "An unexpected error occurred while processing your request."));
+            logger.LogError(ex, "Thao tác ứng dụng Auth thất bại: {Operation}", operation);
+            return Result.Failure(Error.Unexpected("Auth.Unexpected", "Đã xảy ra lỗi không mong muốn khi xử lý yêu cầu của bạn."));
         }
     }
 
@@ -45,8 +45,8 @@ internal static class AuthApplicationServiceGuard
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Auth application operation failed: {Operation}", operation);
-            return Result<T>.Failure(Error.Unexpected("Auth.Unexpected", "An unexpected error occurred while processing your request."));
+            logger.LogError(ex, "Thao tác ứng dụng Auth thất bại: {Operation}", operation);
+            return Result<T>.Failure(Error.Unexpected("Auth.Unexpected", "Đã xảy ra lỗi không mong muốn khi xử lý yêu cầu của bạn."));
         }
     }
 }

@@ -29,7 +29,7 @@ public sealed class FinanceRabbitMqIntegrationEventPublisher : IFinanceIntegrati
 
         if (!_channel.Writer.TryWrite(envelope))
         {
-            _logger.LogWarning("Unable to queue finance integration event {EventType}.", domainEvent.GetType().Name);
+            _logger.LogWarning("Không thể đưa finance integration event {EventType} vào hàng đợi.", domainEvent.GetType().Name);
         }
 
         return ValueTask.CompletedTask;

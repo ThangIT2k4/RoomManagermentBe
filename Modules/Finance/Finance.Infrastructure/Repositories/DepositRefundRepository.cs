@@ -20,7 +20,7 @@ public sealed class DepositRefundRepository(DataAccessAdapter adapter) : IDeposi
     {
         var linq = new LinqMetaData(adapter);
         var dal = await linq.DepositRefund.Where(x => x.Id == entity.Id).FirstOrDefaultAsync(cancellationToken)
-                  ?? throw new InvalidOperationException("Deposit refund not found.");
+                  ?? throw new InvalidOperationException("Không tìm thấy yêu cầu hoàn cọc.");
 
         dal.Status = entity.Status;
         dal.Notes = entity.Notes;

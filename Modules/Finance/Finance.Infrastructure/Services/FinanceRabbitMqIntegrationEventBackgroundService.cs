@@ -39,7 +39,7 @@ public sealed class FinanceRabbitMqIntegrationEventBackgroundService : Backgroun
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Finance RabbitMQ publish failed for {RoutingKey}. Retrying...", envelope.RoutingKey);
+                _logger.LogWarning(ex, "Finance RabbitMQ publish thất bại cho {RoutingKey}. Đang thử lại...", envelope.RoutingKey);
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }
         }

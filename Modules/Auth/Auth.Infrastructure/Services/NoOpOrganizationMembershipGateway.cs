@@ -8,7 +8,7 @@ public sealed class NoOpOrganizationMembershipGateway : IOrganizationMembershipG
 {
     private static readonly Error NotConfigured = Error.BadRequest(
         "Auth.Organization.GatewayNotConfigured",
-        "Organization membership is not configured for this deployment.");
+        "Thành phần quản lý thành viên tổ chức chưa được cấu hình cho môi trường triển khai này.");
 
     public Task<Result> AssignRoleAsync(AssignRoleRequest request, CancellationToken cancellationToken = default) =>
         Task.FromResult(Result.Failure(NotConfigured));
