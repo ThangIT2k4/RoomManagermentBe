@@ -10,6 +10,7 @@
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
         <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
+        <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Shared\RoomManagerment.Shared.csproj" />
         <ProjectReference Include="..\DAL\DatabaseGeneric\RoomManagerment.Notification.csproj" />
         <ProjectReference Include="..\DAL\DatabaseSpecific\RoomManagerment.NotificationDBSpecific.csproj" />
         <ProjectReference Include="..\Notification.Application\Notification.Application.csproj" />

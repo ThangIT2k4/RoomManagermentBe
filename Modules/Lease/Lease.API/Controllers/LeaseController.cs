@@ -1,5 +1,28 @@
 using Lease.API;
 using Lease.Application.Dtos;
+using Lease.Application.Features.Leases.CreateFromBooking;
+using Lease.Application.Features.Leases.CreateManual;
+using Lease.Application.Features.Leases.GetLeaseById;
+using Lease.Application.Features.Leases.GetTenantLeases;
+using Lease.Application.Features.Leases.RenewLease;
+using Lease.Application.Features.Leases.SearchLeases;
+using Lease.Application.Features.Leases.TerminateLease;
+using Lease.Application.Features.Leases.UpdateLease;
+using Lease.Application.Features.MasterLeases.GetMasterLeases;
+using Lease.Application.Features.MasterLeases.TerminateMasterLease;
+using Lease.Application.Features.MasterLeases.UpsertMasterLease;
+using Lease.Application.Features.PaymentCycles.DeletePaymentCycle;
+using Lease.Application.Features.PaymentCycles.GetPaymentCycles;
+using Lease.Application.Features.PaymentCycles.UpsertPaymentCycle;
+using Lease.Application.Features.Residents.AddResident;
+using Lease.Application.Features.Residents.GetResidents;
+using Lease.Application.Features.Residents.LinkResidentUser;
+using Lease.Application.Features.Residents.RemoveResident;
+using Lease.Application.Features.Residents.SetPrimaryResident;
+using Lease.Application.Features.ServiceSets.ApplyServiceSet;
+using Lease.Application.Features.ServiceSets.GetServiceSetById;
+using Lease.Application.Features.ServiceSets.GetServiceSets;
+using Lease.Application.Features.ServiceSets.UpsertServiceSet;
 using Lease.Application.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -9,20 +32,20 @@ namespace Lease.Api.Controllers;
 
 [ApiController]
 [Route("api/lease")]
-public sealed class LeaseController(ILeaseApplicationService service, IBus bus) : ControllerBase
+public sealed class LeaseController(IMediatorGateway mediator, IBus bus) : ControllerBase
 {
     [HttpPost("leases/from-booking")]
     public async Task<ActionResult<LeaseDto>> CreateFromBooking([FromBody] CreateLeaseFromBookingRequest request, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.CreateFromBookingAsync(orgId, userId, request, cancellationToken));
+        return Ok(await mediator.SendAsync<LeaseDto>(new CreateFromBookingCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpPost("leases")]
     public async Task<ActionResult<LeaseDto>> CreateManual([FromBody] CreateManualLeaseRequest request, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.CreateManualAsync(orgId, userId, request, cancellationToken));
+        return Ok(await mediator.SendAsync<LeaseDto>(new CreateManualLeaseCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpGet("leases")]
@@ -30,18 +53,16 @@ public sealed class LeaseController(ILeaseApplicationService service, IBus bus) 
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
         if (!TryNormalizePaging(page, perPage, out var normalizedPage, out var normalizedPerPage, out var pagingError))
-        {
             return BadRequest(new { error = pagingError });
-        }
 
-        return Ok(await service.SearchLeasesAsync(orgId, statuses, unitId, search, normalizedPage, normalizedPerPage, cancellationToken));
+        return Ok(await mediator.SendAsync<IReadOnlyList<LeaseDto>>(new SearchLeasesQuery(orgId, statuses, unitId, search, normalizedPage, normalizedPerPage), cancellationToken));
     }
 
     [HttpGet("leases/{leaseId:guid}")]
     public async Task<ActionResult<LeaseDto>> Detail(Guid leaseId, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        var result = await service.GetLeaseByIdAsync(orgId, leaseId, cancellationToken);
+        var result = await mediator.SendAsync<LeaseDto?>(new GetLeaseByIdQuery(orgId, leaseId), cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -50,14 +71,14 @@ public sealed class LeaseController(ILeaseApplicationService service, IBus bus) 
     {
         var id = userId ?? (HttpContext.TryGetOrgAndUser(out _, out var actor) ? actor : Guid.Empty);
         if (id == Guid.Empty) return BadRequest("User id is required.");
-        return Ok(await service.GetTenantLeasesAsync(id, cancellationToken));
+        return Ok(await mediator.SendAsync<IReadOnlyList<LeaseDto>>(new GetTenantLeasesQuery(id), cancellationToken));
     }
 
     [HttpPut("leases/{leaseId:guid}")]
     public async Task<ActionResult<LeaseDto>> Update(Guid leaseId, [FromBody] UpdateLeaseBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        var updated = await service.UpdateLeaseAsync(orgId, userId, new UpdateLeaseRequest(leaseId, body.EndDate, body.CycleId, body.PaymentDay, body.Notes), cancellationToken);
+        var updated = await mediator.SendAsync<LeaseDto?>(new UpdateLeaseCommand(orgId, userId, new UpdateLeaseRequest(leaseId, body.EndDate, body.CycleId, body.PaymentDay, body.Notes)), cancellationToken);
         return updated is null ? NotFound() : Ok(updated);
     }
 
@@ -65,7 +86,7 @@ public sealed class LeaseController(ILeaseApplicationService service, IBus bus) 
     public async Task<ActionResult<LeaseDto>> Renew(Guid leaseId, [FromBody] RenewLeaseBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        var result = await service.RenewLeaseAsync(orgId, userId, new RenewLeaseRequest(leaseId, body.StartDate, body.EndDate, body.RentAmount, body.DepositAmount, body.CycleId, body.PaymentDay, body.Notes, body.LeaseServiceSetId), cancellationToken);
+        var result = await mediator.SendAsync<LeaseDto>(new RenewLeaseCommand(orgId, userId, new RenewLeaseRequest(leaseId, body.StartDate, body.EndDate, body.RentAmount, body.DepositAmount, body.CycleId, body.PaymentDay, body.Notes, body.LeaseServiceSetId)), cancellationToken);
         return Ok(result);
     }
 
@@ -73,7 +94,7 @@ public sealed class LeaseController(ILeaseApplicationService service, IBus bus) 
     public async Task<ActionResult<LeaseDto>> Terminate(Guid leaseId, [FromBody] TerminateLeaseBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        var result = await service.TerminateLeaseAsync(orgId, userId, new TerminateLeaseRequest(leaseId, body.TerminationDate, body.Reason, body.CreateRefund, body.RefundAmount, body.RefundNotes, body.Notes), cancellationToken);
+        var result = await mediator.SendAsync<LeaseDto?>(new TerminateLeaseCommand(orgId, userId, new TerminateLeaseRequest(leaseId, body.TerminationDate, body.Reason, body.CreateRefund, body.RefundAmount, body.RefundNotes, body.Notes)), cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -81,35 +102,35 @@ public sealed class LeaseController(ILeaseApplicationService service, IBus bus) 
     public async Task<ActionResult<IReadOnlyList<LeaseResidentDto>>> Residents(Guid leaseId, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.GetResidentsAsync(orgId, leaseId, cancellationToken));
+        return Ok(await mediator.SendAsync<IReadOnlyList<LeaseResidentDto>>(new GetResidentsQuery(orgId, leaseId), cancellationToken));
     }
 
     [HttpPost("leases/{leaseId:guid}/residents")]
     public async Task<ActionResult<LeaseResidentDto>> AddResident(Guid leaseId, [FromBody] AddResidentBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.AddResidentAsync(orgId, userId, new AddResidentRequest(leaseId, body.UserId, body.FullName, body.Phone, body.Email, body.IdNumber, body.Relationship), cancellationToken));
+        return Ok(await mediator.SendAsync<LeaseResidentDto>(new AddResidentCommand(orgId, userId, new AddResidentRequest(leaseId, body.UserId, body.FullName, body.Phone, body.Email, body.IdNumber, body.Relationship)), cancellationToken));
     }
 
     [HttpDelete("leases/{leaseId:guid}/residents/{residentId:guid}")]
     public async Task<IActionResult> RemoveResident(Guid leaseId, Guid residentId, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return await service.RemoveResidentAsync(orgId, userId, leaseId, residentId, cancellationToken) ? NoContent() : NotFound();
+        return await mediator.SendAsync<bool>(new RemoveResidentCommand(orgId, userId, leaseId, residentId), cancellationToken) ? NoContent() : NotFound();
     }
 
     [HttpPost("leases/{leaseId:guid}/residents/{residentId:guid}/set-primary")]
     public async Task<IActionResult> SetPrimary(Guid leaseId, Guid residentId, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return await service.SetPrimaryResidentAsync(orgId, userId, leaseId, residentId, cancellationToken) ? Ok() : NotFound();
+        return await mediator.SendAsync<bool>(new SetPrimaryResidentCommand(orgId, userId, leaseId, residentId), cancellationToken) ? Ok() : NotFound();
     }
 
     [HttpPost("leases/{leaseId:guid}/residents/{residentId:guid}/link-user")]
     public async Task<ActionResult<LeaseResidentDto>> LinkUser(Guid leaseId, Guid residentId, [FromBody] LinkUserBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        var result = await service.LinkResidentUserAsync(orgId, userId, new LinkResidentUserRequest(leaseId, residentId, body.UserId), cancellationToken);
+        var result = await mediator.SendAsync<LeaseResidentDto?>(new LinkResidentUserCommand(orgId, userId, new LinkResidentUserRequest(leaseId, residentId, body.UserId)), cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -117,21 +138,21 @@ public sealed class LeaseController(ILeaseApplicationService service, IBus bus) 
     public async Task<IActionResult> ApplyServiceSet(Guid leaseId, [FromBody] ApplyServiceSetBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return await service.ApplyServiceSetAsync(orgId, userId, new ApplyServiceSetRequest(leaseId, body.LeaseServiceSetId), cancellationToken) ? Ok() : NotFound();
+        return await mediator.SendAsync<bool>(new ApplyServiceSetCommand(orgId, userId, new ApplyServiceSetRequest(leaseId, body.LeaseServiceSetId)), cancellationToken) ? Ok() : NotFound();
     }
 
     [HttpGet("lease-service-sets")]
     public async Task<ActionResult<IReadOnlyList<LeaseServiceSetDto>>> GetServiceSets(CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.GetServiceSetsAsync(orgId, cancellationToken));
+        return Ok(await mediator.SendAsync<IReadOnlyList<LeaseServiceSetDto>>(new GetServiceSetsQuery(orgId), cancellationToken));
     }
 
     [HttpGet("lease-service-sets/{id:guid}")]
     public async Task<ActionResult<LeaseServiceSetDto>> GetServiceSetById(Guid id, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        var result = await service.GetServiceSetByIdAsync(orgId, id, cancellationToken);
+        var result = await mediator.SendAsync<LeaseServiceSetDto?>(new GetServiceSetByIdQuery(orgId, id), cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -139,49 +160,49 @@ public sealed class LeaseController(ILeaseApplicationService service, IBus bus) 
     public async Task<ActionResult<LeaseServiceSetDto>> UpsertServiceSet([FromBody] UpsertLeaseServiceSetRequest request, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.UpsertServiceSetAsync(orgId, userId, request, cancellationToken));
+        return Ok(await mediator.SendAsync<LeaseServiceSetDto>(new UpsertServiceSetCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpGet("payment-cycles")]
     public async Task<ActionResult<IReadOnlyList<PaymentCycleDto>>> GetPaymentCycles(CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.GetPaymentCyclesAsync(orgId, cancellationToken));
+        return Ok(await mediator.SendAsync<IReadOnlyList<PaymentCycleDto>>(new GetPaymentCyclesQuery(orgId), cancellationToken));
     }
 
     [HttpPost("payment-cycles")]
     public async Task<ActionResult<PaymentCycleDto>> UpsertPaymentCycle([FromBody] UpsertPaymentCycleRequest request, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.UpsertPaymentCycleAsync(orgId, userId, request, cancellationToken));
+        return Ok(await mediator.SendAsync<PaymentCycleDto>(new UpsertPaymentCycleCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpDelete("payment-cycles/{id:guid}")]
     public async Task<IActionResult> DeletePaymentCycle(Guid id, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return await service.DeletePaymentCycleAsync(orgId, userId, id, cancellationToken) ? NoContent() : NotFound();
+        return await mediator.SendAsync<bool>(new DeletePaymentCycleCommand(orgId, userId, id), cancellationToken) ? NoContent() : NotFound();
     }
 
     [HttpGet("master-leases")]
     public async Task<ActionResult<IReadOnlyList<MasterLeaseDto>>> GetMasterLeases(CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.GetMasterLeasesAsync(orgId, cancellationToken));
+        return Ok(await mediator.SendAsync<IReadOnlyList<MasterLeaseDto>>(new GetMasterLeasesQuery(orgId), cancellationToken));
     }
 
     [HttpPost("master-leases")]
     public async Task<ActionResult<MasterLeaseDto>> UpsertMasterLease([FromBody] UpsertMasterLeaseRequest request, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        return Ok(await service.UpsertMasterLeaseAsync(orgId, userId, request, cancellationToken));
+        return Ok(await mediator.SendAsync<MasterLeaseDto>(new UpsertMasterLeaseCommand(orgId, userId, request), cancellationToken));
     }
 
     [HttpPost("master-leases/{id:guid}/terminate")]
     public async Task<ActionResult<MasterLeaseDto>> TerminateMasterLease(Guid id, [FromBody] TerminateMasterLeaseBody body, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId)) return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
-        var result = await service.TerminateMasterLeaseAsync(orgId, userId, id, body.TerminationDate, body.Reason, cancellationToken);
+        var result = await mediator.SendAsync<MasterLeaseDto?>(new TerminateMasterLeaseCommand(orgId, userId, id, body.TerminationDate, body.Reason), cancellationToken);
         return result is null ? NotFound() : Ok(result);
     }
 
@@ -207,17 +228,8 @@ public sealed class LeaseController(ILeaseApplicationService service, IBus bus) 
         normalizedPerPage = perPage;
         error = null;
 
-        if (page < 1)
-        {
-            error = "Page must be greater than or equal to 1.";
-            return false;
-        }
-
-        if (perPage < 1 || perPage > 200)
-        {
-            error = "PerPage must be between 1 and 200.";
-            return false;
-        }
+        if (page < 1) { error = "Page must be greater than or equal to 1."; return false; }
+        if (perPage < 1 || perPage > 200) { error = "PerPage must be between 1 and 200."; return false; }
 
         return true;
     }

@@ -1,3 +1,5 @@
+using System.Data.Common;
+using System.Diagnostics;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using Notification.Application;
@@ -10,6 +12,10 @@ using Serilog;
 using System.Net.Sockets;
 using System.Threading.RateLimiting;
 using IOException = System.IO.IOException;
+using Npgsql;
+using SD.LLBLGen.Pro.DQE.PostgreSql;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.Tools.OrmProfiler.Interceptor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +78,20 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
 
 // ===== APPLICATION & INFRASTRUCTURE =====
 builder.Services.AddApplication();
+var wrappedFactoryType = InterceptorCore.Initialize("Notification.API", typeof(NpgsqlFactory));
+
+DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
+
+RuntimeConfiguration.ConfigureDQE<PostgreSqlDQEConfiguration>(c =>
+{
+    c.AddDbProviderFactory(wrappedFactoryType); // dùng provider Npgsql
+    c.SetTraceLevel(TraceLevel.Verbose); // bật log (optional)
+});
+
+RuntimeConfiguration.Tracing
+    .SetTraceLevel("ORMPersistenceExecution", TraceLevel.Verbose)
+    .SetTraceLevel("ORMPlainSQLQueryExecution", TraceLevel.Verbose);
+
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // ===== RABBITMQ MESSAGING =====

@@ -5,6 +5,7 @@ using Notification.Domain.Repositories;
 using Notification.Infrastructure.Repositories;
 using Notification.Infrastructure.Services;
 using RoomManagerment.Notification.DatabaseSpecific;
+using RoomManagerment.Shared.Messaging;
 
 namespace Notification.Infrastructure;
 
@@ -13,6 +14,9 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IDataAccessAdapterFactory, DataAccessAdapterFactory>();
+        services.AddNotificationApplicationRequestHandlers();
+        services.AddScoped<IAppSender, AppRequestSender>();
+        services.AddScoped<IMediatorGateway, MediatorGateway>();
         services.AddScoped<DataAccessAdapter>(provider =>
         {
             var factory = provider.GetRequiredService<IDataAccessAdapterFactory>();

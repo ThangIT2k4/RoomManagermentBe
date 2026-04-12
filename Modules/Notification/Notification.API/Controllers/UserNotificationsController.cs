@@ -1,18 +1,17 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Notification.API.Common;
 using Notification.Application.Common;
 using Notification.Application.Features.UserNotifications.GetUnreadCount;
 using Notification.Application.Features.UserNotifications.GetUserNotificationsPaged;
 using Notification.Application.Features.UserNotifications.MarkAsRead;
+using Notification.Application.Services;
 
 namespace Notification.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserNotificationsController(IMediator mediator) : ControllerBase
+public class UserNotificationsController(IMediatorGateway mediator) : ControllerBase
 {
-    /// <summary>Lấy userId từ header X-User-Id (Gateway set từ session). Trả về 401 nếu thiếu/không hợp lệ.</summary>
     private bool TryGetUserIdFromSessionHeader(out Guid userId)
     {
         var value = Request.Headers[SessionUserIdHeader.Name].FirstOrDefault();
@@ -33,7 +32,7 @@ public class UserNotificationsController(IMediator mediator) : ControllerBase
             return Unauthorized(new { error = "Session required. Call via Gateway with cookie." });
 
         var query = new GetUnreadCountQuery(userId);
-        var result = await mediator.Send(query, cancellationToken);
+        var result = await mediator.SendAsync<Result<UnreadCountDto>>(query, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -51,7 +50,7 @@ public class UserNotificationsController(IMediator mediator) : ControllerBase
             return Unauthorized(new { error = "Session required. Call via Gateway with cookie." });
 
         var query = new GetUserNotificationsPagedQuery(userId, page, pageSize, isRead);
-        var result = await mediator.Send(query, cancellationToken);
+        var result = await mediator.SendAsync<Result<PagedResponse<UserNotificationListItemDto>>>(query, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -68,7 +67,7 @@ public class UserNotificationsController(IMediator mediator) : ControllerBase
             return Unauthorized(new { error = "Session required. Call via Gateway with cookie." });
 
         var command = new MarkUserNotificationAsReadCommand(userNotificationId, userId);
-        var result = await mediator.Send(command, cancellationToken);
+        var result = await mediator.SendAsync<Result>(command, cancellationToken);
         return result.ToActionResult();
     }
 }

@@ -1,11 +1,11 @@
-using MediatR;
 using Notification.Application.Common;
 using Notification.Domain.Repositories;
+using RoomManagerment.Shared.Messaging;
 
 namespace Notification.Application.Features.UserNotifications.GetUserNotificationsPaged;
 
 public sealed class GetUserNotificationsPagedQueryHandler(IUserNotificationRepository userNotificationRepository)
-    : IRequestHandler<GetUserNotificationsPagedQuery, Result<PagedResponse<UserNotificationListItemDto>>>
+    : IAppRequestHandler<GetUserNotificationsPagedQuery, Result<PagedResponse<UserNotificationListItemDto>>>
 {
     public async Task<Result<PagedResponse<UserNotificationListItemDto>>> Handle(
         GetUserNotificationsPagedQuery query,
