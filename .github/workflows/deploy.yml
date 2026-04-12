@@ -3,7 +3,7 @@ name: Deploy RoomManagerment BE
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:

@@ -1,0 +1,195 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "Property.API/1.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.OpenApi": "9.0.9",
+          "Property.Application": "1.0.0",
+          "Property.Infrastructure": "1.0.0",
+          "Scalar.AspNetCore": "2.11.0"
+        },
+        "runtime": {
+          "Property.API.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.OpenApi/9.0.9": {
+        "dependencies": {
+          "Microsoft.OpenApi": "1.6.17"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "assemblyVersion": "9.0.9.0",
+            "fileVersion": "9.0.925.42003"
+          }
+        }
+      },
+      "Microsoft.OpenApi/1.6.17": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+            "assemblyVersion": "1.6.17.0",
+            "fileVersion": "1.6.17.0"
+          }
+        }
+      },
+      "Scalar.AspNetCore/2.11.0": {
+        "runtime": {
+          "lib/net9.0/Scalar.AspNetCore.dll": {
+            "assemblyVersion": "2.11.0.0",
+            "fileVersion": "2.11.0.0"
+          }
+        }
+      },
+      "SD.LLBLGen.Pro.DQE.PostgreSql/5.13.0": {
+        "dependencies": {
+          "SD.LLBLGen.Pro.ORMSupportClasses": "5.13.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SD.LLBLGen.Pro.DQE.PostgreSql.dll": {
+            "assemblyVersion": "5.13.0.0",
+            "fileVersion": "5.13.25.1117"
+          }
+        }
+      },
+      "SD.LLBLGen.Pro.ORMSupportClasses/5.13.0": {
+        "runtime": {
+          "lib/netstandard2.0/SD.LLBLGen.Pro.ORMSupportClasses.dll": {
+            "assemblyVersion": "5.13.0.0",
+            "fileVersion": "5.13.25.1117"
+          }
+        }
+      },
+      "Property.Application/1.0.0": {
+        "dependencies": {
+          "Property.Domain": "1.0.0",
+          "RoomManagerment.Property": "1.0.0",
+          "RoomManagerment.PropertyDBSpecific": "1.0.0"
+        },
+        "runtime": {
+          "Property.Application.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Property.Domain/1.0.0": {
+        "dependencies": {
+          "RoomManagerment.Property": "1.0.0"
+        },
+        "runtime": {
+          "Property.Domain.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Property.Infrastructure/1.0.0": {
+        "dependencies": {
+          "Property.Application": "1.0.0",
+          "Property.Domain": "1.0.0",
+          "RoomManagerment.Property": "1.0.0",
+          "RoomManagerment.PropertyDBSpecific": "1.0.0"
+        },
+        "runtime": {
+          "Property.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "RoomManagerment.Property/1.0.0": {
+        "dependencies": {
+          "SD.LLBLGen.Pro.ORMSupportClasses": "5.13.0"
+        },
+        "runtime": {
+          "RoomManagerment.Property.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "RoomManagerment.PropertyDBSpecific/1.0.0": {
+        "dependencies": {
+          "SD.LLBLGen.Pro.DQE.PostgreSql": "5.13.0"
+        },
+        "runtime": {
+          "RoomManagerment.PropertyDBSpecific.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Property.API/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.AspNetCore.OpenApi/9.0.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3Sina0gS/CTYt9XG6DUFPdXOmJui7e551U0kO2bIiDk3vZ2sctxxenN+cE1a5CrUpjIVZfZr32neWYYRO+Piaw==",
+      "path": "microsoft.aspnetcore.openapi/9.0.9",
+      "hashPath": "microsoft.aspnetcore.openapi.9.0.9.nupkg.sha512"
+    },
+    "Microsoft.OpenApi/1.6.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Le+kehlmrlQfuDFUt1zZ2dVwrhFQtKREdKBo+rexOwaCoYP0/qpgT9tLxCsZjsgR5Itk1UKPcbgO+FyaNid/bA==",
+      "path": "microsoft.openapi/1.6.17",
+      "hashPath": "microsoft.openapi.1.6.17.nupkg.sha512"
+    },
+    "Scalar.AspNetCore/2.11.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zOV12+2VE6Tsb3U3YRtJtVABmzbAEPEkiYLAckHBgUuj6suarSp3kA4HE3UU9kNQmJrU6xrD5GTOAtwVENMgJQ==",
+      "path": "scalar.aspnetcore/2.11.0",
+      "hashPath": "scalar.aspnetcore.2.11.0.nupkg.sha512"
+    },
+    "SD.LLBLGen.Pro.DQE.PostgreSql/5.13.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+SszqnA1tHk0bQOSvdrkp6sYI8kAUDIPDRoU0augSR7lV2YnntsnBrupVmiGr7NaGFiQxc9vukAHeeDLVKOTjw==",
+      "path": "sd.llblgen.pro.dqe.postgresql/5.13.0",
+      "hashPath": "sd.llblgen.pro.dqe.postgresql.5.13.0.nupkg.sha512"
+    },
+    "SD.LLBLGen.Pro.ORMSupportClasses/5.13.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6kPvYWWkVmGOGZ4pmF9OlmesC1FAF7kC0WYKDdtSLgBe9wcKLhCxo9DFVQ2vKTkeeiufd6I+J7rrKDyG1M4E0A==",
+      "path": "sd.llblgen.pro.ormsupportclasses/5.13.0",
+      "hashPath": "sd.llblgen.pro.ormsupportclasses.5.13.0.nupkg.sha512"
+    },
+    "Property.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Property.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Property.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RoomManagerment.Property/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RoomManagerment.PropertyDBSpecific/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
