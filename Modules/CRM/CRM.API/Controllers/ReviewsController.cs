@@ -1,23 +1,33 @@
-using RoomManagerment.Shared.Extensions;
-using CRM.Application.Features.UseCases;
-using CRM.Application.Services;
+using CRM.Application.Features.Reviews;
+using CRM.Application.Features.Reviews.CreateReview;
+using CRM.Application.Features.Reviews.GetReviews;
+using CRM.Application.Features.Reviews.ReplyReview;
+using CRM.Application.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
+using RoomManagerment.Shared.Messaging;
 
 namespace CRM.API.Controllers;
 
 [ApiController]
 [Route("api/reviews")]
-public sealed class ReviewsController(ICrmApplicationService crmService) : ControllerBase
+public sealed class ReviewsController(IAppSender sender) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<ReviewDto>> Create([FromBody] CreateReviewCommand command, CancellationToken cancellationToken)
-        => (await crmService.CreateReviewAsync(command, cancellationToken)).ToActionResult(this);
+        => this.ToActionResult(await sender.Send(command, cancellationToken));
 
     [HttpPost("{reviewId:guid}/replies")]
     public async Task<ActionResult<ReviewReplyDto>> Reply([FromRoute] Guid reviewId, [FromBody] ReplyReviewCommand command, CancellationToken cancellationToken)
-        => (await crmService.ReplyReviewAsync(command with { ReviewId = reviewId }, cancellationToken)).ToActionResult(this);
+        => this.ToActionResult(await sender.Send(command with { ReviewId = reviewId }, cancellationToken));
 
     [HttpGet]
-    public async Task<ActionResult<GetReviewsResult>> List([FromQuery] Guid organizationId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
-        => (await crmService.GetReviewsAsync(new GetReviewsQuery(organizationId, Paging: new PagingRequest(pageNumber, pageSize)), cancellationToken)).ToActionResult(this);
+    public async Task<ActionResult<GetReviewsResult>> List(
+        [FromQuery] Guid organizationId,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
+        => this.ToActionResult(await sender.Send(
+            new GetReviewsQuery(organizationId, Paging: new PagingRequest(pageNumber, pageSize)),
+            cancellationToken));
 }

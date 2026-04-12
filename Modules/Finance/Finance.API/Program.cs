@@ -1,3 +1,5 @@
+using System.Data.Common;
+using System.Diagnostics;
 using System.Threading.RateLimiting;
 using Finance.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
@@ -5,6 +7,10 @@ using RoomManagerment.Shared.Extensions;
 using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Formatting.Json;
+using Npgsql;
+using SD.LLBLGen.Pro.DQE.PostgreSql;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.Tools.OrmProfiler.Interceptor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +44,20 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
 
     rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
+
+var wrappedFactoryType = InterceptorCore.Initialize("Finance.API", typeof(NpgsqlFactory));
+
+DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
+
+RuntimeConfiguration.ConfigureDQE<PostgreSqlDQEConfiguration>(c =>
+{
+    c.AddDbProviderFactory(wrappedFactoryType); // dùng provider Npgsql
+    c.SetTraceLevel(TraceLevel.Verbose); // bật log (optional)
+});
+
+RuntimeConfiguration.Tracing
+    .SetTraceLevel("ORMPersistenceExecution", TraceLevel.Verbose)
+    .SetTraceLevel("ORMPlainSQLQueryExecution", TraceLevel.Verbose);
 
 builder.Services.AddFinanceInfrastructure(builder.Configuration);
 

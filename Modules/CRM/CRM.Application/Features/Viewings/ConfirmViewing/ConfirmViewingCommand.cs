@@ -1,7 +1,5 @@
-using CRM.Application.Features.Viewings;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace CRM.Application.Features.Viewings.ConfirmViewing;
 
-/// <summary>Command: xác nhận viewing (ghi).</summary>
-public sealed record ConfirmViewingCommand(Guid ViewingId) : IRequest<Result<ViewingEntityDto>>;
+public sealed record ConfirmViewingCommand(Guid ViewingId) : IAppRequest<Result<ViewingEntityDto>>;

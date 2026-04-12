@@ -1,12 +1,12 @@
-using CRM.Application.Features.Leads;
 using CRM.Application.Services;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace CRM.Application.Features.Leads.CreateLead;
 
 public sealed class CreateLeadCommandHandler(ICrmApplicationService crm)
-    : IRequestHandler<CreateLeadCommand, Result<LeadDto>>
+    : IAppRequestHandler<CreateLeadRequest, Result<LeadDto>>
 {
-    public Task<Result<LeadDto>> Handle(CreateLeadCommand request, CancellationToken cancellationToken)
+    public Task<Result<LeadDto>> Handle(CreateLeadRequest request, CancellationToken cancellationToken)
         => crm.CreateLeadAsync(request, cancellationToken);
 }
+

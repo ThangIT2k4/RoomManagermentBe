@@ -1,27 +1,44 @@
-using RoomManagerment.Shared.Extensions;
-using CRM.Application.Features.UseCases;
-using CRM.Application.Services;
+using CRM.Application.Features.Commissions;
+using CRM.Application.Features.Commissions.ApproveCommission;
+using CRM.Application.Features.Commissions.CreateCommissionPolicy;
+using CRM.Application.Features.Commissions.GetCommissionEvents;
+using CRM.Application.Features.Commissions.GetCommissionPolicies;
+using CRM.Application.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
+using RoomManagerment.Shared.Messaging;
 
 namespace CRM.API.Controllers;
 
 [ApiController]
 [Route("api/commissions")]
-public sealed class CommissionsController(ICrmApplicationService crmService) : ControllerBase
+public sealed class CommissionsController(IAppSender sender) : ControllerBase
 {
     [HttpPost("policies")]
     public async Task<ActionResult<CommissionPolicyDto>> CreatePolicy([FromBody] CreateCommissionPolicyCommand command, CancellationToken cancellationToken)
-        => (await crmService.CreateCommissionPolicyAsync(command, cancellationToken)).ToActionResult(this);
+        => this.ToActionResult(await sender.Send(command, cancellationToken));
 
     [HttpPost("events/{eventId:guid}/approve")]
     public async Task<ActionResult<CommissionEventDto>> Approve([FromRoute] Guid eventId, [FromBody] ApproveCommissionCommand command, CancellationToken cancellationToken)
-        => (await crmService.ApproveCommissionAsync(command with { CommissionEventId = eventId }, cancellationToken)).ToActionResult(this);
+        => this.ToActionResult(await sender.Send(command with { CommissionEventId = eventId }, cancellationToken));
 
     [HttpGet("policies")]
-    public async Task<ActionResult<GetCommissionPoliciesResult>> Policies([FromQuery] Guid organizationId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
-        => (await crmService.GetCommissionPoliciesAsync(new GetCommissionPoliciesQuery(organizationId, Paging: new PagingRequest(pageNumber, pageSize)), cancellationToken)).ToActionResult(this);
+    public async Task<ActionResult<GetCommissionPoliciesResult>> Policies(
+        [FromQuery] Guid organizationId,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
+        => this.ToActionResult(await sender.Send(
+            new GetCommissionPoliciesQuery(organizationId, Paging: new PagingRequest(pageNumber, pageSize)),
+            cancellationToken));
 
     [HttpGet("events")]
-    public async Task<ActionResult<GetCommissionEventsResult>> Events([FromQuery] Guid organizationId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
-        => (await crmService.GetCommissionEventsAsync(new GetCommissionEventsQuery(organizationId, Paging: new PagingRequest(pageNumber, pageSize)), cancellationToken)).ToActionResult(this);
+    public async Task<ActionResult<GetCommissionEventsResult>> Events(
+        [FromQuery] Guid organizationId,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
+        => this.ToActionResult(await sender.Send(
+            new GetCommissionEventsQuery(organizationId, Paging: new PagingRequest(pageNumber, pageSize)),
+            cancellationToken));
 }

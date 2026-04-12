@@ -4,10 +4,12 @@ using Finance.Domain.Repositories;
 using Finance.Infrastructure.Consumers;
 using Finance.Infrastructure.Repositories;
 using Finance.Infrastructure.Services;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RoomManagerment.Finance.DatabaseSpecific;
 using RoomManagerment.Messaging.Extensions;
+using RoomManagerment.Shared.Messaging;
 
 namespace Finance.Infrastructure;
 
@@ -16,7 +18,9 @@ public static class DependencyInjection
     public static IServiceCollection AddFinanceInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IDataAccessAdapterFactory, DataAccessAdapterFactory>();
-        services.AddApplication();
+        services.AddValidatorsFromAssembly(typeof(MediatorAssemblyMarker).Assembly);
+        services.AddFinanceApplicationRequestHandlers();
+        services.AddScoped<IAppSender, AppRequestSender>();
 
         services.AddSingleton<ICacheService, FinanceRedisCacheService>();
 

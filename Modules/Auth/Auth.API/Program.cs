@@ -106,7 +106,7 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
     rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
-var wrappedFactoryType = InterceptorCore.Initialize("GroceryEcommerce.API", typeof(NpgsqlFactory));
+var wrappedFactoryType = InterceptorCore.Initialize("Auth.API", typeof(NpgsqlFactory));
 
 DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
 

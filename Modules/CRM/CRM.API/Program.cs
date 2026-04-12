@@ -1,13 +1,16 @@
+using System.Data.Common;
+using System.Diagnostics;
 using System.Threading.RateLimiting;
-using CRM.API.Validators;
-using CRM.Application.Features.Leads;
 using CRM.Infrastructure;
-using FluentValidation;
 using Microsoft.AspNetCore.RateLimiting;
 using RoomManagerment.Shared.Extensions;
 using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Formatting.Json;
+using Npgsql;
+using SD.LLBLGen.Pro.DQE.PostgreSql;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.Tools.OrmProfiler.Interceptor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,9 +29,6 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 
-builder.Services.AddScoped<IValidator<CreateLeadRequest>, CreateLeadRequestValidator>();
-builder.Services.AddScoped<IValidator<UpdateLeadStatusRequest>, UpdateLeadStatusRequestValidator>();
-
 builder.Services.AddRateLimiter(rateLimiterOptions =>
 {
     rateLimiterOptions.AddFixedWindowLimiter(policyName: "ApiPolicy", options =>
@@ -41,6 +41,20 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
 
     rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
+
+var wrappedFactoryType = InterceptorCore.Initialize("CRM.API", typeof(NpgsqlFactory));
+
+DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
+
+RuntimeConfiguration.ConfigureDQE<PostgreSqlDQEConfiguration>(c =>
+{
+    c.AddDbProviderFactory(wrappedFactoryType); // dùng provider Npgsql
+    c.SetTraceLevel(TraceLevel.Verbose); // bật log (optional)
+});
+
+RuntimeConfiguration.Tracing
+    .SetTraceLevel("ORMPersistenceExecution", TraceLevel.Verbose)
+    .SetTraceLevel("ORMPlainSQLQueryExecution", TraceLevel.Verbose);
 
 builder.Services.AddInfrastructure(builder.Configuration);
 

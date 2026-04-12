@@ -1,15 +1,15 @@
 using CRM.Application;
 using CRM.Application.Services;
 using CRM.Domain.Repositories;
-using MediatR;
-using RoomManagerment.Shared.MediatR;
 using CRM.Infrastructure.Repositories;
 using CRM.Infrastructure.Services;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RoomManagerment.CRM.DatabaseSpecific;
 using RoomManagerment.Messaging.Configuration;
 using RoomManagerment.Messaging.Extensions;
+using RoomManagerment.Shared.Messaging;
 
 namespace CRM.Infrastructure;
 
@@ -18,12 +18,10 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IDataAccessAdapterFactory, DataAccessAdapterFactory>();
-        services.AddApplication();
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(typeof(MediatorAssemblyMarker).Assembly);
-            cfg.AddRoomManagermentPipelineBehaviors();
-        });
+        services.AddValidatorsFromAssembly(typeof(MediatorAssemblyMarker).Assembly);
+        services.AddCrmApplicationRequestHandlers();
+        services.AddScoped<IAppSender, AppRequestSender>();
+
         services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = configuration.GetConnectionString("Redis") ?? "localhost:6379,abortConnect=false,connectTimeout=2000,syncTimeout=2000";
@@ -53,4 +51,3 @@ public static class DependencyInjection
         return services;
     }
 }
-

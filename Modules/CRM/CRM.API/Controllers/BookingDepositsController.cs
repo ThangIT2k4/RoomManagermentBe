@@ -1,27 +1,38 @@
-using CRM.Application.Features.UseCases;
-using MediatR;
+using CRM.Application.Features.Bookings;
+using CRM.Application.Features.Bookings.ApproveBooking;
+using CRM.Application.Features.Bookings.CreateBooking;
+using CRM.Application.Features.Bookings.GetBookings;
+using CRM.Application.Features.Bookings.PayBooking;
+using CRM.Application.Features.Shared;
 using Microsoft.AspNetCore.Mvc;
 using RoomManagerment.Shared.Extensions;
+using RoomManagerment.Shared.Messaging;
 
 namespace CRM.API.Controllers;
 
 [ApiController]
 [Route("api/booking-deposits")]
-public sealed class BookingDepositsController(IMediator mediator) : ControllerBase
+public sealed class BookingDepositsController(IAppSender sender) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<BookingDepositDto>> Create([FromBody] CreateBookingCommand command, CancellationToken cancellationToken)
-        => this.ToActionResult(await mediator.Send(command, cancellationToken));
+        => this.ToActionResult(await sender.Send(command, cancellationToken));
 
     [HttpPost("{bookingId:guid}/approve")]
     public async Task<ActionResult<BookingDepositDto>> Approve([FromRoute] Guid bookingId, [FromBody] ApproveBookingCommand command, CancellationToken cancellationToken)
-        => this.ToActionResult(await mediator.Send(command with { BookingId = bookingId }, cancellationToken));
+        => this.ToActionResult(await sender.Send(command with { BookingId = bookingId }, cancellationToken));
 
     [HttpPost("{bookingId:guid}/confirm-payment")]
     public async Task<ActionResult<BookingDepositDto>> Pay([FromRoute] Guid bookingId, [FromBody] PayBookingCommand command, CancellationToken cancellationToken)
-        => this.ToActionResult(await mediator.Send(command with { BookingId = bookingId }, cancellationToken));
+        => this.ToActionResult(await sender.Send(command with { BookingId = bookingId }, cancellationToken));
 
     [HttpGet]
-    public async Task<ActionResult<GetBookingsResult>> List([FromQuery] Guid organizationId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
-        => this.ToActionResult(await mediator.Send(new GetBookingsQuery(organizationId, Paging: new PagingRequest(pageNumber, pageSize)), cancellationToken));
+    public async Task<ActionResult<GetBookingsResult>> List(
+        [FromQuery] Guid organizationId,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 20,
+        CancellationToken cancellationToken = default)
+        => this.ToActionResult(await sender.Send(
+            new GetBookingsQuery(organizationId, Paging: new PagingRequest(pageNumber, pageSize)),
+            cancellationToken));
 }
