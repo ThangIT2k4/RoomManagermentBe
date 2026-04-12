@@ -1,6 +1,12 @@
+using System.Data.Common;
+using System.Diagnostics;
 using Organization.Infrastructure;
 using Scalar.AspNetCore;
 using Serilog;
+using Npgsql;
+using SD.LLBLGen.Pro.DQE.PostgreSql;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.Tools.OrmProfiler.Interceptor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +22,21 @@ builder.Services.AddSerilog(
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
+
+var wrappedFactoryType = InterceptorCore.Initialize("Organization.API", typeof(NpgsqlFactory));
+
+DbProviderFactories.RegisterFactory("Npgsql", NpgsqlFactory.Instance);
+
+RuntimeConfiguration.ConfigureDQE<PostgreSqlDQEConfiguration>(c =>
+{
+    c.AddDbProviderFactory(wrappedFactoryType); // dùng provider Npgsql
+    c.SetTraceLevel(TraceLevel.Verbose); // bật log (optional)
+});
+
+RuntimeConfiguration.Tracing
+    .SetTraceLevel("ORMPersistenceExecution", TraceLevel.Verbose)
+    .SetTraceLevel("ORMPlainSQLQueryExecution", TraceLevel.Verbose);
+
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
