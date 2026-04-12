@@ -9,6 +9,7 @@ using Auth.Application.Features.Users.DeleteUser;
 using Auth.Application.Features.Users.RemoveRole;
 using Auth.Application.Features.Users.UpdateUser;
 using Auth.Application.Dtos;
+using RoomManagerment.Shared.Http;
 using RoomManagerment.Shared.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,8 @@ namespace Auth.API.Controllers;
 public sealed class UsersController(IAppSender sender) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(PagedUsersResult), StatusCodes.Status200OK)]
-    public async Task<ActionResult<PagedUsersResult>> GetUsers(
+    [ProducesResponseType(typeof(ApiResponse<PagedUsersResult>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse<PagedUsersResult>>> GetUsers(
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 20,
@@ -33,94 +34,94 @@ public sealed class UsersController(IAppSender sender) : ControllerBase
         var result = await sender.Send(
             new GetUsersQuery(searchTerm, pageNumber, pageSize, includeDeleted),
             cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiActionResult(result);
     }
 
     [HttpGet("{userId:guid}")]
-    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserDto>> GetUserById([FromRoute] Guid userId, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ApiResponse<UserDto>>> GetUserById([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetUserByIdQuery(userId), cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPut("{userId:guid}")]
-    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserDto>> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserApiRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ApiResponse<UserDto>>> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserApiRequest request, CancellationToken cancellationToken)
     {
         var result = await sender.Send(
             new UpdateUserCommand(userId, request.Email, request.Username, request.Phone, request.Status),
             cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiActionResult(result);
     }
 
     [HttpDelete("{userId:guid}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> DeleteUser([FromRoute] Guid userId, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthDeleteUserResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthDeleteUserResponse>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<AuthDeleteUserResponse>), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<ApiResponse<AuthDeleteUserResponse>>> DeleteUser([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
         var actorId = ResolveActorUserId();
         if (actorId is null)
         {
-            return Unauthorized(new { message = "User identity is missing." });
+            return this.ApiUnauthorized<AuthDeleteUserResponse>("User identity is missing.");
         }
 
         var result = await sender.Send(new DeleteUserCommand(userId, actorId.Value), cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthDeleteUserResponse>(result);
     }
 
     [HttpPatch("{userId:guid}/status")]
-    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserDto>> ChangeStatus([FromRoute] Guid userId, [FromBody] ChangeUserStatusApiRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ApiResponse<UserDto>>> ChangeStatus([FromRoute] Guid userId, [FromBody] ChangeUserStatusApiRequest request, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new ChangeUserStatusCommand(userId, request.Status), cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPost("{userId:guid}/ban")]
-    public Task<ActionResult<UserDto>> Ban([FromRoute] Guid userId, CancellationToken cancellationToken)
+    public Task<ActionResult<ApiResponse<UserDto>>> Ban([FromRoute] Guid userId, CancellationToken cancellationToken)
         => ChangeStatus(userId, new ChangeUserStatusApiRequest(2), cancellationToken);
 
     [HttpPost("{userId:guid}/unban")]
-    public Task<ActionResult<UserDto>> Unban([FromRoute] Guid userId, CancellationToken cancellationToken)
+    public Task<ActionResult<ApiResponse<UserDto>>> Unban([FromRoute] Guid userId, CancellationToken cancellationToken)
         => ChangeStatus(userId, new ChangeUserStatusApiRequest(1), cancellationToken);
 
     [HttpPost("{userId:guid}/activate")]
-    public Task<ActionResult<UserDto>> Activate([FromRoute] Guid userId, CancellationToken cancellationToken)
+    public Task<ActionResult<ApiResponse<UserDto>>> Activate([FromRoute] Guid userId, CancellationToken cancellationToken)
         => ChangeStatus(userId, new ChangeUserStatusApiRequest(1), cancellationToken);
 
     [HttpPost("{userId:guid}/deactivate")]
-    public Task<ActionResult<UserDto>> Deactivate([FromRoute] Guid userId, CancellationToken cancellationToken)
+    public Task<ActionResult<ApiResponse<UserDto>>> Deactivate([FromRoute] Guid userId, CancellationToken cancellationToken)
         => ChangeStatus(userId, new ChangeUserStatusApiRequest(0), cancellationToken);
 
     [HttpPost("{userId:guid}/roles")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult> AssignRole([FromRoute] Guid userId, [FromBody] AssignRoleApiRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthAssignRoleResponse>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse<AuthAssignRoleResponse>>> AssignRole([FromRoute] Guid userId, [FromBody] AssignRoleApiRequest request, CancellationToken cancellationToken)
     {
         var result = await sender.Send(
             new AssignRoleCommand(request.OrganizationId, userId, request.RoleId),
             cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthAssignRoleResponse>(result);
     }
 
     [HttpDelete("{userId:guid}/roles")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult> RemoveRole([FromRoute] Guid userId, [FromQuery] Guid organizationId, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthRemoveRoleResponse>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse<AuthRemoveRoleResponse>>> RemoveRole([FromRoute] Guid userId, [FromQuery] Guid organizationId, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new RemoveRoleCommand(organizationId, userId), cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthRemoveRoleResponse>(result);
     }
 
     [HttpGet("{userId:guid}/roles")]
-    [ProducesResponseType(typeof(IReadOnlyList<RoleDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<RoleDto>>> GetRoles([FromRoute] Guid userId, [FromQuery] Guid? organizationId, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<IReadOnlyList<RoleDto>>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse<IReadOnlyList<RoleDto>>>> GetRoles([FromRoute] Guid userId, [FromQuery] Guid? organizationId, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetUserRolesQuery(userId, organizationId), cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiActionResult(result);
     }
 
     private Guid? ResolveActorUserId()

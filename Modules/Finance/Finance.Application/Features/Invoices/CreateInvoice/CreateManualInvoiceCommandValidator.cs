@@ -18,9 +18,17 @@ public sealed class CreateManualInvoiceCommandValidator : AbstractValidator<Crea
             .NotEmpty()
             .WithMessage("Mã hợp đồng thuê không được để trống.");
 
+        RuleFor(x => x.InvoiceDate)
+            .Must(date => date <= DateOnly.FromDateTime(DateTime.UtcNow).AddDays(30))
+            .WithMessage("Ngày lập hóa đơn không được vượt quá 30 ngày so với hiện tại.");
+
         RuleFor(x => x.DueDate)
             .GreaterThanOrEqualTo(x => x.InvoiceDate)
             .WithMessage("Ngày đến hạn phải lớn hơn hoặc bằng ngày lập hóa đơn.");
+
+        RuleFor(x => x.Notes)
+            .MaximumLength(2000)
+            .WithMessage("Ghi chú không được vượt quá 2000 ký tự.");
 
         RuleFor(x => x.Items)
             .NotEmpty()
@@ -33,6 +41,11 @@ public sealed class CreateManualInvoiceCommandValidator : AbstractValidator<Crea
                 .WithMessage("Loại mục không được để trống.")
                 .MaximumLength(100)
                 .WithMessage("Loại mục không được vượt quá 100 ký tự.");
+
+            item.RuleFor(i => i.Description)
+                .MaximumLength(2000)
+                .WithMessage("Mô tả khoản thu không được vượt quá 2000 ký tự.")
+                .When(i => !string.IsNullOrWhiteSpace(i.Description));
 
             item.RuleFor(i => i.Quantity)
                 .GreaterThan(0)

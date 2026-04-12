@@ -18,6 +18,14 @@ public sealed class UpdateDraftInvoiceCommandValidator : AbstractValidator<Updat
             .NotEmpty()
             .WithMessage("Mã hóa đơn không được để trống.");
 
+        RuleFor(x => x.DueDate)
+            .NotEmpty()
+            .WithMessage("Ngày đến hạn không được để trống.");
+
+        RuleFor(x => x.Notes)
+            .MaximumLength(2000)
+            .WithMessage("Ghi chú không được vượt quá 2000 ký tự.");
+
         RuleFor(x => x.Items)
             .NotEmpty()
             .WithMessage("Hóa đơn phải có ít nhất một dòng chi tiết.");
@@ -29,6 +37,11 @@ public sealed class UpdateDraftInvoiceCommandValidator : AbstractValidator<Updat
                 .WithMessage("Loại mục không được để trống.")
                 .MaximumLength(100)
                 .WithMessage("Loại mục không được vượt quá 100 ký tự.");
+
+            item.RuleFor(i => i.Description)
+                .MaximumLength(2000)
+                .WithMessage("Mô tả khoản thu không được vượt quá 2000 ký tự.")
+                .When(i => !string.IsNullOrWhiteSpace(i.Description));
 
             item.RuleFor(i => i.Quantity)
                 .GreaterThan(0)

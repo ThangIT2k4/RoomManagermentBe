@@ -28,6 +28,16 @@ public sealed class RecordManualPaymentCommandValidator : AbstractValidator<Reco
 
         RuleFor(x => x.PaidAtUtc)
             .NotEmpty()
-            .WithMessage("Thời điểm thanh toán không được để trống.");
+            .WithMessage("Thời điểm thanh toán không được để trống.")
+            .Must(date => date <= DateTime.UtcNow.AddDays(1))
+            .WithMessage("Thời điểm thanh toán không được vượt quá hiện tại 1 ngày.");
+
+        RuleFor(x => x.ReferenceCode)
+            .MaximumLength(100)
+            .WithMessage("Mã tham chiếu không được vượt quá 100 ký tự.");
+
+        RuleFor(x => x.Note)
+            .MaximumLength(2000)
+            .WithMessage("Ghi chú không được vượt quá 2000 ký tự.");
     }
 }

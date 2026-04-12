@@ -1,7 +1,8 @@
 using Finance.Application.Dtos;
-using RoomManagerment.Shared.Extensions;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
+using RoomManagerment.Shared.Http;
 
 namespace Finance.API.Controllers;
 
@@ -10,13 +11,13 @@ namespace Finance.API.Controllers;
 public sealed class InvoicesController(IFinanceApplicationService finance) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<InvoiceDto>> Create(
+    public async Task<ActionResult<ApiResponse<InvoiceDto>>> Create(
         [FromBody] CreateInvoiceApiRequest body,
         CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
         {
-            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+            return this.ApiBadRequest<InvoiceDto>("Headers X-Organization-Id and X-User-Id are required.");
         }
 
         var lines = body.Items.Select(i => new InvoiceItemLineDto(
@@ -38,18 +39,18 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
             lines,
             cancellationToken);
 
-        return result.ToActionResult(this);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPut("{invoiceId:guid}")]
-    public async Task<ActionResult<InvoiceDto>> UpdateDraft(
+    public async Task<ActionResult<ApiResponse<InvoiceDto>>> UpdateDraft(
         Guid invoiceId,
         [FromBody] UpdateInvoiceApiRequest body,
         CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
         {
-            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+            return this.ApiBadRequest<InvoiceDto>("Headers X-Organization-Id and X-User-Id are required.");
         }
 
         var lines = body.Items.Select(i => new InvoiceItemLineDto(
@@ -70,50 +71,50 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
             lines,
             cancellationToken);
 
-        return result.ToActionResult(this);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPost("{invoiceId:guid}/publish")]
-    public async Task<ActionResult<InvoiceDto>> Publish(Guid invoiceId, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<InvoiceDto>>> Publish(Guid invoiceId, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _))
         {
-            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+            return this.ApiBadRequest<InvoiceDto>("Headers X-Organization-Id and X-User-Id are required.");
         }
 
         var result = await finance.PublishInvoiceAsync(orgId, invoiceId, cancellationToken);
-        return result.ToActionResult(this);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPost("{invoiceId:guid}/cancel")]
-    public async Task<ActionResult<InvoiceDto>> Cancel(
+    public async Task<ActionResult<ApiResponse<InvoiceDto>>> Cancel(
         Guid invoiceId,
         [FromBody] CancelInvoiceApiRequest? body,
         CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
         {
-            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+            return this.ApiBadRequest<InvoiceDto>("Headers X-Organization-Id and X-User-Id are required.");
         }
 
         var result = await finance.CancelInvoiceAsync(orgId, userId, invoiceId, body?.Reason, cancellationToken);
-        return result.ToActionResult(this);
+        return this.ToApiActionResult(result);
     }
 
     [HttpGet("{invoiceId:guid}")]
-    public async Task<ActionResult<InvoiceDto>> GetById(Guid invoiceId, CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<InvoiceDto>>> GetById(Guid invoiceId, CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _))
         {
-            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+            return this.ApiBadRequest<InvoiceDto>("Headers X-Organization-Id and X-User-Id are required.");
         }
 
         var result = await finance.GetInvoiceAsync(orgId, invoiceId, cancellationToken);
-        return result.ToActionResult(this);
+        return this.ToApiActionResult(result);
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedInvoicesDto>> Search(
+    public async Task<ActionResult<ApiResponse<PagedInvoicesDto>>> Search(
         [FromQuery] string? statuses,
         [FromQuery] Guid? leaseId,
         [FromQuery] DateOnly? fromDate,
@@ -125,12 +126,12 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _))
         {
-            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+            return this.ApiBadRequest<PagedInvoicesDto>("Headers X-Organization-Id and X-User-Id are required.");
         }
 
         if (!TryNormalizePaging(page, perPage, out var normalizedPage, out var normalizedPerPage, out var pagingError))
         {
-            return BadRequest(new { error = pagingError });
+            return this.ApiBadRequest<PagedInvoicesDto>(pagingError ?? "Invalid paging.");
         }
 
         IReadOnlyList<string>? statusList = null;
@@ -151,7 +152,7 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
             normalizedPerPage,
             cancellationToken);
 
-        return result.ToActionResult(this);
+        return this.ToApiActionResult(result);
     }
 
     private static bool TryNormalizePaging(int page, int perPage, out int normalizedPage, out int normalizedPerPage, out string? error)

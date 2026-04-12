@@ -1,5 +1,8 @@
+using Finance.Application.Dtos;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
+using RoomManagerment.Shared.Http;
 
 namespace Finance.API.Controllers;
 
@@ -10,7 +13,7 @@ public sealed class PaymentWebhookController(
     ILogger<PaymentWebhookController> logger) : ControllerBase
 {
     [HttpPost("payment")]
-    public async Task<IActionResult> Handle(CancellationToken cancellationToken)
+    public async Task<ActionResult<ApiResponse<FinancePaymentWebhookAckResponse>>> Handle(CancellationToken cancellationToken)
     {
         Request.EnableBuffering();
         using var reader = new StreamReader(Request.Body, leaveOpen: true);
@@ -29,9 +32,10 @@ public sealed class PaymentWebhookController(
                 "Payment webhook processing failed: {Code} {Message}",
                 result.Error?.Code,
                 result.Error?.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            return this.ApiServerError<FinancePaymentWebhookAckResponse>(
+                result.Error?.Message ?? "Webhook processing failed.");
         }
 
-        return Ok();
+        return Ok(ApiResponse<FinancePaymentWebhookAckResponse>.Succeed(new FinancePaymentWebhookAckResponse()));
     }
 }

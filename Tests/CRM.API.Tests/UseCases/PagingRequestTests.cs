@@ -1,4 +1,5 @@
-using CRM.Application.Features.UseCases;
+using CRM.Application.Features
+using CRM.Application.Features.Shared;
 
 namespace CRM.API.Tests.UseCases;
 

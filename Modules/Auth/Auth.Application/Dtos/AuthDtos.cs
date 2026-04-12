@@ -80,3 +80,39 @@ public sealed record LoginResult(UserDto User, SessionDto Session);
 public sealed record PagedUsersResult(IReadOnlyList<UserDto> Items, long TotalCount, int PageNumber, int PageSize, int TotalPages);
 public sealed record PagedSessionsResult(IReadOnlyList<SessionDto> Items, long TotalCount, int PageNumber, int PageSize, int TotalPages);
 public sealed record PagedCapabilitiesResult(IReadOnlyList<CapabilityDto> Items, long TotalCount, int PageNumber, int PageSize, int TotalPages);
+
+/// <summary>Success <c>data</c> for POST /api/auth/logout.</summary>
+public sealed record AuthLogoutResponse();
+
+/// <summary>Success <c>data</c> for POST /api/auth/change-password.</summary>
+public sealed record AuthChangePasswordResponse();
+
+/// <summary>Success <c>data</c> for POST /api/auth/forgot-password.</summary>
+public sealed record AuthForgotPasswordResponse();
+
+/// <summary>Success <c>data</c> for POST /api/auth/reset-password.</summary>
+public sealed record AuthResetPasswordResponse();
+
+/// <summary>Success <c>data</c> for POST /api/auth/send-otp.</summary>
+public sealed record AuthSendOtpResponse();
+
+/// <summary>Success <c>data</c> for POST /api/auth/verify-otp.</summary>
+public sealed record AuthVerifyOtpResponse();
+
+/// <summary>Success <c>data</c> for POST /api/auth/resend-otp.</summary>
+public sealed record AuthResendOtpResponse();
+
+/// <summary>Success <c>data</c> for POST /api/auth/verify-email.</summary>
+public sealed record AuthVerifyEmailResponse();
+
+/// <summary>Success <c>data</c> for DELETE /api/users/{userId}.</summary>
+public sealed record AuthDeleteUserResponse();
+
+/// <summary>Success <c>data</c> for POST /api/users/{userId}/roles.</summary>
+public sealed record AuthAssignRoleResponse();
+
+/// <summary>Success <c>data</c> for DELETE /api/users/{userId}/roles.</summary>
+public sealed record AuthRemoveRoleResponse();
+
+/// <summary>Success <c>data</c> for POST /api/sessions/logout-all.</summary>
+public sealed record AuthLogoutAllSessionsResponse();

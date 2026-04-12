@@ -1,7 +1,8 @@
 using Finance.Application.Dtos;
-using RoomManagerment.Shared.Extensions;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
+using RoomManagerment.Shared.Http;
 
 namespace Finance.API.Controllers;
 
@@ -10,14 +11,14 @@ namespace Finance.API.Controllers;
 public sealed class PaymentsController(IFinanceApplicationService finance) : ControllerBase
 {
     [HttpPost("invoices/{invoiceId:guid}/payments")]
-    public async Task<ActionResult<InvoiceDto>> RecordManual(
+    public async Task<ActionResult<ApiResponse<InvoiceDto>>> RecordManual(
         Guid invoiceId,
         [FromBody] RecordManualPaymentApiRequest body,
         CancellationToken cancellationToken)
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out var userId))
         {
-            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+            return this.ApiBadRequest<InvoiceDto>("Headers X-Organization-Id and X-User-Id are required.");
         }
 
         var request = new RecordManualPaymentRequest(
@@ -31,11 +32,11 @@ public sealed class PaymentsController(IFinanceApplicationService finance) : Con
             body.Note);
 
         var result = await finance.RecordManualPaymentAsync(request, cancellationToken);
-        return result.ToActionResult(this);
+        return this.ToApiActionResult(result);
     }
 
     [HttpGet("payments")]
-    public async Task<ActionResult<PagedPaymentsDto>> Search(
+    public async Task<ActionResult<ApiResponse<PagedPaymentsDto>>> Search(
         [FromQuery] DateTime? fromPaidAtUtc,
         [FromQuery] DateTime? toPaidAtUtc,
         [FromQuery] Guid? methodId,
@@ -46,12 +47,12 @@ public sealed class PaymentsController(IFinanceApplicationService finance) : Con
     {
         if (!HttpContext.TryGetOrgAndUser(out var orgId, out _))
         {
-            return BadRequest("Headers X-Organization-Id and X-User-Id are required.");
+            return this.ApiBadRequest<PagedPaymentsDto>("Headers X-Organization-Id and X-User-Id are required.");
         }
 
         if (!TryNormalizePaging(page, perPage, out var normalizedPage, out var normalizedPerPage, out var pagingError))
         {
-            return BadRequest(new { error = pagingError });
+            return this.ApiBadRequest<PagedPaymentsDto>(pagingError ?? "Invalid paging.");
         }
 
         var result = await finance.SearchPaymentsAsync(
@@ -64,7 +65,7 @@ public sealed class PaymentsController(IFinanceApplicationService finance) : Con
             normalizedPerPage,
             cancellationToken);
 
-        return result.ToActionResult(this);
+        return this.ToApiActionResult(result);
     }
 
     private static bool TryNormalizePaging(int page, int perPage, out int normalizedPage, out int normalizedPerPage, out string? error)

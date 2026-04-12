@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Auth.Application.Features.Auth.Sessions.GetActiveSessions;
 using Auth.Application.Features.Auth.Sessions.LogoutAllSessions;
 using Auth.Application.Dtos;
+using RoomManagerment.Shared.Http;
 using RoomManagerment.Shared.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,9 @@ namespace Auth.API.Controllers;
 public sealed class SessionsController(IAppSender sender) : ControllerBase
 {
     [HttpGet("active")]
-    [ProducesResponseType(typeof(PagedSessionsResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<PagedSessionsResult>> GetActiveSessions(
+    [ProducesResponseType(typeof(ApiResponse<PagedSessionsResult>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<PagedSessionsResult>), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<ApiResponse<PagedSessionsResult>>> GetActiveSessions(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 20,
         CancellationToken cancellationToken = default)
@@ -25,26 +26,26 @@ public sealed class SessionsController(IAppSender sender) : ControllerBase
         var userId = ResolveUserId();
         if (userId is null)
         {
-            return Unauthorized(new { message = "User identity is missing." });
+            return this.ApiUnauthorized<PagedSessionsResult>("User identity is missing.");
         }
 
         var result = await sender.Send(new GetActiveSessionsQuery(userId.Value, pageNumber, pageSize), cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiActionResult(result);
     }
 
     [HttpPost("logout-all")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> LogoutAll(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthLogoutAllSessionsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthLogoutAllSessionsResponse>), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<ApiResponse<AuthLogoutAllSessionsResponse>>> LogoutAll(CancellationToken cancellationToken)
     {
         var userId = ResolveUserId();
         if (userId is null)
         {
-            return Unauthorized(new { message = "User identity is missing." });
+            return this.ApiUnauthorized<AuthLogoutAllSessionsResponse>("User identity is missing.");
         }
 
         var result = await sender.Send(new LogoutAllSessionsCommand(userId.Value), cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthLogoutAllSessionsResponse>(result);
     }
 
     private Guid? ResolveUserId()

@@ -1,5 +1,6 @@
 using CRM.API.Validators;
 using CRM.Application.Features.Leads;
+using CRM.Application.Features.Leads.UpdateLeadStatus;
 
 namespace CRM.API.Tests.Validators;
 

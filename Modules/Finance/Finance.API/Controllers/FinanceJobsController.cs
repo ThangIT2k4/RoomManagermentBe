@@ -1,6 +1,8 @@
-using RoomManagerment.Shared.Extensions;
+using Finance.Application.Dtos;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
+using RoomManagerment.Shared.Http;
 
 namespace Finance.API.Controllers;
 
@@ -9,21 +11,21 @@ namespace Finance.API.Controllers;
 public sealed class FinanceJobsController(IFinanceScheduledJobPublisher jobs) : ControllerBase
 {
     [HttpPost("auto-invoices")]
-    public async Task<IActionResult> EnqueueAutoInvoices(
+    public async Task<ActionResult<ApiResponse<FinanceEnqueueAutoInvoicesResponse>>> EnqueueAutoInvoices(
         [FromBody] AutoInvoiceJobApiRequest body,
         CancellationToken cancellationToken)
     {
         var result = await jobs.PublishAutoInvoiceGenerationAsync(body.RunDate, cancellationToken);
-        return result.ToActionResult(this);
+        return this.ToApiVoidActionResult<FinanceEnqueueAutoInvoicesResponse>(result);
     }
 
     [HttpPost("overdue-sweep")]
-    public async Task<IActionResult> EnqueueOverdueSweep(
+    public async Task<ActionResult<ApiResponse<FinanceEnqueueOverdueSweepResponse>>> EnqueueOverdueSweep(
         [FromBody] OverdueSweepJobApiRequest body,
         CancellationToken cancellationToken)
     {
         var result = await jobs.PublishOverdueSweepAsync(body.AsOfDate, cancellationToken);
-        return result.ToActionResult(this);
+        return this.ToApiVoidActionResult<FinanceEnqueueOverdueSweepResponse>(result);
     }
 }
 

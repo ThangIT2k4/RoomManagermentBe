@@ -101,3 +101,12 @@ public sealed record DebtSummaryDto(
     decimal OverdueAmount,
     int DueSoonCount,
     decimal DueSoonAmount);
+
+/// <summary>Success <c>data</c> for POST /api/finance/internal/jobs/auto-invoices.</summary>
+public sealed record FinanceEnqueueAutoInvoicesResponse();
+
+/// <summary>Success <c>data</c> for POST /api/finance/internal/jobs/overdue-sweep.</summary>
+public sealed record FinanceEnqueueOverdueSweepResponse();
+
+/// <summary>Success <c>data</c> for POST /api/finance/webhooks/payment.</summary>
+public sealed record FinancePaymentWebhookAckResponse();

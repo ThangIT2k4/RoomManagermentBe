@@ -15,6 +15,8 @@ using Auth.Application.Features.Auth.Users.GetUserById;
 using Auth.Application.Features.Auth.VerifyEmail;
 using Auth.Application.Features.Auth.VerifyOtp;
 using Auth.Application.Features.GetCurrentUser;
+using RoomManagerment.Shared.Common;
+using RoomManagerment.Shared.Http;
 using RoomManagerment.Shared.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,24 +32,24 @@ public class AuthController(IAppSender sender) : ControllerBase
     [AllowAnonymous]
     [EnableRateLimiting("RegisterPolicy")]
     [HttpPost("register")]
-    [ProducesResponseType(typeof(RegisterResult), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<RegisterResult>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<RegisterResult>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<RegisterResult>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<RegisterResult>), StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<ApiResponse<RegisterResult>>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
         var result = await sender.Send(
             new RegisterCommand(request.Email, request.Password, request.FullName, request.Username, request.Phone),
             cancellationToken);
-        return this.ToCreatedAtActionResult(result, nameof(GetCurrentUser), new { });
+        return this.ToApiCreatedAtActionResult(result, nameof(GetCurrentUser), new { });
     }
 
     [AllowAnonymous]
     [EnableRateLimiting("LoginPolicy")]
     [HttpPost("login")]
-    [ProducesResponseType(typeof(LoginResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<LoginResult>> Login([FromBody] LoginApiRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<ApiResponse<LoginResult>>> Login([FromBody] LoginApiRequest request, CancellationToken cancellationToken)
     {
         var result = await sender.Send(
             new LoginCommand(
@@ -58,25 +60,31 @@ public class AuthController(IAppSender sender) : ControllerBase
                 request.RememberMe),
             cancellationToken);
 
-        if (result.IsFailure || result.Value is null)
+        if (result.IsFailure)
         {
-            return this.ToActionResult(result);
+            return this.ToApiActionResult(result);
+        }
+
+        if (result.Value is null)
+        {
+            return this.ToApiActionResult(
+                Result<LoginResult>.Failure(Error.Unauthorized("Auth.LoginFailed", "Đăng nhập thất bại.")));
         }
 
         PersistHybridSession(result.Value);
-        return Ok(result.Value);
+        return Ok(ApiResponse<LoginResult>.Succeed(result.Value));
     }
 
     [Authorize]
     [HttpPost("logout")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> Logout(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthLogoutResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthLogoutResponse>), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<ApiResponse<AuthLogoutResponse>>> Logout(CancellationToken cancellationToken)
     {
         var sessionId = ResolveSessionId();
         if (string.IsNullOrWhiteSpace(sessionId))
         {
-            return Unauthorized(new { message = "Session is required." });
+            return this.ApiUnauthorized<AuthLogoutResponse>("Session is required.");
         }
 
         var result = await sender.Send(new LogoutCommand(sessionId), cancellationToken);
@@ -85,153 +93,153 @@ public class AuthController(IAppSender sender) : ControllerBase
             HttpContext.Session.Clear();
         }
 
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthLogoutResponse>(result);
     }
 
     [Authorize]
     [HttpGet("me")]
     [HttpGet("current-user")]
-    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserDto>> GetCurrentUser(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiResponse<UserDto>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ApiResponse<UserDto>>> GetCurrentUser(CancellationToken cancellationToken)
     {
         var sessionId = ResolveSessionId();
         if (string.IsNullOrWhiteSpace(sessionId))
         {
-            return Unauthorized(new { message = "Session is required." });
+            return this.ApiUnauthorized<UserDto>("Session is required.");
         }
 
         var result = await sender.Send(new GetCurrentUserQuery(sessionId), cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiActionResult(result);
     }
 
     [Authorize]
     [HttpPost("change-password")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordApiRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthChangePasswordResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthChangePasswordResponse>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<AuthChangePasswordResponse>), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<ApiResponse<AuthChangePasswordResponse>>> ChangePassword([FromBody] ChangePasswordApiRequest request, CancellationToken cancellationToken)
     {
         var userId = GetCurrentUserId();
         if (userId is null)
         {
-            return Unauthorized(new { message = "User identity is missing." });
+            return this.ApiUnauthorized<AuthChangePasswordResponse>("User identity is missing.");
         }
 
         var sessionId = ResolveSessionId();
         var result = await sender.Send(
             new ChangePasswordCommand(userId.Value, request.CurrentPassword, request.NewPassword, sessionId),
             cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthChangePasswordResponse>(result);
     }
 
     [AllowAnonymous]
     [EnableRateLimiting("OtpPolicy")]
     [HttpPost("forgot-password")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthForgotPasswordResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthForgotPasswordResponse>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<AuthForgotPasswordResponse>>> ForgotPassword([FromBody] ForgotPasswordRequest request, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new ForgotPasswordCommand(request.Email), cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthForgotPasswordResponse>(result);
     }
 
     [AllowAnonymous]
     [EnableRateLimiting("OtpPolicy")]
     [HttpPost("reset-password")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthResetPasswordResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthResetPasswordResponse>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<AuthResetPasswordResponse>>> ResetPassword([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken)
     {
         var result = await sender.Send(
             new ResetPasswordCommand(request.Email, request.OtpCode, request.NewPassword),
             cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthResetPasswordResponse>(result);
     }
 
     [Authorize]
     [EnableRateLimiting("OtpPolicy")]
     [HttpPost("send-otp")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> SendOtp([FromBody] SendOtpRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthSendOtpResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthSendOtpResponse>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<AuthSendOtpResponse>>> SendOtp([FromBody] SendOtpRequest request, CancellationToken cancellationToken)
     {
         var userId = GetCurrentUserId();
         if (userId is null)
         {
-            return Unauthorized(new { message = "User identity is missing." });
+            return this.ApiUnauthorized<AuthSendOtpResponse>("User identity is missing.");
         }
 
         var userResult = await sender.Send(new GetUserByIdQuery(userId.Value), cancellationToken);
         if (userResult.IsFailure || userResult.Value is null)
         {
-            return Unauthorized(new { message = "User not found." });
+            return this.ApiUnauthorized<AuthSendOtpResponse>("User not found.");
         }
 
         if (!string.Equals(userResult.Value.Email, request.Email.Trim(), StringComparison.OrdinalIgnoreCase))
         {
-            return BadRequest(new { message = "Email does not match the authenticated account." });
+            return this.ApiBadRequest<AuthSendOtpResponse>("Email does not match the authenticated account.");
         }
 
         var result = await sender.Send(
             new SendOtpCommand(request.Email, request.Purpose, userId.Value),
             cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthSendOtpResponse>(result);
     }
 
     [AllowAnonymous]
     [EnableRateLimiting("OtpPolicy")]
     [HttpPost("verify-otp")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> VerifyOtp([FromBody] VerifyOtpRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthVerifyOtpResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthVerifyOtpResponse>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<AuthVerifyOtpResponse>>> VerifyOtp([FromBody] VerifyOtpRequest request, CancellationToken cancellationToken)
     {
         var result = await sender.Send(
             new VerifyOtpCommand(request.Email, request.Purpose, request.OtpCode),
             cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthVerifyOtpResponse>(result);
     }
 
     [Authorize]
     [EnableRateLimiting("OtpPolicy")]
     [HttpPost("resend-otp")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> ResendOtp([FromBody] ResendOtpRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthResendOtpResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthResendOtpResponse>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<AuthResendOtpResponse>>> ResendOtp([FromBody] ResendOtpRequest request, CancellationToken cancellationToken)
     {
         var userId = GetCurrentUserId();
         if (userId is null)
         {
-            return Unauthorized(new { message = "User identity is missing." });
+            return this.ApiUnauthorized<AuthResendOtpResponse>("User identity is missing.");
         }
 
         var userResult = await sender.Send(new GetUserByIdQuery(userId.Value), cancellationToken);
         if (userResult.IsFailure || userResult.Value is null)
         {
-            return Unauthorized(new { message = "User not found." });
+            return this.ApiUnauthorized<AuthResendOtpResponse>("User not found.");
         }
 
         if (!string.Equals(userResult.Value.Email, request.Email.Trim(), StringComparison.OrdinalIgnoreCase))
         {
-            return BadRequest(new { message = "Email does not match the authenticated account." });
+            return this.ApiBadRequest<AuthResendOtpResponse>("Email does not match the authenticated account.");
         }
 
         var result = await sender.Send(
             new ResendOtpCommand(request.Email, request.Purpose, userId.Value),
             cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthResendOtpResponse>(result);
     }
 
     [AllowAnonymous]
     [EnableRateLimiting("OtpPolicy")]
     [HttpPost("verify-email")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> VerifyEmail([FromBody] VerifyEmailRequest request, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(ApiResponse<AuthVerifyEmailResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthVerifyEmailResponse>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<AuthVerifyEmailResponse>>> VerifyEmail([FromBody] VerifyEmailRequest request, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new VerifyEmailCommand(request.Email, request.OtpCode), cancellationToken);
-        return this.ToActionResult(result);
+        return this.ToApiVoidActionResult<AuthVerifyEmailResponse>(result);
     }
 
     private void PersistHybridSession(LoginResult loginResult)

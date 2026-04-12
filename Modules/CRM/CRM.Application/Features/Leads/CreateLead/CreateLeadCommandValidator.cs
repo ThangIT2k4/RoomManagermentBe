@@ -13,8 +13,12 @@ public sealed class CreateLeadCommandValidator : AbstractValidator<CreateLeadReq
             .WithMessage("Mã tổ chức không được để trống.");
 
         RuleFor(x => x.FullName)
+            .NotEmpty()
+            .WithMessage("Họ và tên không được để trống.")
             .MaximumLength(InputSecurityLimits.MaxLeadNameLength)
-            .WithMessage($"Họ và tên không được vượt quá {InputSecurityLimits.MaxLeadNameLength} ký tự.")
+            .WithMessage($"Họ và tên không được vượt quá {InputSecurityLimits.MaxLeadNameLength} ký tự.");
+
+        RuleFor(x => x.FullName)
             .Must(ValidationGuards.BeSafeText)
             .WithMessage("Họ và tên chứa nội dung không an toàn.")
             .When(x => !string.IsNullOrWhiteSpace(x.FullName));

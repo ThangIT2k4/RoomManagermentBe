@@ -21,5 +21,9 @@ public sealed class CreateDepositRefundCommandValidator : AbstractValidator<Crea
         RuleFor(x => x.Amount)
             .GreaterThan(0)
             .WithMessage("Số tiền phải lớn hơn 0.");
+
+        RuleFor(x => x.Notes)
+            .MaximumLength(2000)
+            .WithMessage("Ghi chú không được vượt quá 2000 ký tự.");
     }
 }
