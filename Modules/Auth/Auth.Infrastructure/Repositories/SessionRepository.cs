@@ -2,7 +2,9 @@ using Auth.Application.Services;
 using Auth.Domain.Common;
 using Auth.Domain.Entities;
 using Auth.Domain.Repositories;
+using Auth.Infrastructure;
 using Auth.Infrastructure.Mapper;
+using Microsoft.Extensions.Logging;
 using RoomManagerment.Auth.DatabaseSpecific;
 using RoomManagerment.Auth.Linq;
 using SD.LLBLGen.Pro.LinqSupportClasses;
@@ -12,148 +14,159 @@ namespace Auth.Infrastructure.Repositories;
 public sealed class SessionRepository(
     DataAccessAdapter adapter,
     ICacheService cacheService,
-    IIntegrationEventPublisher eventPublisher) : ISessionRepository
+    IIntegrationEventPublisher eventPublisher,
+    ILogger<SessionRepository> logger) : ISessionRepository
 {
     private static readonly TimeSpan DefaultCacheExpiry = TimeSpan.FromHours(1);
+    private const string Repo = nameof(SessionRepository);
 
-    public async Task<SessionEntity?> GetByIdAsync(string sessionId, CancellationToken cancellationToken = default)
-    {
-        var cacheKey = BuildCacheKey(sessionId);
-        var cached = await cacheService.GetAsync<SessionEntity>(cacheKey, cancellationToken);
-        if (cached is not null)
+    public Task<SessionEntity?> GetByIdAsync(string sessionId, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(GetByIdAsync), cancellationToken, async () =>
         {
-            return cached;
-        }
+            var cacheKey = BuildCacheKey(sessionId);
+            var cached = await cacheService.GetAsync<SessionEntity>(cacheKey, cancellationToken);
+            if (cached is not null)
+            {
+                return cached;
+            }
 
-        var dal = await QuerySessionByIdAsync(sessionId, cancellationToken);
-        if (dal is null)
-        {
-            return null;
-        }
+            var dal = await QuerySessionByIdAsync(sessionId, cancellationToken);
+            if (dal is null)
+            {
+                return null;
+            }
 
-        var session = dal.ToDomain();
-        await TryCacheSessionAsync(session, cancellationToken);
-        return session;
-    }
-
-    public async Task<SessionEntity> AddAsync(SessionEntity session, CancellationToken cancellationToken = default)
-    {
-        var dal = session.ToPersistence();
-        await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
-        await PublishDomainEventsAsync(session, cancellationToken);
-        await TryCacheSessionAsync(session, cancellationToken);
-        return session;
-    }
-
-    public async Task<SessionEntity> UpdateAsync(SessionEntity session, CancellationToken cancellationToken = default)
-    {
-        if (session.IsRevoked)
-        {
-            await DeleteAsync(session.Id, cancellationToken);
-            await PublishDomainEventsAsync(session, cancellationToken);
+            var session = dal.ToDomain();
+            await TryCacheSessionAsync(session, cancellationToken);
             return session;
-        }
+        });
 
-        var dal = session.ToPersistence();
-        await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
-        await PublishDomainEventsAsync(session, cancellationToken);
-        await TryCacheSessionAsync(session, cancellationToken);
-        return session;
-    }
-
-    public async Task DeleteAsync(string sessionId, CancellationToken cancellationToken = default)
-    {
-        var dal = await QuerySessionByIdAsync(sessionId, cancellationToken);
-        if (dal is null)
+    public Task<SessionEntity> AddAsync(SessionEntity session, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(AddAsync), cancellationToken, async () =>
         {
-            return;
-        }
+            var dal = session.ToPersistence();
+            await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
+            await PublishDomainEventsAsync(session, cancellationToken);
+            await TryCacheSessionAsync(session, cancellationToken);
+            return session;
+        });
 
-        await adapter.DeleteEntityAsync(dal, cancellationToken);
-        await cacheService.RemoveAsync(BuildCacheKey(sessionId), cancellationToken);
-    }
+    public Task<SessionEntity> UpdateAsync(SessionEntity session, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(UpdateAsync), cancellationToken, async () =>
+        {
+            if (session.IsRevoked)
+            {
+                await DeleteAsync(session.Id, cancellationToken);
+                await PublishDomainEventsAsync(session, cancellationToken);
+                return session;
+            }
 
-    public async Task<PagedResult<SessionEntity>> GetByUserPagedAsync(
+            var dal = session.ToPersistence();
+            await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
+            await PublishDomainEventsAsync(session, cancellationToken);
+            await TryCacheSessionAsync(session, cancellationToken);
+            return session;
+        });
+
+    public Task DeleteAsync(string sessionId, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(DeleteAsync), cancellationToken, async () =>
+        {
+            var dal = await QuerySessionByIdAsync(sessionId, cancellationToken);
+            if (dal is null)
+            {
+                return;
+            }
+
+            await adapter.DeleteEntityAsync(dal, cancellationToken);
+            await cacheService.RemoveAsync(BuildCacheKey(sessionId), cancellationToken);
+        });
+
+    public Task<PagedResult<SessionEntity>> GetByUserPagedAsync(
         Guid userId,
         int pageNumber = 1,
         int pageSize = 20,
         bool includeExpired = false,
         CancellationToken cancellationToken = default)
-    {
-        var paging = PagingInput.Create(pageNumber, pageSize);
-        var linq = new LinqMetaData(adapter);
-        var query = ApplyActiveFilter(linq.Session.Where(x => x.UserId == userId), includeExpired, DateTimeOffset.UtcNow);
-
-        var totalCount = await query.LongCountAsync(cancellationToken);
-        var items = await query
-            .OrderByDescending(x => x.LastActivity)
-            .Skip(paging.Skip)
-            .Take(paging.PageSize)
-            .ToListAsync(cancellationToken);
-
-        return new PagedResult<SessionEntity>(
-            items.Select(x => x.ToDomain()).ToList(),
-            (int)totalCount,
-            paging.PageNumber,
-            paging.PageSize);
-    }
-
-    public async Task<IReadOnlyCollection<SessionEntity>> GetActiveByUserAsync(Guid userId, CancellationToken cancellationToken = default)
-    {
-        var linq = new LinqMetaData(adapter);
-        var items = await ApplyActiveFilter(linq.Session.Where(x => x.UserId == userId), false, DateTimeOffset.UtcNow)
-            .OrderByDescending(x => x.LastActivity)
-            .ToListAsync(cancellationToken);
-
-        return items.Select(x => x.ToDomain()).ToList();
-    }
-
-    public async Task<long> DeleteExpiredAsync(DateTimeOffset now, CancellationToken cancellationToken = default)
-    {
-        var linq = new LinqMetaData(adapter);
-        var expiredSessions = await linq.Session
-            .Where(x => x.ExpiresAt != null && x.ExpiresAt <= now.UtcDateTime)
-            .ToListAsync(cancellationToken);
-
-        foreach (var session in expiredSessions)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(GetByUserPagedAsync), cancellationToken, async () =>
         {
-            await cacheService.RemoveAsync(BuildCacheKey(session.Id), cancellationToken);
-            await adapter.DeleteEntityAsync(session, cancellationToken);
-        }
+            var paging = PagingInput.Create(pageNumber, pageSize);
+            var linq = new LinqMetaData(adapter);
+            var query = ApplyActiveFilter(linq.Session.Where(x => x.UserId == userId), includeExpired, DateTimeOffset.UtcNow);
 
-        return expiredSessions.Count;
-    }
+            var totalCount = await query.LongCountAsync(cancellationToken);
+            var items = await query
+                .OrderByDescending(x => x.LastActivity)
+                .Skip(paging.Skip)
+                .Take(paging.PageSize)
+                .ToListAsync(cancellationToken);
 
-    public async Task<long> DeleteAllByUserAsync(Guid userId, CancellationToken cancellationToken = default)
-    {
-        var linq = new LinqMetaData(adapter);
-        var sessions = await linq.Session.Where(x => x.UserId == userId).ToListAsync(cancellationToken);
+            return new PagedResult<SessionEntity>(
+                items.Select(x => x.ToDomain()).ToList(),
+                (int)totalCount,
+                paging.PageNumber,
+                paging.PageSize);
+        });
 
-        foreach (var session in sessions)
+    public Task<IReadOnlyCollection<SessionEntity>> GetActiveByUserAsync(Guid userId, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(GetActiveByUserAsync), cancellationToken, async () =>
         {
-            await cacheService.RemoveAsync(BuildCacheKey(session.Id), cancellationToken);
-            await adapter.DeleteEntityAsync(session, cancellationToken);
-        }
+            var linq = new LinqMetaData(adapter);
+            var items = await ApplyActiveFilter(linq.Session.Where(x => x.UserId == userId), false, DateTimeOffset.UtcNow)
+                .OrderByDescending(x => x.LastActivity)
+                .ToListAsync(cancellationToken);
 
-        return sessions.Count;
-    }
+            return (IReadOnlyCollection<SessionEntity>)items.Select(x => x.ToDomain()).ToList();
+        });
 
-    public async Task<long> DeleteAllByUserExceptAsync(
+    public Task<long> DeleteExpiredAsync(DateTimeOffset now, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(DeleteExpiredAsync), cancellationToken, async () =>
+        {
+            var linq = new LinqMetaData(adapter);
+            var expiredSessions = await linq.Session
+                .Where(x => x.ExpiresAt != null && x.ExpiresAt <= now.UtcDateTime)
+                .ToListAsync(cancellationToken);
+
+            foreach (var session in expiredSessions)
+            {
+                await cacheService.RemoveAsync(BuildCacheKey(session.Id), cancellationToken);
+                await adapter.DeleteEntityAsync(session, cancellationToken);
+            }
+
+            return (long)expiredSessions.Count;
+        });
+
+    public Task<long> DeleteAllByUserAsync(Guid userId, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(DeleteAllByUserAsync), cancellationToken, async () =>
+        {
+            var linq = new LinqMetaData(adapter);
+            var sessions = await linq.Session.Where(x => x.UserId == userId).ToListAsync(cancellationToken);
+
+            foreach (var session in sessions)
+            {
+                await cacheService.RemoveAsync(BuildCacheKey(session.Id), cancellationToken);
+                await adapter.DeleteEntityAsync(session, cancellationToken);
+            }
+
+            return (long)sessions.Count;
+        });
+
+    public Task<long> DeleteAllByUserExceptAsync(
         Guid userId,
         string exceptSessionId,
         CancellationToken cancellationToken = default)
-    {
-        var linq = new LinqMetaData(adapter);
-        var sessions = await linq.Session.Where(x => x.UserId == userId && x.Id != exceptSessionId).ToListAsync(cancellationToken);
-
-        foreach (var session in sessions)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(DeleteAllByUserExceptAsync), cancellationToken, async () =>
         {
-            await cacheService.RemoveAsync(BuildCacheKey(session.Id), cancellationToken);
-            await adapter.DeleteEntityAsync(session, cancellationToken);
-        }
+            var linq = new LinqMetaData(adapter);
+            var sessions = await linq.Session.Where(x => x.UserId == userId && x.Id != exceptSessionId).ToListAsync(cancellationToken);
 
-        return sessions.Count;
-    }
+            foreach (var session in sessions)
+            {
+                await cacheService.RemoveAsync(BuildCacheKey(session.Id), cancellationToken);
+                await adapter.DeleteEntityAsync(session, cancellationToken);
+            }
+
+            return (long)sessions.Count;
+        });
 
     private async Task<RoomManagerment.Auth.EntityClasses.SessionEntity?> QuerySessionByIdAsync(string sessionId, CancellationToken cancellationToken)
     {
@@ -200,4 +213,3 @@ public sealed class SessionRepository(
 
     private static string BuildCacheKey(string sessionId) => $"auth:session:{sessionId}";
 }
-

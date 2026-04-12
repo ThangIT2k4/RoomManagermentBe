@@ -1,18 +1,19 @@
-using Auth.API.Validators;
 using Auth.Application.Dtos;
+using Auth.Application.Features.Auth.ResendOtp;
+using Auth.Application.Validators;
 
 namespace Auth.API.Tests.Validators;
 
 public sealed class ResendOtpRequestValidatorTests
 {
-    private readonly ResendOtpRequestValidator _validator = new();
+    private readonly ResendOtpCommandValidator _validator = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenEmailIsInvalid()
     {
-        var request = new ResendOtpRequest("not-an-email", OtpPurpose.VerifyEmail, Guid.NewGuid());
+        var command = new ResendOtpCommand("not-an-email", OtpPurpose.VerifyEmail, Guid.NewGuid());
 
-        var result = _validator.Validate(request);
+        var result = _validator.Validate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x => x.PropertyName == "Email");
@@ -21,9 +22,9 @@ public sealed class ResendOtpRequestValidatorTests
     [Fact]
     public void Validate_ShouldPass_WhenPayloadIsValid()
     {
-        var request = new ResendOtpRequest("user@example.com", OtpPurpose.VerifyEmail, Guid.NewGuid());
+        var command = new ResendOtpCommand("user@example.com", OtpPurpose.VerifyEmail, Guid.NewGuid());
 
-        var result = _validator.Validate(request);
+        var result = _validator.Validate(command);
 
         Assert.True(result.IsValid);
     }

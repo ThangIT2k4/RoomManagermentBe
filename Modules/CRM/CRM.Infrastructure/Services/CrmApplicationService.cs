@@ -1,4 +1,3 @@
-using CRM.Application.Common;
 using CRM.Application.Features.Leads;
 using CRM.Application.Features.UseCases;
 using CRM.Application.Services;
@@ -27,7 +26,7 @@ public sealed class CrmApplicationService(
     {
         if (request.OrganizationId == Guid.Empty)
         {
-            return Result<LeadDto>.Failure(new Error("CRM.Lead.Organization.Required", "OrganizationId is required."));
+            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.Organization.Required", "OrganizationId is required."));
         }
 
         LeadEntity entity;
@@ -37,7 +36,7 @@ public sealed class CrmApplicationService(
         }
         catch (ArgumentException ex)
         {
-            return Result<LeadDto>.Failure(new Error("CRM.Lead.InvalidInput", ex.Message));
+            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.InvalidInput", ex.Message));
         }
 
         var created = await leadRepository.AddAsync(entity, cancellationToken);
@@ -48,7 +47,7 @@ public sealed class CrmApplicationService(
     {
         if (leadId == Guid.Empty)
         {
-            return Result<LeadDto>.Failure(new Error("CRM.Lead.Id.Required", "LeadId is required."));
+            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.Id.Required", "LeadId is required."));
         }
 
         var cacheKey = $"crm:lead:{leadId}";
@@ -61,7 +60,7 @@ public sealed class CrmApplicationService(
         var lead = await leadRepository.GetByIdAsync(leadId, cancellationToken);
         if (lead is null)
         {
-            return Result<LeadDto>.Failure(new Error("CRM.Lead.NotFound", "Lead not found."));
+            return Result<LeadDto>.Failure(Error.NotFound("CRM.Lead.NotFound", "Lead not found."));
         }
 
         var dto = Map(lead);
@@ -73,13 +72,13 @@ public sealed class CrmApplicationService(
     {
         if (request.LeadId == Guid.Empty)
         {
-            return Result<LeadDto>.Failure(new Error("CRM.Lead.Id.Required", "LeadId is required."));
+            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.Id.Required", "LeadId is required."));
         }
 
         var lead = await leadRepository.GetByIdAsync(request.LeadId, cancellationToken);
         if (lead is null)
         {
-            return Result<LeadDto>.Failure(new Error("CRM.Lead.NotFound", "Lead not found."));
+            return Result<LeadDto>.Failure(Error.NotFound("CRM.Lead.NotFound", "Lead not found."));
         }
 
         try
@@ -88,7 +87,7 @@ public sealed class CrmApplicationService(
         }
         catch (ArgumentException ex)
         {
-            return Result<LeadDto>.Failure(new Error("CRM.Lead.InvalidStatus", ex.Message));
+            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.InvalidStatus", ex.Message));
         }
 
         var updated = await leadRepository.UpdateAsync(lead, cancellationToken);
@@ -106,7 +105,7 @@ public sealed class CrmApplicationService(
     public async Task<Result<ViewingEntityDto>> ConfirmViewingAsync(Guid viewingId, CancellationToken cancellationToken = default)
     {
         var viewing = await viewingRepository.GetByIdAsync(viewingId, cancellationToken);
-        if (viewing is null) return Result<ViewingEntityDto>.Failure(new Error("CRM.Viewing.NotFound", "Viewing not found."));
+        if (viewing is null) return Result<ViewingEntityDto>.Failure(Error.NotFound("CRM.Viewing.NotFound", "Viewing not found."));
         viewing.Confirm();
         await viewingRepository.UpdateAsync(viewing, cancellationToken);
         return Result<ViewingEntityDto>.Success(Map(viewing));
@@ -115,7 +114,7 @@ public sealed class CrmApplicationService(
     public async Task<Result<ViewingEntityDto>> CompleteViewingAsync(CompleteViewingCommand command, CancellationToken cancellationToken = default)
     {
         var viewing = await viewingRepository.GetByIdAsync(command.ViewingId, cancellationToken);
-        if (viewing is null) return Result<ViewingEntityDto>.Failure(new Error("CRM.Viewing.NotFound", "Viewing not found."));
+        if (viewing is null) return Result<ViewingEntityDto>.Failure(Error.NotFound("CRM.Viewing.NotFound", "Viewing not found."));
         viewing.Complete(command.Summary);
         await viewingRepository.UpdateAsync(viewing, cancellationToken);
         return Result<ViewingEntityDto>.Success(Map(viewing));
@@ -124,7 +123,7 @@ public sealed class CrmApplicationService(
     public async Task<Result<ViewingEntityDto>> CancelViewingAsync(CancelViewingCommand command, CancellationToken cancellationToken = default)
     {
         var viewing = await viewingRepository.GetByIdAsync(command.ViewingId, cancellationToken);
-        if (viewing is null) return Result<ViewingEntityDto>.Failure(new Error("CRM.Viewing.NotFound", "Viewing not found."));
+        if (viewing is null) return Result<ViewingEntityDto>.Failure(Error.NotFound("CRM.Viewing.NotFound", "Viewing not found."));
         viewing.Cancel(command.Reason);
         await viewingRepository.UpdateAsync(viewing, cancellationToken);
         return Result<ViewingEntityDto>.Success(Map(viewing));
@@ -140,7 +139,7 @@ public sealed class CrmApplicationService(
     public async Task<Result<BookingDepositDto>> ApproveBookingAsync(ApproveBookingCommand command, CancellationToken cancellationToken = default)
     {
         var booking = await bookingRepository.GetByIdAsync(command.BookingId, cancellationToken);
-        if (booking is null) return Result<BookingDepositDto>.Failure(new Error("CRM.Booking.NotFound", "Booking not found."));
+        if (booking is null) return Result<BookingDepositDto>.Failure(Error.NotFound("CRM.Booking.NotFound", "Booking not found."));
         booking.Approve(command.ApprovedAt);
         await bookingRepository.UpdateAsync(booking, cancellationToken);
         return Result<BookingDepositDto>.Success(Map(booking));
@@ -149,7 +148,7 @@ public sealed class CrmApplicationService(
     public async Task<Result<BookingDepositDto>> PayBookingAsync(PayBookingCommand command, CancellationToken cancellationToken = default)
     {
         var booking = await bookingRepository.GetByIdAsync(command.BookingId, cancellationToken);
-        if (booking is null) return Result<BookingDepositDto>.Failure(new Error("CRM.Booking.NotFound", "Booking not found."));
+        if (booking is null) return Result<BookingDepositDto>.Failure(Error.NotFound("CRM.Booking.NotFound", "Booking not found."));
         booking.MarkPaid(command.PaidAt);
         await bookingRepository.UpdateAsync(booking, cancellationToken);
         return Result<BookingDepositDto>.Success(Map(booking));
@@ -179,7 +178,7 @@ public sealed class CrmApplicationService(
     public async Task<Result<CommissionEventDto>> ApproveCommissionAsync(ApproveCommissionCommand command, CancellationToken cancellationToken = default)
     {
         var commissionEvent = await commissionEventRepository.GetByIdAsync(command.CommissionEventId, cancellationToken);
-        if (commissionEvent is null) return Result<CommissionEventDto>.Failure(new Error("CRM.Commission.NotFound", "Commission event not found."));
+        if (commissionEvent is null) return Result<CommissionEventDto>.Failure(Error.NotFound("CRM.Commission.NotFound", "Commission event not found."));
         commissionEvent.Approve(command.ApprovedAt);
         await commissionEventRepository.UpdateAsync(commissionEvent, cancellationToken);
         return Result<CommissionEventDto>.Success(Map(commissionEvent));

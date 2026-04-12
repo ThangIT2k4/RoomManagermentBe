@@ -1,6 +1,6 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Users.UpdateUser;
 
@@ -9,4 +9,4 @@ public sealed record UpdateUserCommand(
     string? Email,
     string? Username,
     string? Phone,
-    short? Status) : IRequest<Result<UserDto>>;
+    short? Status) : IAppRequest<Result<UserDto>>;

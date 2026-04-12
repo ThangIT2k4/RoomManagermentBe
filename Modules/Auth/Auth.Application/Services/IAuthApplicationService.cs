@@ -1,5 +1,6 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
+using Auth.Application.Features.Register;
 
 namespace Auth.Application.Services;
 

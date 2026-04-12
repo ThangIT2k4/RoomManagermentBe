@@ -1,6 +1,6 @@
 using Auth.Application.Common;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.Sessions.LogoutAllSessions;
 
-public sealed record LogoutAllSessionsCommand(Guid UserId) : IRequest<Result>;
+public sealed record LogoutAllSessionsCommand(Guid UserId) : IAppRequest<Result>;

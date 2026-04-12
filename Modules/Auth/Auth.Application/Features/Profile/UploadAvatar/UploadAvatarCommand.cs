@@ -1,7 +1,7 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.Profile.UploadAvatar;
 
-public sealed record UploadAvatarCommand(Guid UserId, string AvatarUrl) : IRequest<Result<UserProfileDto>>;
+public sealed record UploadAvatarCommand(Guid UserId, string AvatarUrl) : IAppRequest<Result<UserProfileDto>>;

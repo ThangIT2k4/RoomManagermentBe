@@ -1,7 +1,7 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.Users.GetUserById;
 
-public sealed record GetUserByIdQuery(Guid UserId) : IRequest<Result<UserDto>>;
+public sealed record GetUserByIdQuery(Guid UserId) : IAppRequest<Result<UserDto>>;

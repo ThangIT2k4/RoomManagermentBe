@@ -1,7 +1,7 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.Profile.GetProfile;
 
-public sealed record GetProfileQuery(Guid UserId) : IRequest<Result<UserProfileDto>>;
+public sealed record GetProfileQuery(Guid UserId) : IAppRequest<Result<UserProfileDto>>;

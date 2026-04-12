@@ -6,8 +6,10 @@
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="MediatR" Version="13.1.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.9" />
     <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Shared\RoomManagerment.Shared.csproj" />
     <ProjectReference Include="..\DAL\DatabaseGeneric\RoomManagerment.CRM.csproj" />
     <ProjectReference Include="..\DAL\DatabaseSpecific\RoomManagerment.CRMDBSpecific.csproj" />
     <ProjectReference Include="..\CRM.Application\CRM.Application.csproj" />

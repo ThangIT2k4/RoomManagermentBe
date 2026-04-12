@@ -1,4 +1,3 @@
-using CRM.Application.Common;
 using CRM.Application.Features.Leads;
 using CRM.Application.Features.UseCases;
 

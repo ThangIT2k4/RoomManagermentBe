@@ -7,9 +7,11 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-    <PackageReference Include="MediatR" Version="13.1.0" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="StackExchange.Redis" Version="2.11.0" />
     <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Messaging\RoomManagerment.Messaging.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\RoomManagerment.Shared\RoomManagerment.Shared.csproj" />
     <ProjectReference Include="..\DAL\DatabaseGeneric\RoomManagerment.Auth.csproj" />
     <ProjectReference Include="..\DAL\DatabaseSpecific\RoomManagerment.AuthDBSpecific.csproj" />
     <ProjectReference Include="..\Auth.Application\Auth.Application.csproj" />

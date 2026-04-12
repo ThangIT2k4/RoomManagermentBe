@@ -5,7 +5,9 @@ namespace Finance.API.Controllers;
 
 [ApiController]
 [Route("api/finance/webhooks")]
-public sealed class PaymentWebhookController(IFinanceApplicationService finance) : ControllerBase
+public sealed class PaymentWebhookController(
+    IFinanceApplicationService finance,
+    ILogger<PaymentWebhookController> logger) : ControllerBase
 {
     [HttpPost("payment")]
     public async Task<IActionResult> Handle(CancellationToken cancellationToken)
@@ -20,7 +22,16 @@ public sealed class PaymentWebhookController(IFinanceApplicationService finance)
             h => h.Value.FirstOrDefault() ?? string.Empty,
             StringComparer.OrdinalIgnoreCase);
 
-        await finance.HandlePaymentWebhookAsync(raw, headers, cancellationToken);
+        var result = await finance.HandlePaymentWebhookAsync(raw, headers, cancellationToken);
+        if (result.IsFailure)
+        {
+            logger.LogError(
+                "Payment webhook processing failed: {Code} {Message}",
+                result.Error?.Code,
+                result.Error?.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
         return Ok();
     }
 }

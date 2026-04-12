@@ -1,4 +1,4 @@
-using CRM.API.Common;
+using RoomManagerment.Shared.Extensions;
 using CRM.Application.Features.UseCases;
 using CRM.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +11,13 @@ public sealed class ReviewsController(ICrmApplicationService crmService) : Contr
 {
     [HttpPost]
     public async Task<ActionResult<ReviewDto>> Create([FromBody] CreateReviewCommand command, CancellationToken cancellationToken)
-        => (await crmService.CreateReviewAsync(command, cancellationToken)).ToActionResult();
+        => (await crmService.CreateReviewAsync(command, cancellationToken)).ToActionResult(this);
 
     [HttpPost("{reviewId:guid}/replies")]
     public async Task<ActionResult<ReviewReplyDto>> Reply([FromRoute] Guid reviewId, [FromBody] ReplyReviewCommand command, CancellationToken cancellationToken)
-        => (await crmService.ReplyReviewAsync(command with { ReviewId = reviewId }, cancellationToken)).ToActionResult();
+        => (await crmService.ReplyReviewAsync(command with { ReviewId = reviewId }, cancellationToken)).ToActionResult(this);
 
     [HttpGet]
     public async Task<ActionResult<GetReviewsResult>> List([FromQuery] Guid organizationId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
-        => (await crmService.GetReviewsAsync(new GetReviewsQuery(organizationId, Paging: new PagingRequest(pageNumber, pageSize)), cancellationToken)).ToActionResult();
+        => (await crmService.GetReviewsAsync(new GetReviewsQuery(organizationId, Paging: new PagingRequest(pageNumber, pageSize)), cancellationToken)).ToActionResult(this);
 }

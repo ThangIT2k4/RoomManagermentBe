@@ -1,6 +1,6 @@
 using Auth.Application.Common;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.ForgotPassword;
 
-public sealed record ForgotPasswordCommand(string Email) : IRequest<Result>;
+public sealed record ForgotPasswordCommand(string Email) : IAppRequest<Result>;

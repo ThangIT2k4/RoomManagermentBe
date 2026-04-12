@@ -1,18 +1,18 @@
-using Auth.API.Validators;
-using Auth.Application.Dtos;
+using Auth.Application.Features.Auth.ResetPassword;
+using Auth.Application.Validators;
 
 namespace Auth.API.Tests.Validators;
 
 public sealed class ResetPasswordRequestValidatorTests
 {
-    private readonly ResetPasswordRequestValidator _validator = new();
+    private readonly ResetPasswordCommandValidator _validator = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenOtpIsNotNumeric()
     {
-        var request = new ResetPasswordRequest("user@example.com", "12ab56", "Password1");
+        var command = new ResetPasswordCommand("user@example.com", "12ab56", "Password1");
 
-        var result = _validator.Validate(request);
+        var result = _validator.Validate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x => x.PropertyName == "OtpCode");
@@ -21,9 +21,9 @@ public sealed class ResetPasswordRequestValidatorTests
     [Fact]
     public void Validate_ShouldPass_WhenOtpIsNumeric6Digits()
     {
-        var request = new ResetPasswordRequest("user@example.com", "123456", "Password1");
+        var command = new ResetPasswordCommand("user@example.com", "123456", "Password1");
 
-        var result = _validator.Validate(request);
+        var result = _validator.Validate(command);
 
         Assert.True(result.IsValid);
     }

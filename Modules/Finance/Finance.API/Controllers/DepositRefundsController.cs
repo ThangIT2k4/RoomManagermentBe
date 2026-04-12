@@ -1,4 +1,4 @@
-using Finance.API;
+using RoomManagerment.Shared.Extensions;
 using Finance.Application.Dtos;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +22,7 @@ public sealed class DepositRefundsController(IFinanceApplicationService finance)
 
         var request = new CreateDepositRefundRequest(orgId, userId, leaseId, body.Amount, body.Notes);
         var result = await finance.CreateDepositRefundAsync(request, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpPost("deposit-refunds/{refundId:guid}/confirm-paid")]
@@ -38,7 +38,7 @@ public sealed class DepositRefundsController(IFinanceApplicationService finance)
 
         var request = new ConfirmDepositRefundRequest(orgId, userId, body.PaidAtUtc, body.ReferenceCode);
         var result = await finance.ConfirmDepositRefundPaidAsync(orgId, refundId, request, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpPost("deposit-refunds/{refundId:guid}/forfeit")]
@@ -54,7 +54,7 @@ public sealed class DepositRefundsController(IFinanceApplicationService finance)
 
         var request = new ForfeitDepositRefundRequest(orgId, userId, body.Reason);
         var result = await finance.ForfeitDepositRefundAsync(orgId, refundId, request, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 }
 

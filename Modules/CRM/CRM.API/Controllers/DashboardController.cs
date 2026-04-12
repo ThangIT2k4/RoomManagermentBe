@@ -1,20 +1,23 @@
 using CRM.Application.Features.UseCases;
-using CRM.Application.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
 
 namespace CRM.API.Controllers;
 
 [ApiController]
 [Route("api/crm")]
-public sealed class DashboardController(ICrmApplicationService crmService) : ControllerBase
+public sealed class DashboardController(IMediator mediator) : ControllerBase
 {
     [HttpGet("dashboard")]
     public async Task<ActionResult<object>> GetDashboard([FromQuery] Guid organizationId, CancellationToken cancellationToken)
     {
-        var leads = await crmService.GetLeadsAsync(new GetLeadsQuery(organizationId, Paging: new PagingRequest(1, 200)), cancellationToken);
+        var leads = await mediator.Send(
+            new GetLeadsQuery(organizationId, Paging: new PagingRequest(1, 200)),
+            cancellationToken);
         if (leads.IsFailure)
         {
-            return BadRequest(new { error = leads.Error });
+            return this.ToActionResult(leads);
         }
 
         var items = leads.Value!.Data.Items;

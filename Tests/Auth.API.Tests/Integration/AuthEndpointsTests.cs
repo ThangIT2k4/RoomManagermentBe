@@ -1,16 +1,15 @@
 using System.Net;
 using System.Net.Http.Json;
-using Auth.Application.Common;
 using Auth.Application.Dtos;
-using Auth.Application.Features.Auth.Users.GetUserById;
 using Moq;
+using RoomManagerment.Shared.Common;
 
 namespace Auth.API.Tests.Integration;
 
 public sealed class AuthEndpointsTests
 {
     [Fact]
-    public async Task Login_ShouldReturnBadRequest_WhenPayloadInvalid()
+    public async Task Login_ShouldReturnUnprocessableEntity_WhenPayloadInvalid()
     {
         await using var host = new AuthApiTestHost();
 
@@ -21,9 +20,9 @@ public sealed class AuthEndpointsTests
             rememberMe = false
         });
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        host.MediatorMock.Verify(
-            x => x.Send(It.IsAny<Auth.Application.Features.Auth.Login.LoginCommand>(), It.IsAny<CancellationToken>()),
+        Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+        host.AuthServiceMock.Verify(
+            x => x.LoginAsync(It.IsAny<LoginRequest>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
 
@@ -43,8 +42,8 @@ public sealed class AuthEndpointsTests
             DateTime.UtcNow,
             null);
 
-        host.MediatorMock
-            .Setup(x => x.Send(It.IsAny<GetUserByIdQuery>(), It.IsAny<CancellationToken>()))
+        host.AuthServiceMock
+            .Setup(x => x.GetUserByIdAsync(It.IsAny<GetUserByIdRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result<UserDto>.Success(existingUser));
 
         var request = new HttpRequestMessage(HttpMethod.Post, "/api/auth/send-otp")
@@ -60,9 +59,9 @@ public sealed class AuthEndpointsTests
         var response = await host.Client.SendAsync(request);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        host.MediatorMock.Verify(x => x.Send(It.IsAny<GetUserByIdQuery>(), It.IsAny<CancellationToken>()), Times.Once);
-        host.MediatorMock.Verify(
-            x => x.Send(It.IsAny<Auth.Application.Features.Auth.SendOtp.SendOtpCommand>(), It.IsAny<CancellationToken>()),
+        host.AuthServiceMock.Verify(x => x.GetUserByIdAsync(It.IsAny<GetUserByIdRequest>(), It.IsAny<CancellationToken>()), Times.Once);
+        host.AuthServiceMock.Verify(
+            x => x.SendOtpAsync(It.IsAny<SendOtpRequest>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
 }

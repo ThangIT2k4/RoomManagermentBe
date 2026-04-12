@@ -1,15 +1,16 @@
-using Auth.API.Common;
+using Auth.Application.Features.Auth.Capabilities.GetCapabilities;
 using Auth.Application.Dtos;
-using Auth.Application.Services;
+using RoomManagerment.Shared.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
 
 namespace Auth.API.Controllers;
 
 [ApiController]
 [Authorize]
 [Route("api/capabilities")]
-public sealed class CapabilitiesController(IAuthApplicationService authService) : ControllerBase
+public sealed class CapabilitiesController(IAppSender sender) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(PagedCapabilitiesResult), StatusCodes.Status200OK)]
@@ -19,7 +20,7 @@ public sealed class CapabilitiesController(IAuthApplicationService authService) 
         [FromQuery] int pageSize = 50,
         CancellationToken cancellationToken = default)
     {
-        var result = await authService.GetCapabilitiesAsync(new GetCapabilitiesRequest(searchTerm, pageNumber, pageSize), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new GetCapabilitiesQuery(searchTerm, pageNumber, pageSize), cancellationToken);
+        return this.ToActionResult(result);
     }
 }

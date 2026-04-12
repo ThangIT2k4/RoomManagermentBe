@@ -1,4 +1,4 @@
-using Finance.API;
+using RoomManagerment.Shared.Extensions;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +14,7 @@ public sealed class FinanceJobsController(IFinanceScheduledJobPublisher jobs) : 
         CancellationToken cancellationToken)
     {
         var result = await jobs.PublishAutoInvoiceGenerationAsync(body.RunDate, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpPost("overdue-sweep")]
@@ -23,7 +23,7 @@ public sealed class FinanceJobsController(IFinanceScheduledJobPublisher jobs) : 
         CancellationToken cancellationToken)
     {
         var result = await jobs.PublishOverdueSweepAsync(body.AsOfDate, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 }
 

@@ -1,6 +1,6 @@
 using Auth.Application.Common;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Users.DeleteUser;
 
-public sealed record DeleteUserCommand(Guid UserId, Guid DeletedBy) : IRequest<Result>;
+public sealed record DeleteUserCommand(Guid UserId, Guid DeletedBy) : IAppRequest<Result>;

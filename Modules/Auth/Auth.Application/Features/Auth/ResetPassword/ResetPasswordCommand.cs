@@ -1,6 +1,6 @@
 using Auth.Application.Common;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.ResetPassword;
 
-public sealed record ResetPasswordCommand(string Email, string OtpCode, string NewPassword) : IRequest<Result>;
+public sealed record ResetPasswordCommand(string Email, string OtpCode, string NewPassword) : IAppRequest<Result>;

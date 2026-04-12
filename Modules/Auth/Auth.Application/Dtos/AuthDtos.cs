@@ -77,7 +77,6 @@ public sealed record GetUserRolesRequest(Guid UserId, Guid? OrganizationId = nul
 public sealed record GetCapabilitiesRequest(string? SearchTerm = null, int PageNumber = 1, int PageSize = 50);
 
 public sealed record LoginResult(UserDto User, SessionDto Session);
-public sealed record RegisterResult(UserDto User);
 public sealed record PagedUsersResult(IReadOnlyList<UserDto> Items, long TotalCount, int PageNumber, int PageSize, int TotalPages);
 public sealed record PagedSessionsResult(IReadOnlyList<SessionDto> Items, long TotalCount, int PageNumber, int PageSize, int TotalPages);
 public sealed record PagedCapabilitiesResult(IReadOnlyList<CapabilityDto> Items, long TotalCount, int PageNumber, int PageSize, int TotalPages);

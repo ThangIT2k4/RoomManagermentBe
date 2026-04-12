@@ -1,18 +1,18 @@
-using Auth.API.Requests;
-using Auth.API.Validators;
+using Auth.Application.Features.Auth.Login;
+using Auth.Application.Validators;
 
 namespace Auth.API.Tests.Validators;
 
 public sealed class LoginApiRequestValidatorTests
 {
-    private readonly LoginApiRequestValidator _validator = new();
+    private readonly LoginCommandValidator _validator = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenLoginLooksLikeSqlInjection()
     {
-        var request = new LoginApiRequest("admin' OR 1=1 --", "Password1", false);
+        var command = new LoginCommand("admin' OR 1=1 --", "Password1", null, null, false);
 
-        var result = _validator.Validate(request);
+        var result = _validator.Validate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x => x.PropertyName == "Login");
@@ -21,9 +21,9 @@ public sealed class LoginApiRequestValidatorTests
     [Fact]
     public void Validate_ShouldPass_WhenLoginIsNormalEmail()
     {
-        var request = new LoginApiRequest("normal.user@example.com", "Password1", false);
+        var command = new LoginCommand("normal.user@example.com", "Password1", null, null, false);
 
-        var result = _validator.Validate(request);
+        var result = _validator.Validate(command);
 
         Assert.True(result.IsValid);
     }

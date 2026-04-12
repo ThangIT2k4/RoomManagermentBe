@@ -1,14 +1,13 @@
-using Auth.Application.Common;
 using Auth.Application.Dtos;
+using Auth.Application.Features.Register;
 using Auth.Application.Services;
 using Auth.Domain.Common;
 using Auth.Domain.Entities;
 using Auth.Domain.Enums;
 using Auth.Domain.Repositories;
 using Auth.Domain.ValueObjects;
-using Auth.Infrastructure.Mapper;
-using RoomManagerment.Auth.DatabaseSpecific;
-using RoomManagerment.Auth.Linq;
+using Microsoft.Extensions.Logging;
+using RoomManagerment.Shared.Common;
 using SD.LLBLGen.Pro.LinqSupportClasses;
 using AuthDataAccessAdapter = RoomManagerment.Auth.DatabaseSpecific.DataAccessAdapter;
 using AuthLinqMetaData = RoomManagerment.Auth.Linq.LinqMetaData;
@@ -22,7 +21,8 @@ public sealed class AuthApplicationService(
     ISessionRepository sessionRepository,
     IPasswordHasher passwordHasher,
     IOrganizationMembershipGateway organizationGateway,
-    AuthDataAccessAdapter adapter) : IAuthApplicationService
+    AuthDataAccessAdapter adapter,
+    ILogger<AuthApplicationService> logger) : IAuthApplicationService
 {
     private static TimeSpan OtpExpiryFor(OtpPurpose purpose) => purpose switch
     {
@@ -30,434 +30,451 @@ public sealed class AuthApplicationService(
         _ => TimeSpan.FromMinutes(5)
     };
 
-    public async Task<Result<RegisterResult>> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
-    {
-        if (string.IsNullOrWhiteSpace(request.Password))
+    public Task<Result<RegisterResult>> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(RegisterAsync), cancellationToken, async () =>
         {
-            return Result<RegisterResult>.Failure(new Error("Auth.Password.Empty", "Password is required."));
-        }
-
-        var email = Email.Create(request.Email);
-        if (await userRepository.ExistsByEmailAsync(email, cancellationToken: cancellationToken))
-        {
-            return Result<RegisterResult>.Failure(new Error("Auth.Email.Exists", "Email already exists."));
-        }
-
-        Username? username = null;
-        if (!string.IsNullOrWhiteSpace(request.Username))
-        {
-            username = Username.Create(request.Username);
-            if (await userRepository.ExistsByUsernameAsync(username, cancellationToken: cancellationToken))
+            if (string.IsNullOrWhiteSpace(request.Password))
             {
-                return Result<RegisterResult>.Failure(new Error("Auth.Username.Exists", "Username already exists."));
+                return Result<RegisterResult>.Failure(Error.BadRequest("Auth.Password.Empty", "Password is required."));
             }
-        }
 
-        var user = UserEntity.Create(
-            email,
-            username,
-            string.IsNullOrWhiteSpace(request.Phone) ? null : Phone.Create(request.Phone),
-            PasswordHash.Create(passwordHasher.Hash(request.Password)),
-            (short)UserStatus.Inactive,
-            DateTime.UtcNow);
-
-        await userRepository.AddAsync(user, cancellationToken);
-
-        var now = DateTime.UtcNow;
-        var profile = new DalUserProfileEntity
-        {
-            UserId = user.Id,
-            FullName = request.FullName.Trim(),
-            CreatedAt = now,
-            UpdatedAt = now
-        };
-        await adapter.SaveEntityAsync(profile, true, false, cancellationToken);
-
-        var otpResult = await SendOtpAsync(
-            new SendOtpRequest(user.Email.Value, OtpPurpose.VerifyEmail, user.Id),
-            cancellationToken);
-        if (otpResult.IsFailure)
-        {
-            return Result<RegisterResult>.Failure(otpResult.Error ?? new Error("Auth.Otp.Failed", "Could not issue verification OTP."));
-        }
-
-        return Result<RegisterResult>.Success(new RegisterResult(MapUser(user)));
-    }
-
-    public async Task<Result<LoginResult>> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
-    {
-        if (string.IsNullOrWhiteSpace(request.Login) || string.IsNullOrWhiteSpace(request.Password))
-        {
-            return Result<LoginResult>.Failure(new Error("Auth.Login.Invalid", "Login or password is invalid."));
-        }
-
-        UserEntity? user;
-        if (request.Login.Contains('@'))
-        {
-            user = await userRepository.GetByEmailAsync(Email.Create(request.Login), cancellationToken);
-        }
-        else
-        {
-            user = await userRepository.GetByUsernameAsync(Username.Create(request.Login), cancellationToken);
-        }
-
-        if (user is null || user.PasswordHash is null)
-        {
-            return Result<LoginResult>.Failure(new Error("Auth.Login.Failed", "Invalid credentials."));
-        }
-
-        if (user.Status == UserStatus.Inactive)
-        {
-            return Result<LoginResult>.Failure(new Error("Auth.Login.NotVerified", "Account is not verified. Please verify your email."));
-        }
-
-        if (user.Status == UserStatus.Banned)
-        {
-            return Result<LoginResult>.Failure(new Error("Auth.Login.Banned", "Account is locked."));
-        }
-
-        if (!passwordHasher.Verify(request.Password, user.PasswordHash.Value))
-        {
-            return Result<LoginResult>.Failure(new Error("Auth.Login.Failed", "Invalid credentials."));
-        }
-
-        user.RecordLogin(DateTime.UtcNow, null, request.IpAddress);
-        await userRepository.UpdateAsync(user, cancellationToken);
-
-        var sessionResult = await CreateSessionAsync(new CreateSessionRequest(user.Id, request.IpAddress, request.UserAgent, request.RememberMe), cancellationToken);
-        if (sessionResult.IsFailure || sessionResult.Value is null)
-        {
-            return Result<LoginResult>.Failure(sessionResult.Error ?? new Error("Auth.Session.Failed", "Cannot create session."));
-        }
-
-        return Result<LoginResult>.Success(new LoginResult(MapUser(user), sessionResult.Value));
-    }
-
-    public async Task<Result> LogoutAsync(LogoutRequest request, CancellationToken cancellationToken = default)
-    {
-        await sessionRepository.DeleteAsync(request.SessionId, cancellationToken);
-        return Result.Success();
-    }
-
-    public async Task<Result<UserDto>> GetCurrentUserAsync(GetCurrentUserRequest request, CancellationToken cancellationToken = default)
-    {
-        var session = await sessionRepository.GetByIdAsync(request.SessionId, cancellationToken);
-        if (session is null || session.IsExpired(DateTimeOffset.UtcNow))
-        {
-            return Result<UserDto>.Failure(new Error("Auth.Session.NotFound", "Session not found or expired."));
-        }
-
-        var user = await userRepository.GetByIdAsync(session.UserId, cancellationToken);
-        if (user is null)
-        {
-            return Result<UserDto>.Failure(new Error("Auth.User.NotFound", "User not found."));
-        }
-
-        return Result<UserDto>.Success(MapUser(user));
-    }
-
-    public async Task<Result<UserDto>> GetUserByIdAsync(GetUserByIdRequest request, CancellationToken cancellationToken = default)
-    {
-        var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
-        if (user is null)
-        {
-            return Result<UserDto>.Failure(new Error("Auth.User.NotFound", "User not found."));
-        }
-
-        return Result<UserDto>.Success(MapUser(user));
-    }
-
-    public async Task<Result<PagedUsersResult>> GetUsersAsync(GetUsersRequest request, CancellationToken cancellationToken = default)
-    {
-        var paged = await userRepository.SearchPagedAsync(request.SearchTerm, request.PageNumber, request.PageSize, request.IncludeDeleted, cancellationToken);
-        return Result<PagedUsersResult>.Success(new PagedUsersResult(
-            paged.Items.Select(MapUser).ToList(),
-            paged.TotalCount,
-            paged.Page,
-            paged.PageSize,
-            paged.TotalPages));
-    }
-
-    public async Task<Result<UserDto>> UpdateUserAsync(UpdateUserRequest request, CancellationToken cancellationToken = default)
-    {
-        var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
-        if (user is null)
-        {
-            return Result<UserDto>.Failure(new Error("Auth.User.NotFound", "User not found."));
-        }
-
-        if (!string.IsNullOrWhiteSpace(request.Email))
-        {
             var email = Email.Create(request.Email);
-            if (await userRepository.ExistsByEmailAsync(email, request.UserId, cancellationToken))
+            if (await userRepository.ExistsByEmailAsync(email, cancellationToken: cancellationToken))
             {
-                return Result<UserDto>.Failure(new Error("Auth.Email.Exists", "Email already exists."));
+                return Result<RegisterResult>.Failure(Error.Conflict("Auth.Email.Exists", "Email already exists."));
             }
-            user.ChangeEmail(email, DateTime.UtcNow);
-        }
 
-        if (!string.IsNullOrWhiteSpace(request.Username))
-        {
-            var username = Username.Create(request.Username);
-            if (await userRepository.ExistsByUsernameAsync(username, request.UserId, cancellationToken))
+            Username? username = null;
+            if (!string.IsNullOrWhiteSpace(request.Username))
             {
-                return Result<UserDto>.Failure(new Error("Auth.Username.Exists", "Username already exists."));
+                username = Username.Create(request.Username);
+                if (await userRepository.ExistsByUsernameAsync(username, cancellationToken: cancellationToken))
+                {
+                    return Result<RegisterResult>.Failure(Error.Conflict("Auth.Username.Exists", "Username already exists."));
+                }
             }
-            user.ChangeUsername(username, DateTime.UtcNow);
-        }
 
-        if (request.Phone is not null)
+            var user = UserEntity.Create(
+                email,
+                username,
+                string.IsNullOrWhiteSpace(request.Phone) ? null : Phone.Create(request.Phone),
+                PasswordHash.Create(passwordHasher.Hash(request.Password)),
+                (short)UserStatus.Inactive,
+                DateTime.UtcNow);
+
+            await userRepository.AddAsync(user, cancellationToken);
+
+            var now = DateTime.UtcNow;
+            var profile = new DalUserProfileEntity
+            {
+                UserId = user.Id,
+                FullName = request.FullName.Trim(),
+                CreatedAt = now,
+                UpdatedAt = now
+            };
+            await adapter.SaveEntityAsync(profile, true, false, cancellationToken);
+
+            var otpResult = await SendOtpAsync(
+                new SendOtpRequest(user.Email.Value, OtpPurpose.VerifyEmail, user.Id),
+                cancellationToken);
+            if (otpResult.IsFailure)
+            {
+                return Result<RegisterResult>.Failure(otpResult.Error ?? Error.BadRequest("Auth.Otp.Failed", "Could not issue verification OTP."));
+            }
+
+            return Result<RegisterResult>.Success(new RegisterResult(MapUser(user)));
+        });
+
+    public Task<Result<LoginResult>> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(LoginAsync), cancellationToken, async () =>
         {
-            user.ChangePhone(string.IsNullOrWhiteSpace(request.Phone) ? null : Phone.Create(request.Phone), DateTime.UtcNow);
-        }
+            if (string.IsNullOrWhiteSpace(request.Login) || string.IsNullOrWhiteSpace(request.Password))
+            {
+                return Result<LoginResult>.Failure(Error.BadRequest("Auth.Login.Invalid", "Login or password is invalid."));
+            }
 
-        if (request.Status.HasValue)
+            UserEntity? user;
+            if (request.Login.Contains('@'))
+            {
+                user = await userRepository.GetByEmailAsync(Email.Create(request.Login), cancellationToken);
+            }
+            else
+            {
+                user = await userRepository.GetByUsernameAsync(Username.Create(request.Login), cancellationToken);
+            }
+
+            if (user is null || user.PasswordHash is null)
+            {
+                return Result<LoginResult>.Failure(Error.Unauthorized("Auth.Login.Failed", "Invalid credentials."));
+            }
+
+            if (user.Status == UserStatus.Inactive)
+            {
+                return Result<LoginResult>.Failure(Error.Forbidden("Auth.Login.NotVerified", "Account is not verified. Please verify your email."));
+            }
+
+            if (user.Status == UserStatus.Banned)
+            {
+                return Result<LoginResult>.Failure(Error.Forbidden("Auth.Login.Banned", "Account is locked."));
+            }
+
+            if (!passwordHasher.Verify(request.Password, user.PasswordHash.Value))
+            {
+                return Result<LoginResult>.Failure(Error.Unauthorized("Auth.Login.Failed", "Invalid credentials."));
+            }
+
+            user.RecordLogin(DateTime.UtcNow, null, request.IpAddress);
+            await userRepository.UpdateAsync(user, cancellationToken);
+
+            var sessionResult = await CreateSessionAsync(new CreateSessionRequest(user.Id, request.IpAddress, request.UserAgent, request.RememberMe), cancellationToken);
+            if (sessionResult.IsFailure || sessionResult.Value is null)
+            {
+                return Result<LoginResult>.Failure(sessionResult.Error ?? Error.BadRequest("Auth.Session.Failed", "Cannot create session."));
+            }
+
+            return Result<LoginResult>.Success(new LoginResult(MapUser(user), sessionResult.Value));
+        });
+
+    public Task<Result> LogoutAsync(LogoutRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(LogoutAsync), cancellationToken, async () =>
         {
-            ApplyStatus(user, request.Status.Value, DateTime.UtcNow);
-        }
+            await sessionRepository.DeleteAsync(request.SessionId, cancellationToken);
+            return Result.Success();
+        });
 
-        await userRepository.UpdateAsync(user, cancellationToken);
-        return Result<UserDto>.Success(MapUser(user));
-    }
-
-    public async Task<Result> DeleteUserAsync(DeleteUserRequest request, CancellationToken cancellationToken = default)
-    {
-        await userRepository.SoftDeleteAsync(request.UserId, request.DeletedBy, DateTime.UtcNow, cancellationToken);
-        return Result.Success();
-    }
-
-    public async Task<Result> ChangePasswordAsync(ChangePasswordRequest request, CancellationToken cancellationToken = default)
-    {
-        var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
-        if (user is null || user.PasswordHash is null)
+    public Task<Result<UserDto>> GetCurrentUserAsync(GetCurrentUserRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(GetCurrentUserAsync), cancellationToken, async () =>
         {
-            return Result.Failure(new Error("Auth.User.NotFound", "User not found."));
-        }
+            var session = await sessionRepository.GetByIdAsync(request.SessionId, cancellationToken);
+            if (session is null || session.IsExpired(DateTimeOffset.UtcNow))
+            {
+                return Result<UserDto>.Failure(Error.Unauthorized("Auth.Session.NotFound", "Session not found or expired."));
+            }
 
-        if (!passwordHasher.Verify(request.CurrentPassword, user.PasswordHash.Value))
+            var user = await userRepository.GetByIdAsync(session.UserId, cancellationToken);
+            if (user is null)
+            {
+                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+            }
+
+            return Result<UserDto>.Success(MapUser(user));
+        });
+
+    public Task<Result<UserDto>> GetUserByIdAsync(GetUserByIdRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(GetUserByIdAsync), cancellationToken, async () =>
         {
-            return Result.Failure(new Error("Auth.Password.Invalid", "Current password is invalid."));
-        }
+            var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
+            if (user is null)
+            {
+                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+            }
 
-        user.SetPassword(PasswordHash.Create(passwordHasher.Hash(request.NewPassword)), DateTime.UtcNow);
-        await userRepository.UpdateAsync(user, cancellationToken);
+            return Result<UserDto>.Success(MapUser(user));
+        });
 
-        if (!string.IsNullOrWhiteSpace(request.RetainSessionId))
+    public Task<Result<PagedUsersResult>> GetUsersAsync(GetUsersRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(GetUsersAsync), cancellationToken, async () =>
         {
-            await sessionRepository.DeleteAllByUserExceptAsync(request.UserId, request.RetainSessionId, cancellationToken);
-        }
+            var paged = await userRepository.SearchPagedAsync(request.SearchTerm, request.PageNumber, request.PageSize, request.IncludeDeleted, cancellationToken);
+            return Result<PagedUsersResult>.Success(new PagedUsersResult(
+                paged.Items.Select(MapUser).ToList(),
+                paged.TotalCount,
+                paged.Page,
+                paged.PageSize,
+                paged.TotalPages));
+        });
 
-        return Result.Success();
-    }
-
-    public async Task<Result> ForgotPasswordAsync(ForgotPasswordRequest request, CancellationToken cancellationToken = default)
-    {
-        return await SendOtpAsync(new SendOtpRequest(request.Email, OtpPurpose.ResetPassword), cancellationToken);
-    }
-
-    public async Task<Result> ResetPasswordAsync(ResetPasswordRequest request, CancellationToken cancellationToken = default)
-    {
-        var otp = await VerifyOtpCoreAsync(request.Email, OtpPurpose.ResetPassword, request.OtpCode, cancellationToken);
-        if (otp is null)
+    public Task<Result<UserDto>> UpdateUserAsync(UpdateUserRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(UpdateUserAsync), cancellationToken, async () =>
         {
-            return Result.Failure(new Error("Auth.Otp.Invalid", "OTP is invalid or expired."));
-        }
+            var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
+            if (user is null)
+            {
+                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+            }
 
-        var user = await userRepository.GetByEmailAsync(Email.Create(request.Email), cancellationToken);
-        if (user is null)
+            if (!string.IsNullOrWhiteSpace(request.Email))
+            {
+                var email = Email.Create(request.Email);
+                if (await userRepository.ExistsByEmailAsync(email, request.UserId, cancellationToken))
+                {
+                    return Result<UserDto>.Failure(Error.Conflict("Auth.Email.Exists", "Email already exists."));
+                }
+                user.ChangeEmail(email, DateTime.UtcNow);
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Username))
+            {
+                var username = Username.Create(request.Username);
+                if (await userRepository.ExistsByUsernameAsync(username, request.UserId, cancellationToken))
+                {
+                    return Result<UserDto>.Failure(Error.Conflict("Auth.Username.Exists", "Username already exists."));
+                }
+                user.ChangeUsername(username, DateTime.UtcNow);
+            }
+
+            if (request.Phone is not null)
+            {
+                user.ChangePhone(string.IsNullOrWhiteSpace(request.Phone) ? null : Phone.Create(request.Phone), DateTime.UtcNow);
+            }
+
+            if (request.Status.HasValue)
+            {
+                ApplyStatus(user, request.Status.Value, DateTime.UtcNow);
+            }
+
+            await userRepository.UpdateAsync(user, cancellationToken);
+            return Result<UserDto>.Success(MapUser(user));
+        });
+
+    public Task<Result> DeleteUserAsync(DeleteUserRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(DeleteUserAsync), cancellationToken, async () =>
         {
-            return Result.Failure(new Error("Auth.User.NotFound", "User not found."));
-        }
+            await userRepository.SoftDeleteAsync(request.UserId, request.DeletedBy, DateTime.UtcNow, cancellationToken);
+            return Result.Success();
+        });
 
-        user.SetPassword(PasswordHash.Create(passwordHasher.Hash(request.NewPassword)), DateTime.UtcNow);
-        user.ClearRememberToken(DateTime.UtcNow);
-        await userRepository.UpdateAsync(user, cancellationToken);
-        await sessionRepository.DeleteAllByUserAsync(user.Id, cancellationToken);
-        return Result.Success();
-    }
-
-    public async Task<Result> SendOtpAsync(SendOtpRequest request, CancellationToken cancellationToken = default)
-    {
-        var linq = new AuthLinqMetaData(adapter);
-        var now = DateTime.UtcNow;
-        var otp = GenerateOtp();
-
-        var entity = new DalEmailOtpEntity
+    public Task<Result> ChangePasswordAsync(ChangePasswordRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(ChangePasswordAsync), cancellationToken, async () =>
         {
-            Id = Guid.NewGuid(),
-            UserId = request.UserId,
-            Email = request.Email.Trim().ToLowerInvariant(),
-            OtpCode = otp,
-            Type = MapOtpPurpose(request.Purpose),
-            ExpiresAt = now.Add(OtpExpiryFor(request.Purpose)),
-            IsUsed = false,
-            CreatedAt = now,
-            UpdatedAt = now
-        };
+            var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
+            if (user is null || user.PasswordHash is null)
+            {
+                return Result.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+            }
 
-        await adapter.SaveEntityAsync(entity, true, false, cancellationToken);
-        return Result.Success();
-    }
+            if (!passwordHasher.Verify(request.CurrentPassword, user.PasswordHash.Value))
+            {
+                return Result.Failure(Error.BadRequest("Auth.Password.Invalid", "Current password is invalid."));
+            }
 
-    public async Task<Result> VerifyOtpAsync(VerifyOtpRequest request, CancellationToken cancellationToken = default)
-    {
-        var otp = await VerifyOtpCoreAsync(request.Email, request.Purpose, request.OtpCode, cancellationToken);
-        return otp is null
-            ? Result.Failure(new Error("Auth.Otp.Invalid", "OTP is invalid or expired."))
-            : Result.Success();
-    }
+            user.SetPassword(PasswordHash.Create(passwordHasher.Hash(request.NewPassword)), DateTime.UtcNow);
+            await userRepository.UpdateAsync(user, cancellationToken);
 
-    public async Task<Result> VerifyEmailAsync(VerifyEmailRequest request, CancellationToken cancellationToken = default)
-    {
-        var otp = await VerifyOtpCoreAsync(request.Email, OtpPurpose.VerifyEmail, request.OtpCode, cancellationToken);
-        if (otp is null)
+            if (!string.IsNullOrWhiteSpace(request.RetainSessionId))
+            {
+                await sessionRepository.DeleteAllByUserExceptAsync(request.UserId, request.RetainSessionId, cancellationToken);
+            }
+
+            return Result.Success();
+        });
+
+    public Task<Result> ForgotPasswordAsync(ForgotPasswordRequest request, CancellationToken cancellationToken = default)
+        => SendOtpAsync(new SendOtpRequest(request.Email, OtpPurpose.ResetPassword), cancellationToken);
+
+    public Task<Result> ResetPasswordAsync(ResetPasswordRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(ResetPasswordAsync), cancellationToken, async () =>
         {
-            return Result.Failure(new Error("Auth.Otp.Invalid", "OTP is invalid or expired."));
-        }
+            var otp = await VerifyOtpCoreAsync(request.Email, OtpPurpose.ResetPassword, request.OtpCode, cancellationToken);
+            if (otp is null)
+            {
+                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP is invalid or expired."));
+            }
 
-        if (!otp.UserId.HasValue || otp.UserId.Value == Guid.Empty)
+            var user = await userRepository.GetByEmailAsync(Email.Create(request.Email), cancellationToken);
+            if (user is null)
+            {
+                return Result.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+            }
+
+            user.SetPassword(PasswordHash.Create(passwordHasher.Hash(request.NewPassword)), DateTime.UtcNow);
+            user.ClearRememberToken(DateTime.UtcNow);
+            await userRepository.UpdateAsync(user, cancellationToken);
+            await sessionRepository.DeleteAllByUserAsync(user.Id, cancellationToken);
+            return Result.Success();
+        });
+
+    public Task<Result> SendOtpAsync(SendOtpRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(SendOtpAsync), cancellationToken, async () =>
         {
-            return Result.Failure(new Error("Auth.Otp.Invalid", "OTP is not bound to a user."));
-        }
+            var now = DateTime.UtcNow;
+            var otp = GenerateOtp();
 
-        var user = await userRepository.GetByIdAsync(otp.UserId.Value, cancellationToken);
-        if (user is null)
+            var entity = new DalEmailOtpEntity
+            {
+                Id = Guid.NewGuid(),
+                UserId = request.UserId,
+                Email = request.Email.Trim().ToLowerInvariant(),
+                OtpCode = otp,
+                Type = MapOtpPurpose(request.Purpose),
+                ExpiresAt = now.Add(OtpExpiryFor(request.Purpose)),
+                IsUsed = false,
+                CreatedAt = now,
+                UpdatedAt = now
+            };
+
+            await adapter.SaveEntityAsync(entity, true, false, cancellationToken);
+            return Result.Success();
+        });
+
+    public Task<Result> VerifyOtpAsync(VerifyOtpRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(VerifyOtpAsync), cancellationToken, async () =>
         {
-            return Result.Failure(new Error("Auth.User.NotFound", "User not found."));
-        }
+            var otp = await VerifyOtpCoreAsync(request.Email, request.Purpose, request.OtpCode, cancellationToken);
+            return otp is null
+                ? Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP is invalid or expired."))
+                : Result.Success();
+        });
 
-        if (!string.Equals(user.Email.Value, request.Email.Trim(), StringComparison.OrdinalIgnoreCase))
+    public Task<Result> VerifyEmailAsync(VerifyEmailRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(VerifyEmailAsync), cancellationToken, async () =>
         {
-            return Result.Failure(new Error("Auth.Otp.Invalid", "OTP does not match this email."));
-        }
+            var otp = await VerifyOtpCoreAsync(request.Email, OtpPurpose.VerifyEmail, request.OtpCode, cancellationToken);
+            if (otp is null)
+            {
+                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP is invalid or expired."));
+            }
 
-        user.VerifyEmailAndActivate(DateTime.UtcNow);
-        await userRepository.UpdateAsync(user, cancellationToken);
-        return Result.Success();
-    }
+            if (!otp.UserId.HasValue || otp.UserId.Value == Guid.Empty)
+            {
+                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP is not bound to a user."));
+            }
 
-    public async Task<Result> ResendOtpAsync(ResendOtpRequest request, CancellationToken cancellationToken = default)
-    {
-        return await SendOtpAsync(new SendOtpRequest(request.Email, request.Purpose, request.UserId), cancellationToken);
-    }
+            var user = await userRepository.GetByIdAsync(otp.UserId.Value, cancellationToken);
+            if (user is null)
+            {
+                return Result.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+            }
 
-    public async Task<Result<SessionDto>> CreateSessionAsync(CreateSessionRequest request, CancellationToken cancellationToken = default)
-    {
-        var token = Convert.ToHexString(Guid.NewGuid().ToByteArray()) + Convert.ToHexString(Guid.NewGuid().ToByteArray());
-        if (token.Length > 128)
+            if (!string.Equals(user.Email.Value, request.Email.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                return Result.Failure(Error.BadRequest("Auth.Otp.Invalid", "OTP does not match this email."));
+            }
+
+            user.VerifyEmailAndActivate(DateTime.UtcNow);
+            await userRepository.UpdateAsync(user, cancellationToken);
+            return Result.Success();
+        });
+
+    public Task<Result> ResendOtpAsync(ResendOtpRequest request, CancellationToken cancellationToken = default)
+        => SendOtpAsync(new SendOtpRequest(request.Email, request.Purpose, request.UserId), cancellationToken);
+
+    public Task<Result<SessionDto>> CreateSessionAsync(CreateSessionRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(CreateSessionAsync), cancellationToken, async () =>
         {
-            token = token[..128];
-        }
+            var token = Convert.ToHexString(Guid.NewGuid().ToByteArray()) + Convert.ToHexString(Guid.NewGuid().ToByteArray());
+            if (token.Length > 128)
+            {
+                token = token[..128];
+            }
 
-        var expiresAt = request.RememberMe ? DateTimeOffset.UtcNow.AddDays(30) : (DateTimeOffset?)null;
-        var session = SessionEntity.Create(request.UserId, token, request.IpAddress, request.UserAgent, null, expiresAt, DateTime.UtcNow);
-        await sessionRepository.AddAsync(session, cancellationToken);
-        return Result<SessionDto>.Success(MapSession(session));
-    }
+            var expiresAt = request.RememberMe ? DateTimeOffset.UtcNow.AddDays(30) : (DateTimeOffset?)null;
+            var session = SessionEntity.Create(request.UserId, token, request.IpAddress, request.UserAgent, null, expiresAt, DateTime.UtcNow);
+            await sessionRepository.AddAsync(session, cancellationToken);
+            return Result<SessionDto>.Success(MapSession(session));
+        });
 
-    public async Task<Result<PagedSessionsResult>> GetActiveSessionsAsync(GetActiveSessionsRequest request, CancellationToken cancellationToken = default)
-    {
-        var paged = await sessionRepository.GetByUserPagedAsync(request.UserId, request.PageNumber, request.PageSize, false, cancellationToken);
-        return Result<PagedSessionsResult>.Success(new PagedSessionsResult(
-            paged.Items.Select(MapSession).ToList(),
-            paged.TotalCount,
-            paged.Page,
-            paged.PageSize,
-            paged.TotalPages));
-    }
-
-    public async Task<Result> LogoutAllSessionsAsync(LogoutAllSessionsRequest request, CancellationToken cancellationToken = default)
-    {
-        await sessionRepository.DeleteAllByUserAsync(request.UserId, cancellationToken);
-        return Result.Success();
-    }
-
-    public async Task<Result<UserDto>> ChangeUserStatusAsync(ChangeUserStatusRequest request, CancellationToken cancellationToken = default)
-    {
-        var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
-        if (user is null)
+    public Task<Result<PagedSessionsResult>> GetActiveSessionsAsync(GetActiveSessionsRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(GetActiveSessionsAsync), cancellationToken, async () =>
         {
-            return Result<UserDto>.Failure(new Error("Auth.User.NotFound", "User not found."));
-        }
+            var paged = await sessionRepository.GetByUserPagedAsync(request.UserId, request.PageNumber, request.PageSize, false, cancellationToken);
+            return Result<PagedSessionsResult>.Success(new PagedSessionsResult(
+                paged.Items.Select(MapSession).ToList(),
+                paged.TotalCount,
+                paged.Page,
+                paged.PageSize,
+                paged.TotalPages));
+        });
 
-        ApplyStatus(user, request.Status, DateTime.UtcNow);
-        await userRepository.UpdateAsync(user, cancellationToken);
-        return Result<UserDto>.Success(MapUser(user));
-    }
-
-    public async Task<Result<UserProfileDto>> GetProfileAsync(GetProfileRequest request, CancellationToken cancellationToken = default)
-    {
-        var linq = new AuthLinqMetaData(adapter);
-        var profile = await linq.UserProfile.Where(x => x.UserId == request.UserId).FirstOrDefaultAsync(cancellationToken);
-        if (profile is null)
+    public Task<Result> LogoutAllSessionsAsync(LogoutAllSessionsRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(LogoutAllSessionsAsync), cancellationToken, async () =>
         {
-            return Result<UserProfileDto>.Failure(new Error("Auth.Profile.NotFound", "Profile not found."));
-        }
+            await sessionRepository.DeleteAllByUserAsync(request.UserId, cancellationToken);
+            return Result.Success();
+        });
 
-        return Result<UserProfileDto>.Success(MapProfile(profile));
-    }
+    public Task<Result<UserDto>> ChangeUserStatusAsync(ChangeUserStatusRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(ChangeUserStatusAsync), cancellationToken, async () =>
+        {
+            var user = await userRepository.GetByIdAsync(request.UserId, cancellationToken);
+            if (user is null)
+            {
+                return Result<UserDto>.Failure(Error.NotFound("Auth.User.NotFound", "User not found."));
+            }
 
-    public async Task<Result<UserProfileDto>> UpdateProfileAsync(UpdateProfileRequest request, CancellationToken cancellationToken = default)
-    {
-        var profile = await EnsureProfileAsync(request.UserId, cancellationToken);
-        profile.FullName = request.FullName?.Trim();
-        profile.Dob = request.Dob ?? profile.Dob;
-        profile.Gender = request.Gender;
-        profile.Address = request.Address?.Trim();
-        profile.Note = request.Note?.Trim();
-        profile.UpdatedAt = DateTime.UtcNow;
+            ApplyStatus(user, request.Status, DateTime.UtcNow);
+            await userRepository.UpdateAsync(user, cancellationToken);
+            return Result<UserDto>.Success(MapUser(user));
+        });
 
-        await adapter.SaveEntityAsync(profile, true, false, cancellationToken);
-        return Result<UserProfileDto>.Success(MapProfile(profile));
-    }
+    public Task<Result<UserProfileDto>> GetProfileAsync(GetProfileRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(GetProfileAsync), cancellationToken, async () =>
+        {
+            var linq = new AuthLinqMetaData(adapter);
+            var profile = await linq.UserProfile.Where(x => x.UserId == request.UserId).FirstOrDefaultAsync(cancellationToken);
+            if (profile is null)
+            {
+                return Result<UserProfileDto>.Failure(Error.NotFound("Auth.Profile.NotFound", "Profile not found."));
+            }
 
-    public async Task<Result<UserProfileDto>> UploadAvatarAsync(UploadAvatarRequest request, CancellationToken cancellationToken = default)
-    {
-        var profile = await EnsureProfileAsync(request.UserId, cancellationToken);
-        profile.Avatar = request.AvatarUrl?.Trim();
-        profile.UpdatedAt = DateTime.UtcNow;
+            return Result<UserProfileDto>.Success(MapProfile(profile));
+        });
 
-        await adapter.SaveEntityAsync(profile, true, false, cancellationToken);
-        return Result<UserProfileDto>.Success(MapProfile(profile));
-    }
+    public Task<Result<UserProfileDto>> UpdateProfileAsync(UpdateProfileRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(UpdateProfileAsync), cancellationToken, async () =>
+        {
+            var profile = await EnsureProfileAsync(request.UserId, cancellationToken);
+            profile.FullName = request.FullName?.Trim();
+            profile.Dob = request.Dob ?? profile.Dob;
+            profile.Gender = request.Gender;
+            profile.Address = request.Address?.Trim();
+            profile.Note = request.Note?.Trim();
+            profile.UpdatedAt = DateTime.UtcNow;
 
-    public async Task<Result<UserProfileDto>> UpdatePersonalInfoAsync(UpdatePersonalInfoRequest request, CancellationToken cancellationToken = default)
-    {
-        return await UpdateProfileAsync(new UpdateProfileRequest(request.UserId, request.FullName, request.Dob, request.Gender, request.Address, request.Note), cancellationToken);
-    }
+            await adapter.SaveEntityAsync(profile, true, false, cancellationToken);
+            return Result<UserProfileDto>.Success(MapProfile(profile));
+        });
+
+    public Task<Result<UserProfileDto>> UploadAvatarAsync(UploadAvatarRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(UploadAvatarAsync), cancellationToken, async () =>
+        {
+            var profile = await EnsureProfileAsync(request.UserId, cancellationToken);
+            profile.Avatar = request.AvatarUrl?.Trim();
+            profile.UpdatedAt = DateTime.UtcNow;
+
+            await adapter.SaveEntityAsync(profile, true, false, cancellationToken);
+            return Result<UserProfileDto>.Success(MapProfile(profile));
+        });
+
+    public Task<Result<UserProfileDto>> UpdatePersonalInfoAsync(UpdatePersonalInfoRequest request, CancellationToken cancellationToken = default)
+        => UpdateProfileAsync(new UpdateProfileRequest(request.UserId, request.FullName, request.Dob, request.Gender, request.Address, request.Note), cancellationToken);
 
     public Task<Result> AssignRoleAsync(AssignRoleRequest request, CancellationToken cancellationToken = default)
-        => organizationGateway.AssignRoleAsync(request, cancellationToken);
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(AssignRoleAsync), cancellationToken, () =>
+            organizationGateway.AssignRoleAsync(request, cancellationToken));
 
     public Task<Result> RemoveRoleAsync(RemoveRoleRequest request, CancellationToken cancellationToken = default)
-        => organizationGateway.RemoveRoleAsync(request, cancellationToken);
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(RemoveRoleAsync), cancellationToken, () =>
+            organizationGateway.RemoveRoleAsync(request, cancellationToken));
 
     public Task<Result<IReadOnlyList<RoleDto>>> GetUserRolesAsync(GetUserRolesRequest request, CancellationToken cancellationToken = default)
-        => organizationGateway.GetUserRolesAsync(request, cancellationToken);
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(GetUserRolesAsync), cancellationToken, () =>
+            organizationGateway.GetUserRolesAsync(request, cancellationToken));
 
-    public async Task<Result<PagedCapabilitiesResult>> GetCapabilitiesAsync(GetCapabilitiesRequest request, CancellationToken cancellationToken = default)
-    {
-        var paging = PagingInput.Create(request.PageNumber, request.PageSize);
-        var linq = new AuthLinqMetaData(adapter);
-        IQueryable<RoomManagerment.Auth.EntityClasses.CapabilityEntity> query = linq.Capability;
-
-        var search = SearchInput.Normalize(request.SearchTerm);
-        if (!string.IsNullOrWhiteSpace(search))
+    public Task<Result<PagedCapabilitiesResult>> GetCapabilitiesAsync(GetCapabilitiesRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(GetCapabilitiesAsync), cancellationToken, async () =>
         {
-            query = query.Where(x => x.KeyCode.Contains(search) || x.Name.Contains(search) || (x.Description != null && x.Description.Contains(search)));
-        }
+            var paging = PagingInput.Create(request.PageNumber, request.PageSize);
+            var linq = new AuthLinqMetaData(adapter);
+            IQueryable<RoomManagerment.Auth.EntityClasses.CapabilityEntity> query = linq.Capability;
 
-        var total = await query.LongCountAsync(cancellationToken);
-        var items = await query
-            .OrderBy(x => x.DisplayOrder)
-            .ThenBy(x => x.Name)
-            .Skip(paging.Skip)
-            .Take(paging.PageSize)
-            .ToListAsync(cancellationToken);
+            var search = SearchInput.Normalize(request.SearchTerm);
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(x => x.KeyCode.Contains(search) || x.Name.Contains(search) || (x.Description != null && x.Description.Contains(search)));
+            }
 
-        var mapped = items.Select(x => new CapabilityDto(x.Id, x.KeyCode, x.Name, x.Description, x.Category, x.DisplayOrder)).ToList();
-        return Result<PagedCapabilitiesResult>.Success(new PagedCapabilitiesResult(mapped, total, paging.PageNumber, paging.PageSize, total == 0 ? 0 : (int)Math.Ceiling(total / (double)paging.PageSize)));
-    }
+            var total = await query.LongCountAsync(cancellationToken);
+            var items = await query
+                .OrderBy(x => x.DisplayOrder)
+                .ThenBy(x => x.Name)
+                .Skip(paging.Skip)
+                .Take(paging.PageSize)
+                .ToListAsync(cancellationToken);
+
+            var mapped = items.Select(x => new CapabilityDto(x.Id, x.KeyCode, x.Name, x.Description, x.Category, x.DisplayOrder)).ToList();
+            return Result<PagedCapabilitiesResult>.Success(new PagedCapabilitiesResult(mapped, total, paging.PageNumber, paging.PageSize, total == 0 ? 0 : (int)Math.Ceiling(total / (double)paging.PageSize)));
+        });
 
     private async Task<DalUserProfileEntity> EnsureProfileAsync(Guid userId, CancellationToken cancellationToken)
     {
@@ -577,5 +594,3 @@ public sealed class AuthApplicationService(
             profile.UpdatedAt);
     }
 }
-
-

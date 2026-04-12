@@ -1,5 +1,4 @@
 using System.Text.Json;
-using Finance.Application.Common;
 using Finance.Application.Dtos;
 using Finance.Application.Services;
 using Finance.Domain;
@@ -34,39 +33,36 @@ public sealed class FinanceApplicationService(
     {
         if (items.Count == 0)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Items", "At least one line item is required."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "At least one line item is required."));
         }
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         if (invoiceDate > today.AddDays(30))
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Date", "Invoice date cannot be more than 30 days in the future."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Date", "Invoice date cannot be more than 30 days in the future."));
         }
 
         var lease = await leaseReadGateway.GetLeaseAsync(leaseId, organizationId, cancellationToken);
         if (lease is null)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Lease.NotFound", "Lease was not found for this organization."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Lease.NotFound", "Lease was not found for this organization."));
         }
 
         if (!lease.Status.Equals("active", StringComparison.OrdinalIgnoreCase))
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Lease.Inactive", "Lease must be active to create an invoice."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Lease.Inactive", "Lease must be active to create an invoice."));
         }
 
-        decimal total;
-        try
+        if (items.Any(i => i.Quantity < 0 || i.UnitPrice < 0))
         {
-            total = items.Sum(i => Math.Round(i.Quantity * i.UnitPrice, 2, MidpointRounding.AwayFromZero));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Line quantities and unit prices must be non-negative."));
         }
-        catch
-        {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Total", "Could not compute invoice total."));
-        }
+
+        var total = items.Sum(i => Math.Round(i.Quantity * i.UnitPrice, 2, MidpointRounding.AwayFromZero));
 
         if (total <= 0)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Total", "Total amount must be greater than zero."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Total", "Total amount must be greater than zero."));
         }
 
         List<InvoiceItemEntity> lineEntities;
@@ -107,7 +103,7 @@ public sealed class FinanceApplicationService(
         }
         catch (ArgumentException ex)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Invalid", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Invalid", ex.Message));
         }
     }
 
@@ -122,33 +118,30 @@ public sealed class FinanceApplicationService(
     {
         if (items.Count == 0)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Items", "At least one line item is required."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "At least one line item is required."));
         }
 
         var existing = await invoiceRepository.GetByIdAsync(invoiceId, organizationId, cancellationToken);
         if (existing is null)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
         }
 
         if (!InvoiceRules.CanEdit(existing.Status))
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.State", "Only draft invoices can be edited."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.State", "Only draft invoices can be edited."));
         }
 
-        decimal total;
-        try
+        if (items.Any(i => i.Quantity < 0 || i.UnitPrice < 0))
         {
-            total = items.Sum(i => Math.Round(i.Quantity * i.UnitPrice, 2, MidpointRounding.AwayFromZero));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Line quantities and unit prices must be non-negative."));
         }
-        catch
-        {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Total", "Could not compute invoice total."));
-        }
+
+        var total = items.Sum(i => Math.Round(i.Quantity * i.UnitPrice, 2, MidpointRounding.AwayFromZero));
 
         if (total <= 0)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Total", "Total amount must be greater than zero."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Total", "Total amount must be greater than zero."));
         }
 
         try
@@ -174,11 +167,11 @@ public sealed class FinanceApplicationService(
         }
         catch (ArgumentException ex)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Invalid", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Invalid", ex.Message));
         }
         catch (InvalidOperationException ex)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.State", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.State", ex.Message));
         }
     }
 
@@ -190,13 +183,13 @@ public sealed class FinanceApplicationService(
         var invoice = await invoiceRepository.GetByIdAsync(invoiceId, organizationId, cancellationToken);
         if (invoice is null)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
         }
 
         var lines = await invoiceItemRepository.ListActiveByInvoiceIdAsync(invoiceId, cancellationToken);
         if (lines.Count == 0)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Items", "Invoice must have at least one line to publish."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Items", "Invoice must have at least one line to publish."));
         }
 
         try
@@ -205,7 +198,7 @@ public sealed class FinanceApplicationService(
         }
         catch (InvalidOperationException ex)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.State", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.State", ex.Message));
         }
 
         await invoiceRepository.UpdateAsync(invoice, cancellationToken);
@@ -239,7 +232,7 @@ public sealed class FinanceApplicationService(
         var invoice = await invoiceRepository.GetByIdAsync(invoiceId, organizationId, cancellationToken);
         if (invoice is null)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
         }
 
         var previous = invoice.Status;
@@ -249,7 +242,7 @@ public sealed class FinanceApplicationService(
         }
         catch (InvalidOperationException ex)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Cancel", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Invoice.Cancel", ex.Message));
         }
 
         await invoiceRepository.UpdateAsync(invoice, cancellationToken);
@@ -281,7 +274,7 @@ public sealed class FinanceApplicationService(
         var invoice = await invoiceRepository.GetByIdAsync(invoiceId, organizationId, cancellationToken);
         if (invoice is null)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
         }
 
         return Result<InvoiceDto>.Success(await MapInvoiceDetailAsync(invoice, cancellationToken));
@@ -295,13 +288,13 @@ public sealed class FinanceApplicationService(
         var invoice = await invoiceRepository.GetByIdAsync(invoiceId, cancellationToken);
         if (invoice is null || string.Equals(invoice.Status, InvoiceStatuses.Draft, StringComparison.OrdinalIgnoreCase))
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
         }
 
         var leaseIds = await leaseReadGateway.GetLeaseIdsForResidentUserAsync(tenantUserId, cancellationToken);
         if (invoice.LeaseId is null || !leaseIds.Contains(invoice.LeaseId.Value))
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.Forbidden", "You cannot access this invoice."));
+            return Result<InvoiceDto>.Failure(Error.Forbidden("Finance.Invoice.Forbidden", "You cannot access this invoice."));
         }
 
         return Result<InvoiceDto>.Success(await MapInvoiceDetailAsync(invoice, cancellationToken));
@@ -350,24 +343,24 @@ public sealed class FinanceApplicationService(
     {
         if (request.MethodId == Guid.Empty)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Payment.Method", "Payment method is required."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Method", "Payment method is required."));
         }
 
         var invoice = await invoiceRepository.GetByIdAsync(request.InvoiceId, request.OrganizationId, cancellationToken);
         if (invoice is null)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Invoice.NotFound", "Invoice not found."));
+            return Result<InvoiceDto>.Failure(Error.NotFound("Finance.Invoice.NotFound", "Invoice not found."));
         }
 
         if (!InvoiceRules.CanRecordPayment(invoice.Status))
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Payment.State", "Cannot record payment for this invoice status."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.State", "Cannot record payment for this invoice status."));
         }
 
         var remaining = invoice.TotalAmount - invoice.PaidAmount;
         if (request.Amount <= 0 || request.Amount > remaining)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Payment.Amount", "Amount must be positive and not greater than balance due."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Amount", "Amount must be positive and not greater than balance due."));
         }
 
         var paidAt = request.PaidAtUtc.Kind == DateTimeKind.Utc
@@ -376,7 +369,7 @@ public sealed class FinanceApplicationService(
 
         if (paidAt > DateTime.UtcNow.AddDays(1))
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Payment.Date", "Paid date cannot be far in the future."));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Date", "Paid date cannot be far in the future."));
         }
 
         var payload = string.IsNullOrWhiteSpace(request.Note)
@@ -394,16 +387,16 @@ public sealed class FinanceApplicationService(
         if (!string.IsNullOrWhiteSpace(request.ReferenceCode)
             && await paymentRepository.ExistsByReferenceCodeAsync(request.ReferenceCode.Trim(), cancellationToken))
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Payment.Duplicate", "Reference code already used."));
+            return Result<InvoiceDto>.Failure(Error.Conflict("Finance.Payment.Duplicate", "Reference code already used."));
         }
 
         try
         {
             invoice.ApplyPayment(request.Amount);
         }
-        catch (Exception ex)
+        catch (InvalidOperationException ex)
         {
-            return Result<InvoiceDto>.Failure(new Error("Finance.Payment.Apply", ex.Message));
+            return Result<InvoiceDto>.Failure(Error.BadRequest("Finance.Payment.Apply", ex.Message));
         }
 
         await paymentRepository.AddAsync(payment, cancellationToken);
@@ -480,13 +473,13 @@ public sealed class FinanceApplicationService(
         if (await depositRefundRepository.HasPendingOrApprovedForLeaseAsync(request.LeaseId, cancellationToken))
         {
             return Result<DepositRefundDto>.Failure(
-                new Error("Finance.DepositRefund.Pending", "A deposit refund is already pending for this lease."));
+                Error.Conflict("Finance.DepositRefund.Pending", "A deposit refund is already pending for this lease."));
         }
 
         var lease = await leaseReadGateway.GetLeaseAsync(request.LeaseId, request.OrganizationId, cancellationToken);
         if (lease is null)
         {
-            return Result<DepositRefundDto>.Failure(new Error("Finance.Lease.NotFound", "Lease was not found."));
+            return Result<DepositRefundDto>.Failure(Error.NotFound("Finance.Lease.NotFound", "Lease was not found."));
         }
 
         try
@@ -517,7 +510,7 @@ public sealed class FinanceApplicationService(
         }
         catch (ArgumentException ex)
         {
-            return Result<DepositRefundDto>.Failure(new Error("Finance.DepositRefund.Invalid", ex.Message));
+            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.Invalid", ex.Message));
         }
     }
 
@@ -530,7 +523,7 @@ public sealed class FinanceApplicationService(
         var entity = await depositRefundRepository.GetByIdAsync(refundId, organizationId, cancellationToken);
         if (entity is null)
         {
-            return Result<DepositRefundDto>.Failure(new Error("Finance.DepositRefund.NotFound", "Refund not found."));
+            return Result<DepositRefundDto>.Failure(Error.NotFound("Finance.DepositRefund.NotFound", "Refund not found."));
         }
 
         try
@@ -557,7 +550,7 @@ public sealed class FinanceApplicationService(
         }
         catch (InvalidOperationException ex)
         {
-            return Result<DepositRefundDto>.Failure(new Error("Finance.DepositRefund.State", ex.Message));
+            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.State", ex.Message));
         }
     }
 
@@ -570,12 +563,12 @@ public sealed class FinanceApplicationService(
         var entity = await depositRefundRepository.GetByIdAsync(refundId, organizationId, cancellationToken);
         if (entity is null)
         {
-            return Result<DepositRefundDto>.Failure(new Error("Finance.DepositRefund.NotFound", "Refund not found."));
+            return Result<DepositRefundDto>.Failure(Error.NotFound("Finance.DepositRefund.NotFound", "Refund not found."));
         }
 
         if (string.IsNullOrWhiteSpace(request.Reason))
         {
-            return Result<DepositRefundDto>.Failure(new Error("Finance.DepositRefund.Reason", "Reason is required."));
+            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.Reason", "Reason is required."));
         }
 
         try
@@ -599,7 +592,7 @@ public sealed class FinanceApplicationService(
         }
         catch (InvalidOperationException ex)
         {
-            return Result<DepositRefundDto>.Failure(new Error("Finance.DepositRefund.State", ex.Message));
+            return Result<DepositRefundDto>.Failure(Error.BadRequest("Finance.DepositRefund.State", ex.Message));
         }
     }
 
@@ -639,9 +632,14 @@ public sealed class FinanceApplicationService(
                     }
                 }
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-                logger.LogWarning(ex, "Failed to mark invoice {InvoiceId} overdue", inv.Id);
+                logger.LogWarning(ex, "Domain rule prevented marking invoice {InvoiceId} overdue", inv.Id);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                logger.LogError(ex, "Infrastructure failure marking invoice {InvoiceId} overdue — aborting sweep", inv.Id);
+                throw;
             }
         }
 

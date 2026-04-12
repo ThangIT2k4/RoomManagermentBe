@@ -3,7 +3,9 @@ using Auth.Domain.Common;
 using Auth.Domain.Entities;
 using Auth.Domain.Repositories;
 using Auth.Domain.ValueObjects;
+using Auth.Infrastructure;
 using Auth.Infrastructure.Mapper;
+using Microsoft.Extensions.Logging;
 using RoomManagerment.Auth.DatabaseSpecific;
 using RoomManagerment.Auth.Linq;
 using SD.LLBLGen.Pro.LinqSupportClasses;
@@ -13,190 +15,202 @@ namespace Auth.Infrastructure.Repositories;
 public sealed class UserRepository(
     DataAccessAdapter adapter,
     ICacheService cacheService,
-    IIntegrationEventPublisher eventPublisher) : IUserRepository
+    IIntegrationEventPublisher eventPublisher,
+    ILogger<UserRepository> logger) : IUserRepository
 {
     private static readonly TimeSpan CacheExpiry = TimeSpan.FromMinutes(30);
+    private const string Repo = nameof(UserRepository);
 
-    public async Task<UserEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        var cacheKey = BuildUserIdCacheKey(id);
-        var cached = await cacheService.GetAsync<UserEntity>(cacheKey, cancellationToken);
-        if (cached is not null)
+    public Task<UserEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(GetByIdAsync), cancellationToken, async () =>
         {
-            return cached;
-        }
+            var cacheKey = BuildUserIdCacheKey(id);
+            var cached = await cacheService.GetAsync<UserEntity>(cacheKey, cancellationToken);
+            if (cached is not null)
+            {
+                return cached;
+            }
 
-        var linq = new LinqMetaData(adapter);
-        var dal = await linq.User.Where(x => x.Id == id).FirstOrDefaultAsync(cancellationToken);
-        var domain = dal?.ToDomain();
-        if (domain is not null)
+            var linq = new LinqMetaData(adapter);
+            var dal = await linq.User.Where(x => x.Id == id).FirstOrDefaultAsync(cancellationToken);
+            var domain = dal?.ToDomain();
+            if (domain is not null)
+            {
+                await TryCacheAsync(domain, cancellationToken);
+            }
+
+            return domain;
+        });
+
+    public Task<UserEntity?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(GetByEmailAsync), cancellationToken, async () =>
         {
-            await TryCacheAsync(domain, cancellationToken);
-        }
+            var cacheKey = BuildUserEmailCacheKey(email.Value);
+            var cached = await cacheService.GetAsync<UserEntity>(cacheKey, cancellationToken);
+            if (cached is not null)
+            {
+                return cached;
+            }
 
-        return domain;
-    }
+            var linq = new LinqMetaData(adapter);
+            var dal = await linq.User.Where(x => x.Email == email.Value).FirstOrDefaultAsync(cancellationToken);
+            var domain = dal?.ToDomain();
+            if (domain is not null)
+            {
+                await TryCacheAsync(domain, cancellationToken);
+            }
 
-    public async Task<UserEntity?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default)
-    {
-        var cacheKey = BuildUserEmailCacheKey(email.Value);
-        var cached = await cacheService.GetAsync<UserEntity>(cacheKey, cancellationToken);
-        if (cached is not null)
+            return domain;
+        });
+
+    public Task<UserEntity?> GetByUsernameAsync(Username username, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(GetByUsernameAsync), cancellationToken, async () =>
         {
-            return cached;
-        }
+            var cacheKey = BuildUserUsernameCacheKey(username.Value);
+            var cached = await cacheService.GetAsync<UserEntity>(cacheKey, cancellationToken);
+            if (cached is not null)
+            {
+                return cached;
+            }
 
-        var linq = new LinqMetaData(adapter);
-        var dal = await linq.User.Where(x => x.Email == email.Value).FirstOrDefaultAsync(cancellationToken);
-        var domain = dal?.ToDomain();
-        if (domain is not null)
+            var linq = new LinqMetaData(adapter);
+            var dal = await linq.User.Where(x => x.Username == username.Value).FirstOrDefaultAsync(cancellationToken);
+            var domain = dal?.ToDomain();
+            if (domain is not null)
+            {
+                await TryCacheAsync(domain, cancellationToken);
+            }
+
+            return domain;
+        });
+
+    public Task<UserEntity> AddAsync(UserEntity user, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(AddAsync), cancellationToken, async () =>
         {
-            await TryCacheAsync(domain, cancellationToken);
-        }
+            var dal = user.ToPersistence();
+            await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
+            await PublishDomainEventsAsync(user, cancellationToken);
+            await TryCacheAsync(user, cancellationToken);
+            return user;
+        });
 
-        return domain;
-    }
-
-    public async Task<UserEntity?> GetByUsernameAsync(Username username, CancellationToken cancellationToken = default)
-    {
-        var cacheKey = BuildUserUsernameCacheKey(username.Value);
-        var cached = await cacheService.GetAsync<UserEntity>(cacheKey, cancellationToken);
-        if (cached is not null)
+    public Task<UserEntity> UpdateAsync(UserEntity user, CancellationToken cancellationToken = default)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(UpdateAsync), cancellationToken, async () =>
         {
-            return cached;
-        }
+            var existing = await GetDbByIdAsync(user.Id, cancellationToken);
+            var dal = user.ToPersistence();
+            await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
+            await PublishDomainEventsAsync(user, cancellationToken);
 
-        var linq = new LinqMetaData(adapter);
-        var dal = await linq.User.Where(x => x.Username == username.Value).FirstOrDefaultAsync(cancellationToken);
-        var domain = dal?.ToDomain();
-        if (domain is not null)
-        {
-            await TryCacheAsync(domain, cancellationToken);
-        }
+            if (existing is not null)
+            {
+                await TryInvalidateAsync(existing.ToDomain(), cancellationToken);
+            }
 
-        return domain;
-    }
+            await TryCacheAsync(user, cancellationToken);
+            return user;
+        });
 
-    public async Task<UserEntity> AddAsync(UserEntity user, CancellationToken cancellationToken = default)
-    {
-        var dal = user.ToPersistence();
-        await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
-        await PublishDomainEventsAsync(user, cancellationToken);
-        await TryCacheAsync(user, cancellationToken);
-        return user;
-    }
-
-    public async Task<UserEntity> UpdateAsync(UserEntity user, CancellationToken cancellationToken = default)
-    {
-        var existing = await GetDbByIdAsync(user.Id, cancellationToken);
-        var dal = user.ToPersistence();
-        await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
-        await PublishDomainEventsAsync(user, cancellationToken);
-
-        if (existing is not null)
-        {
-            await TryInvalidateAsync(existing.ToDomain(), cancellationToken);
-        }
-
-        await TryCacheAsync(user, cancellationToken);
-        return user;
-    }
-
-    public async Task<PagedResult<UserEntity>> SearchPagedAsync(
+    public Task<PagedResult<UserEntity>> SearchPagedAsync(
         string? searchTerm,
         int pageNumber = 1,
         int pageSize = 20,
         bool includeDeleted = false,
         CancellationToken cancellationToken = default)
-    {
-        var paging = PagingInput.Create(pageNumber, pageSize);
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(SearchPagedAsync), cancellationToken, async () =>
+        {
+            var paging = PagingInput.Create(pageNumber, pageSize);
 
-        var linq = new LinqMetaData(adapter);
-        var normalizedSearchTerm = SearchInput.Normalize(searchTerm);
-        var query = ApplyUserSearch(linq.User, normalizedSearchTerm, includeDeleted);
+            var linq = new LinqMetaData(adapter);
+            var normalizedSearchTerm = SearchInput.Normalize(searchTerm);
+            var query = ApplyUserSearch(linq.User, normalizedSearchTerm, includeDeleted);
 
-        var totalCount = await query.LongCountAsync(cancellationToken);
-        var items = await query
-            .OrderByDescending(x => x.CreatedAt)
-            .Skip(paging.Skip)
-            .Take(paging.PageSize)
-            .ToListAsync(cancellationToken);
+            var totalCount = await query.LongCountAsync(cancellationToken);
+            var items = await query
+                .OrderByDescending(x => x.CreatedAt)
+                .Skip(paging.Skip)
+                .Take(paging.PageSize)
+                .ToListAsync(cancellationToken);
 
-        return new PagedResult<UserEntity>(
-            items.Select(x => x.ToDomain()).ToList(),
-            (int)totalCount,
-            paging.PageNumber,
-            paging.PageSize);
-    }
+            return new PagedResult<UserEntity>(
+                items.Select(x => x.ToDomain()).ToList(),
+                (int)totalCount,
+                paging.PageNumber,
+                paging.PageSize);
+        });
 
-    public async Task<long> CountAsync(
+    public Task<long> CountAsync(
         string? searchTerm = null,
         bool includeDeleted = false,
         CancellationToken cancellationToken = default)
-    {
-        var linq = new LinqMetaData(adapter);
-        var normalizedSearchTerm = SearchInput.Normalize(searchTerm);
-        var query = ApplyUserSearch(linq.User, normalizedSearchTerm, includeDeleted);
-        return await query.LongCountAsync(cancellationToken);
-    }
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(CountAsync), cancellationToken, async () =>
+        {
+            var linq = new LinqMetaData(adapter);
+            var normalizedSearchTerm = SearchInput.Normalize(searchTerm);
+            var query = ApplyUserSearch(linq.User, normalizedSearchTerm, includeDeleted);
+            return await query.LongCountAsync(cancellationToken);
+        });
 
-    public async Task<bool> ExistsByEmailAsync(
+    public Task<bool> ExistsByEmailAsync(
         Email email,
         Guid? excludeUserId = null,
         CancellationToken cancellationToken = default)
-    {
-        var linq = new LinqMetaData(adapter);
-        var query = linq.User.Where(x => x.Email == email.Value && x.DeletedAt == null);
-
-        if (excludeUserId.HasValue)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(ExistsByEmailAsync), cancellationToken, async () =>
         {
-            query = query.Where(x => x.Id != excludeUserId.Value);
-        }
+            var linq = new LinqMetaData(adapter);
+            var query = linq.User.Where(x => x.Email == email.Value && x.DeletedAt == null);
 
-        return await query.AnyAsync(cancellationToken);
-    }
+            if (excludeUserId.HasValue)
+            {
+                query = query.Where(x => x.Id != excludeUserId.Value);
+            }
 
-    public async Task<bool> ExistsByUsernameAsync(
+            return await query.AnyAsync(cancellationToken);
+        });
+
+    public Task<bool> ExistsByUsernameAsync(
         Username username,
         Guid? excludeUserId = null,
         CancellationToken cancellationToken = default)
-    {
-        var linq = new LinqMetaData(adapter);
-        var query = linq.User.Where(x => x.Username == username.Value && x.DeletedAt == null);
-
-        if (excludeUserId.HasValue)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(ExistsByUsernameAsync), cancellationToken, async () =>
         {
-            query = query.Where(x => x.Id != excludeUserId.Value);
-        }
+            var linq = new LinqMetaData(adapter);
+            var query = linq.User.Where(x => x.Username == username.Value && x.DeletedAt == null);
 
-        return await query.AnyAsync(cancellationToken);
-    }
+            if (excludeUserId.HasValue)
+            {
+                query = query.Where(x => x.Id != excludeUserId.Value);
+            }
 
-    public async Task SoftDeleteAsync(
+            return await query.AnyAsync(cancellationToken);
+        });
+
+    public Task SoftDeleteAsync(
         Guid userId,
         Guid deletedBy,
         DateTime deletedAt,
         CancellationToken cancellationToken = default)
-    {
-        if (deletedAt.Kind != DateTimeKind.Utc)
+        => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(SoftDeleteAsync), cancellationToken, async () =>
         {
-            throw new ArgumentException("deletedAt must be UTC.", nameof(deletedAt));
-        }
+            if (deletedAt.Kind != DateTimeKind.Utc)
+            {
+                throw new ArgumentException("deletedAt must be UTC.", nameof(deletedAt));
+            }
 
-        var dal = await GetDbByIdAsync(userId, cancellationToken);
+            var dal = await GetDbByIdAsync(userId, cancellationToken);
 
-        if (dal is null)
-        {
-            return;
-        }
+            if (dal is null)
+            {
+                return;
+            }
 
-        dal.DeletedAt = deletedAt;
-        dal.DeletedBy = deletedBy;
-        dal.UpdatedAt = deletedAt;
+            dal.DeletedAt = deletedAt;
+            dal.DeletedBy = deletedBy;
+            dal.UpdatedAt = deletedAt;
 
-        await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
-        await TryInvalidateAsync(dal.ToDomain(), cancellationToken);
-    }
+            await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
+            await TryInvalidateAsync(dal.ToDomain(), cancellationToken);
+        });
 
     private async Task<RoomManagerment.Auth.EntityClasses.UserEntity?> GetDbByIdAsync(Guid id, CancellationToken cancellationToken)
     {

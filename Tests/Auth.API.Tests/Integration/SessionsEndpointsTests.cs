@@ -1,7 +1,7 @@
 using System.Net;
-using Auth.Application.Common;
 using Auth.Application.Dtos;
 using Moq;
+using RoomManagerment.Shared.Common;
 
 namespace Auth.API.Tests.Integration;
 

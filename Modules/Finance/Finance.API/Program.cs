@@ -1,21 +1,24 @@
 using System.Threading.RateLimiting;
 using Finance.Infrastructure;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
 using Scalar.AspNetCore;
 using Serilog;
+using Serilog.Formatting.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var logBasePath = Environment.GetEnvironmentVariable("LOG_BASE_PATH")
                   ?? "/home/thang/projects/WorkSpace/Projects/RoomManagerment/Logs";
-var financeLogPath = Path.Combine(logBasePath, "finance-api", "finance-api-.txt");
-builder.Services.AddSerilog(
-    new LoggerConfiguration()
-        .WriteTo.Console()
-        .WriteTo.File(financeLogPath, rollingInterval: RollingInterval.Day)
-        .MinimumLevel.Information()
-        .CreateLogger());
+var financeLogPath = Path.Combine(logBasePath, "finance-api", "finance-api-.json");
+
+builder.Host.UseSerilog((ctx, lc) => lc
+    .ReadFrom.Configuration(ctx.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .Enrich.WithEnvironmentName()
+    .WriteTo.Console(new JsonFormatter())
+    .WriteTo.File(new JsonFormatter(), financeLogPath, rollingInterval: RollingInterval.Day));
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -40,9 +43,10 @@ builder.Services.AddFinanceInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
+app.UseRoomManagermentExceptionHandling();
+
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/error");
     app.UseHsts();
 }
 
@@ -58,26 +62,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-
-if (!app.Environment.IsDevelopment())
-{
-    app.Map(
-        "/error",
-        static (HttpContext context) =>
-        {
-            var problem = new ProblemDetails
-            {
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
-                Title = "Internal Server Error",
-                Status = StatusCodes.Status500InternalServerError,
-                Detail = "An internal server error has occurred.",
-                Instance = context.Request.Path.Value
-            };
-
-            context.Response.ContentType = "application/problem+json";
-            return Results.Json(problem, statusCode: StatusCodes.Status500InternalServerError);
-        });
-}
 
 var port = Environment.GetEnvironmentVariable("FINANCE_API_PORT") ?? "5203";
 app.Urls.Add($"http://0.0.0.0:{port}");

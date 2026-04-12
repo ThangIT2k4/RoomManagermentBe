@@ -1,4 +1,5 @@
 using Finance.Application.Dtos;
+using RoomManagerment.Shared.Extensions;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,7 +38,7 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
             lines,
             cancellationToken);
 
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpPut("{invoiceId:guid}")]
@@ -69,7 +70,7 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
             lines,
             cancellationToken);
 
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpPost("{invoiceId:guid}/publish")]
@@ -81,7 +82,7 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
         }
 
         var result = await finance.PublishInvoiceAsync(orgId, invoiceId, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpPost("{invoiceId:guid}/cancel")]
@@ -96,7 +97,7 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
         }
 
         var result = await finance.CancelInvoiceAsync(orgId, userId, invoiceId, body?.Reason, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpGet("{invoiceId:guid}")]
@@ -108,7 +109,7 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
         }
 
         var result = await finance.GetInvoiceAsync(orgId, invoiceId, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpGet]
@@ -150,7 +151,7 @@ public sealed class InvoicesController(IFinanceApplicationService finance) : Con
             normalizedPerPage,
             cancellationToken);
 
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     private static bool TryNormalizePaging(int page, int perPage, out int normalizedPage, out int normalizedPerPage, out string? error)

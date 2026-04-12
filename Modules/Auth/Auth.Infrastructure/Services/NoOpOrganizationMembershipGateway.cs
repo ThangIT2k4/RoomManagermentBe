@@ -1,12 +1,12 @@
-using Auth.Application.Common;
 using Auth.Application.Dtos;
 using Auth.Application.Services;
+using RoomManagerment.Shared.Common;
 
 namespace Auth.Infrastructure.Services;
 
 public sealed class NoOpOrganizationMembershipGateway : IOrganizationMembershipGateway
 {
-    private static readonly Error NotConfigured = new(
+    private static readonly Error NotConfigured = Error.BadRequest(
         "Auth.Organization.GatewayNotConfigured",
         "Organization membership is not configured for this deployment.");
 

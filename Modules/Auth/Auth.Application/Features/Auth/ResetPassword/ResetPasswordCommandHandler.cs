@@ -1,12 +1,12 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
 using Auth.Application.Services;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.ResetPassword;
 
 public sealed class ResetPasswordCommandHandler(IAuthApplicationService authService)
-    : IRequestHandler<ResetPasswordCommand, Result>
+    : IAppRequestHandler<ResetPasswordCommand, Result>
 {
     public Task<Result> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         => authService.ResetPasswordAsync(

@@ -1,5 +1,5 @@
 using Auth.Application.Common;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.ChangePassword;
 
@@ -7,4 +7,4 @@ public sealed record ChangePasswordCommand(
     Guid UserId,
     string CurrentPassword,
     string NewPassword,
-    string? RetainSessionId = null) : IRequest<Result>;
+    string? RetainSessionId = null) : IAppRequest<Result>;

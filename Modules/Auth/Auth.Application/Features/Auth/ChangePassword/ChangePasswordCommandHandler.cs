@@ -1,12 +1,12 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
 using Auth.Application.Services;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.ChangePassword;
 
 public sealed class ChangePasswordCommandHandler(IAuthApplicationService authService)
-    : IRequestHandler<ChangePasswordCommand, Result>
+    : IAppRequestHandler<ChangePasswordCommand, Result>
 {
     public Task<Result> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         => authService.ChangePasswordAsync(

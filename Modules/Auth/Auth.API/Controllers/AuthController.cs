@@ -7,7 +7,7 @@ using Auth.Application.Features.Auth.ChangePassword;
 using Auth.Application.Features.Auth.ForgotPassword;
 using Auth.Application.Features.Auth.Login;
 using Auth.Application.Features.Auth.Logout;
-using Auth.Application.Features.Auth.Register;
+using Auth.Application.Features.Register;
 using Auth.Application.Features.Auth.ResendOtp;
 using Auth.Application.Features.Auth.ResetPassword;
 using Auth.Application.Features.Auth.SendOtp;
@@ -15,28 +15,17 @@ using Auth.Application.Features.Auth.Users.GetUserById;
 using Auth.Application.Features.Auth.VerifyEmail;
 using Auth.Application.Features.Auth.VerifyOtp;
 using Auth.Application.Features.GetCurrentUser;
-using FluentValidation;
-using FluentValidation.Results;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using RoomManagerment.Shared.Extensions;
 
 namespace Auth.API.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(
-    IMediator mediator,
-    IValidator<RegisterRequest> registerValidator,
-    IValidator<LoginApiRequest> loginValidator,
-    IValidator<ChangePasswordRequest> changePasswordValidator,
-    IValidator<ForgotPasswordRequest> forgotPasswordValidator,
-    IValidator<ResetPasswordRequest> resetPasswordValidator,
-    IValidator<SendOtpRequest> sendOtpValidator,
-    IValidator<VerifyOtpRequest> verifyOtpValidator,
-    IValidator<ResendOtpRequest> resendOtpValidator,
-    IValidator<VerifyEmailRequest> verifyEmailValidator) : ControllerBase
+public class AuthController(IAppSender sender) : ControllerBase
 {
     [AllowAnonymous]
     [EnableRateLimiting("RegisterPolicy")]
@@ -46,16 +35,10 @@ public class AuthController(
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<RegisterResult>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
-        var validation = await registerValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await mediator.Send(
+        var result = await sender.Send(
             new RegisterCommand(request.Email, request.Password, request.FullName, request.Username, request.Phone),
             cancellationToken);
-        return result.ToCreatedAtActionResult(nameof(GetCurrentUser), new { });
+        return this.ToCreatedAtActionResult(result, nameof(GetCurrentUser), new { });
     }
 
     [AllowAnonymous]
@@ -66,13 +49,7 @@ public class AuthController(
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<LoginResult>> Login([FromBody] LoginApiRequest request, CancellationToken cancellationToken)
     {
-        var validation = await loginValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await mediator.Send(
+        var result = await sender.Send(
             new LoginCommand(
                 request.Login,
                 request.Password,
@@ -83,7 +60,7 @@ public class AuthController(
 
         if (result.IsFailure || result.Value is null)
         {
-            return result.ToActionResult();
+            return this.ToActionResult(result);
         }
 
         PersistHybridSession(result.Value);
@@ -102,13 +79,13 @@ public class AuthController(
             return Unauthorized(new { message = "Session is required." });
         }
 
-        var result = await mediator.Send(new LogoutCommand(sessionId), cancellationToken);
+        var result = await sender.Send(new LogoutCommand(sessionId), cancellationToken);
         if (result.IsSuccess)
         {
             HttpContext.Session.Clear();
         }
 
-        return result.ToActionResult();
+        return this.ToActionResult(result);
     }
 
     [Authorize]
@@ -125,8 +102,8 @@ public class AuthController(
             return Unauthorized(new { message = "Session is required." });
         }
 
-        var result = await mediator.Send(new GetCurrentUserQuery(sessionId), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new GetCurrentUserQuery(sessionId), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [Authorize]
@@ -143,17 +120,10 @@ public class AuthController(
         }
 
         var sessionId = ResolveSessionId();
-        var command = new ChangePasswordRequest(userId.Value, request.CurrentPassword, request.NewPassword, sessionId);
-        var validation = await changePasswordValidator.ValidateAsync(command, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await mediator.Send(
+        var result = await sender.Send(
             new ChangePasswordCommand(userId.Value, request.CurrentPassword, request.NewPassword, sessionId),
             cancellationToken);
-        return result.ToActionResult();
+        return this.ToActionResult(result);
     }
 
     [AllowAnonymous]
@@ -163,14 +133,8 @@ public class AuthController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request, CancellationToken cancellationToken)
     {
-        var validation = await forgotPasswordValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await mediator.Send(new ForgotPasswordCommand(request.Email), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new ForgotPasswordCommand(request.Email), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [AllowAnonymous]
@@ -180,16 +144,10 @@ public class AuthController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken)
     {
-        var validation = await resetPasswordValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await mediator.Send(
+        var result = await sender.Send(
             new ResetPasswordCommand(request.Email, request.OtpCode, request.NewPassword),
             cancellationToken);
-        return result.ToActionResult();
+        return this.ToActionResult(result);
     }
 
     [Authorize]
@@ -199,19 +157,13 @@ public class AuthController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> SendOtp([FromBody] SendOtpRequest request, CancellationToken cancellationToken)
     {
-        var validation = await sendOtpValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
         var userId = GetCurrentUserId();
         if (userId is null)
         {
             return Unauthorized(new { message = "User identity is missing." });
         }
 
-        var userResult = await mediator.Send(new GetUserByIdQuery(userId.Value), cancellationToken);
+        var userResult = await sender.Send(new GetUserByIdQuery(userId.Value), cancellationToken);
         if (userResult.IsFailure || userResult.Value is null)
         {
             return Unauthorized(new { message = "User not found." });
@@ -222,10 +174,10 @@ public class AuthController(
             return BadRequest(new { message = "Email does not match the authenticated account." });
         }
 
-        var result = await mediator.Send(
+        var result = await sender.Send(
             new SendOtpCommand(request.Email, request.Purpose, userId.Value),
             cancellationToken);
-        return result.ToActionResult();
+        return this.ToActionResult(result);
     }
 
     [AllowAnonymous]
@@ -235,16 +187,10 @@ public class AuthController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> VerifyOtp([FromBody] VerifyOtpRequest request, CancellationToken cancellationToken)
     {
-        var validation = await verifyOtpValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await mediator.Send(
+        var result = await sender.Send(
             new VerifyOtpCommand(request.Email, request.Purpose, request.OtpCode),
             cancellationToken);
-        return result.ToActionResult();
+        return this.ToActionResult(result);
     }
 
     [Authorize]
@@ -254,19 +200,13 @@ public class AuthController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> ResendOtp([FromBody] ResendOtpRequest request, CancellationToken cancellationToken)
     {
-        var validation = await resendOtpValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
         var userId = GetCurrentUserId();
         if (userId is null)
         {
             return Unauthorized(new { message = "User identity is missing." });
         }
 
-        var userResult = await mediator.Send(new GetUserByIdQuery(userId.Value), cancellationToken);
+        var userResult = await sender.Send(new GetUserByIdQuery(userId.Value), cancellationToken);
         if (userResult.IsFailure || userResult.Value is null)
         {
             return Unauthorized(new { message = "User not found." });
@@ -277,10 +217,10 @@ public class AuthController(
             return BadRequest(new { message = "Email does not match the authenticated account." });
         }
 
-        var result = await mediator.Send(
+        var result = await sender.Send(
             new ResendOtpCommand(request.Email, request.Purpose, userId.Value),
             cancellationToken);
-        return result.ToActionResult();
+        return this.ToActionResult(result);
     }
 
     [AllowAnonymous]
@@ -290,14 +230,8 @@ public class AuthController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> VerifyEmail([FromBody] VerifyEmailRequest request, CancellationToken cancellationToken)
     {
-        var validation = await verifyEmailValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await mediator.Send(new VerifyEmailCommand(request.Email, request.OtpCode), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new VerifyEmailCommand(request.Email, request.OtpCode), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     private void PersistHybridSession(LoginResult loginResult)
@@ -329,18 +263,5 @@ public class AuthController(
 
         raw = HttpContext.Session.GetString(SessionAuthenticationHandler.SessionUserIdKey);
         return Guid.TryParse(raw, out userId) ? userId : null;
-    }
-
-    private static object ToValidationErrorPayload(ValidationResult validationResult)
-    {
-        return new
-        {
-            message = "Validation failed",
-            errors = validationResult.Errors.Select(error => new
-            {
-                field = error.PropertyName,
-                error = error.ErrorMessage
-            })
-        };
     }
 }

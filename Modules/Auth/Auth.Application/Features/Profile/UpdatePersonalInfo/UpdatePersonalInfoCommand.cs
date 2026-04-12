@@ -1,6 +1,6 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.Profile.UpdatePersonalInfo;
 
@@ -10,4 +10,4 @@ public sealed record UpdatePersonalInfoCommand(
     DateOnly? Dob,
     short? Gender,
     string? Address,
-    string? Note) : IRequest<Result<UserProfileDto>>;
+    string? Note) : IAppRequest<Result<UserProfileDto>>;

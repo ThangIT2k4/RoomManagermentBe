@@ -1,4 +1,4 @@
-using Finance.API;
+using RoomManagerment.Shared.Extensions;
 using Finance.Application.Dtos;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ public sealed class TenantFinanceController(IFinanceApplicationService finance) 
         }
 
         var result = await finance.ListTenantInvoicesAsync(tenantUserId, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpGet("invoices/{invoiceId:guid}")]
@@ -30,7 +30,7 @@ public sealed class TenantFinanceController(IFinanceApplicationService finance) 
         }
 
         var result = await finance.GetInvoiceForTenantAsync(tenantUserId, invoiceId, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpGet("payments")]
@@ -42,7 +42,7 @@ public sealed class TenantFinanceController(IFinanceApplicationService finance) 
         }
 
         var result = await finance.ListTenantPaymentsAsync(tenantUserId, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpPost("invoices/{invoiceId:guid}/payment-request")]
@@ -62,7 +62,7 @@ public sealed class TenantFinanceController(IFinanceApplicationService finance) 
             body.MethodKey,
             cancellationToken);
 
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 }
 

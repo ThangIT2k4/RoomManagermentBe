@@ -1,12 +1,12 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
 using Auth.Application.Services;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.Sessions.LogoutAllSessions;
 
 public sealed class LogoutAllSessionsCommandHandler(IAuthApplicationService authService)
-    : IRequestHandler<LogoutAllSessionsCommand, Result>
+    : IAppRequestHandler<LogoutAllSessionsCommand, Result>
 {
     public Task<Result> Handle(LogoutAllSessionsCommand request, CancellationToken cancellationToken)
         => authService.LogoutAllSessionsAsync(new LogoutAllSessionsRequest(request.UserId), cancellationToken);

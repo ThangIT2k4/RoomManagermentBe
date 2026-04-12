@@ -1,4 +1,4 @@
-using Finance.API;
+using RoomManagerment.Shared.Extensions;
 using Finance.Application.Dtos;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ public sealed class FinanceReportsController(IFinanceApplicationService finance)
         }
 
         var result = await finance.GetDebtSummaryAsync(orgId, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpGet("revenue")]
@@ -32,6 +32,6 @@ public sealed class FinanceReportsController(IFinanceApplicationService finance)
         }
 
         var result = await finance.GetRevenueByMonthAsync(orgId, year, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 }

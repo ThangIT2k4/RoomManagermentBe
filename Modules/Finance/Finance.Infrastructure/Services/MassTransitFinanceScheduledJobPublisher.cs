@@ -1,4 +1,3 @@
-using Finance.Application.Common;
 using Finance.Application.Services;
 using MassTransit;
 using RoomManagerment.Messaging.Contracts.Messages;

@@ -1,15 +1,15 @@
 using System.Net;
 using System.Net.Http.Headers;
-using Auth.Application.Common;
 using Auth.Application.Dtos;
 using Moq;
+using RoomManagerment.Shared.Common;
 
 namespace Auth.API.Tests.Integration;
 
 public sealed class UsersEndpointsTests
 {
     [Fact]
-    public async Task GetUsers_ShouldReturnBadRequest_WhenSearchTermIsUnsafe()
+    public async Task GetUsers_ShouldReturnUnprocessableEntity_WhenSearchTermIsUnsafe()
     {
         await using var host = new AuthApiTestHost();
         var request = new HttpRequestMessage(HttpMethod.Get, "/api/users?searchTerm=union select * from users");
@@ -17,7 +17,7 @@ public sealed class UsersEndpointsTests
 
         var response = await host.Client.SendAsync(request);
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
     }
 
     [Fact]

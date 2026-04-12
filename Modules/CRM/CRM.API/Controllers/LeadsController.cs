@@ -1,20 +1,15 @@
-using CRM.API.Common;
 using CRM.Application.Features.Leads;
 using CRM.Application.Features.UseCases;
-using CRM.Application.Services;
-using FluentValidation;
-using FluentValidation.Results;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using RoomManagerment.Shared.Extensions;
 
 namespace CRM.API.Controllers;
 
 [ApiController]
 [Route("api/leads")]
-public sealed class LeadsController(
-    ICrmApplicationService crmService,
-    IValidator<CreateLeadRequest> createLeadValidator,
-    IValidator<UpdateLeadStatusRequest> updateStatusValidator) : ControllerBase
+public sealed class LeadsController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
     [EnableRateLimiting("ApiPolicy")]
@@ -22,14 +17,8 @@ public sealed class LeadsController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<LeadDto>> CreateLead([FromBody] CreateLeadRequest request, CancellationToken cancellationToken)
     {
-        var validation = await createLeadValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await crmService.CreateLeadAsync(request, cancellationToken);
-        return result.ToActionResult();
+        var result = await mediator.Send(request, cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpGet("{leadId:guid}")]
@@ -37,16 +26,18 @@ public sealed class LeadsController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LeadDto>> GetLeadById([FromRoute] Guid leadId, CancellationToken cancellationToken)
     {
-        var result = await crmService.GetLeadByIdAsync(leadId, cancellationToken);
-        return result.ToActionResult();
+        var result = await mediator.Send(new GetLeadByIdQuery(leadId), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(GetLeadsResult), StatusCodes.Status200OK)]
     public async Task<ActionResult<GetLeadsResult>> GetLeads([FromQuery] Guid organizationId, [FromQuery] string? search, [FromQuery] string? status, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
     {
-        var result = await crmService.GetLeadsAsync(new GetLeadsQuery(organizationId, search, status, new PagingRequest(pageNumber, pageSize)), cancellationToken);
-        return result.ToActionResult();
+        var result = await mediator.Send(
+            new GetLeadsQuery(organizationId, search, status, new PagingRequest(pageNumber, pageSize)),
+            cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpPatch("{leadId:guid}/status")]
@@ -56,26 +47,7 @@ public sealed class LeadsController(
     public async Task<ActionResult<LeadDto>> UpdateLeadStatus([FromRoute] Guid leadId, [FromBody] UpdateLeadStatusRequest request, CancellationToken cancellationToken)
     {
         var command = request with { LeadId = leadId };
-        var validation = await updateStatusValidator.ValidateAsync(command, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await crmService.UpdateLeadStatusAsync(command, cancellationToken);
-        return result.ToActionResult();
-    }
-
-    private static object ToValidationErrorPayload(ValidationResult validationResult)
-    {
-        return new
-        {
-            message = "Validation failed",
-            errors = validationResult.Errors.Select(error => new
-            {
-                field = error.PropertyName,
-                error = error.ErrorMessage
-            })
-        };
+        var result = await mediator.Send(command, cancellationToken);
+        return this.ToActionResult(result);
     }
 }

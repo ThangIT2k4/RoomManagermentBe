@@ -1,4 +1,5 @@
 using Finance.Application.Dtos;
+using RoomManagerment.Shared.Extensions;
 using Finance.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +31,7 @@ public sealed class PaymentsController(IFinanceApplicationService finance) : Con
             body.Note);
 
         var result = await finance.RecordManualPaymentAsync(request, cancellationToken);
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     [HttpGet("payments")]
@@ -63,7 +64,7 @@ public sealed class PaymentsController(IFinanceApplicationService finance) : Con
             normalizedPerPage,
             cancellationToken);
 
-        return result.ToActionResult();
+        return result.ToActionResult(this);
     }
 
     private static bool TryNormalizePaging(int page, int perPage, out int normalizedPage, out int normalizedPerPage, out string? error)

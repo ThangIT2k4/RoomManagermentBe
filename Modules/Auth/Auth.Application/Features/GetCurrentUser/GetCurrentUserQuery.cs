@@ -1,7 +1,7 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.GetCurrentUser;
 
-public sealed record GetCurrentUserQuery(string SessionId) : IRequest<Result<UserDto>>;
+public sealed record GetCurrentUserQuery(string SessionId) : IAppRequest<Result<UserDto>>;

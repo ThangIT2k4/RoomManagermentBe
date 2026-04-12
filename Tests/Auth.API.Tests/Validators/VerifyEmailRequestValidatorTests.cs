@@ -1,18 +1,18 @@
-using Auth.API.Validators;
-using Auth.Application.Dtos;
+using Auth.Application.Features.Auth.VerifyEmail;
+using Auth.Application.Validators;
 
 namespace Auth.API.Tests.Validators;
 
 public sealed class VerifyEmailRequestValidatorTests
 {
-    private readonly VerifyEmailRequestValidator _validator = new();
+    private readonly VerifyEmailCommandValidator _validator = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenOtpCodeContainsLetters()
     {
-        var request = new VerifyEmailRequest("user@example.com", "12AB56");
+        var command = new VerifyEmailCommand("user@example.com", "12AB56");
 
-        var result = _validator.Validate(request);
+        var result = _validator.Validate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x => x.PropertyName == "OtpCode");
@@ -21,9 +21,9 @@ public sealed class VerifyEmailRequestValidatorTests
     [Fact]
     public void Validate_ShouldPass_WhenPayloadIsValid()
     {
-        var request = new VerifyEmailRequest("user@example.com", "123456");
+        var command = new VerifyEmailCommand("user@example.com", "123456");
 
-        var result = _validator.Validate(request);
+        var result = _validator.Validate(command);
 
         Assert.True(result.IsValid);
     }

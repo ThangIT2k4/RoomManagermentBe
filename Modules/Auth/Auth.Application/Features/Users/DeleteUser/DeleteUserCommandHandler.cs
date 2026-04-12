@@ -1,12 +1,12 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
 using Auth.Application.Services;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Users.DeleteUser;
 
 public sealed class DeleteUserCommandHandler(IAuthApplicationService authService)
-    : IRequestHandler<DeleteUserCommand, Result>
+    : IAppRequestHandler<DeleteUserCommand, Result>
 {
     public Task<Result> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         => authService.DeleteUserAsync(new DeleteUserRequest(request.UserId, request.DeletedBy), cancellationToken);

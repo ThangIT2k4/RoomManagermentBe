@@ -1,7 +1,7 @@
 using Auth.Application.Common;
 using Auth.Application.Dtos;
-using MediatR;
+using RoomManagerment.Shared.Messaging;
 
 namespace Auth.Application.Features.Auth.ResendOtp;
 
-public sealed record ResendOtpCommand(string Email, OtpPurpose Purpose, Guid? UserId = null) : IRequest<Result>;
+public sealed record ResendOtpCommand(string Email, OtpPurpose Purpose, Guid? UserId = null) : IAppRequest<Result>;

@@ -1,24 +1,25 @@
 using System.Security.Claims;
-using Auth.API.Common;
 using Auth.API.Requests;
-using Auth.API.Validators;
+using Auth.Application.Features.Auth.ChangeUserStatus;
+using Auth.Application.Features.Auth.Roles.GetUserRoles;
+using Auth.Application.Features.Auth.Users.GetUserById;
+using Auth.Application.Features.Auth.Users.GetUsers;
+using Auth.Application.Features.Users.AssignRole;
+using Auth.Application.Features.Users.DeleteUser;
+using Auth.Application.Features.Users.RemoveRole;
+using Auth.Application.Features.Users.UpdateUser;
 using Auth.Application.Dtos;
-using Auth.Application.Services;
-using Auth.Domain.Common;
-using FluentValidation;
-using FluentValidation.Results;
+using RoomManagerment.Shared.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
 
 namespace Auth.API.Controllers;
 
 [ApiController]
 [Authorize]
 [Route("api/users")]
-public sealed class UsersController(
-    IAuthApplicationService authService,
-    IValidator<UpdateUserApiRequest> updateUserValidator,
-    IValidator<AssignRoleApiRequest> assignRoleValidator) : ControllerBase
+public sealed class UsersController(IAppSender sender) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(PagedUsersResult), StatusCodes.Status200OK)]
@@ -29,16 +30,10 @@ public sealed class UsersController(
         [FromQuery] bool includeDeleted = false,
         CancellationToken cancellationToken = default)
     {
-        if (!ValidationGuards.BeSafeText(searchTerm))
-        {
-            return BadRequest(new { message = "Search term contains unsafe content." });
-        }
-
-        var paging = PagingInput.Create(pageNumber, pageSize);
-        var safeSearchTerm = SearchInput.Normalize(searchTerm);
-
-        var result = await authService.GetUsersAsync(new GetUsersRequest(safeSearchTerm, paging.PageNumber, paging.PageSize, includeDeleted), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(
+            new GetUsersQuery(searchTerm, pageNumber, pageSize, includeDeleted),
+            cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpGet("{userId:guid}")]
@@ -46,8 +41,8 @@ public sealed class UsersController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> GetUserById([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
-        var result = await authService.GetUserByIdAsync(new GetUserByIdRequest(userId), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new GetUserByIdQuery(userId), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpPut("{userId:guid}")]
@@ -55,15 +50,10 @@ public sealed class UsersController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserApiRequest request, CancellationToken cancellationToken)
     {
-        var validation = await updateUserValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var command = new UpdateUserRequest(userId, request.Email, request.Username, request.Phone, request.Status);
-        var result = await authService.UpdateUserAsync(command, cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(
+            new UpdateUserCommand(userId, request.Email, request.Username, request.Phone, request.Status),
+            cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpDelete("{userId:guid}")]
@@ -78,8 +68,8 @@ public sealed class UsersController(
             return Unauthorized(new { message = "User identity is missing." });
         }
 
-        var result = await authService.DeleteUserAsync(new DeleteUserRequest(userId, actorId.Value), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new DeleteUserCommand(userId, actorId.Value), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpPatch("{userId:guid}/status")]
@@ -87,8 +77,8 @@ public sealed class UsersController(
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> ChangeStatus([FromRoute] Guid userId, [FromBody] ChangeUserStatusApiRequest request, CancellationToken cancellationToken)
     {
-        var result = await authService.ChangeUserStatusAsync(new ChangeUserStatusRequest(userId, request.Status), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new ChangeUserStatusCommand(userId, request.Status), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpPost("{userId:guid}/ban")]
@@ -111,53 +101,31 @@ public sealed class UsersController(
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> AssignRole([FromRoute] Guid userId, [FromBody] AssignRoleApiRequest request, CancellationToken cancellationToken)
     {
-        var validation = await assignRoleValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await authService.AssignRoleAsync(new AssignRoleRequest(request.OrganizationId, userId, request.RoleId), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(
+            new AssignRoleCommand(request.OrganizationId, userId, request.RoleId),
+            cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpDelete("{userId:guid}/roles")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> RemoveRole([FromRoute] Guid userId, [FromQuery] Guid organizationId, CancellationToken cancellationToken)
     {
-        if (organizationId == Guid.Empty)
-        {
-            return BadRequest(new { message = "organizationId is required." });
-        }
-
-        var result = await authService.RemoveRoleAsync(new RemoveRoleRequest(organizationId, userId), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new RemoveRoleCommand(organizationId, userId), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpGet("{userId:guid}/roles")]
     [ProducesResponseType(typeof(IReadOnlyList<RoleDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<RoleDto>>> GetRoles([FromRoute] Guid userId, [FromQuery] Guid? organizationId, CancellationToken cancellationToken)
     {
-        var result = await authService.GetUserRolesAsync(new GetUserRolesRequest(userId, organizationId), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new GetUserRolesQuery(userId, organizationId), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     private Guid? ResolveActorUserId()
     {
         var raw = User.FindFirstValue(ClaimTypes.NameIdentifier);
         return Guid.TryParse(raw, out var id) ? id : null;
-    }
-
-    private static object ToValidationErrorPayload(ValidationResult validationResult)
-    {
-        return new
-        {
-            message = "Validation failed",
-            errors = validationResult.Errors.Select(error => new
-            {
-                field = error.PropertyName,
-                error = error.ErrorMessage
-            })
-        };
     }
 }

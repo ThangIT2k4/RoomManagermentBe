@@ -3,10 +3,11 @@ using Auth.Application.Services;
 using Auth.Domain.Repositories;
 using Auth.Infrastructure.Repositories;
 using Auth.Infrastructure.Services;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MediatR;
 using RoomManagerment.Auth.DatabaseSpecific;
+using RoomManagerment.Shared.Messaging;
 using RoomManagerment.Messaging.Configuration;
 using RoomManagerment.Messaging.Extensions;
 
@@ -17,9 +18,10 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IDataAccessAdapterFactory, DataAccessAdapterFactory>();
-        services.AddApplication();
+        services.AddValidatorsFromAssembly(typeof(MediatorAssemblyMarker).Assembly);
+        services.AddAuthApplicationRequestHandlers();
+        services.AddScoped<IAppSender, AppRequestSender>();
         services.AddRabbitMqMessaging(configuration);
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(MediatorAssemblyMarker).Assembly));
         services.AddScoped<IMediatorGateway, MediatorGateway>();
         services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
         services.AddScoped<IOrganizationMembershipGateway, NoOpOrganizationMembershipGateway>();
@@ -46,4 +48,3 @@ public static class DependencyInjection
         return services;
     }
 }
-

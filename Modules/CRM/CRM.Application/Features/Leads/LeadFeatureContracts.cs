@@ -1,3 +1,5 @@
+using MediatR;
+
 namespace CRM.Application.Features.Leads;
 
 public sealed record LeadDto(
@@ -8,6 +10,8 @@ public sealed record LeadDto(
     DateTime CreatedAt,
     DateTime? UpdatedAt);
 
-public sealed record CreateLeadRequest(Guid OrganizationId, string? FullName, string Status = "new");
+public sealed record CreateLeadRequest(Guid OrganizationId, string? FullName, string Status = "new")
+    : IRequest<Result<LeadDto>>;
 
-public sealed record UpdateLeadStatusRequest(Guid LeadId, string Status);
+public sealed record UpdateLeadStatusRequest(Guid LeadId, string Status)
+    : IRequest<Result<LeadDto>>;

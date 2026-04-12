@@ -1,22 +1,22 @@
 using System.Security.Claims;
-using Auth.API.Common;
 using Auth.API.Requests;
+using Auth.Application.Features.Auth.Profile.GetProfile;
+using Auth.Application.Features.Auth.Profile.UpdatePersonalInfo;
+using Auth.Application.Features.Auth.Profile.UpdateProfile;
+using Auth.Application.Features.Auth.Profile.UploadAvatar;
 using Auth.Application.Dtos;
-using Auth.Application.Services;
-using FluentValidation;
-using FluentValidation.Results;
+using RoomManagerment.Shared.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
+
 
 namespace Auth.API.Controllers;
 
 [ApiController]
 [Authorize]
 [Route("api/profile")]
-public sealed class ProfileController(
-    IAuthApplicationService authService,
-    IValidator<UpdateProfileApiRequest> updateProfileValidator,
-    IValidator<UploadAvatarApiRequest> uploadAvatarValidator) : ControllerBase
+public sealed class ProfileController(IAppSender sender) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(UserProfileDto), StatusCodes.Status200OK)]
@@ -29,8 +29,8 @@ public sealed class ProfileController(
             return Unauthorized(new { message = "User identity is missing." });
         }
 
-        var result = await authService.GetProfileAsync(new GetProfileRequest(userId.Value), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new GetProfileQuery(userId.Value), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpPut]
@@ -44,15 +44,10 @@ public sealed class ProfileController(
             return Unauthorized(new { message = "User identity is missing." });
         }
 
-        var validation = await updateProfileValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var command = new UpdateProfileRequest(userId.Value, request.FullName, request.Dob, request.Gender, request.Address, request.Note);
-        var result = await authService.UpdateProfileAsync(command, cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(
+            new UpdateProfileCommand(userId.Value, request.FullName, request.Dob, request.Gender, request.Address, request.Note),
+            cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpPatch("avatar")]
@@ -66,14 +61,8 @@ public sealed class ProfileController(
             return Unauthorized(new { message = "User identity is missing." });
         }
 
-        var validation = await uploadAvatarValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var result = await authService.UploadAvatarAsync(new UploadAvatarRequest(userId.Value, request.AvatarUrl), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new UploadAvatarCommand(userId.Value, request.AvatarUrl), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpPatch("personal-info")]
@@ -87,33 +76,15 @@ public sealed class ProfileController(
             return Unauthorized(new { message = "User identity is missing." });
         }
 
-        var validation = await updateProfileValidator.ValidateAsync(request, cancellationToken);
-        if (!validation.IsValid)
-        {
-            return BadRequest(ToValidationErrorPayload(validation));
-        }
-
-        var command = new UpdatePersonalInfoRequest(userId.Value, request.FullName, request.Dob, request.Gender, request.Address, request.Note);
-        var result = await authService.UpdatePersonalInfoAsync(command, cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(
+            new UpdatePersonalInfoCommand(userId.Value, request.FullName, request.Dob, request.Gender, request.Address, request.Note),
+            cancellationToken);
+        return this.ToActionResult(result);
     }
 
     private Guid? ResolveUserId()
     {
         var raw = User.FindFirstValue(ClaimTypes.NameIdentifier);
         return Guid.TryParse(raw, out var userId) ? userId : null;
-    }
-
-    private static object ToValidationErrorPayload(ValidationResult validationResult)
-    {
-        return new
-        {
-            message = "Validation failed",
-            errors = validationResult.Errors.Select(error => new
-            {
-                field = error.PropertyName,
-                error = error.ErrorMessage
-            })
-        };
     }
 }

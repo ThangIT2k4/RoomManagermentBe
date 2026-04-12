@@ -1,18 +1,18 @@
 using System.Security.Claims;
-using Auth.API.Common;
-using Auth.Application.Dtos;
+using Auth.Application.Features.Auth.Sessions.GetActiveSessions;
 using Auth.Application.Features.Auth.Sessions.LogoutAllSessions;
-using Auth.Application.Services;
-using MediatR;
+using Auth.Application.Dtos;
+using RoomManagerment.Shared.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RoomManagerment.Shared.Extensions;
 
 namespace Auth.API.Controllers;
 
 [ApiController]
 [Authorize]
 [Route("api/sessions")]
-public sealed class SessionsController(IAuthApplicationService authService, IMediator mediator) : ControllerBase
+public sealed class SessionsController(IAppSender sender) : ControllerBase
 {
     [HttpGet("active")]
     [ProducesResponseType(typeof(PagedSessionsResult), StatusCodes.Status200OK)]
@@ -28,8 +28,8 @@ public sealed class SessionsController(IAuthApplicationService authService, IMed
             return Unauthorized(new { message = "User identity is missing." });
         }
 
-        var result = await authService.GetActiveSessionsAsync(new GetActiveSessionsRequest(userId.Value, pageNumber, pageSize), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new GetActiveSessionsQuery(userId.Value, pageNumber, pageSize), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     [HttpPost("logout-all")]
@@ -43,8 +43,8 @@ public sealed class SessionsController(IAuthApplicationService authService, IMed
             return Unauthorized(new { message = "User identity is missing." });
         }
 
-        var result = await mediator.Send(new LogoutAllSessionsCommand(userId.Value), cancellationToken);
-        return result.ToActionResult();
+        var result = await sender.Send(new LogoutAllSessionsCommand(userId.Value), cancellationToken);
+        return this.ToActionResult(result);
     }
 
     private Guid? ResolveUserId()

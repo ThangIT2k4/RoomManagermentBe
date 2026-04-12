@@ -1,18 +1,18 @@
-using Auth.API.Validators;
-using Auth.Application.Dtos;
+using Auth.Application.Features.Auth.ForgotPassword;
+using Auth.Application.Validators;
 
 namespace Auth.API.Tests.Validators;
 
 public sealed class ForgotPasswordRequestValidatorTests
 {
-    private readonly ForgotPasswordRequestValidator _validator = new();
+    private readonly ForgotPasswordCommandValidator _validator = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenEmailContainsScriptPayload()
     {
-        var request = new ForgotPasswordRequest("<script>alert(1)</script>@example.com");
+        var command = new ForgotPasswordCommand("<script>alert(1)</script>@example.com");
 
-        var result = _validator.Validate(request);
+        var result = _validator.Validate(command);
 
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x => x.PropertyName == "Email");
@@ -21,9 +21,9 @@ public sealed class ForgotPasswordRequestValidatorTests
     [Fact]
     public void Validate_ShouldPass_WhenEmailIsNormal()
     {
-        var request = new ForgotPasswordRequest("normal.user@example.com");
+        var command = new ForgotPasswordCommand("normal.user@example.com");
 
-        var result = _validator.Validate(request);
+        var result = _validator.Validate(command);
 
         Assert.True(result.IsValid);
     }
