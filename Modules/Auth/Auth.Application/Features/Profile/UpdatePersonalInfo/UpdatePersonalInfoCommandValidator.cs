@@ -7,24 +7,29 @@ public sealed class UpdatePersonalInfoCommandValidator : AbstractValidator<Updat
 {
     public UpdatePersonalInfoCommandValidator()
     {
-        RuleFor(x => x.UserId).NotEmpty();
+        RuleFor(x => x.UserId)
+            .NotEmpty()
+            .WithMessage("Mã người dùng không được để trống.");
 
         RuleFor(x => x.FullName)
             .MaximumLength(120)
+            .WithMessage("Họ và tên không được vượt quá 120 ký tự.")
             .Must(ValidationGuards.BeSafeText)
-            .WithMessage("FullName contains unsafe content.")
+            .WithMessage("Họ và tên chứa nội dung không an toàn.")
             .When(x => !string.IsNullOrWhiteSpace(x.FullName));
 
         RuleFor(x => x.Address)
             .MaximumLength(255)
+            .WithMessage("Địa chỉ không được vượt quá 255 ký tự.")
             .Must(ValidationGuards.BeSafeText)
-            .WithMessage("Address contains unsafe content.")
+            .WithMessage("Địa chỉ chứa nội dung không an toàn.")
             .When(x => !string.IsNullOrWhiteSpace(x.Address));
 
         RuleFor(x => x.Note)
             .MaximumLength(500)
+            .WithMessage("Ghi chú không được vượt quá 500 ký tự.")
             .Must(ValidationGuards.BeSafeText)
-            .WithMessage("Note contains unsafe content.")
+            .WithMessage("Ghi chú chứa nội dung không an toàn.")
             .When(x => !string.IsNullOrWhiteSpace(x.Note));
     }
 }

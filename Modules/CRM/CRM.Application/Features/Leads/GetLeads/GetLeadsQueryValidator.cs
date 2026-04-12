@@ -8,18 +8,22 @@ public sealed class GetLeadsQueryValidator : AbstractValidator<GetLeadsQuery>
 {
     public GetLeadsQueryValidator()
     {
-        RuleFor(x => x.OrganizationId).NotEmpty();
+        RuleFor(x => x.OrganizationId)
+            .NotEmpty()
+            .WithMessage("Mã tổ chức không được để trống.");
 
         RuleFor(x => x.Search)
             .MaximumLength(InputSecurityLimits.MaxSearchLength)
+            .WithMessage($"Từ khóa tìm kiếm không được vượt quá {InputSecurityLimits.MaxSearchLength} ký tự.")
             .Must(ValidationGuards.BeSafeText)
-            .WithMessage("Search contains unsafe content.")
+            .WithMessage("Từ khóa tìm kiếm chứa nội dung không an toàn.")
             .When(x => !string.IsNullOrWhiteSpace(x.Search));
 
         RuleFor(x => x.Status)
             .MaximumLength(InputSecurityLimits.MaxStatusLength)
+            .WithMessage($"Trạng thái không được vượt quá {InputSecurityLimits.MaxStatusLength} ký tự.")
             .Must(ValidationGuards.BeSafeText)
-            .WithMessage("Status contains unsafe content.")
+            .WithMessage("Trạng thái chứa nội dung không an toàn.")
             .When(x => !string.IsNullOrWhiteSpace(x.Status));
     }
 }

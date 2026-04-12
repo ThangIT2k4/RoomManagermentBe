@@ -12,9 +12,10 @@ public sealed class SendOtpCommandValidator : AbstractValidator<SendOtpCommand>
             .EmailAddress()
             .MaximumLength(120)
             .Must(ValidationGuards.BeSafeText)
-            .WithMessage("Email contains unsafe content.");
+            .WithMessage("Email chứa nội dung không an toàn.");
 
         RuleFor(x => x.Purpose)
-            .IsInEnum();
+            .IsInEnum()
+            .WithMessage("Mục đích OTP không hợp lệ.");
     }
 }

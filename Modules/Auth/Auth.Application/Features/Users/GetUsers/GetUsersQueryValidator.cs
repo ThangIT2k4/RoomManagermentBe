@@ -9,7 +9,7 @@ public sealed class GetUsersQueryValidator : AbstractValidator<GetUsersQuery>
     {
         RuleFor(x => x.SearchTerm)
             .Must(ValidationGuards.BeSafeText)
-            .WithMessage("Search term contains unsafe content.")
+            .WithMessage("Từ khóa tìm kiếm chứa nội dung không an toàn.")
             .When(x => !string.IsNullOrWhiteSpace(x.SearchTerm));
     }
 }

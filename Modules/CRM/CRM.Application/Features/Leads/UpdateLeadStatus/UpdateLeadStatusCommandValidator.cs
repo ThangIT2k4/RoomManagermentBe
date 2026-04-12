@@ -8,12 +8,16 @@ public sealed class UpdateLeadStatusCommandValidator : AbstractValidator<UpdateL
 {
     public UpdateLeadStatusCommandValidator()
     {
-        RuleFor(x => x.LeadId).NotEmpty();
+        RuleFor(x => x.LeadId)
+            .NotEmpty()
+            .WithMessage("Mã khách hàng tiềm năng không được để trống.");
 
         RuleFor(x => x.Status)
             .NotEmpty()
+            .WithMessage("Trạng thái không được để trống.")
             .MaximumLength(InputSecurityLimits.MaxStatusLength)
+            .WithMessage($"Trạng thái không được vượt quá {InputSecurityLimits.MaxStatusLength} ký tự.")
             .Must(ValidationGuards.BeSafeText)
-            .WithMessage("Status contains unsafe content.");
+            .WithMessage("Trạng thái chứa nội dung không an toàn.");
     }
 }
