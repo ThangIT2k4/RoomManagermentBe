@@ -42,7 +42,7 @@ public sealed class AppRequestSender(IServiceProvider serviceProvider, ILogger<A
             var response = resultProperty.GetValue(task);
             if (response is null)
             {
-                throw new InvalidOperationException("Handler trả về null.");
+                throw new InvalidOperationException("Handler trả về giá trị rỗng.");
             }
 
             sw.Stop();
@@ -108,6 +108,6 @@ public sealed class AppRequestSender(IServiceProvider serviceProvider, ILogger<A
             return (TResponse)failureMethod.Invoke(null, [error])!;
         }
 
-        throw new InvalidOperationException($"{typeof(TResponse).Name} không phải kiểu Result; không thể tổng hợp lỗi validation.");
+        throw new InvalidOperationException($"{typeof(TResponse).Name} không phải kiểu Result; không thể tổng hợp lỗi xác thực.");
     }
 }

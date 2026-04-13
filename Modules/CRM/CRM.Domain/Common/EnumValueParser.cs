@@ -9,7 +9,7 @@ internal static class EnumValueParser
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new DomainValidationException($"{fieldName} is required.");
+            throw new DomainValidationException($"{fieldName} là bắt buộc.");
         }
 
         var normalized = value.Trim();
@@ -19,7 +19,7 @@ internal static class EnumValueParser
         }
 
         var allowed = string.Join(", ", Enum.GetNames<TEnum>().Select(x => x.ToLowerInvariant()));
-        throw new DomainValidationException($"Invalid {fieldName}. Allowed values: {allowed}.");
+        throw new DomainValidationException($"{fieldName} không hợp lệ. Giá trị cho phép: {allowed}.");
     }
 
     public static string? ParseOptional<TEnum>(string? value, string fieldName)

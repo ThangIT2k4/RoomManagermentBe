@@ -71,7 +71,7 @@ public sealed class OrganizationUserRepository(DataAccessAdapter adapter) : IOrg
     public async Task<OrganizationUserEntity> UpdateAsync(OrganizationUserEntity entity, CancellationToken cancellationToken = default)
     {
         var dal = await new LinqMetaData(adapter).OrganizationUser.Where(x => x.Id == entity.Id).FirstOrDefaultAsync(cancellationToken)
-                  ?? throw new InvalidOperationException($"OrganizationUser {entity.Id} not found.");
+                  ?? throw new InvalidOperationException($"Không tìm thấy thành viên tổ chức {entity.Id}.");
         dal.RoleId = entity.RoleId;
         dal.IsActive = entity.IsActive;
         dal.InvitationToken = entity.InvitationToken;

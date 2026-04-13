@@ -19,7 +19,7 @@ public sealed class RabbitMqIntegrationEventPublisher : IIntegrationEventPublish
     {
         if (!_channel.Writer.TryWrite(new IntegrationEventEnvelope(routingKey, message)))
         {
-            _logger.LogWarning("Unable to queue integration event {RoutingKey}.", routingKey);
+            _logger.LogWarning("Không thể đưa integration event {RoutingKey} vào hàng đợi.", routingKey);
         }
 
         return ValueTask.CompletedTask;

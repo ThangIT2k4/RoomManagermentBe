@@ -22,6 +22,7 @@ public interface IAuthApplicationService
     Task<Result> SendOtpAsync(SendOtpRequest request, CancellationToken cancellationToken = default);
     Task<Result> VerifyOtpAsync(VerifyOtpRequest request, CancellationToken cancellationToken = default);
     Task<Result> VerifyEmailAsync(VerifyEmailRequest request, CancellationToken cancellationToken = default);
+    Task<Result> ResendVerifyEmailOtpAsync(ResendVerifyEmailOtpRequest request, CancellationToken cancellationToken = default);
     Task<Result> ResendOtpAsync(ResendOtpRequest request, CancellationToken cancellationToken = default);
 
     Task<Result<SessionDto>> CreateSessionAsync(CreateSessionRequest request, CancellationToken cancellationToken = default);

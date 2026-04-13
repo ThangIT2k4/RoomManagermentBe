@@ -47,7 +47,7 @@ public sealed class OrganizationRepository(DataAccessAdapter adapter) : IOrganiz
 
         if (dal is null)
         {
-            throw new InvalidOperationException($"Organization {organization.Id} not found.");
+            throw new InvalidOperationException($"Không tìm thấy tổ chức {organization.Id}.");
         }
 
         dal.Name = organization.Name;

@@ -36,7 +36,7 @@ public sealed class RedisOrganizationCacheService : IOrganizationCacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis get org cache failed for {OrganizationId}.", organizationId);
+            _logger.LogWarning(ex, "Redis lấy cache tổ chức thất bại với {OrganizationId}.", organizationId);
             return null;
         }
     }
@@ -55,7 +55,7 @@ public sealed class RedisOrganizationCacheService : IOrganizationCacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis set org cache failed for {OrganizationId}.", organization.Id);
+            _logger.LogWarning(ex, "Redis ghi cache tổ chức thất bại với {OrganizationId}.", organization.Id);
         }
     }
 
@@ -73,7 +73,7 @@ public sealed class RedisOrganizationCacheService : IOrganizationCacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis remove org cache failed for {OrganizationId}.", organizationId);
+            _logger.LogWarning(ex, "Redis xóa cache tổ chức thất bại với {OrganizationId}.", organizationId);
         }
     }
 
@@ -110,7 +110,7 @@ public sealed class RedisOrganizationCacheService : IOrganizationCacheService
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Redis unavailable, cache falls back to no-op mode.");
+                _logger.LogWarning(ex, "Redis không khả dụng, cache chuyển sang chế độ no-op.");
                 _redis = null;
                 _database = null;
             }

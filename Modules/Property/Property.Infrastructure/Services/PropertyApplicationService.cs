@@ -12,8 +12,8 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
     public async Task<PropertyDto> CreatePropertyAsync(Guid organizationId, Guid userId, CreatePropertyRequest request, CancellationToken cancellationToken = default)
     {
         ValidateOrgAndUser(organizationId, userId);
-        if (string.IsNullOrWhiteSpace(request.Name)) throw new ArgumentException("Property name is required.");
-        if (string.IsNullOrWhiteSpace(request.Address)) throw new ArgumentException("Property address is required.");
+        if (string.IsNullOrWhiteSpace(request.Name)) throw new ArgumentException("Tên bất động sản là bắt buộc.");
+        if (string.IsNullOrWhiteSpace(request.Address)) throw new ArgumentException("Địa chỉ bất động sản là bắt buộc.");
 
         using var adapter = (DataAccessAdapter)adapterFactory.CreateAdapter();
         var entity = new PropertyEntity
@@ -269,10 +269,10 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
             .FirstOrDefaultAsync(cancellationToken);
 
         if (lastValue.HasValue && request.Value < lastValue.Value)
-            throw new InvalidOperationException("New reading must be greater than or equal to latest reading.");
+            throw new InvalidOperationException("Chỉ số mới phải lớn hơn hoặc bằng chỉ số gần nhất.");
 
         var existed = await linq.MeterReading.AnyAsync(x => x.MeterId == request.MeterId && x.ReadingDate == request.ReadingDate && x.DeletedAt == null, cancellationToken);
-        if (existed) throw new InvalidOperationException("Reading already exists for the same date.");
+        if (existed) throw new InvalidOperationException("Chỉ số đã tồn tại cho cùng ngày.");
 
         var entity = new MeterReadingEntity
         {
@@ -315,7 +315,7 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
         {
             var linq = new LinqMetaData(adapter);
             entity = await linq.Amenity.FirstOrDefaultAsync(x => x.Id == request.Id.Value && x.DeletedAt == null, cancellationToken)
-                ?? throw new InvalidOperationException("Amenity not found.");
+                ?? throw new InvalidOperationException("Không tìm thấy tiện ích.");
             entity.KeyCode = request.KeyCode.Trim();
             entity.Name = request.Name.Trim();
             entity.Category = request.Category?.Trim();
@@ -375,7 +375,7 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
         {
             var linq = new LinqMetaData(adapter);
             entity = await linq.PropertyType.FirstOrDefaultAsync(x => x.Id == request.Id.Value && x.DeletedAt == null, cancellationToken)
-                ?? throw new InvalidOperationException("Property type not found.");
+                ?? throw new InvalidOperationException("Không tìm thấy loại bất động sản.");
             entity.KeyCode = request.KeyCode.Trim();
             entity.Name = request.Name.Trim();
             entity.Description = request.Description?.Trim();
@@ -465,7 +465,7 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
         {
             var linq = new LinqMetaData(adapter);
             entity = await linq.Vendor.FirstOrDefaultAsync(x => x.Id == request.Id.Value && x.OrganizationId == organizationId && x.DeletedAt == null, cancellationToken)
-                ?? throw new InvalidOperationException("Vendor not found.");
+                ?? throw new InvalidOperationException("Không tìm thấy nhà cung cấp.");
             entity.Name = request.Name.Trim();
             entity.TaxCode = request.TaxCode?.Trim();
             entity.Phone = request.Phone?.Trim();
@@ -598,8 +598,8 @@ public sealed class PropertyApplicationService(IDataAccessAdapterFactory adapter
 
     private static void ValidateOrgAndUser(Guid organizationId, Guid userId)
     {
-        if (organizationId == Guid.Empty) throw new ArgumentException("Organization id is required.");
-        if (userId == Guid.Empty) throw new ArgumentException("User id is required.");
+        if (organizationId == Guid.Empty) throw new ArgumentException("Mã tổ chức là bắt buộc.");
+        if (userId == Guid.Empty) throw new ArgumentException("Mã người dùng là bắt buộc.");
     }
 
     private static PropertyDto Map(PropertyEntity entity) =>

@@ -50,7 +50,7 @@ public sealed class BookingDepositEntity : AggregateRoot<Guid>
     {
         if (organizationId == Guid.Empty)
         {
-            throw new DomainValidationException("OrganizationId is required.");
+            throw new DomainValidationException("OrganizationId là bắt buộc.");
         }
 
         return new BookingDepositEntity(

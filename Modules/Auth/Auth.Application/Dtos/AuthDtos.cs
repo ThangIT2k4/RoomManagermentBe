@@ -58,6 +58,10 @@ public sealed record SendOtpRequest(string Email, OtpPurpose Purpose, Guid? User
 public sealed record VerifyOtpRequest(string Email, OtpPurpose Purpose, string OtpCode);
 /// <summary>Email verification: user identity comes from the OTP record, not from the client.</summary>
 public sealed record VerifyEmailRequest(string Email, string OtpCode);
+
+/// <summary>Resend verify-email OTP without session (user is not logged in until verified).</summary>
+public sealed record ResendVerifyEmailOtpRequest(string Email, string Password);
+
 public sealed record ResendOtpRequest(string Email, OtpPurpose Purpose, Guid? UserId = null);
 
 public sealed record CreateSessionRequest(Guid UserId, string? IpAddress, string? UserAgent, bool RememberMe);
@@ -104,6 +108,9 @@ public sealed record AuthResendOtpResponse();
 
 /// <summary>Success <c>data</c> for POST /api/auth/verify-email.</summary>
 public sealed record AuthVerifyEmailResponse();
+
+/// <summary>Success <c>data</c> for POST /api/auth/resend-verify-email-otp.</summary>
+public sealed record AuthResendVerifyEmailOtpResponse();
 
 /// <summary>Success <c>data</c> for DELETE /api/users/{userId}.</summary>
 public sealed record AuthDeleteUserResponse();

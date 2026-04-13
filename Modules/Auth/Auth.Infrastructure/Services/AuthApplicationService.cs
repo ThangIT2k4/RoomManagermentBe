@@ -6,7 +6,10 @@ using Auth.Domain.Entities;
 using Auth.Domain.Enums;
 using Auth.Domain.Repositories;
 using Auth.Domain.ValueObjects;
+using Auth.Infrastructure.Mail;
+using Auth.Infrastructure.Options;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RoomManagerment.Shared.Common;
 using SD.LLBLGen.Pro.LinqSupportClasses;
 using AuthDataAccessAdapter = RoomManagerment.Auth.DatabaseSpecific.DataAccessAdapter;
@@ -22,12 +25,18 @@ public sealed class AuthApplicationService(
     IPasswordHasher passwordHasher,
     IOrganizationMembershipGateway organizationGateway,
     AuthDataAccessAdapter adapter,
+    IEmailSender emailSender,
+    IOptions<EmailOptions> emailOptions,
+    IOptions<OtpOptions> otpOptions,
     ILogger<AuthApplicationService> logger) : IAuthApplicationService
 {
-    private static TimeSpan OtpExpiryFor(OtpPurpose purpose) => purpose switch
+    private readonly EmailOptions _emailOptions = emailOptions.Value;
+    private readonly OtpOptions _otpOptions = otpOptions.Value;
+
+    private TimeSpan OtpExpiryFor(OtpPurpose purpose) => purpose switch
     {
-        OtpPurpose.ResetPassword => TimeSpan.FromMinutes(15),
-        _ => TimeSpan.FromMinutes(5)
+        OtpPurpose.ResetPassword => TimeSpan.FromMinutes(Math.Max(1, _otpOptions.ResetPasswordExpiryMinutes)),
+        _ => TimeSpan.FromMinutes(Math.Max(1, _otpOptions.VerifyEmailExpiryMinutes))
     };
 
     public Task<Result<RegisterResult>> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
@@ -304,7 +313,9 @@ public sealed class AuthApplicationService(
             };
 
             await adapter.SaveEntityAsync(entity, true, false, cancellationToken);
-            return Result.Success();
+
+            var sent = await DispatchOtpEmailAsync(request.Email, otp, request.Purpose, cancellationToken);
+            return sent.IsFailure ? sent : Result.Success();
         });
 
     public Task<Result> VerifyOtpAsync(VerifyOtpRequest request, CancellationToken cancellationToken = default)
@@ -346,8 +357,41 @@ public sealed class AuthApplicationService(
             return Result.Success();
         });
 
+    public Task<Result> ResendVerifyEmailOtpAsync(ResendVerifyEmailOtpRequest request, CancellationToken cancellationToken = default)
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(ResendVerifyEmailOtpAsync), cancellationToken, async () =>
+        {
+            var email = Email.Create(request.Email);
+            var user = await userRepository.GetByEmailAsync(email, cancellationToken);
+            if (user is null || user.Status != UserStatus.Inactive || user.PasswordHash is null)
+            {
+                return Result.Failure(Error.BadRequest("Auth.Resend.Invalid", "Không thể gửi lại mã. Kiểm tra email và mật khẩu."));
+            }
+
+            if (!passwordHasher.Verify(request.Password, user.PasswordHash.Value))
+            {
+                return Result.Failure(Error.BadRequest("Auth.Resend.Invalid", "Không thể gửi lại mã. Kiểm tra email và mật khẩu."));
+            }
+
+            var cooldownErr = await CheckResendCooldownAsync(request.Email, OtpPurpose.VerifyEmail, cancellationToken);
+            if (cooldownErr is not null)
+            {
+                return Result.Failure(cooldownErr);
+            }
+
+            return await SendOtpAsync(new SendOtpRequest(user.Email.Value, OtpPurpose.VerifyEmail, user.Id), cancellationToken);
+        });
+
     public Task<Result> ResendOtpAsync(ResendOtpRequest request, CancellationToken cancellationToken = default)
-        => SendOtpAsync(new SendOtpRequest(request.Email, request.Purpose, request.UserId), cancellationToken);
+        => AuthApplicationServiceGuard.RunAsync(logger, nameof(ResendOtpAsync), cancellationToken, async () =>
+        {
+            var cooldownErr = await CheckResendCooldownAsync(request.Email, request.Purpose, cancellationToken);
+            if (cooldownErr is not null)
+            {
+                return Result.Failure(cooldownErr);
+            }
+
+            return await SendOtpAsync(new SendOtpRequest(request.Email, request.Purpose, request.UserId), cancellationToken);
+        });
 
     public Task<Result<SessionDto>> CreateSessionAsync(CreateSessionRequest request, CancellationToken cancellationToken = default)
         => AuthApplicationServiceGuard.RunAsync(logger, nameof(CreateSessionAsync), cancellationToken, async () =>
@@ -493,6 +537,69 @@ public sealed class AuthApplicationService(
         };
         await adapter.SaveEntityAsync(profile, true, false, cancellationToken);
         return profile;
+    }
+
+    private async Task<Error?> CheckResendCooldownAsync(string email, OtpPurpose purpose, CancellationToken cancellationToken)
+    {
+        var linq = new AuthLinqMetaData(adapter);
+        var normalized = email.Trim().ToLowerInvariant();
+        var type = MapOtpPurpose(purpose);
+
+        var latest = await linq.EmailOtp
+            .Where(x => x.Email == normalized && x.Type == type)
+            .OrderByDescending(x => x.CreatedAt)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (latest is null)
+        {
+            return null;
+        }
+
+        var cooldown = TimeSpan.FromMinutes(Math.Max(1, _otpOptions.ResendCooldownMinutes));
+        var elapsed = DateTime.UtcNow - latest.CreatedAt;
+        if (elapsed < cooldown)
+        {
+            var waitSeconds = (int)Math.Ceiling((cooldown - elapsed).TotalSeconds);
+            return Error.BadRequest("Auth.Otp.ResendTooSoon", $"Vui lòng đợi thêm {waitSeconds} giây trước khi gửi lại mã.");
+        }
+
+        return null;
+    }
+
+    private async Task<Result> DispatchOtpEmailAsync(string toEmail, string otpCode, OtpPurpose purpose, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(_emailOptions.Host))
+        {
+            logger.LogWarning("SMTP host is empty; OTP stored for {Email} but email was not sent.", toEmail);
+            return Result.Success();
+        }
+
+        var (subject, text, html) = BuildOtpEmailContent(otpCode, purpose);
+        try
+        {
+            await emailSender.SendAsync(toEmail, subject, text, html, cancellationToken);
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to send OTP email to {Email}", toEmail);
+            return Result.Failure(Error.BadRequest("Auth.Email.SendFailed", "Không gửi được email OTP. Kiểm tra cấu hình SMTP hoặc thử lại sau."));
+        }
+    }
+
+    private static (string Subject, string Text, string Html) BuildOtpEmailContent(string otpCode, OtpPurpose purpose)
+    {
+        return purpose switch
+        {
+            OtpPurpose.ResetPassword => (
+                "Mã đặt lại mật khẩu",
+                $"Mã OTP của bạn là: {otpCode}. Mã có hiệu lực trong thời gian đã cấu hình. Nếu bạn không yêu cầu, hãy bỏ qua email này.",
+                $"<p>Mã OTP đặt lại mật khẩu: <strong>{otpCode}</strong></p><p>Nếu bạn không yêu cầu, hãy bỏ qua email này.</p>"),
+            _ => (
+                "Xác thực email",
+                $"Mã OTP xác thực email của bạn là: {otpCode}. Mã có hiệu lực trong thời gian đã cấu hình.",
+                $"<p>Mã OTP xác thực email: <strong>{otpCode}</strong></p>")
+        };
     }
 
     private async Task<DalEmailOtpEntity?> VerifyOtpCoreAsync(string email, OtpPurpose purpose, string otpCode, CancellationToken cancellationToken)

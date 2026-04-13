@@ -9,7 +9,7 @@ public sealed class MediatorGateway(IAppSender sender) : IMediatorGateway
     {
         if (request is not IAppRequest<TResponse> appRequest)
             throw new ArgumentException(
-                $"Request type {request.GetType().Name} must implement IAppRequest<{typeof(TResponse).Name}>.",
+                $"Kiểu request {request.GetType().Name} phải triển khai IAppRequest<{typeof(TResponse).Name}>.",
                 nameof(request));
 
         return sender.Send(appRequest, cancellationToken);

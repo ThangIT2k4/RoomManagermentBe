@@ -16,13 +16,13 @@ public sealed class PersonName : ValueObject
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new DomainValidationException($"{fieldName} is required.");
+            throw new DomainValidationException($"{fieldName} là bắt buộc.");
         }
 
         var normalized = value.Trim();
         if (normalized.Length > InputSecurityLimits.MaxLeadNameLength)
         {
-            throw new DomainValidationException($"{fieldName} length cannot exceed {InputSecurityLimits.MaxLeadNameLength}.");
+            throw new DomainValidationException($"Độ dài {fieldName} không được vượt quá {InputSecurityLimits.MaxLeadNameLength}.");
         }
 
         return new PersonName(normalized);

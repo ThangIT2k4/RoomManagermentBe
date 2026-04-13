@@ -99,6 +99,21 @@ public sealed class FinanceApplicationService(
             }
 
             await invoiceItemRepository.AddRangeAsync(lineEntities, cancellationToken);
+
+            if (invoice.LeaseId is { } createdLeaseId && !string.IsNullOrWhiteSpace(invoice.InvoiceNo))
+            {
+                await integrationEventPublisher.PublishAsync(
+                    new InvoiceCreatedEvent(
+                        invoice.Id,
+                        invoice.OrganizationId,
+                        createdLeaseId,
+                        invoice.InvoiceNo,
+                        invoice.TotalAmount,
+                        invoice.DueDate,
+                        invoice.IsAutoCreated),
+                    cancellationToken);
+            }
+
             return Result<InvoiceDto>.Success(await MapInvoiceDetailAsync(invoice, cancellationToken));
         }
         catch (ArgumentException)
@@ -203,6 +218,19 @@ public sealed class FinanceApplicationService(
 
         await invoiceRepository.UpdateAsync(invoice, cancellationToken);
 
+        if (invoice.LeaseId is { } publishedLeaseId && !string.IsNullOrWhiteSpace(invoice.InvoiceNo))
+        {
+            await integrationEventPublisher.PublishAsync(
+                new InvoicePublishedEvent(
+                    invoice.Id,
+                    invoice.OrganizationId,
+                    publishedLeaseId,
+                    invoice.InvoiceNo,
+                    invoice.TotalAmount,
+                    invoice.DueDate),
+                cancellationToken);
+        }
+
         if (invoice.LeaseId is { } lid)
         {
             var lease = await leaseReadGateway.GetLeaseAsync(lid, organizationId, cancellationToken);
@@ -244,6 +272,18 @@ public sealed class FinanceApplicationService(
         }
 
         await invoiceRepository.UpdateAsync(invoice, cancellationToken);
+
+        if (invoice.LeaseId is { } cancelledLeaseId)
+        {
+            await integrationEventPublisher.PublishAsync(
+                new InvoiceCancelledEvent(
+                    invoice.Id,
+                    invoice.OrganizationId,
+                    cancelledLeaseId,
+                    invoice.InvoiceNo,
+                    reason),
+                cancellationToken);
+        }
 
         if ((previous.Equals(InvoiceStatuses.Sent, StringComparison.OrdinalIgnoreCase)
              || previous.Equals(InvoiceStatuses.Overdue, StringComparison.OrdinalIgnoreCase))
@@ -400,6 +440,18 @@ public sealed class FinanceApplicationService(
         await paymentRepository.AddAsync(payment, cancellationToken);
         await invoiceRepository.UpdateAsync(invoice, cancellationToken);
 
+        await integrationEventPublisher.PublishAsync(
+            new InvoicePaymentRecordedEvent(
+                invoice.Id,
+                invoice.OrganizationId,
+                payment.Id,
+                payment.Amount,
+                invoice.PaidAmount,
+                invoice.TotalAmount,
+                string.Equals(invoice.Status, InvoiceStatuses.Paid, StringComparison.OrdinalIgnoreCase),
+                payment.ReferenceCode),
+            cancellationToken);
+
         if (string.Equals(invoice.Status, InvoiceStatuses.Paid, StringComparison.OrdinalIgnoreCase)
             && invoice.LeaseId is { } lid)
         {
@@ -490,6 +542,15 @@ public sealed class FinanceApplicationService(
 
             await depositRefundRepository.AddAsync(entity, cancellationToken);
 
+            await integrationEventPublisher.PublishAsync(
+                new DepositRefundCreatedEvent(
+                    entity.Id,
+                    entity.OrganizationId,
+                    entity.LeaseId,
+                    entity.TenantId,
+                    entity.Amount),
+                cancellationToken);
+
             if (lease.PrimaryResidentUserId is { } uid && uid != Guid.Empty)
             {
                 await integrationEventPublisher.PublishAsync(
@@ -527,6 +588,16 @@ public sealed class FinanceApplicationService(
                 : request.PaidAtUtc.ToUniversalTime();
             entity.MarkPaid(request.UserId, paidAt);
             await depositRefundRepository.UpdateAsync(entity, cancellationToken);
+
+            await integrationEventPublisher.PublishAsync(
+                new DepositRefundPaidEvent(
+                    entity.Id,
+                    entity.OrganizationId,
+                    entity.LeaseId,
+                    entity.TenantId,
+                    entity.Amount,
+                    paidAt),
+                cancellationToken);
 
             if (entity.TenantId is { } tid && tid != Guid.Empty)
             {
@@ -568,6 +639,15 @@ public sealed class FinanceApplicationService(
             entity.Forfeit(request.Reason);
             await depositRefundRepository.UpdateAsync(entity, cancellationToken);
 
+            await integrationEventPublisher.PublishAsync(
+                new DepositRefundForfeitedEvent(
+                    entity.Id,
+                    entity.OrganizationId,
+                    entity.LeaseId,
+                    entity.TenantId,
+                    request.Reason),
+                cancellationToken);
+
             if (entity.TenantId is { } tid && tid != Guid.Empty)
             {
                 await integrationEventPublisher.PublishAsync(
@@ -606,6 +686,19 @@ public sealed class FinanceApplicationService(
                 inv.MarkOverdue();
                 await invoiceRepository.UpdateAsync(inv, cancellationToken);
                 count++;
+
+                if (inv.LeaseId is { } overdueLeaseId)
+                {
+                    await integrationEventPublisher.PublishAsync(
+                        new InvoiceOverdueEvent(
+                            inv.Id,
+                            inv.OrganizationId,
+                            overdueLeaseId,
+                            inv.InvoiceNo,
+                            inv.DueDate,
+                            inv.TotalAmount - inv.PaidAmount),
+                        cancellationToken);
+                }
 
                 if (inv.LeaseId is { } lid)
                 {

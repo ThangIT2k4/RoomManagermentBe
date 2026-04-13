@@ -27,7 +27,7 @@ public sealed class OrganizationApplicationService(
         var org = await organizationRepository.GetByIdAsync(organizationId, cancellationToken);
         if (org is null)
         {
-            return Result<OrganizationDto>.Failure(new Error("Org.NotFound", "Organization not found."));
+            return Result<OrganizationDto>.Failure(new Error("Org.NotFound", "Không tìm thấy tổ chức."));
         }
 
         var dto = Map(org);
@@ -40,7 +40,7 @@ public sealed class OrganizationApplicationService(
         var org = await organizationRepository.GetByIdAsync(request.OrganizationId, cancellationToken);
         if (org is null)
         {
-            return Result<OrganizationDto>.Failure(new Error("Org.NotFound", "Organization not found."));
+            return Result<OrganizationDto>.Failure(new Error("Org.NotFound", "Không tìm thấy tổ chức."));
         }
 
         org.UpdateProfile(request.Name, request.Phone, request.Email, null, request.TaxCode, request.Address, DateTime.UtcNow);
@@ -55,7 +55,7 @@ public sealed class OrganizationApplicationService(
         var org = await organizationRepository.GetByIdAsync(request.OrganizationId, cancellationToken);
         if (org is null)
         {
-            return Result<OrganizationDto>.Failure(new Error("Org.NotFound", "Organization not found."));
+            return Result<OrganizationDto>.Failure(new Error("Org.NotFound", "Không tìm thấy tổ chức."));
         }
 
         org.UpdateProfile(request.Name, request.Phone, request.Email, request.PublicMail, request.TaxCode, request.Address, DateTime.UtcNow);
@@ -70,7 +70,7 @@ public sealed class OrganizationApplicationService(
         var list = await organizationBankingRepository.GetByOrganizationAsync(request.OrganizationId, cancellationToken);
         if (list.Any(x => x.AccountNumber == request.AccountNumber))
         {
-            return Result<OrganizationBankingDto>.Failure(new Error("Org.Banking.Duplicate", "Account number already exists in organization."));
+            return Result<OrganizationBankingDto>.Failure(new Error("Org.Banking.Duplicate", "Số tài khoản đã tồn tại trong tổ chức."));
         }
 
         var banking = OrganizationBankingEntity.Create(
@@ -157,7 +157,7 @@ public sealed class OrganizationApplicationService(
         var member = await organizationUserRepository.GetByOrgAndUserAsync(request.OrganizationId, request.UserId, cancellationToken);
         if (member is null)
         {
-            return Result.Failure(new Error("Org.Member.NotFound", "Member not found."));
+            return Result.Failure(new Error("Org.Member.NotFound", "Không tìm thấy thành viên."));
         }
 
         member.Deactivate(DateTime.UtcNow);
@@ -171,7 +171,7 @@ public sealed class OrganizationApplicationService(
         var member = await organizationUserRepository.GetByOrgAndUserAsync(request.OrganizationId, request.UserId, cancellationToken);
         if (member is null)
         {
-            return Result.Failure(new Error("Org.Member.NotFound", "Member not found."));
+            return Result.Failure(new Error("Org.Member.NotFound", "Không tìm thấy thành viên."));
         }
 
         member.ChangeRole(request.RoleId);
@@ -185,7 +185,7 @@ public sealed class OrganizationApplicationService(
         var member = await organizationUserRepository.GetByOrgAndUserAsync(request.OrganizationId, request.UserId, cancellationToken);
         if (member is null)
         {
-            return Result.Failure(new Error("Org.Member.NotFound", "Member not found."));
+            return Result.Failure(new Error("Org.Member.NotFound", "Không tìm thấy thành viên."));
         }
 
         if (request.IsActive)
@@ -207,7 +207,7 @@ public sealed class OrganizationApplicationService(
         var member = await organizationUserRepository.GetByOrgAndUserAsync(request.OrganizationId, request.UserId, cancellationToken);
         if (member is null)
         {
-            return Result<bool>.Failure(new Error("Org.Member.NotFound", "Member not found."));
+            return Result<bool>.Failure(new Error("Org.Member.NotFound", "Không tìm thấy thành viên."));
         }
 
         // Capability id is resolved by upstream auth/capability catalog.
@@ -239,7 +239,7 @@ public sealed class OrganizationApplicationService(
         var invitation = await organizationUserRepository.GetByInvitationTokenAsync(token, cancellationToken);
         if (invitation is null || invitation.InvitationExpiry <= DateTime.UtcNow)
         {
-            return Result<InvitationPreviewDto>.Failure(new Error("Org.Invitation.NotFound", "Invitation not found or expired."));
+            return Result<InvitationPreviewDto>.Failure(new Error("Org.Invitation.NotFound", "Không tìm thấy lời mời hoặc lời mời đã hết hạn."));
         }
 
         return Result<InvitationPreviewDto>.Success(MapInvitation(invitation, invitation.UserId != Guid.Empty));
@@ -250,7 +250,7 @@ public sealed class OrganizationApplicationService(
         var invitation = await organizationUserRepository.GetByInvitationTokenAsync(request.Token, cancellationToken);
         if (invitation is null || invitation.InvitationExpiry <= DateTime.UtcNow)
         {
-            return Result.Failure(new Error("Org.Invitation.NotFound", "Invitation not found or expired."));
+            return Result.Failure(new Error("Org.Invitation.NotFound", "Không tìm thấy lời mời hoặc lời mời đã hết hạn."));
         }
 
         invitation.AcceptInvitation(request.UserId, DateTime.UtcNow);
@@ -264,7 +264,7 @@ public sealed class OrganizationApplicationService(
         var invitation = await organizationUserRepository.GetByIdAsync(request.MembershipId, cancellationToken);
         if (invitation is null)
         {
-            return Result.Failure(new Error("Org.Invitation.NotFound", "Invitation not found."));
+            return Result.Failure(new Error("Org.Invitation.NotFound", "Không tìm thấy lời mời."));
         }
 
         invitation.Deactivate(DateTime.UtcNow);
@@ -277,7 +277,7 @@ public sealed class OrganizationApplicationService(
         var invitation = await organizationUserRepository.GetByIdAsync(request.MembershipId, cancellationToken);
         if (invitation is null || string.IsNullOrWhiteSpace(invitation.InvitationToken))
         {
-            return Result<InvitationPreviewDto>.Failure(new Error("Org.Invitation.NotFound", "Invitation not found."));
+            return Result<InvitationPreviewDto>.Failure(new Error("Org.Invitation.NotFound", "Không tìm thấy lời mời."));
         }
 
         await eventPublisher.EnqueueAsync(
@@ -312,7 +312,7 @@ public sealed class OrganizationApplicationService(
         var orgResult = await GetOrganizationAsync(organizationId, cancellationToken);
         if (orgResult.IsFailure || orgResult.Value is null)
         {
-            return Result<DashboardDto>.Failure(orgResult.Error ?? new Error("Org.NotFound", "Organization not found."));
+            return Result<DashboardDto>.Failure(orgResult.Error ?? new Error("Org.NotFound", "Không tìm thấy tổ chức."));
         }
 
         var members = await GetMembersAsync(organizationId, 1, 10, cancellationToken);

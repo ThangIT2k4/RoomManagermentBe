@@ -4,6 +4,8 @@ namespace Finance.Application.Features.Invoices.CreateInvoice;
 
 public sealed class CreateManualInvoiceCommandValidator : AbstractValidator<CreateManualInvoiceCommand>
 {
+    private static readonly string[] AllowedItemTypes = ["rent", "service", "meter", "maintenance", "other"];
+
     public CreateManualInvoiceCommandValidator()
     {
         RuleFor(x => x.OrganizationId)
@@ -40,7 +42,9 @@ public sealed class CreateManualInvoiceCommandValidator : AbstractValidator<Crea
                 .NotEmpty()
                 .WithMessage("Loại mục không được để trống.")
                 .MaximumLength(100)
-                .WithMessage("Loại mục không được vượt quá 100 ký tự.");
+                .WithMessage("Loại mục không được vượt quá 100 ký tự.")
+                .Must(IsAllowedItemType)
+                .WithMessage("Loại mục không hợp lệ.");
 
             item.RuleFor(i => i.Description)
                 .MaximumLength(2000)
@@ -55,5 +59,16 @@ public sealed class CreateManualInvoiceCommandValidator : AbstractValidator<Crea
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Đơn giá phải lớn hơn hoặc bằng 0.");
         });
+    }
+
+    private static bool IsAllowedItemType(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        var normalized = value.Trim().ToLowerInvariant();
+        return Array.IndexOf(AllowedItemTypes, normalized) >= 0;
     }
 }

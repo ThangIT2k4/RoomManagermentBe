@@ -102,6 +102,13 @@ services:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
       ConnectionStrings__Auth: ${AUTH_CONNECTION_STRING}
       Redis__Configuration: ${REDIS_CONFIGURATION:-redis:6379}
+      EmailSettings__Host: ${EMAIL_HOST:-smtp.gmail.com}
+      EmailSettings__Port: ${EMAIL_PORT:-587}
+      EmailSettings__Username: ${EMAIL_USERNAME:-}
+      EmailSettings__Password: ${EMAIL_PASSWORD:-}
+      EmailSettings__EnableSsl: ${EMAIL_ENABLE_SSL:-true}
+      EmailSettings__FromEmail: ${EMAIL_FROM_EMAIL:-}
+      EmailSettings__FromName: ${EMAIL_FROM_NAME:-RoomManagerment Zoro}
       Cors__AllowedOrigins__0: http://localhost:3000
       Cors__AllowedOrigins__1: http://localhost:4200
       Cors__AllowedOrigins__2: http://localhost:${GATEWAY_API_PORT:-5200}
@@ -305,6 +312,13 @@ services:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
       ConnectionStrings__Notification: ${NOTIFICATION_CONNECTION_STRING}
       LOG_BASE_PATH: ${LOG_BASE_PATH:-/app/logs}
+      EmailSettings__Host: ${EMAIL_HOST:-smtp.gmail.com}
+      EmailSettings__Port: ${EMAIL_PORT:-587}
+      EmailSettings__Username: ${EMAIL_USERNAME:-}
+      EmailSettings__Password: ${EMAIL_PASSWORD:-}
+      EmailSettings__EnableSsl: ${EMAIL_ENABLE_SSL:-true}
+      EmailSettings__FromEmail: ${EMAIL_FROM_EMAIL:-}
+      EmailSettings__FromName: ${EMAIL_FROM_NAME:-RoomManagerment Zoro}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}

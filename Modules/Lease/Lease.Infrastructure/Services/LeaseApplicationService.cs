@@ -1,5 +1,6 @@
 using Lease.Application.Dtos;
 using Lease.Application.Services;
+using Lease.Domain.Events;
 using RoomManagerment.Lease.DatabaseSpecific;
 using RoomManagerment.Lease.EntityClasses;
 using RoomManagerment.Lease.Linq;
@@ -7,7 +8,9 @@ using SD.LLBLGen.Pro.LinqSupportClasses;
 
 namespace Lease.Infrastructure.Services;
 
-public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFactory) : ILeaseApplicationService
+public sealed class LeaseApplicationService(
+    IDataAccessAdapterFactory adapterFactory,
+    ILeaseIntegrationEventPublisher integrationEventPublisher) : ILeaseApplicationService
 {
     public async Task<LeaseDto> CreateFromBookingAsync(Guid organizationId, Guid userId, CreateLeaseFromBookingRequest request, CancellationToken cancellationToken = default)
     {
@@ -38,7 +41,7 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
             Id = Guid.NewGuid(),
             LeaseId = lease.Id,
             UserId = request.TenantUserId,
-            FullName = "Primary Tenant",
+            FullName = "Khách thuê chính",
             Relationship = "primary",
             IsPrimary = true,
             CreatedAt = DateTime.UtcNow
@@ -46,6 +49,19 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
 
         await adapter.SaveEntityAsync(lease, true, false, cancellationToken);
         await adapter.SaveEntityAsync(resident, true, false, cancellationToken);
+
+        await integrationEventPublisher.PublishAsync(
+            new LeaseActivatedEvent(
+                lease.Id,
+                lease.UnitId,
+                lease.OrganizationId,
+                lease.StartDate,
+                lease.EndDate,
+                lease.RentAmount,
+                lease.DepositAmount,
+                DateTimeOffset.UtcNow),
+            cancellationToken);
+
         return MapLease(lease);
     }
 
@@ -78,7 +94,7 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
             Id = Guid.NewGuid(),
             LeaseId = lease.Id,
             UserId = request.TenantUserId,
-            FullName = request.TenantFullName?.Trim() ?? "Primary Tenant",
+            FullName = request.TenantFullName?.Trim() ?? "Khách thuê chính",
             Phone = request.TenantPhone?.Trim(),
             Email = request.TenantEmail?.Trim(),
             IdNumber = request.TenantIdNumber?.Trim(),
@@ -86,6 +102,18 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
             IsPrimary = true,
             CreatedAt = DateTime.UtcNow
         }, true, false, cancellationToken);
+
+        await integrationEventPublisher.PublishAsync(
+            new LeaseActivatedEvent(
+                lease.Id,
+                lease.UnitId,
+                lease.OrganizationId,
+                lease.StartDate,
+                lease.EndDate,
+                lease.RentAmount,
+                lease.DepositAmount,
+                DateTimeOffset.UtcNow),
+            cancellationToken);
 
         return MapLease(lease);
     }
@@ -154,6 +182,15 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
         lease.Notes = request.Notes?.Trim();
         lease.UpdatedAt = DateTime.UtcNow;
         await adapter.SaveEntityAsync(lease, true, false, cancellationToken);
+
+        await integrationEventPublisher.PublishAsync(
+            new LeaseUpdatedEvent(
+                lease.Id,
+                lease.UnitId,
+                ["end_date", "cycle_id", "payment_day", "notes", "updated_at"],
+                DateTimeOffset.UtcNow),
+            cancellationToken);
+
         return MapLease(lease);
     }
 
@@ -163,7 +200,7 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
         using var adapter = (DataAccessAdapter)adapterFactory.CreateAdapter();
         var linq = new LinqMetaData(adapter);
         var oldLease = await linq.Lease.FirstOrDefaultAsync(x => x.Id == request.OldLeaseId && x.OrganizationId == organizationId && x.DeletedAt == null, cancellationToken)
-                       ?? throw new InvalidOperationException("Old lease not found.");
+                       ?? throw new InvalidOperationException("Không tìm thấy hợp đồng thuê cũ.");
 
         var newLease = new LeaseEntity
         {
@@ -206,6 +243,17 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
         oldLease.Status = "renewed";
         oldLease.UpdatedAt = DateTime.UtcNow;
         await adapter.SaveEntityAsync(oldLease, true, false, cancellationToken);
+
+        await integrationEventPublisher.PublishAsync(
+            new LeaseRenewedEvent(
+                oldLease.Id,
+                newLease.Id,
+                newLease.UnitId,
+                newLease.RentAmount,
+                newLease.StartDate,
+                DateTimeOffset.UtcNow),
+            cancellationToken);
+
         return MapLease(newLease);
     }
 
@@ -225,6 +273,17 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
         lease.Notes = string.IsNullOrWhiteSpace(request.Notes) ? lease.Notes : request.Notes.Trim();
         lease.UpdatedAt = DateTime.UtcNow;
         await adapter.SaveEntityAsync(lease, true, false, cancellationToken);
+
+        await integrationEventPublisher.PublishAsync(
+            new LeaseTerminatedEvent(
+                lease.Id,
+                lease.UnitId,
+                lease.OrganizationId,
+                request.TerminationDate,
+                request.Reason,
+                DateTimeOffset.UtcNow),
+            cancellationToken);
+
         return MapLease(lease);
     }
 
@@ -302,6 +361,15 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
         resident.UserId = request.UserId;
         resident.UpdatedAt = DateTime.UtcNow;
         await adapter.SaveEntityAsync(resident, true, false, cancellationToken);
+
+        await integrationEventPublisher.PublishAsync(
+            new ResidentLinkedEvent(
+                request.LeaseId,
+                request.ResidentId,
+                request.UserId,
+                DateTimeOffset.UtcNow),
+            cancellationToken);
+
         return MapResident(resident);
     }
 
@@ -328,6 +396,16 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
         lease.Notes = AppendServiceSetToNotes(lease.Notes, request.LeaseServiceSetId);
         lease.UpdatedAt = DateTime.UtcNow;
         await adapter.SaveEntityAsync(lease, true, false, cancellationToken);
+
+        await integrationEventPublisher.PublishAsync(
+            new LeaseServiceSetAppliedEvent(
+                lease.Id,
+                lease.UnitId,
+                lease.OrganizationId,
+                request.LeaseServiceSetId,
+                DateTimeOffset.UtcNow),
+            cancellationToken);
+
         return true;
     }
 
@@ -340,7 +418,7 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
         if (request.Id.HasValue)
         {
             set = await linq.LeaseServiceSet.FirstOrDefaultAsync(x => x.Id == request.Id.Value && x.OrganizationId == organizationId && x.DeletedAt == null, cancellationToken)
-                  ?? throw new InvalidOperationException("Service set not found.");
+                  ?? throw new InvalidOperationException("Không tìm thấy bộ dịch vụ.");
             set.Name = request.Name.Trim();
             set.Description = request.Description?.Trim();
             set.UpdatedAt = DateTime.UtcNow;
@@ -421,7 +499,7 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
         if (request.Id.HasValue)
         {
             cycle = await linq.PaymentCycle.FirstOrDefaultAsync(x => x.Id == request.Id.Value && x.OrganizationId == organizationId && x.DeletedAt == null, cancellationToken)
-                    ?? throw new InvalidOperationException("Payment cycle not found.");
+                    ?? throw new InvalidOperationException("Không tìm thấy chu kỳ thanh toán.");
             cycle.Name = request.Name.Trim();
             cycle.DurationMonths = request.DurationMonths;
             cycle.DayOfMonth = request.DayOfMonth;
@@ -479,7 +557,7 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
         if (request.Id.HasValue)
         {
             entity = await linq.MasterLease.FirstOrDefaultAsync(x => x.Id == request.Id.Value && x.OrganizationId == organizationId && x.DeletedAt == null, cancellationToken)
-                     ?? throw new InvalidOperationException("Master lease not found.");
+                     ?? throw new InvalidOperationException("Không tìm thấy hợp đồng thuê tổng.");
             entity.LandlordUserId = request.LandlordUserId;
             entity.PropertyId = request.PropertyId;
             entity.ContractNo = request.ContractNo?.Trim();
@@ -569,6 +647,14 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
             lease.Status = "expired";
             lease.UpdatedAt = DateTime.UtcNow;
             await adapter.SaveEntityAsync(lease, true, false, cancellationToken);
+
+            await integrationEventPublisher.PublishAsync(
+                new LeaseExpiredEvent(
+                    lease.Id,
+                    lease.UnitId,
+                    lease.OrganizationId,
+                    DateTimeOffset.UtcNow),
+                cancellationToken);
         }
 
         return rows.Count;
@@ -578,14 +664,14 @@ public sealed class LeaseApplicationService(IDataAccessAdapterFactory adapterFac
     {
         if (endDate <= startDate)
         {
-            throw new InvalidOperationException("End date must be greater than start date.");
+            throw new InvalidOperationException("Ngày kết thúc phải lớn hơn ngày bắt đầu.");
         }
     }
 
     private static void ValidateOrgAndUser(Guid organizationId, Guid userId)
     {
-        if (organizationId == Guid.Empty) throw new ArgumentException("Organization id is required.");
-        if (userId == Guid.Empty) throw new ArgumentException("User id is required.");
+        if (organizationId == Guid.Empty) throw new ArgumentException("Mã tổ chức là bắt buộc.");
+        if (userId == Guid.Empty) throw new ArgumentException("Mã người dùng là bắt buộc.");
     }
 
     private static string? AppendServiceSetToNotes(string? notes, Guid? serviceSetId)

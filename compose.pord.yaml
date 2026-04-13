@@ -89,6 +89,13 @@ services:
       ASPNETCORE_URLS: http://0.0.0.0:${AUTH_API_PORT:-5002}
       ConnectionStrings__Auth: Host=postgres;Port=5432;Database=${AUTH_DB:-roommanager_auth};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       Redis__Configuration: ${REDIS_CONFIGURATION:-redis:6379}
+      EmailSettings__Host: ${EMAIL_HOST:-smtp.gmail.com}
+      EmailSettings__Port: ${EMAIL_PORT:-587}
+      EmailSettings__Username: ${EMAIL_USERNAME:-}
+      EmailSettings__Password: ${EMAIL_PASSWORD:-}
+      EmailSettings__EnableSsl: ${EMAIL_ENABLE_SSL:-true}
+      EmailSettings__FromEmail: ${EMAIL_FROM_EMAIL:-}
+      EmailSettings__FromName: ${EMAIL_FROM_NAME:-RoomManagerment Zoro}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
@@ -266,6 +273,13 @@ services:
     environment:
       ASPNETCORE_URLS: http://0.0.0.0:${NOTIFICATION_API_PORT:-5001}
       ConnectionStrings__Notification: Host=postgres;Port=5432;Database=${NOTIFICATION_DB:-roommanager_notification};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      EmailSettings__Host: ${EMAIL_HOST:-smtp.gmail.com}
+      EmailSettings__Port: ${EMAIL_PORT:-587}
+      EmailSettings__Username: ${EMAIL_USERNAME:-}
+      EmailSettings__Password: ${EMAIL_PASSWORD:-}
+      EmailSettings__EnableSsl: ${EMAIL_ENABLE_SSL:-true}
+      EmailSettings__FromEmail: ${EMAIL_FROM_EMAIL:-}
+      EmailSettings__FromName: ${EMAIL_FROM_NAME:-RoomManagerment Zoro}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
       RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}

@@ -20,7 +20,7 @@ public sealed class DataAccessAdapterFactory(IConfiguration configuration) : IDa
         if (string.IsNullOrWhiteSpace(connectionString))
         {
             throw new InvalidOperationException(
-                $"Missing required connection string '{name}'. Set 'ConnectionStrings__{name}' or '{envAlias}'."
+                $"Thiếu chuỗi kết nối bắt buộc '{name}'. Hãy cấu hình 'ConnectionStrings__{name}' hoặc '{envAlias}'."
             );
         }
 

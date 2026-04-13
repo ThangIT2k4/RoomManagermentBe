@@ -27,22 +27,22 @@ public sealed class AppRequestSender(IServiceProvider serviceProvider, ILogger<A
                 if (validationOutcome is { Count: > 0 })
                 {
                     sw.Stop();
-                    logger.LogInformation("Đã xử lý {RequestName} trong {ElapsedMs}ms (validate thất bại)", requestName, sw.ElapsedMilliseconds);
+                    logger.LogInformation("Đã xử lý {RequestName} trong {ElapsedMs}ms (xác thực thất bại)", requestName, sw.ElapsedMilliseconds);
                     return CreateValidationFailure<TResponse>(validationOutcome);
                 }
             }
 
             var handler = ResolveHandler(requestType, typeof(TResponse));
             var handleMethod = handler.GetType().GetMethod("Handle")
-                ?? throw new InvalidOperationException($"Handler {handler.GetType().Name} không có phương thức Handle.");
+                ?? throw new InvalidOperationException($"Trình xử lý {handler.GetType().Name} không có phương thức Handle.");
             var task = (Task)handleMethod.Invoke(handler, [request, cancellationToken])!;
             await task.ConfigureAwait(false);
             var resultProperty = task.GetType().GetProperty("Result")
-                ?? throw new InvalidOperationException("Handler không trả về Task có thuộc tính Result.");
+                ?? throw new InvalidOperationException("Trình xử lý không trả về Task có thuộc tính Result.");
             var response = resultProperty.GetValue(task);
             if (response is null)
             {
-                throw new InvalidOperationException("Handler trả về null.");
+                throw new InvalidOperationException("Trình xử lý trả về giá trị rỗng.");
             }
 
             sw.Stop();
@@ -51,7 +51,7 @@ public sealed class AppRequestSender(IServiceProvider serviceProvider, ILogger<A
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            logger.LogError(ex, "Ngoại lệ chưa được xử lý trong handler của {RequestName}", requestName);
+            logger.LogError(ex, "Ngoại lệ chưa được xử lý trong trình xử lý của {RequestName}", requestName);
             throw;
         }
     }
@@ -108,6 +108,6 @@ public sealed class AppRequestSender(IServiceProvider serviceProvider, ILogger<A
             return (TResponse)failureMethod.Invoke(null, [error])!;
         }
 
-        throw new InvalidOperationException($"{typeof(TResponse).Name} không phải kiểu Result; không thể tổng hợp lỗi validation.");
+        throw new InvalidOperationException($"{typeof(TResponse).Name} không phải kiểu Result; không thể tổng hợp lỗi xác thực.");
     }
 }

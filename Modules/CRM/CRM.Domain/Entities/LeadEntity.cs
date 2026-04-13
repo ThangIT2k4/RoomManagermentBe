@@ -28,7 +28,7 @@ public sealed class LeadEntity : AggregateRoot<Guid>
     {
         if (organizationId == Guid.Empty)
         {
-            throw new DomainValidationException("OrganizationId is required.");
+            throw new DomainValidationException("OrganizationId là bắt buộc.");
         }
 
         var normalizedFullName = NormalizeFullName(fullName);

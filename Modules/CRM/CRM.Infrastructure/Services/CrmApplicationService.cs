@@ -57,7 +57,7 @@ public sealed class CrmApplicationService(
         }
         catch (ArgumentException)
         {
-            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.InvalidInput", "Dữ liệu đầu vào của lead không hợp lệ."));
+            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.InvalidInput", "Dữ liệu đầu vào của khách hàng tiềm năng không hợp lệ."));
         }
 
         var created = await leadRepository.AddAsync(entity, cancellationToken);
@@ -68,7 +68,7 @@ public sealed class CrmApplicationService(
     {
         if (leadId == Guid.Empty)
         {
-            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.Id.Required", "Mã lead là bắt buộc."));
+            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.Id.Required", "Mã khách hàng tiềm năng là bắt buộc."));
         }
 
         var cacheKey = $"crm:lead:{leadId}";
@@ -81,7 +81,7 @@ public sealed class CrmApplicationService(
         var lead = await leadRepository.GetByIdAsync(leadId, cancellationToken);
         if (lead is null)
         {
-            return Result<LeadDto>.Failure(Error.NotFound("CRM.Lead.NotFound", "Không tìm thấy lead."));
+            return Result<LeadDto>.Failure(Error.NotFound("CRM.Lead.NotFound", "Không tìm thấy khách hàng tiềm năng."));
         }
 
         var dto = Map(lead);
@@ -93,13 +93,13 @@ public sealed class CrmApplicationService(
     {
         if (request.LeadId == Guid.Empty)
         {
-            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.Id.Required", "Mã lead là bắt buộc."));
+            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.Id.Required", "Mã khách hàng tiềm năng là bắt buộc."));
         }
 
         var lead = await leadRepository.GetByIdAsync(request.LeadId, cancellationToken);
         if (lead is null)
         {
-            return Result<LeadDto>.Failure(Error.NotFound("CRM.Lead.NotFound", "Không tìm thấy lead."));
+            return Result<LeadDto>.Failure(Error.NotFound("CRM.Lead.NotFound", "Không tìm thấy khách hàng tiềm năng."));
         }
 
         try
@@ -108,7 +108,7 @@ public sealed class CrmApplicationService(
         }
         catch (ArgumentException)
         {
-            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.InvalidStatus", "Trạng thái lead không hợp lệ."));
+            return Result<LeadDto>.Failure(Error.BadRequest("CRM.Lead.InvalidStatus", "Trạng thái khách hàng tiềm năng không hợp lệ."));
         }
 
         var updated = await leadRepository.UpdateAsync(lead, cancellationToken);
@@ -160,7 +160,7 @@ public sealed class CrmApplicationService(
     public async Task<Result<BookingDepositDto>> ApproveBookingAsync(ApproveBookingCommand command, CancellationToken cancellationToken = default)
     {
         var booking = await bookingRepository.GetByIdAsync(command.BookingId, cancellationToken);
-        if (booking is null) return Result<BookingDepositDto>.Failure(Error.NotFound("CRM.Booking.NotFound", "Không tìm thấy booking."));
+        if (booking is null) return Result<BookingDepositDto>.Failure(Error.NotFound("CRM.Booking.NotFound", "Không tìm thấy đặt cọc."));
         booking.Approve(command.ApprovedAt);
         await bookingRepository.UpdateAsync(booking, cancellationToken);
         return Result<BookingDepositDto>.Success(Map(booking));
@@ -169,7 +169,7 @@ public sealed class CrmApplicationService(
     public async Task<Result<BookingDepositDto>> PayBookingAsync(PayBookingCommand command, CancellationToken cancellationToken = default)
     {
         var booking = await bookingRepository.GetByIdAsync(command.BookingId, cancellationToken);
-        if (booking is null) return Result<BookingDepositDto>.Failure(Error.NotFound("CRM.Booking.NotFound", "Không tìm thấy booking."));
+        if (booking is null) return Result<BookingDepositDto>.Failure(Error.NotFound("CRM.Booking.NotFound", "Không tìm thấy đặt cọc."));
         booking.MarkPaid(command.PaidAt);
         await bookingRepository.UpdateAsync(booking, cancellationToken);
         return Result<BookingDepositDto>.Success(Map(booking));

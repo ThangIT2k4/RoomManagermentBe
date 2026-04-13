@@ -49,7 +49,7 @@ public sealed class ViewingEntity : AggregateRoot<Guid>
     {
         if (organizationId == Guid.Empty)
         {
-            throw new DomainValidationException("OrganizationId is required.");
+            throw new DomainValidationException("OrganizationId là bắt buộc.");
         }
 
         return new ViewingEntity(
@@ -91,7 +91,7 @@ public sealed class ViewingEntity : AggregateRoot<Guid>
         var normalized = NormalizeStatus(Status);
         if (normalized is not ("scheduled" or "confirmed"))
         {
-            throw new DomainValidationException("Viewing can only be completed from scheduled/confirmed.");
+            throw new DomainValidationException("Lịch xem chỉ có thể hoàn tất từ trạng thái scheduled/confirmed.");
         }
 
         Status = ViewingStatus.Completed.ToString().ToLowerInvariant();
@@ -105,7 +105,7 @@ public sealed class ViewingEntity : AggregateRoot<Guid>
         var normalized = NormalizeStatus(Status);
         if (normalized is not ("scheduled" or "confirmed"))
         {
-            throw new DomainValidationException("Viewing can only be cancelled from scheduled/confirmed.");
+            throw new DomainValidationException("Lịch xem chỉ có thể hủy từ trạng thái scheduled/confirmed.");
         }
 
         Status = ViewingStatus.Cancelled.ToString().ToLowerInvariant();
@@ -119,7 +119,7 @@ public sealed class ViewingEntity : AggregateRoot<Guid>
         var current = NormalizeStatus(Status);
         if (!string.Equals(current, expected, StringComparison.OrdinalIgnoreCase))
         {
-            throw new DomainValidationException($"Invalid viewing status transition from '{current}' to '{next}'.");
+            throw new DomainValidationException($"Chuyển trạng thái lịch xem không hợp lệ từ '{current}' sang '{next}'.");
         }
     }
 

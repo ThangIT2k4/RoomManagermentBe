@@ -48,22 +48,22 @@ public sealed class ReviewEntity : AggregateRoot<Guid>
     {
         if (organizationId == Guid.Empty)
         {
-            throw new DomainValidationException("OrganizationId is required.");
+            throw new DomainValidationException("OrganizationId là bắt buộc.");
         }
 
         if (unitId == Guid.Empty)
         {
-            throw new DomainValidationException("UnitId is required.");
+            throw new DomainValidationException("UnitId là bắt buộc.");
         }
 
         if (userId == Guid.Empty)
         {
-            throw new DomainValidationException("UserId is required.");
+            throw new DomainValidationException("UserId là bắt buộc.");
         }
 
         if (rating is < 1 or > 5)
         {
-            throw new DomainValidationException("Rating must be between 1 and 5.");
+            throw new DomainValidationException("Điểm đánh giá phải nằm trong khoảng từ 1 đến 5.");
         }
 
         return new ReviewEntity(
@@ -96,7 +96,7 @@ public sealed class ReviewEntity : AggregateRoot<Guid>
     {
         if (rating is < 1 or > 5)
         {
-            throw new DomainValidationException("Rating must be between 1 and 5.");
+            throw new DomainValidationException("Điểm đánh giá phải nằm trong khoảng từ 1 đến 5.");
         }
 
         Rating = rating;

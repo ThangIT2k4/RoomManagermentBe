@@ -32,17 +32,17 @@ public sealed class ReviewReplyEntity : AggregateRoot<Guid>
     {
         if (reviewId == Guid.Empty)
         {
-            throw new DomainValidationException("ReviewId is required.");
+            throw new DomainValidationException("ReviewId là bắt buộc.");
         }
 
         if (userId == Guid.Empty)
         {
-            throw new DomainValidationException("UserId is required.");
+            throw new DomainValidationException("UserId là bắt buộc.");
         }
 
         if (string.IsNullOrWhiteSpace(content))
         {
-            throw new DomainValidationException("Content is required.");
+            throw new DomainValidationException("Nội dung là bắt buộc.");
         }
 
         return new ReviewReplyEntity(Guid.NewGuid(), reviewId, userId, content.Trim(), createdAt ?? DateTime.UtcNow, null);
@@ -57,7 +57,7 @@ public sealed class ReviewReplyEntity : AggregateRoot<Guid>
     {
         if (string.IsNullOrWhiteSpace(content))
         {
-            throw new DomainValidationException("Content is required.");
+            throw new DomainValidationException("Nội dung là bắt buộc.");
         }
 
         Content = content.Trim();

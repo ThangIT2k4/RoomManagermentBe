@@ -16,12 +16,12 @@ public sealed class MoneyAmount : ValueObject
     {
         if (value < 0)
         {
-            throw new DomainValidationException($"{fieldName} cannot be negative.");
+            throw new DomainValidationException($"{fieldName} không được âm.");
         }
 
         if (!allowZero && value == 0)
         {
-            throw new DomainValidationException($"{fieldName} must be greater than 0.");
+            throw new DomainValidationException($"{fieldName} phải lớn hơn 0.");
         }
 
         return new MoneyAmount(decimal.Round(value, 2, MidpointRounding.AwayFromZero));

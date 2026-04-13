@@ -14,7 +14,7 @@ public sealed class GetNotificationByIdQueryHandler(INotificationRepository noti
         if (notification is null)
         {
             return Result<NotificationDto>.Failure(
-                new Error("Notification.NotFound", $"Notification with id '{query.Id}' was not found."));
+                new Error("Notification.NotFound", $"Không tìm thấy thông báo với id '{query.Id}'."));
         }
 
         var dto = new NotificationDto(

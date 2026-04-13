@@ -1,6 +1,8 @@
 using Auth.Application;
 using Auth.Application.Services;
 using Auth.Domain.Repositories;
+using Auth.Infrastructure.Mail;
+using Auth.Infrastructure.Options;
 using Auth.Infrastructure.Repositories;
 using Auth.Infrastructure.Services;
 using FluentValidation;
@@ -31,6 +33,9 @@ public static class DependencyInjection
         services.AddSingleton<IIntegrationEventPublisher>(sp => sp.GetRequiredService<RabbitMqIntegrationEventPublisher>());
         services.AddHostedService<RabbitMqIntegrationEventBackgroundService>();
         services.AddOptions<RabbitMqOptions>().Bind(configuration.GetSection(RabbitMqOptions.Section)).ValidateOnStart();
+        services.AddOptions<EmailOptions>().Bind(configuration.GetSection(EmailOptions.SectionName));
+        services.AddOptions<OtpOptions>().Bind(configuration.GetSection(OtpOptions.SectionName));
+        services.AddSingleton<IEmailSender, SmtpEmailSender>();
         services.AddScoped<DataAccessAdapter>(provider =>
         {
             var factory = provider.GetRequiredService<IDataAccessAdapterFactory>();

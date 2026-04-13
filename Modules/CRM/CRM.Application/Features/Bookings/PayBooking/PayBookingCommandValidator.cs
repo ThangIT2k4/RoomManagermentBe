@@ -9,7 +9,7 @@ public sealed class PayBookingCommandValidator : AbstractValidator<PayBookingCom
     {
         RuleFor(x => x.BookingId)
             .NotEmpty()
-            .WithMessage("Mã booking không được để trống.");
+            .WithMessage("Mã đặt cọc không được để trống.");
 
         RuleFor(x => x.PaidAmount)
             .GreaterThan(0)

@@ -9,6 +9,7 @@ using Auth.Application.Features.Auth.Login;
 using Auth.Application.Features.Auth.Logout;
 using Auth.Application.Features.Register;
 using Auth.Application.Features.Auth.ResendOtp;
+using Auth.Application.Features.Auth.ResendVerifyEmailOtp;
 using Auth.Application.Features.Auth.ResetPassword;
 using Auth.Application.Features.Auth.SendOtp;
 using Auth.Application.Features.Auth.Users.GetUserById;
@@ -240,6 +241,19 @@ public class AuthController(IAppSender sender) : ControllerBase
     {
         var result = await sender.Send(new VerifyEmailCommand(request.Email, request.OtpCode), cancellationToken);
         return this.ToApiVoidActionResult<AuthVerifyEmailResponse>(result);
+    }
+
+    [AllowAnonymous]
+    [EnableRateLimiting("OtpPolicy")]
+    [HttpPost("resend-verify-email-otp")]
+    [ProducesResponseType(typeof(ApiResponse<AuthResendVerifyEmailOtpResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<AuthResendVerifyEmailOtpResponse>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<AuthResendVerifyEmailOtpResponse>>> ResendVerifyEmailOtp(
+        [FromBody] ResendVerifyEmailOtpApiRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(new ResendVerifyEmailOtpCommand(request.Email, request.Password), cancellationToken);
+        return this.ToApiVoidActionResult<AuthResendVerifyEmailOtpResponse>(result);
     }
 
     private void PersistHybridSession(LoginResult loginResult)

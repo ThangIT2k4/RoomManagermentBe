@@ -47,7 +47,7 @@ public sealed class OrganizationBankingRepository(DataAccessAdapter adapter) : I
     public async Task<OrganizationBankingEntity> UpdateAsync(OrganizationBankingEntity entity, CancellationToken cancellationToken = default)
     {
         var dal = await new LinqMetaData(adapter).OrganizationBanking.Where(x => x.Id == entity.Id).FirstOrDefaultAsync(cancellationToken)
-                  ?? throw new InvalidOperationException($"OrganizationBanking {entity.Id} not found.");
+                  ?? throw new InvalidOperationException($"Không tìm thấy tài khoản ngân hàng tổ chức {entity.Id}.");
         dal.IsPrimary = entity.IsPrimary;
         dal.UpdatedAt = DateTime.UtcNow;
         await adapter.SaveEntityAsync(dal, false, false, cancellationToken);

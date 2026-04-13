@@ -45,12 +45,12 @@ public sealed class CommissionPolicyEntity : AggregateRoot<Guid>
     {
         if (organizationId == Guid.Empty)
         {
-            throw new DomainValidationException("OrganizationId is required.");
+            throw new DomainValidationException("OrganizationId là bắt buộc.");
         }
 
         if (string.IsNullOrWhiteSpace(title))
         {
-            throw new DomainValidationException("Title is required.");
+            throw new DomainValidationException("Tiêu đề là bắt buộc.");
         }
 
         return new CommissionPolicyEntity(

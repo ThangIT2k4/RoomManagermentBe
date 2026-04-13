@@ -33,7 +33,7 @@ public sealed class RabbitMqIntegrationEventBackgroundService : BackgroundServic
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning(ex, "RabbitMQ publish failed for {RoutingKey}. Retrying...", envelope.RoutingKey);
+                    _logger.LogWarning(ex, "RabbitMQ publish thất bại cho {RoutingKey}. Đang thử lại...", envelope.RoutingKey);
                     await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                 }
             }

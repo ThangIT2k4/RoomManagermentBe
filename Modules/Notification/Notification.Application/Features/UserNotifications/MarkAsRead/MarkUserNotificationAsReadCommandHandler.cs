@@ -14,7 +14,7 @@ public sealed class MarkUserNotificationAsReadCommandHandler(IUserNotificationRe
         if (!success)
         {
             return Result.Failure(
-                new Error("UserNotification.NotFound", $"User notification with id '{command.UserNotificationId}' was not found or you don't have access."));
+                new Error("UserNotification.NotFound", $"Không tìm thấy thông báo người dùng với id '{command.UserNotificationId}' hoặc bạn không có quyền truy cập."));
         }
 
         return Result.Success();
