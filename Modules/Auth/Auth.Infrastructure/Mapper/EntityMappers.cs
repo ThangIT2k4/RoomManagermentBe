@@ -62,6 +62,27 @@ internal static class EntityMappers
         };
     }
 
+    /// <summary>
+    /// Copies domain state onto a DAL entity that was loaded from the database so LLBLGen keeps "existing" entity state and issues UPDATE, not INSERT.
+    /// </summary>
+    public static void ApplyFromDomain(this DalUserEntity dal, DomainUserEntity domain)
+    {
+        dal.Email = domain.Email.Value;
+        dal.Username = domain.Username?.Value;
+        dal.Phone = domain.Phone?.Value;
+        dal.PasswordHash = domain.PasswordHash?.Value;
+        dal.GoogleId = domain.GoogleId;
+        dal.RememberToken = domain.RememberToken;
+        dal.Status = (short)domain.Status;
+        dal.EmailVerifiedAt = domain.EmailVerifiedAt;
+        dal.PhoneVerifiedAt = domain.PhoneVerifiedAt;
+        dal.LastLoginAt = domain.LastLoginAt;
+        dal.CreatedAt = domain.CreatedAt;
+        dal.UpdatedAt = domain.UpdatedAt;
+        dal.DeletedAt = domain.DeletedAt;
+        dal.DeletedBy = domain.DeletedBy;
+    }
+
     public static DomainSessionEntity ToDomain(this DalSessionEntity dal)
     {
         return DomainSessionEntity.Reconstitute(
@@ -88,6 +109,17 @@ internal static class EntityMappers
             ExpiresAt = domain.ExpiresAt?.UtcDateTime,
             CreatedAt = domain.CreatedAt
         };
+    }
+
+    public static void ApplyFromDomain(this DalSessionEntity dal, DomainSessionEntity domain)
+    {
+        dal.UserId = domain.UserId;
+        dal.IpAddress = string.IsNullOrWhiteSpace(domain.IpAddress) ? null : IPAddress.TryParse(domain.IpAddress, out var ipAddress) ? ipAddress : null;
+        dal.UserAgent = domain.UserAgent;
+        dal.Payload = domain.PayloadJson;
+        dal.LastActivity = domain.LastActivity.UtcDateTime;
+        dal.ExpiresAt = domain.ExpiresAt?.UtcDateTime;
+        dal.CreatedAt = domain.CreatedAt;
     }
 
     public static DomainUserProfileEntity ToDomain(this DalUserProfileEntity dal)
@@ -143,6 +175,30 @@ internal static class EntityMappers
         };
     }
 
+    public static void ApplyFromDomain(this DalUserProfileEntity dal, DomainUserProfileEntity domain)
+    {
+        dal.FullName = domain.FullName?.Value;
+        dal.Avatar = domain.Avatar;
+        dal.Dob = domain.Dob ?? default;
+        dal.Gender = domain.Gender is { } g ? (short)g : null;
+        dal.IdNumber = domain.IdNumber;
+        dal.TaxCode = domain.TaxCode;
+        dal.IdIssuedAt = domain.IdIssuedAt ?? default;
+        dal.IdCardPlace = domain.IdCardPlace;
+        dal.IdImages = domain.IdImagesJson;
+        dal.Address = domain.Address;
+        dal.Note = domain.Note;
+        dal.SepayBankId = domain.SepayBankId;
+        dal.AccountNumber = domain.AccountNumber;
+        dal.AccountHolderName = domain.AccountHolderName;
+        dal.BranchName = domain.BranchName;
+        dal.BranchCode = domain.BranchCode;
+        dal.SwiftCode = domain.SwiftCode;
+        dal.BankingNotes = domain.BankingNotes;
+        dal.CreatedAt = domain.CreatedAt;
+        dal.UpdatedAt = domain.UpdatedAt;
+    }
+
     public static DomainRoleEntity ToDomain(this DalRoleEntity dal)
     {
         return DomainRoleEntity.Reconstitute(
@@ -164,6 +220,15 @@ internal static class EntityMappers
             CreatedAt = domain.CreatedAt,
             UpdatedAt = domain.UpdatedAt
         };
+    }
+
+    public static void ApplyFromDomain(this DalRoleEntity dal, DomainRoleEntity domain)
+    {
+        dal.KeyCode = domain.KeyCode.Value;
+        dal.Name = domain.Name;
+        dal.Description = domain.Description;
+        dal.CreatedAt = domain.CreatedAt;
+        dal.UpdatedAt = domain.UpdatedAt;
     }
 
     public static DomainCapabilityEntity ToDomain(this DalCapabilityEntity dal)
@@ -191,6 +256,17 @@ internal static class EntityMappers
             CreatedAt = domain.CreatedAt,
             UpdatedAt = domain.UpdatedAt
         };
+    }
+
+    public static void ApplyFromDomain(this DalCapabilityEntity dal, DomainCapabilityEntity domain)
+    {
+        dal.KeyCode = domain.KeyCode.Value;
+        dal.Name = domain.Name;
+        dal.Description = domain.Description;
+        dal.Category = domain.Category;
+        dal.DisplayOrder = domain.DisplayOrder;
+        dal.CreatedAt = domain.CreatedAt;
+        dal.UpdatedAt = domain.UpdatedAt;
     }
 
     public static DomainEmailOtpEntity ToDomain(this DalEmailOtpEntity dal)
@@ -227,6 +303,19 @@ internal static class EntityMappers
             UpdatedAt = domain.UpdatedAt,
             VerifiedAt = domain.VerifiedAt?.UtcDateTime
         };
+    }
+
+    public static void ApplyFromDomain(this DalEmailOtpEntity dal, DomainEmailOtpEntity domain)
+    {
+        dal.UserId = domain.UserId;
+        dal.Email = domain.Email.Value;
+        dal.OtpCode = domain.OtpCode.Value;
+        dal.Type = EmailOtpTypeStorage.ToPersistedString(domain.Type);
+        dal.ExpiresAt = domain.ExpiresAt.UtcDateTime;
+        dal.IsUsed = domain.IsUsed;
+        dal.CreatedAt = domain.CreatedAt;
+        dal.UpdatedAt = domain.UpdatedAt;
+        dal.VerifiedAt = domain.VerifiedAt?.UtcDateTime;
     }
 
     public static DomainAuditLogEntity ToDomain(this DalAuditLogEntity dal)

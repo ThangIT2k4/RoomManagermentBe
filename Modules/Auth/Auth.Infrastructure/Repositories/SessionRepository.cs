@@ -61,8 +61,14 @@ public sealed class SessionRepository(
                 return session;
             }
 
-            var dal = session.ToPersistence();
-            await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
+            var existing = await QuerySessionByIdAsync(session.Id, cancellationToken);
+            if (existing is null)
+            {
+                throw new InvalidOperationException("Không tìm thấy phiên đăng nhập để cập nhật.");
+            }
+
+            existing.ApplyFromDomain(session);
+            await adapter.SaveEntityAsync(existing, true, false, cancellationToken);
             await PublishDomainEventsAsync(session, cancellationToken);
             await TryCacheSessionAsync(session, cancellationToken);
             return session;

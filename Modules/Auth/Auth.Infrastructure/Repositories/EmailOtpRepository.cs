@@ -4,7 +4,6 @@ using Auth.Domain.Entities;
 using Auth.Domain.Enums;
 using Auth.Domain.Repositories;
 using Auth.Domain.ValueObjects;
-using Auth.Infrastructure;
 using Auth.Infrastructure.Mapper;
 using Microsoft.Extensions.Logging;
 using RoomManagerment.Auth.DatabaseSpecific;
@@ -60,8 +59,8 @@ public sealed class EmailOtpRepository(
                 throw new InvalidOperationException("Không tìm thấy OTP email để cập nhật.");
             }
 
-            var dal = otp.ToPersistence();
-            await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
+            existing.ApplyFromDomain(otp);
+            await adapter.SaveEntityAsync(existing, true, false, cancellationToken);
             await PublishDomainEventsAsync(otp, cancellationToken);
             return otp;
         });

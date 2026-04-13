@@ -2,7 +2,6 @@ using Auth.Application.Services;
 using Auth.Domain.Common;
 using Auth.Domain.Entities;
 using Auth.Domain.Repositories;
-using Auth.Infrastructure;
 using Auth.Infrastructure.Mapper;
 using Microsoft.Extensions.Logging;
 using RoomManagerment.Auth.DatabaseSpecific;
@@ -45,8 +44,8 @@ public sealed class UserProfileRepository(
                 throw new InvalidOperationException("Không tìm thấy hồ sơ người dùng để cập nhật.");
             }
 
-            var dal = profile.ToPersistence();
-            await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
+            existing.ApplyFromDomain(profile);
+            await adapter.SaveEntityAsync(existing, true, false, cancellationToken);
             await PublishDomainEventsAsync(profile, cancellationToken);
             return profile;
         });

@@ -1,6 +1,7 @@
 using System.Data.Common;
 using System.Diagnostics;
 using System.Threading.RateLimiting;
+using Auth.API.Configuration;
 using Auth.API.Security;
 using Auth.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
@@ -17,7 +18,7 @@ using SD.Tools.OrmProfiler.Interceptor;
 
 var builder = WebApplication.CreateBuilder(args);
 
-ApplyLegacyAuthEnvToConfiguration(builder.Configuration);
+AuthEmailEnvConfiguration.Apply(builder.Configuration);
 
 var logBasePath = Environment.GetEnvironmentVariable("LOG_BASE_PATH") ?? "/home/thang/projects/WorkSpace/Projects/RoomManagerment/Logs";
 var authLogPath = Path.Combine(logBasePath, "auth-api", "auth-api-.json");
@@ -161,26 +162,3 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 
 app.Run();
-
-static void ApplyLegacyAuthEnvToConfiguration(ConfigurationManager configuration)
-{
-    void Map(string envName, string configKey)
-    {
-        var v = Environment.GetEnvironmentVariable(envName);
-        if (!string.IsNullOrWhiteSpace(v))
-        {
-            configuration[configKey] = v.Trim();
-        }
-    }
-
-    Map("EMAIL_HOST", "Email:Host");
-    Map("EMAIL_PORT", "Email:Port");
-    Map("EMAIL_USERNAME", "Email:Username");
-    Map("EMAIL_PASSWORD", "Email:Password");
-    Map("EMAIL_ENABLE_SSL", "Email:EnableSsl");
-    Map("EMAIL_FROM_EMAIL", "Email:FromEmail");
-    Map("EMAIL_FROM_NAME", "Email:FromName");
-    Map("OTP_RESEND_COOLDOWN_MINUTES", "Otp:ResendCooldownMinutes");
-    Map("OTP_VERIFY_EMAIL_EXPIRY_MINUTES", "Otp:VerifyEmailExpiryMinutes");
-    Map("OTP_RESET_PASSWORD_EXPIRY_MINUTES", "Otp:ResetPasswordExpiryMinutes");
-}

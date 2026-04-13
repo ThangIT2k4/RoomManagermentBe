@@ -26,11 +26,11 @@ public sealed class AuthApplicationService(
     IOrganizationMembershipGateway organizationGateway,
     AuthDataAccessAdapter adapter,
     IEmailSender emailSender,
-    IOptions<EmailOptions> emailOptions,
+    IOptionsSnapshot<EmailOptions> emailOptions,
     IOptions<OtpOptions> otpOptions,
     ILogger<AuthApplicationService> logger) : IAuthApplicationService
 {
-    private readonly EmailOptions _emailOptions = emailOptions.Value;
+    private readonly IOptionsSnapshot<EmailOptions> _emailOptions = emailOptions;
     private readonly OtpOptions _otpOptions = otpOptions.Value;
 
     private TimeSpan OtpExpiryFor(OtpPurpose purpose) => purpose switch
@@ -568,22 +568,54 @@ public sealed class AuthApplicationService(
 
     private async Task<Result> DispatchOtpEmailAsync(string toEmail, string otpCode, OtpPurpose purpose, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(_emailOptions.Host))
-        {
-            logger.LogWarning("SMTP host is empty; OTP stored for {Email} but email was not sent.", toEmail);
-            return Result.Success();
-        }
+        var emailOpts = _emailOptions.Value;
+        var purposeKey = purpose.ToString();
 
-        var (subject, text, html) = BuildOtpEmailContent(otpCode, purpose);
-        try
+        using (logger.BeginScope(new Dictionary<string, object>
+               {
+                   ["AuthEmailTo"] = toEmail,
+                   ["AuthEmailPurpose"] = purposeKey,
+               }))
         {
-            await emailSender.SendAsync(toEmail, subject, text, html, cancellationToken);
-            return Result.Success();
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Failed to send OTP email to {Email}", toEmail);
-            return Result.Failure(Error.BadRequest("Auth.Email.SendFailed", "Không gửi được email OTP. Kiểm tra cấu hình SMTP hoặc thử lại sau."));
+            if (string.IsNullOrWhiteSpace(emailOpts.Host))
+            {
+                if (emailOpts.AllowSendWithoutSmtp)
+                {
+                    logger.LogWarning(
+                        "AUTH_EMAIL_SKIPPED: SMTP host empty but AllowSendWithoutSmtp=true. OTP is in DB; no message was sent. Set Email:Host to enable mail.");
+                    return Result.Success();
+                }
+
+                logger.LogWarning(
+                    "AUTH_EMAIL_NOT_CONFIGURED: Email:Host is empty and AllowSendWithoutSmtp=false. Client will receive an error; check Email__Host / EMAIL_HOST and .env.");
+                return Result.Failure(Error.BadRequest(
+                    "Auth.Email.NotConfigured",
+                    "Chưa cấu hình gửi email (SMTP). Đặt Email:Host / EMAIL_HOST hoặc bật Email:AllowSendWithoutSmtp chỉ trên môi trường dev."));
+            }
+
+            var (subject, text, html) = BuildOtpEmailContent(otpCode, purpose);
+            try
+            {
+                await emailSender.SendAsync(toEmail, subject, text, html, cancellationToken);
+                logger.LogInformation("AUTH_EMAIL_SENT: OTP email dispatched for purpose {Purpose}.", purposeKey);
+                return Result.Success();
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(
+                    ex,
+                    "AUTH_EMAIL_SEND_FAILED: SMTP threw after OTP was saved. Purpose={Purpose}, Host={SmtpHost}, Port={SmtpPort}. See exception for MailKit/Socket details.",
+                    purposeKey,
+                    emailOpts.Host,
+                    emailOpts.Port);
+                return Result.Failure(Error.BadRequest(
+                    "Auth.Email.SendFailed",
+                    "Không gửi được email OTP. Xem log Auth API (AUTH_EMAIL_SEND_FAILED) để biết lỗi SMTP chi tiết."));
+            }
         }
     }
 
@@ -604,28 +636,38 @@ public sealed class AuthApplicationService(
 
     private async Task<DalEmailOtpEntity?> VerifyOtpCoreAsync(string email, OtpPurpose purpose, string otpCode, CancellationToken cancellationToken)
     {
-        var linq = new AuthLinqMetaData(adapter);
-        var now = DateTime.UtcNow;
-
-        var otp = await linq.EmailOtp
-            .Where(x => x.Email == email.Trim().ToLowerInvariant()
-                        && x.Type == MapOtpPurpose(purpose)
-                        && x.OtpCode == otpCode
-                        && x.IsUsed == false
-                        && x.ExpiresAt > now)
-            .OrderByDescending(x => x.CreatedAt)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (otp is null)
+        try
         {
+            var linq = new AuthLinqMetaData(adapter);
+            var now = DateTime.UtcNow;
+            var normalizedEmail = email.Trim().ToLowerInvariant();
+            var otpType = MapOtpPurpose(purpose);
+
+            var otp = await linq.EmailOtp
+                .Where(x => x.Email == normalizedEmail
+                            && x.Type == otpType
+                            && x.OtpCode == otpCode
+                            && x.IsUsed == false
+                            && x.ExpiresAt > now)
+                .OrderByDescending(x => x.CreatedAt)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (otp is null)
+            {
+                return null;
+            }
+
+            otp.IsUsed = true;
+            otp.VerifiedAt = now;
+            otp.UpdatedAt = now;
+            await adapter.SaveEntityAsync(otp, true, false, cancellationToken);
+            return otp;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Lỗi khi truy vấn OTP cho email {Email} và mục đích {Purpose}.", email, purpose);
             return null;
         }
-
-        otp.IsUsed = true;
-        otp.VerifiedAt = now;
-        otp.UpdatedAt = now;
-        await adapter.SaveEntityAsync(otp, true, false, cancellationToken);
-        return otp;
     }
 
     private static void ApplyStatus(UserEntity user, short status, DateTime changedAt)

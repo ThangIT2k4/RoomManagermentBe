@@ -98,15 +98,16 @@ public sealed class UserRepository(
         => AuthDataAccessGuard.RunAsync(logger, Repo, nameof(UpdateAsync), cancellationToken, async () =>
         {
             var existing = await GetDbByIdAsync(user.Id, cancellationToken);
-            var dal = user.ToPersistence();
-            await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
-            await PublishDomainEventsAsync(user, cancellationToken);
-
-            if (existing is not null)
+            if (existing is null)
             {
-                await TryInvalidateAsync(existing.ToDomain(), cancellationToken);
+                throw new InvalidOperationException($"Không tìm thấy người dùng {user.Id} để cập nhật.");
             }
 
+            var previousDomain = existing.ToDomain();
+            existing.ApplyFromDomain(user);
+            await adapter.SaveEntityAsync(existing, true, false, cancellationToken);
+            await PublishDomainEventsAsync(user, cancellationToken);
+            await TryInvalidateAsync(previousDomain, cancellationToken);
             await TryCacheAsync(user, cancellationToken);
             return user;
         });

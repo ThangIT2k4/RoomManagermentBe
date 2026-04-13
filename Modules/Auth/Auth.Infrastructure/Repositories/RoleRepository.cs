@@ -3,7 +3,6 @@ using Auth.Domain.Common;
 using Auth.Domain.Entities;
 using Auth.Domain.Repositories;
 using Auth.Domain.ValueObjects;
-using Auth.Infrastructure;
 using Auth.Infrastructure.Mapper;
 using Microsoft.Extensions.Logging;
 using RoomManagerment.Auth.DatabaseSpecific;
@@ -56,8 +55,8 @@ public sealed class RoleRepository(
                 throw new InvalidOperationException("Không tìm thấy vai trò để cập nhật.");
             }
 
-            var dal = role.ToPersistence();
-            await adapter.SaveEntityAsync(dal, true, false, cancellationToken);
+            existing.ApplyFromDomain(role);
+            await adapter.SaveEntityAsync(existing, true, false, cancellationToken);
             await PublishDomainEventsAsync(role, cancellationToken);
             return role;
         });
