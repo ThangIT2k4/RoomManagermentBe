@@ -1,6 +1,5 @@
 using Auth.Application.Dtos;
 using Auth.Application.Features.Auth.SendOtp;
-using Auth.Application.Validators;
 
 namespace Auth.API.Tests.Validators;
 

@@ -1,5 +1,4 @@
 using Auth.Application.Features.Auth.Login;
-using Auth.Application.Validators;
 
 namespace Auth.API.Tests.Validators;
 

@@ -3,6 +3,7 @@ using Auth.Application;
 using Auth.Application.Services;
 using Auth.Infrastructure;
 using Auth.Infrastructure.Services;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.TestHost;
@@ -35,7 +36,7 @@ internal sealed class AuthApiTestHost : IAsyncDisposable
             .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.SchemeName, _ => { });
         builder.Services.AddAuthorization();
 
-        builder.Services.AddApplication();
+        builder.Services.AddValidatorsFromAssembly(typeof(MediatorAssemblyMarker).Assembly);
         builder.Services.AddAuthApplicationRequestHandlers();
         builder.Services.AddScoped<IAppSender, AppRequestSender>();
         builder.Services.AddScoped<IAuthApplicationService>(_ => AuthServiceMock.Object);

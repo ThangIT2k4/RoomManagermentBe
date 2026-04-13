@@ -1,6 +1,4 @@
 using Auth.Application.Features.Auth.ResetPassword;
-using Auth.Application.Validators;
-
 namespace Auth.API.Tests.Validators;
 
 public sealed class ResetPasswordRequestValidatorTests

@@ -1,11 +1,10 @@
-using CRM.API.Validators;
-using CRM.Application.Features.Leads;
+using CRM.Application.Features.Leads.CreateLead;
 
 namespace CRM.API.Tests.Validators;
 
 public sealed class CreateLeadRequestValidatorTests
 {
-    private readonly CreateLeadRequestValidator _validator = new();
+    private readonly CreateLeadCommandValidator _validator = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenFullNameContainsScriptPayload()

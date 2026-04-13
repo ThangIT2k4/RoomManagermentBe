@@ -1,5 +1,4 @@
 using Auth.Application.Features.Users.UpdateUser;
-using Auth.Application.Validators;
 
 namespace Auth.API.Tests.Validators;
 
@@ -16,7 +15,7 @@ public sealed class UpdateUserCommandValidatorTests
         var result = _validator.Validate(command);
 
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, x => x.ErrorMessage.Contains("At least one field must be provided"));
+        Assert.Contains(result.Errors, x => x.ErrorMessage.Contains("một trường để cập nhật"));
     }
 
     [Fact]

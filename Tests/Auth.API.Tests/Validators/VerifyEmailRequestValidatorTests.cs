@@ -1,5 +1,4 @@
 using Auth.Application.Features.Auth.VerifyEmail;
-using Auth.Application.Validators;
 
 namespace Auth.API.Tests.Validators;
 

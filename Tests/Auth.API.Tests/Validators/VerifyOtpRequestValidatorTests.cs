@@ -1,7 +1,5 @@
 using Auth.Application.Dtos;
 using Auth.Application.Features.Auth.VerifyOtp;
-using Auth.Application.Validators;
-
 namespace Auth.API.Tests.Validators;
 
 public sealed class VerifyOtpRequestValidatorTests

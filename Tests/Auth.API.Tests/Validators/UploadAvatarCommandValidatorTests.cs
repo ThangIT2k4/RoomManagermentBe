@@ -1,5 +1,4 @@
 using Auth.Application.Features.Auth.Profile.UploadAvatar;
-using Auth.Application.Validators;
 
 namespace Auth.API.Tests.Validators;
 

@@ -1,6 +1,4 @@
 using Auth.Application.Features.Auth.ChangePassword;
-using Auth.Application.Validators;
-
 namespace Auth.API.Tests.Validators;
 
 public sealed class ChangePasswordRequestValidatorTests

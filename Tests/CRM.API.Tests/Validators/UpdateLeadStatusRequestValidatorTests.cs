@@ -1,12 +1,10 @@
-using CRM.API.Validators;
-using CRM.Application.Features.Leads;
 using CRM.Application.Features.Leads.UpdateLeadStatus;
 
 namespace CRM.API.Tests.Validators;
 
 public sealed class UpdateLeadStatusRequestValidatorTests
 {
-    private readonly UpdateLeadStatusRequestValidator _validator = new();
+    private readonly UpdateLeadStatusCommandValidator _validator = new();
 
     [Fact]
     public void Validate_ShouldFail_WhenLeadIdIsEmpty()
