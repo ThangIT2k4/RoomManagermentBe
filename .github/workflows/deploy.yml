@@ -53,7 +53,18 @@ jobs:
           script: |
             RELEASE=/var/www/releases/${{ steps.vars.outputs.RELEASE_NAME }}
 
-            # Tạo symlink (atomic)
+            echo "Deploying $RELEASE"
+
+            # ================= VERIFY =================
+            for svc in gateway auth-api finance-api organization-api property-api lease-api notification-api external-api
+            do
+              if [ ! -d "$RELEASE/$svc" ]; then
+                echo "❌ Missing folder: $RELEASE/$svc"
+                exit 1
+              fi
+            done
+
+            # ================= SYMLINK =================
             ln -sfn $RELEASE/gateway /var/www/gateway
             ln -sfn $RELEASE/auth-api /var/www/auth-api
             ln -sfn $RELEASE/finance-api /var/www/finance-api
@@ -63,12 +74,29 @@ jobs:
             ln -sfn $RELEASE/notification-api /var/www/notification-api
             ln -sfn $RELEASE/external-api /var/www/external-api
 
-            # Restart từng service (an toàn)
+            # ================= RESTART =================
             systemctl daemon-reload
 
             for svc in gateway auth-api finance-api organization-api property-api lease-api notification-api external-api
             do
+              echo "Restarting $svc..."
+
               systemctl restart $svc
-              sleep 2
-              systemctl is-active --quiet $svc || exit 1
+
+              # wait max 10s
+              for i in {1..10}; do
+                if systemctl is-active --quiet $svc; then
+                  echo "✅ $svc running"
+                  break
+                fi
+                sleep 1
+              done
+
+              if ! systemctl is-active --quiet $svc; then
+                echo "❌ $svc failed"
+                journalctl -u $svc -n 20 --no-pager
+                exit 1
+              fi
             done
+
+            echo "🎉 Deploy success"
