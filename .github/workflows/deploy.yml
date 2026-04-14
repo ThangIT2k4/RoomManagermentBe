@@ -26,6 +26,7 @@ jobs:
           dotnet publish Modules/Property/Property.API/Property.API.csproj -c Release -o publish/property-api
           dotnet publish Modules/Lease/Lease.API/Lease.API.csproj -c Release -o publish/lease-api
           dotnet publish Modules/Notification/Notification.API/Notification.API.csproj -c Release -o publish/notification-api
+          dotnet publish Modules/CRM/CRM.API/CRM.API.csproj -c Release -o publish/crm-api
           dotnet publish Api/RoomManagerment.ExternalApi/RoomManagerment.ExternalApi.csproj -c Release -o publish/external-api
 
       # ================= PREPARE VERSION =================
@@ -56,7 +57,7 @@ jobs:
             echo "Deploying $RELEASE"
 
             # ================= VERIFY =================
-            for svc in gateway auth-api finance-api organization-api property-api lease-api notification-api external-api
+            for svc in gateway auth-api finance-api organization-api property-api lease-api notification-api crm-api external-api
             do
               if [ ! -d "$RELEASE/publish/$svc" ]; then
                 echo "❌ Missing folder: $RELEASE/publish/$svc"
@@ -72,12 +73,13 @@ jobs:
             ln -sfn $RELEASE/publish/property-api /var/www/property-api
             ln -sfn $RELEASE/publish/lease-api /var/www/lease-api
             ln -sfn $RELEASE/publish/notification-api /var/www/notification-api
+            ln -sfn $RELEASE/publish/crm-api /var/www/crm-api
             ln -sfn $RELEASE/publish/external-api /var/www/external-api
 
             # ================= RESTART =================
             systemctl daemon-reload
 
-            for svc in gateway auth-api finance-api organization-api property-api lease-api notification-api external-api
+            for svc in gateway auth-api finance-api organization-api property-api lease-api notification-api crm-api external-api
             do
               echo "Restarting $svc..."
 
