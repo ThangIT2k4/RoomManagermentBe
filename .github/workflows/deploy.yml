@@ -58,21 +58,21 @@ jobs:
             # ================= VERIFY =================
             for svc in gateway auth-api finance-api organization-api property-api lease-api notification-api external-api
             do
-              if [ ! -d "$RELEASE/$svc" ]; then
-                echo "❌ Missing folder: $RELEASE/$svc"
+              if [ ! -d "$RELEASE/publish/$svc" ]; then
+                echo "❌ Missing folder: $RELEASE/publish/$svc"
                 exit 1
               fi
             done
 
             # ================= SYMLINK =================
-            ln -sfn $RELEASE/gateway /var/www/gateway
-            ln -sfn $RELEASE/auth-api /var/www/auth-api
-            ln -sfn $RELEASE/finance-api /var/www/finance-api
-            ln -sfn $RELEASE/organization-api /var/www/organization-api
-            ln -sfn $RELEASE/property-api /var/www/property-api
-            ln -sfn $RELEASE/lease-api /var/www/lease-api
-            ln -sfn $RELEASE/notification-api /var/www/notification-api
-            ln -sfn $RELEASE/external-api /var/www/external-api
+            ln -sfn $RELEASE/publish/gateway /var/www/gateway
+            ln -sfn $RELEASE/publish/auth-api /var/www/auth-api
+            ln -sfn $RELEASE/publish/finance-api /var/www/finance-api
+            ln -sfn $RELEASE/publish/organization-api /var/www/organization-api
+            ln -sfn $RELEASE/publish/property-api /var/www/property-api
+            ln -sfn $RELEASE/publish/lease-api /var/www/lease-api
+            ln -sfn $RELEASE/publish/notification-api /var/www/notification-api
+            ln -sfn $RELEASE/publish/external-api /var/www/external-api
 
             # ================= RESTART =================
             systemctl daemon-reload
