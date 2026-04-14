@@ -35,8 +35,8 @@ services:
       EmailSettings__FromName: ${EMAIL_FROM_NAME:-RoomManagerment Zoro}
       RabbitMq__Host: ${RABBITMQ_HOST}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     security_opt:
@@ -57,8 +57,8 @@ services:
       Finance__Messaging__Enabled: ${FINANCE_MESSAGING_ENABLED:-true}
       RabbitMq__Host: ${RABBITMQ_HOST}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     security_opt:
@@ -76,8 +76,8 @@ services:
       ASPNETCORE_URLS: http://0.0.0.0:${EXTERNAL_API_PORT:-5004}
       RabbitMq__Host: ${RABBITMQ_HOST}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     security_opt:
@@ -98,8 +98,8 @@ services:
       Redis__Configuration: ${REDIS_CONFIGURATION}
       RabbitMq__Host: ${RABBITMQ_HOST}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     security_opt:
@@ -133,8 +133,8 @@ services:
       ConnectionStrings__Lease: ${LEASE_CONNECTION_STRING}
       RabbitMq__Host: ${RABBITMQ_HOST}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     security_opt:
@@ -154,8 +154,8 @@ services:
       Redis__Configuration: ${REDIS_CONFIGURATION}
       RabbitMq__Host: ${RABBITMQ_HOST}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     security_opt:
@@ -181,8 +181,8 @@ services:
       EmailSettings__FromName: ${EMAIL_FROM_NAME:-RoomManagerment Zoro}
       RabbitMq__Host: ${RABBITMQ_HOST}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     security_opt:

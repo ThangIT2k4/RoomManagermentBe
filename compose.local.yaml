@@ -29,8 +29,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RABBITMQ_DEFAULT_VHOST: /
     volumes:
       - rabbitmqdata:/var/lib/rabbitmq
@@ -114,8 +114,8 @@ services:
       Cors__AllowedOrigins__2: http://localhost:${GATEWAY_API_PORT:-5200}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     ports:
       - "${AUTH_API_PORT:-5202}:${AUTH_API_PORT:-5202}"
@@ -147,8 +147,8 @@ services:
       LOG_BASE_PATH: ${LOG_BASE_PATH:-/app/logs}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     ports:
       - "${FINANCE_API_PORT:-5203}:${FINANCE_API_PORT:-5203}"
@@ -175,8 +175,8 @@ services:
       ASPNETCORE_URLS: http://0.0.0.0:${EXTERNAL_API_PORT:-5204}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     ports:
       - "${EXTERNAL_API_PORT:-5204}:${EXTERNAL_API_PORT:-5204}"
@@ -202,8 +202,8 @@ services:
       ConnectionStrings__Redis: ${REDIS_CONFIGURATION:-redis:6379}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     ports:
       - "${CRM_API_PORT:-5205}:${CRM_API_PORT:-5205}"
@@ -253,8 +253,8 @@ services:
       ConnectionStrings__Lease: ${LEASE_CONNECTION_STRING}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     ports:
       - "${LEASE_API_PORT:-5207}:${LEASE_API_PORT:-5207}"
@@ -282,8 +282,8 @@ services:
       Redis__Configuration: ${REDIS_CONFIGURATION:-redis:6379}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
       LOG_BASE_PATH: ${LOG_BASE_PATH:-/app/logs}
     ports:
@@ -321,8 +321,8 @@ services:
       EmailSettings__FromName: ${EMAIL_FROM_NAME:-RoomManagerment Zoro}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     ports:
       - "${NOTIFICATION_API_PORT:-5201}:${NOTIFICATION_API_PORT:-5201}"

@@ -21,8 +21,8 @@ services:
     image: rabbitmq:3.13-management-alpine
     container_name: rm-rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RABBITMQ_DEFAULT_VHOST: /
     volumes:
       - rabbitmqdata:/var/lib/rabbitmq
@@ -101,8 +101,8 @@ services:
       EmailSettings__FromName: ${EMAIL_FROM_NAME:-RoomManagerment Zoro}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     depends_on:
@@ -130,8 +130,8 @@ services:
       Finance__Messaging__Enabled: ${FINANCE_MESSAGING_ENABLED:-true}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     depends_on:
@@ -156,8 +156,8 @@ services:
       ASPNETCORE_URLS: http://0.0.0.0:${EXTERNAL_API_PORT:-5004}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     depends_on:
@@ -180,8 +180,8 @@ services:
       ConnectionStrings__Redis: ${REDIS_CONFIGURATION:-redis:6379}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     depends_on:
@@ -225,8 +225,8 @@ services:
       ConnectionStrings__Lease: Host=postgres;Port=5432;Database=${LEASE_DB:-roommanager_lease};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     depends_on:
@@ -251,8 +251,8 @@ services:
       Redis__Configuration: ${REDIS_CONFIGURATION:-redis:6379}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     depends_on:
@@ -285,8 +285,8 @@ services:
       EmailSettings__FromName: ${EMAIL_FROM_NAME:-RoomManagerment Zoro}
       RabbitMq__Host: ${RABBITMQ_HOST:-rabbitmq}
       RabbitMq__Port: ${RABBITMQ_PORT:-5672}
-      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
-      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RabbitMq__Username: ${RABBITMQ_USER:-${RABBITMQ_DEFAULT_USER:-guest}}
+      RabbitMq__Password: ${RABBITMQ_PASS:-${RABBITMQ_DEFAULT_PASS:-guest}}
       RabbitMq__VirtualHost: ${RABBITMQ_VHOST:-/}
     restart: unless-stopped
     depends_on:

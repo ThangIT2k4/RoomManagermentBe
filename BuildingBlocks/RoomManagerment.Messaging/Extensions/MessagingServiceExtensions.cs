@@ -72,16 +72,13 @@ public static class MessagingServiceExtensions
             GetEnvValue(envFileValues, "RABBITMQ_HOST")
         );
 
-        // In docker-compose, service DNS name is "rabbitmq".
-        // For direct local dotnet run, map it to localhost to avoid name resolution failure.
-        if (string.Equals(host, "rabbitmq", StringComparison.OrdinalIgnoreCase) && !IsRunningInContainer())
-        {
-            host = "localhost";
-        }
+        host = NormalizeRabbitMqHostForLocalRun(host);
 
         var username = FirstNonEmpty(
             sectionOptions?.Username,
             configuration[$"{RabbitMqOptions.Section}:Username"],
+            configuration["RABBITMQ_USER"],
+            GetEnvValue(envFileValues, "RABBITMQ_USER"),
             configuration["RABBITMQ_DEFAULT_USER"],
             GetEnvValue(envFileValues, "RABBITMQ_DEFAULT_USER")
         );
@@ -89,6 +86,8 @@ public static class MessagingServiceExtensions
         var password = FirstNonEmpty(
             sectionOptions?.Password,
             configuration[$"{RabbitMqOptions.Section}:Password"],
+            configuration["RABBITMQ_PASS"],
+            GetEnvValue(envFileValues, "RABBITMQ_PASS"),
             configuration["RABBITMQ_DEFAULT_PASS"],
             GetEnvValue(envFileValues, "RABBITMQ_DEFAULT_PASS")
         );
@@ -97,7 +96,7 @@ public static class MessagingServiceExtensions
         {
             throw new InvalidOperationException(
                 $"Missing RabbitMQ configuration. Provide section '{RabbitMqOptions.Section}' or env vars " +
-                "RABBITMQ_HOST, RABBITMQ_DEFAULT_USER, RABBITMQ_DEFAULT_PASS."
+                "RABBITMQ_HOST with RABBITMQ_USER and RABBITMQ_PASS (or legacy RABBITMQ_DEFAULT_USER / RABBITMQ_DEFAULT_PASS)."
             );
         }
 
@@ -223,5 +222,26 @@ public static class MessagingServiceExtensions
             "true",
             StringComparison.OrdinalIgnoreCase
         );
-    
+
+    /// <summary>
+    /// Compose DNS name is <c>rabbitmq</c>. Legacy env files used wrong hostnames.
+    /// From the host OS (<c>dotnet run</c>), those names do not resolve; use published port on localhost.
+    /// </summary>
+    private static string? NormalizeRabbitMqHostForLocalRun(string? host)
+    {
+        if (string.IsNullOrWhiteSpace(host))
+            return host;
+
+        if (IsRunningInContainer())
+            return host;
+
+        if (string.Equals(host, "rabbitmq", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(host, "room_managerment_rabbitmq", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(host, "rm-rabbitmq", StringComparison.OrdinalIgnoreCase))
+        {
+            return "localhost";
+        }
+
+        return host;
+    }
 }

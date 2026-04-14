@@ -2,6 +2,7 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using RoomManagerment.Gateway.Models;
+using RoomManagerment.Messaging.Extensions;
 using RoomManagerment.Shared.Http;
 using Serilog;
 using StackExchange.Redis;
@@ -31,10 +32,8 @@ builder.Host.UseSerilog((ctx, lc) =>
 
 #region REDIS
 
-// Redis:Configuration (env Redis__Configuration) hoặc ConnectionStrings:Redis; Docker override = redis:6379
-var redisConfig = builder.Configuration["Redis:Configuration"]
-    ?? builder.Configuration.GetConnectionString("Redis")
-    ?? "redis:6379";
+// Cùng chuỗi ưu tiên với các API (Redis__Configuration, REDIS_CONFIGURATION, REDIS_HOST+PORT+PASSWORD, …)
+var redisConfig = RedisServiceExtensions.ResolveConnectionString(builder.Configuration);
 var redisOptions = ConfigurationOptions.Parse(redisConfig);
 redisOptions.AbortOnConnectFail = false;
 redisOptions.ConnectRetry = 3;
@@ -157,9 +156,7 @@ builder.Services.AddProblemDetails();
 
 #region SIGNALR
 
-var redisConnection = builder.Configuration["Redis:Configuration"]
-    ?? builder.Configuration.GetConnectionString("Redis")
-    ?? "redis:6379";
+var redisConnection = RedisServiceExtensions.ResolveConnectionString(builder.Configuration);
 builder.Services.AddSignalR()
     .AddStackExchangeRedis(redisConnection, options =>
     {
