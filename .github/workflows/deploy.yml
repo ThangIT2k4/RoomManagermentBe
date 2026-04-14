@@ -20,7 +20,6 @@ jobs:
       - name: Publish all services
         run: |
           dotnet publish Api/RoomManagerment.Gateway/RoomManagerment.Gateway.csproj -c Release -o publish/gateway
-
           dotnet publish Modules/Auth/Auth.API/Auth.API.csproj -c Release -o publish/auth-api
           dotnet publish Modules/Finance/Finance.API/Finance.API.csproj -c Release -o publish/finance-api
           dotnet publish Modules/Organization/Organization.API/Organization.API.csproj -c Release -o publish/organization-api
@@ -29,105 +28,47 @@ jobs:
           dotnet publish Modules/Notification/Notification.API/Notification.API.csproj -c Release -o publish/notification-api
           dotnet publish Api/RoomManagerment.ExternalApi/RoomManagerment.ExternalApi.csproj -c Release -o publish/external-api
 
-      # ================= CLEAN =================
-      - name: Clean old files on server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: root
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            rm -rf /var/www/gateway/*
-            rm -rf /var/www/auth-api/*
-            rm -rf /var/www/finance-api/*
-            rm -rf /var/www/organization-api/*
-            rm -rf /var/www/property-api/*
-            rm -rf /var/www/lease-api/*
-            rm -rf /var/www/notification-api/*
-            rm -rf /var/www/external-api/*
+      # ================= PREPARE VERSION =================
+      - name: Generate release name
+        id: vars
+        run: echo "RELEASE_NAME=release-$(date +%s)" >> $GITHUB_OUTPUT
 
       # ================= COPY =================
-      - name: Copy Gateway
+      - name: Copy to server (release folder)
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: root
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "publish/gateway/*"
-          target: "/var/www/gateway"
+          source: "publish/*"
+          target: "/var/www/releases/${{ steps.vars.outputs.RELEASE_NAME }}"
 
-      - name: Copy Auth
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: root
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "publish/auth-api/*"
-          target: "/var/www/auth-api"
-
-      - name: Copy Finance
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: root
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "publish/finance-api/*"
-          target: "/var/www/finance-api"
-
-      - name: Copy Organization
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: root
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "publish/organization-api/*"
-          target: "/var/www/organization-api"
-
-      - name: Copy Property
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: root
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "publish/property-api/*"
-          target: "/var/www/property-api"
-
-      - name: Copy Lease
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: root
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "publish/lease-api/*"
-          target: "/var/www/lease-api"
-
-      - name: Copy Notification
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: root
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "publish/notification-api/*"
-          target: "/var/www/notification-api"
-
-      - name: Copy External
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: root
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "publish/external-api/*"
-          target: "/var/www/external-api"
-
-      # ================= RESTART =================
-      - name: Restart all services
+      # ================= DEPLOY =================
+      - name: Activate release
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: root
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            RELEASE=/var/www/releases/${{ steps.vars.outputs.RELEASE_NAME }}
+
+            # Tạo symlink (atomic)
+            ln -sfn $RELEASE/gateway /var/www/gateway
+            ln -sfn $RELEASE/auth-api /var/www/auth-api
+            ln -sfn $RELEASE/finance-api /var/www/finance-api
+            ln -sfn $RELEASE/organization-api /var/www/organization-api
+            ln -sfn $RELEASE/property-api /var/www/property-api
+            ln -sfn $RELEASE/lease-api /var/www/lease-api
+            ln -sfn $RELEASE/notification-api /var/www/notification-api
+            ln -sfn $RELEASE/external-api /var/www/external-api
+
+            # Restart từng service (an toàn)
             systemctl daemon-reload
-            systemctl restart gateway auth-api finance-api organization-api property-api lease-api notification-api external-api
-            sleep 5
-            systemctl is-active --quiet gateway || exit 1
+
+            for svc in gateway auth-api finance-api organization-api property-api lease-api notification-api external-api
+            do
+              systemctl restart $svc
+              sleep 2
+              systemctl is-active --quiet $svc || exit 1
+            done
