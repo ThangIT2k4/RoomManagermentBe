@@ -24,7 +24,7 @@ public static class DependencyInjection
 
         services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = configuration.GetConnectionString("Redis") ?? "localhost:6379,abortConnect=false,connectTimeout=2000,syncTimeout=2000";
+            options.Configuration = RedisServiceExtensions.ResolveConnectionString(configuration);
             options.InstanceName = "crm";
         });
         services.AddRabbitMqMessaging(configuration);

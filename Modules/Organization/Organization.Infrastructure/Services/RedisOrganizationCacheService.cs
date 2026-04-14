@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Organization.Application.Dtos;
 using Organization.Application.Services;
+using RoomManagerment.Messaging.Extensions;
 using StackExchange.Redis;
 
 namespace Organization.Infrastructure.Services;
@@ -94,15 +95,7 @@ public sealed class RedisOrganizationCacheService : IOrganizationCacheService
                 return _database;
             }
 
-            var connectionString =
-                _configuration["Redis:Configuration"]
-                ?? _configuration["Redis:ConnectionString"]
-                ?? _configuration.GetConnectionString("Redis");
-            if (string.IsNullOrWhiteSpace(connectionString))
-            {
-                return null;
-            }
-
+            var connectionString = RedisServiceExtensions.ResolveConnectionString(_configuration);
             try
             {
                 _redis = await ConnectionMultiplexer.ConnectAsync(connectionString);

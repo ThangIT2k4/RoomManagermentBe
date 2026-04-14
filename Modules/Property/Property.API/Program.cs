@@ -41,6 +41,12 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
-var port = Environment.GetEnvironmentVariable("PROPERTY_API_PORT") ?? "5206";
-app.Urls.Add($"http://0.0.0.0:{port}");
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ASPNETCORE_URLS"))
+    && string.IsNullOrEmpty(builder.Configuration["urls"]))
+{
+    var port = Environment.GetEnvironmentVariable("PROPERTY_API_PORT")
+               ?? builder.Configuration["PROPERTY_API_PORT"]
+               ?? "5206";
+    app.Urls.Add($"http://0.0.0.0:{port}");
+}
 app.Run();

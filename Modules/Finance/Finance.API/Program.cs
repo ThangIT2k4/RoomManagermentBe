@@ -83,6 +83,13 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
-var port = Environment.GetEnvironmentVariable("FINANCE_API_PORT") ?? "5203";
-app.Urls.Add($"http://0.0.0.0:{port}");
+// ASPNETCORE_URLS được set bởi Docker Compose → dùng nó; chỉ fallback khi chạy dotnet run trực tiếp
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ASPNETCORE_URLS"))
+    && string.IsNullOrEmpty(builder.Configuration["urls"]))
+{
+    var port = Environment.GetEnvironmentVariable("FINANCE_API_PORT")
+               ?? builder.Configuration["FINANCE_API_PORT"]
+               ?? "5203";
+    app.Urls.Add($"http://0.0.0.0:{port}");
+}
 app.Run();

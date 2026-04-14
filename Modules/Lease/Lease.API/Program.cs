@@ -40,6 +40,12 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
-var port = Environment.GetEnvironmentVariable("LEASE_API_PORT") ?? "5207";
-app.Urls.Add($"http://0.0.0.0:{port}");
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ASPNETCORE_URLS"))
+    && string.IsNullOrEmpty(builder.Configuration["urls"]))
+{
+    var port = Environment.GetEnvironmentVariable("LEASE_API_PORT")
+               ?? builder.Configuration["LEASE_API_PORT"]
+               ?? "5207";
+    app.Urls.Add($"http://0.0.0.0:{port}");
+}
 app.Run();

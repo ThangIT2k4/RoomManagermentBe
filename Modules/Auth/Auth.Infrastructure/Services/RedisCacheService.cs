@@ -2,6 +2,7 @@ using System.Text.Json;
 using Auth.Application.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using RoomManagerment.Messaging.Extensions;
 using StackExchange.Redis;
 
 namespace Auth.Infrastructure.Services;
@@ -133,11 +134,6 @@ public sealed class RedisCacheService : ICacheService
             }
 
             var connectionString = BuildConnectionString();
-            if (string.IsNullOrWhiteSpace(connectionString))
-            {
-                return null;
-            }
-
             try
             {
                 _redis = await ConnectionMultiplexer.ConnectAsync(connectionString);
@@ -158,51 +154,7 @@ public sealed class RedisCacheService : ICacheService
         }
     }
 
-    private string? BuildConnectionString()
-    {
-        var configurationConnectionString = _configuration["Redis:Configuration"];
-        if (!string.IsNullOrWhiteSpace(configurationConnectionString))
-        {
-            return configurationConnectionString;
-        }
-
-        var explicitConnectionString = _configuration["Redis:ConnectionString"];
-        if (!string.IsNullOrWhiteSpace(explicitConnectionString))
-        {
-            return explicitConnectionString;
-        }
-
-        var fallbackConnectionString = _configuration.GetConnectionString("Redis");
-        if (!string.IsNullOrWhiteSpace(fallbackConnectionString))
-        {
-            return fallbackConnectionString;
-        }
-
-        var host = _configuration["Redis:Host"];
-        if (string.IsNullOrWhiteSpace(host))
-        {
-            return null;
-        }
-
-        var port = _configuration.GetValue("Redis:Port", 6379);
-        var password = _configuration["Redis:Password"];
-        var database = _configuration.GetValue("Redis:Database", 0);
-        var timeout = _configuration.GetValue("Redis:Timeout", 5000);
-
-        var parts = new List<string>
-        {
-            $"{host}:{port}",
-            $"defaultDatabase={database}",
-            $"connectTimeout={timeout}",
-            $"abortConnect=false"
-        };
-
-        if (!string.IsNullOrWhiteSpace(password))
-        {
-            parts.Add($"password={password}");
-        }
-
-        return string.Join(',', parts);
-    }
+    private string BuildConnectionString()
+        => RedisServiceExtensions.ResolveConnectionString(_configuration);
 }
 
